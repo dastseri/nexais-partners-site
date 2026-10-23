@@ -414,6 +414,38 @@
     *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   }
 
+  /* in-person visit scripts sub-block */
+  .visit-block{border-top:2px solid var(--panel-line);margin-top:28px;padding-top:24px}
+  .visit-title{font-size:21px;margin-bottom:8px}
+  .visit-intro{color:var(--ink-2);font-size:15px;margin-bottom:16px;max-width:72ch}
+  .visit-note{margin-top:12px;color:var(--ink-2);font-size:15px}
+  .card-print{margin-top:14px}
+
+  /* printable docs — scripts / one card / phone list, built into #print-root on demand */
+  @media print{
+    #print-root .pr-doc{display:block;background:#fff;color:#000;padding:.55in .65in;font-family:Georgia,'Times New Roman',serif;font-size:12pt;line-height:1.55}
+    #print-root .pr-doc *{color:#000 !important;background:transparent !important;box-shadow:none !important;text-shadow:none !important}
+    #print-root .pr-doc h2{font-family:Arial,Helvetica,sans-serif;font-size:19pt;margin:0 0 6pt}
+    #print-root .pr-doc h3{font-family:Arial,Helvetica,sans-serif;font-size:13pt;margin:15pt 0 5pt;page-break-after:avoid}
+    #print-root .pr-doc .pr-kicker{font-family:Arial,Helvetica,sans-serif;font-size:9.5pt;letter-spacing:.12em;text-transform:uppercase;margin:0 0 4pt}
+    #print-root .pr-doc p{margin:0 0 8pt}
+    #print-root .pr-doc .pr-meta{font-family:Arial,Helvetica,sans-serif;font-size:11pt;margin:0 0 3pt}
+    #print-root .pr-doc .pr-note{font-size:10.5pt}
+    #print-root .pr-doc blockquote{border:1px solid #999;padding:9pt 12pt;margin:0 0 10pt;font-size:11.5pt;page-break-inside:avoid}
+    #print-root .pr-doc .script-block{border:none;padding:0;margin:0 0 6pt;border-radius:0}
+    #print-root .pr-doc .how{border:none;padding:0;margin:0 0 10pt}
+    #print-root .pr-doc .pr-sum{font-family:Arial,Helvetica,sans-serif;font-weight:700}
+    #print-root .pr-doc .obj{border-top:1px solid #bbb;padding:8pt 0;page-break-inside:avoid}
+    #print-root .pr-doc .rules-list{grid-template-columns:1fr;gap:2pt;padding-left:16pt}
+    #print-root .pr-doc .visit-block{border-top:2pt solid #000;margin-top:16pt;padding-top:12pt}
+    #print-root .pr-doc .visit-title{font-size:15pt}
+    #print-root table.pr-table{width:100%;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;font-size:9.5pt;line-height:1.35}
+    #print-root table.pr-table th,#print-root table.pr-table td{border:1px solid #777;padding:4pt 6pt;text-align:start;vertical-align:top}
+    #print-root table.pr-table thead{display:table-header-group}
+    #print-root table.pr-table tr{page-break-inside:avoid}
+    #print-root table.pr-table td.res{width:1.15in}
+  }
+
   /* join form */
   .join-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .join-form label{font-weight:700;font-size:14px;display:block}
@@ -873,6 +905,7 @@
         <option value="t">Transport — trucking &amp; logistics</option>
       </select>
       <button class="btn ghost" id="copy-log" type="button">Copy today's call log</button>
+      <button class="btn ghost" id="print-list" type="button">Print phone list</button>
     </div>
     <p class="progress-line" id="progress">54 businesses · 0 outcomes logged in this session</p>
     <div id="cards">
@@ -4398,6 +4431,7 @@
     <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Call scripts</span><h2>The master script — word for word</h2></span></summary>
     <div class="sec-head">
       <details class="how"><summary>How it works</summary><p>[Caller] is your name · [Business] is theirs · [Date] is October 20 or October 21, from their card · [Hook] is the personalized sentence on their card. Each call should run 60–90 seconds.</p></details>
+      <p style="margin-top:12px"><button class="btn ghost" id="print-scripts" type="button">Print scripts</button></p>
     
     </div>
     <details class="script-block acc"><summary>
@@ -4438,6 +4472,32 @@
         <li>The <b>7-day free trial</b> runs on their own line first — card required upfront, charged only from day 8 if you continue — they decide after hearing her on real calls.</li>
       </ul>
     </details>
+    <div class="visit-block">
+      <h3 class="visit-title">In-person visit scripts — word for word</h3>
+      <p class="visit-intro">Outreach is a phone call or an in-person visit — both count the same. [Caller] is your name · [Business] is theirs · [Name] is the owner or manager named on their card · [Hook] is the personalized sentence on their card. Walk in with the official AVA flyer from the Sales Kit in your hand.</p>
+      <details class="script-block acc"><summary>
+        <h3>1 — At the front desk (30 seconds)</h3></summary>
+        <blockquote>"Hi, I'm [Caller] from NexAIS, here in Richmond Hill. I stopped in in person because we emailed [Business] a proposal about AVA, our AI receptionist, and I'd rather put a face to it than leave it sitting in an inbox. Is [Name] in today? I only need two minutes of their time."</blockquote>
+      </details>
+      <details class="script-block acc"><summary>
+        <h3>2 — The owner is available (60–90 seconds)</h3></summary>
+        <blockquote>"Thanks for the minute. [Hook — the personalized sentence from the business's card.] That's exactly what AVA does: she answers your phone 24/7, in seconds — takes reservations and phone orders from your live menu, reads every order back, captures large parties and catering completely, and confirms everything by text. You don't have to take my word for it — she's live right now: call +1 (437) 529-0400 on your own phone, right here, and hear her answer. All I'm asking for is ten minutes this week to show you how she would sound on your own line — and we can start with a 7-day free trial — card required upfront, charged only from day 8 if you continue — so you hear her on your real calls before you decide anything. Is Thursday or Friday better for you?"</blockquote>
+      </details>
+      <details class="script-block acc"><summary>
+        <h3>3 — The owner isn't available — leave the flyer, capture the contact</h3></summary>
+        <blockquote>"No problem at all. I'll leave our flyer with you — it has the live demo number on it, so they can hear AVA for themselves. Could I ask who looks after reservations and events here? … Thank you. And what's the best direct email for them, so the full proposal lands in the right inbox? … And when is the best time to catch them — before service, or in the afternoon? I'll call then. Thanks very much for your help."</blockquote>
+        <p class="visit-note">Leave the official AVA flyer from the Sales Kit — and nothing else with numbers on it. Never leave prices in writing beyond the flyer: if they press you to write a price down, don't. Prices live in the proposal — restaurants start at Professional, the setup fee is quoted by NexAIS in writing only, and there are no discounts to write down.</p>
+      </details>
+      <details class="script-block acc"><summary>
+        <h3>Visit etiquette — the rules that protect the visit</h3></summary>
+        <ul class="rules-list">
+          <li><b>Never interrupt a service rush.</b> If the room is full or the line is long, wait quietly or come back at a quieter hour — a visit that costs them a customer costs you the sale.</li>
+          <li><b>One visit = one attempt.</b> Log it on the business's card as a Visit action the moment you walk out — an unlogged visit counts as not made.</li>
+          <li><b>If you're asked to leave, leave.</b> If they say don't come back, log it on the card and never revisit that business — immediately and permanently.</li>
+          <li><b>The locked rules travel with you.</b> Restaurants start at Professional $399, never quote a setup fee, never promise a feature AVA doesn't have, and no discounts — in person exactly as on the phone.</li>
+        </ul>
+      </details>
+    </div>
   </details>
   </div>
 </section>
@@ -6563,6 +6623,196 @@ Object.assign(window.FA, {
     if (orig && !window.__nexaisAIPatched){
       window.__nexaisAIPatched = true;
       window.NEXAIS_setLang = function(l){ orig(l); renderRequests(); };
+    }
+  });
+})();
+</script>
+<script>
+/* ================= in-person visit scripts — FA strings ================= */
+Object.assign(window.FA, {
+  "Print scripts": "چاپ اسکریپت‌ها",
+  "Print phone list": "چاپ لیست تلفن‌ها",
+  "In-person visit scripts — word for word": "اسکریپت‌های مراجعهٔ حضوری — کلمه به کلمه",
+  "Outreach is a phone call or an in-person visit — both count the same. [Caller] is your name · [Business] is theirs · [Name] is the owner or manager named on their card · [Hook] is the personalized sentence on their card. Walk in with the official AVA flyer from the Sales Kit in your hand.": "تماس با مشتری یا تلفنی است یا مراجعهٔ حضوری — هر دو یکسان حساب می‌شوند. [Caller] نام شماست · [Business] نام آن‌ها · [Name] نام مالک یا مدیر روی کارت آن‌ها · [Hook] جملهٔ شخصی‌سازی‌شده روی کارت آن‌ها. فلایر رسمی AVA از کیت فروش را در دست وارد شوید.",
+  "1 — At the front desk (30 seconds)": "۱ — پشت میز پذیرش (۳۰ ثانیه)",
+  "2 — The owner is available (60–90 seconds)": "۲ — مالک حضور دارد (۶۰ تا ۹۰ ثانیه)",
+  "3 — The owner isn't available — leave the flyer, capture the contact": "۳ — مالک حضور ندارد — فلایر را بگذارید و اطلاعات تماس را بگیرید",
+  "Leave the official AVA flyer from the Sales Kit — and nothing else with numbers on it. Never leave prices in writing beyond the flyer: if they press you to write a price down, don't. Prices live in the proposal — restaurants start at Professional, the setup fee is quoted by NexAIS in writing only, and there are no discounts to write down.": "فلایر رسمی AVA از کیت فروش را بگذارید — و هیچ چیز دیگری که رویش عدد باشد نه. هرگز قیمتی را کتبی فراتر از فلایر جا نگذارید: اگر اصرار کردند قیمت را بنویسید، ننویسید. قیمت‌ها در پروپوزال‌اند — رستوران‌ها از Professional شروع می‌کنند، هزینهٔ راه‌اندازی را فقط NexAIS کتبی اعلام می‌کند و هیچ تخفیفی برای نوشتن وجود ندارد.",
+  "Visit etiquette — the rules that protect the visit": "آداب مراجعه — قوانینی که مراجعه را درست نگه می‌دارند",
+  "Never interrupt a service rush.": "هرگز وسط شلوغی سرویس مزاحم نشوید.",
+  "If the room is full or the line is long, wait quietly or come back at a quieter hour — a visit that costs them a customer costs you the sale.": "اگر سالن پر است یا صف طولانی است، آرام صبر کنید یا ساعت خلوت‌تری برگردید — مراجعه‌ای که برای آن‌ها یک مشتری هزینه داشته باشد، فروش را از شما می‌گیرد.",
+  "One visit = one attempt.": "هر مراجعه = یک تلاش.",
+  "Log it on the business's card as a Visit action the moment you walk out — an unlogged visit counts as not made.": "همان لحظه که بیرون آمدید، آن را روی کارت کسب‌وکار به‌عنوان اقدام «مراجعه» ثبت کنید — مراجعهٔ ثبت‌نشده انجام‌نشده حساب می‌شود.",
+  "If you're asked to leave, leave.": "اگر از شما خواستند بروید، بروید.",
+  "If they say don't come back, log it on the card and never revisit that business — immediately and permanently.": "اگر گفتند برنگردید، روی کارت ثبتش کنید و هرگز به آن کسب‌وکار برنگردید — فوری و برای همیشه.",
+  "The locked rules travel with you.": "قوانین قفل‌شده با شما همراه‌اند.",
+  "Restaurants start at Professional $399, never quote a setup fee, never promise a feature AVA doesn't have, and no discounts — in person exactly as on the phone.": "رستوران‌ها از Professional ‎$399 شروع می‌کنند، هرگز هزینهٔ راه‌اندازی اعلام نکنید، هرگز قابلیتی را که AVA ندارد قول ندهید و هیچ تخفیفی نیست — حضوری دقیقاً مثل تلفنی."
+});
+/* ================= printable docs — all scripts / one card / phone list ================= */
+(function(){
+  "use strict";
+  var root = document.getElementById("print-root");
+  var cardsBox = document.getElementById("cards");
+  if (!root || !cardsBox) return;
+  var saved = null;
+  function clean(s){ return String(s == null ? "" : s).replace(/\s+/g, " ").trim(); }
+  function mk(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function beginPrint(doc){
+    saved = root.innerHTML;
+    root.innerHTML = "";
+    root.appendChild(doc);
+    window.print();
+  }
+  window.addEventListener("afterprint", function(){
+    if (saved !== null){ root.innerHTML = saved; saved = null; }
+  });
+  function newDoc(extra){
+    var d = mk("div", "pr-doc" + (extra ? " " + extra : ""));
+    d.setAttribute("dir", document.documentElement.getAttribute("dir") || "ltr");
+    return d;
+  }
+  /* turn every <details> in a cloned doc into an open block so nothing prints collapsed */
+  function flatten(scope){
+    var list = Array.prototype.slice.call(scope.querySelectorAll("details"));
+    list.reverse().forEach(function(det){
+      var div = mk("div", det.className), sum = null;
+      Array.prototype.slice.call(det.childNodes).forEach(function(n){
+        if (n.nodeType === 1 && n.tagName === "SUMMARY" && !sum) sum = n;
+        div.appendChild(n);
+      });
+      if (sum){
+        var head = mk("div", "pr-sum");
+        Array.prototype.slice.call(sum.childNodes).forEach(function(n){ head.appendChild(n); });
+        div.replaceChild(head, sum);
+      }
+      if (det.parentNode) det.parentNode.replaceChild(div, det);
+    });
+    Array.prototype.slice.call(scope.querySelectorAll("button")).forEach(function(b){ b.remove(); });
+    Array.prototype.slice.call(scope.querySelectorAll("[id]")).forEach(function(n){ n.removeAttribute("id"); });
+  }
+  function printScripts(){
+    var panel = document.querySelector("#scripts .sec-panel");
+    if (!panel) return;
+    var doc = newDoc();
+    var sum = panel.querySelector("summary");
+    var kicker = sum ? sum.querySelector(".kicker") : null;
+    var h2 = sum ? sum.querySelector("h2") : null;
+    doc.appendChild(mk("p", "pr-kicker", kicker ? clean(kicker.textContent) : "Call scripts"));
+    doc.appendChild(mk("h2", null, h2 ? clean(h2.textContent) : "Call scripts"));
+    Array.prototype.slice.call(panel.childNodes).forEach(function(n){
+      if (n.nodeType !== 1 || n === sum) return;
+      doc.appendChild(n.cloneNode(true));
+    });
+    flatten(doc);
+    beginPrint(doc);
+  }
+  /* card facts are read by row position, so they work in EN and FA alike */
+  function factValue(card, idx){
+    var dl = card.querySelector("dl.facts");
+    if (!dl || !dl.children[idx]) return "";
+    var dd = dl.children[idx].querySelector("dd");
+    return dd ? clean(dd.textContent) : "";
+  }
+  function cardEmail(card){
+    var links = card.querySelectorAll('dl.facts a[href^="mailto:"]');
+    for (var i = 0; i < links.length; i++){
+      var href = links[i].getAttribute("href").slice(7).split("?")[0];
+      if (href) return href;
+    }
+    return "";
+  }
+  function cardName(card){
+    var h4 = card.querySelector(".card-top h4");
+    var name = h4 ? clean(h4.textContent) : (card.getAttribute("data-name") || "");
+    var num = card.querySelector(".num");
+    if (num) name = name.replace(clean(num.textContent), "").trim();
+    return name;
+  }
+  function printCard(card){
+    var doc = newDoc("pr-card");
+    var num = card.querySelector(".num");
+    doc.appendChild(mk("h2", null, (num ? clean(num.textContent) + " — " : "") + cardName(card)));
+    var loc = card.querySelector(".loc");
+    var lines = [];
+    if (loc && clean(loc.textContent)) lines.push(tt("City", "شهر") + ": " + clean(loc.textContent));
+    var phone = factValue(card, 1);
+    if (phone) lines.push(tt("Phone", "تلفن") + ": " + phone);
+    var ask = factValue(card, 0);
+    if (ask) lines.push(tt("Ask for", "بخواهید") + ": " + ask);
+    var email = cardEmail(card);
+    if (email) lines.push(tt("Email", "ایمیل") + ": " + email);
+    lines.forEach(function(m){ doc.appendChild(mk("p", "pr-meta", m)); });
+    var openings = card.querySelectorAll("details.opening");
+    if (!openings.length){
+      doc.appendChild(mk("p", "pr-note", tt("No script on this card yet.", "هنوز اسکریپتی روی این کارت نیست.")));
+    }
+    Array.prototype.forEach.call(openings, function(op){
+      var s = op.querySelector("summary");
+      var bq = op.querySelector("blockquote");
+      if (s) doc.appendChild(mk("h3", null, clean(s.textContent)));
+      if (bq) doc.appendChild(mk("blockquote", null, clean(bq.textContent)));
+      var fill = op.querySelector(".fill");
+      if (fill) doc.appendChild(mk("p", "pr-note", clean(fill.textContent)));
+    });
+    beginPrint(doc);
+  }
+  function printList(){
+    var cards = Array.prototype.slice.call(cardsBox.querySelectorAll(".card")).filter(function(c){ return !c.classList.contains("hidden-card"); });
+    var doc = newDoc();
+    doc.appendChild(mk("h2", null, tt("NexAIS — phone list", "NexAIS — لیست تلفن‌ها")));
+    doc.appendChild(mk("p", "pr-meta", cards.length + " " + tt("businesses — tick or write the result by hand after each call or visit.", "کسب‌وکار — نتیجه را بعد از هر تماس یا مراجعه با دست تیک بزنید یا بنویسید.")));
+    var table = mk("table", "pr-table");
+    var thead = mk("thead"), htr = mk("tr");
+    [tt("No.", "ردیف"), tt("Business", "کسب‌وکار"), tt("City", "شهر"), tt("Phone", "تلفن"), tt("Ask for", "بخواهید"), tt("Email", "ایمیل"), tt("Result", "نتیجه")].forEach(function(h){ htr.appendChild(mk("th", null, h)); });
+    thead.appendChild(htr);
+    table.appendChild(thead);
+    var tbody = mk("tbody");
+    cards.forEach(function(c){
+      var tr = mk("tr");
+      var num = c.querySelector(".num");
+      var loc = c.querySelector(".loc");
+      [num ? clean(num.textContent) : "", cardName(c), loc ? clean(loc.textContent) : "", factValue(c, 1), factValue(c, 0), cardEmail(c), ""].forEach(function(v, i){
+        tr.appendChild(mk("td", i === 6 ? "res" : null, v));
+      });
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    doc.appendChild(table);
+    beginPrint(doc);
+  }
+  var ps = document.getElementById("print-scripts");
+  if (ps) ps.addEventListener("click", printScripts);
+  var pl = document.getElementById("print-list");
+  if (pl) pl.addEventListener("click", printList);
+  function relabelCardBtns(){
+    Array.prototype.forEach.call(document.querySelectorAll(".print-card-btn"), function(b){
+      b.textContent = tt("Print script", "چاپ اسکریپت");
+    });
+  }
+  function addCardButtons(){
+    Array.prototype.forEach.call(cardsBox.querySelectorAll(".card"), function(c){
+      if (c.querySelector(".print-card-btn")) return;
+      var row = mk("div", "card-print");
+      var b = mk("button", "btn ghost print-card-btn", tt("Print script", "چاپ اسکریپت"));
+      b.type = "button";
+      row.appendChild(b);
+      var tracker = c.querySelector(".tracker");
+      if (tracker) c.insertBefore(row, tracker); else c.appendChild(row);
+    });
+  }
+  addCardButtons();
+  if (window.MutationObserver) new MutationObserver(addCardButtons).observe(cardsBox, { childList: true });
+  cardsBox.addEventListener("click", function(e){
+    var b = e.target && e.target.closest ? e.target.closest(".print-card-btn") : null;
+    if (!b) return;
+    var card = b.closest(".card");
+    if (card) printCard(card);
+  });
+  window.addEventListener("load", function(){
+    var orig = window.NEXAIS_setLang;
+    if (orig && !window.__printPatched){
+      window.__printPatched = true;
+      window.NEXAIS_setLang = function(l){ orig(l); relabelCardBtns(); };
     }
   });
 })();
