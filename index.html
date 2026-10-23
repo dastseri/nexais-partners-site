@@ -266,6 +266,27 @@
   details.phase-more>summary{font-weight:700;font-size:14px;color:var(--blue-dark)}
   details.phase-more p{margin-top:8px}
 
+  /* main section panels — each major section collapsible, closed by default */
+  section[id]{scroll-margin-top:74px}
+  details.sec-panel>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:14px;border-radius:8px}
+  details.sec-panel>summary::-webkit-details-marker{display:none}
+  details.sec-panel>summary::after{content:"";flex:none;width:9px;height:9px;margin-inline-start:auto;
+    border-right:2.5px solid var(--blue);border-bottom:2.5px solid var(--blue);transform:rotate(-45deg)}
+  [dir="rtl"] details.sec-panel>summary::after{transform:rotate(135deg)}
+  details.sec-panel[open]>summary::after{transform:rotate(45deg)}
+  details.sec-panel>summary:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+  details.sec-panel>summary:hover h2{color:var(--blue-dark)}
+  details.sec-panel>summary .sec-sum-text{flex:1;min-width:0}
+  details.sec-panel>summary .kicker{display:block;margin-bottom:6px}
+  details.sec-panel>summary h2{font-size:30px}
+  details.sec-panel[open]>summary{margin-bottom:24px}
+  section:has(> .wrap > details.sec-panel){padding:18px 0}
+  section:has(> .wrap > details.sec-panel[open]){padding:40px 0 52px}
+  @media (max-width:900px){
+    details.sec-panel>summary h2{font-size:23px}
+    section:has(> .wrap > details.sec-panel[open]){padding:32px 0 42px}
+  }
+
   /* kit */
   .kit-item{display:flex;gap:16px;align-items:flex-start}
   .kit-item img{width:86px;height:86px;object-fit:cover;object-position:top;border-radius:10px;border:1px solid var(--panel-line);flex:none}
@@ -526,10 +547,10 @@
 
 <section class="soft" id="offer">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">What you're selling</span><h2>AVA — AI that doesn't just answer. It gets work done.</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">What you're selling</p>
-      <h2>AVA — AI that doesn't just answer. It gets work done.</h2>
       <details class="how"><summary>How it works</summary><p>A missed call can be a missed customer. AVA answers in seconds, around the clock: reservations and appointments booked, phone orders taken from the business's own live menu and read back before they're placed, large parties and catering captured in full on the first call, returning customers recognized, and every booking confirmed by text. She speaks multiple languages and remembers your customers.</p></details>
+    
     </div>
     <div class="grid c3">
       <div class="box plan">
@@ -570,15 +591,16 @@
     <div class="rule-note">
       <b>Read this before you quote anyone:</b> Restaurants always start at <b>Professional ($399/mo)</b> — Starter is never offered to a restaurant, because they need the CRM and app for reservations and orders. There is no package smaller than Starter. The only offer below Starter is the <b>7-day free trial</b> — card required upfront, charged only from day 8 if you continue. A one-time setup fee applies and varies with the size of the deployment and the number of phone lines — it is quoted by NexAIS in writing, never by you on a call.
     </div>
+  </details>
   </div>
 </section>
 
 <section id="earn">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Commissions</span><h2>What you earn — and how it stacks</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">Commissions</p>
-      <h2>What you earn — and how it stacks</h2>
       <details class="how"><summary>How it works</summary><p>On monthly AVA contracts you earn <b>30% of the first month</b>, then <b>10% of every month for the life of the contract</b>. On one-time projects — websites, films, design work — you earn <b>20% of the project value</b>, paid when the client has paid in full. Commissions are calculated on amounts actually received from the client and are paid monthly.</p></details>
+    
     </div>
     <div class="grid c2" style="margin-bottom:22px">
       <details class="box acc"><summary>
@@ -635,15 +657,16 @@
         <div class="row big"><span>Total earned in your first 12 months</span><b id="c-tot">$0</b></div>
       </div>
     </div>
+  </details>
   </div>
 </section>
 
 <section class="soft" id="start">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Getting started</span><h2>From application to your first registered lead</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">Getting started</p>
-      <h2>From application to your first registered lead</h2>
       <p>Four steps and you're selling. Most partners complete them inside a week.</p>
+    
     </div>
     <div class="steps">
       <div class="step"><span class="n">1</span><h3>Apply</h3><p>Send your application with the form at the bottom of this page. Tell us your territory and the kinds of businesses you know.</p></div>
@@ -673,15 +696,16 @@
         </ul>
       </details>
     </div>
+  </details>
   </div>
 </section>
 
 <section id="plan">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Sales action plan</span><h2>The 30-day plan — sales only, starting today</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">Sales action plan</p>
-      <h2>The 30-day plan — sales only, starting today</h2>
       <details class="how"><summary>How it works</summary><p>This hub has one job for the next 30 days: turn the work already done into paying AVA clients. No new offers, no new discounts, no side projects. Every step below runs from today — Friday, October 23 — to Sunday, November 22, 2026, and feeds the same three things: calls, demos, pilots.</p></details>
+    
     </div>
 
     <details class="box acc" style="margin-bottom:22px"><summary>
@@ -771,9 +795,14 @@
       </details>
     </div>
 
-    <div class="box" id="talk">
-      <span class="tag">Connected to Muse</span>
-      <h3>Talk to Muse — from inside this page</h3>
+  </details>
+  </div>
+</section>
+
+<section class="soft" id="talk">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Connected to Muse</span><h2>Talk to Muse — from inside this page</h2></span></summary>
+    <div class="box">
       <details class="how"><summary>How it works</summary><p style="color:var(--ink-2);font-size:15px;margin-top:6px">This page is a fixed snapshot, so it cannot send anything by itself — it is wired to Muse through you. Pick a message type, fill in the fields, and the panel writes the exact message. Copy it, paste it into your Muse chat, and Muse picks the work up from there: answers, follow-ups, and decisions come back in the chat and are folded into this page's next update. AVA development requests travel the same road — they are decided by Zhaleh and Muse together, and only then does anyone tell a prospect.</p></details>
       <form class="talk-form" id="talk-form">
         <label>Message type
@@ -800,15 +829,16 @@
         <span class="hint">Then paste it into your Muse chat — that's the connection. Nothing here is sent automatically.</span>
       </div>
     </div>
+    </details>
   </div>
 </section>
 
 <section id="call-list">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Your call list</span><h2>Proposal follow-ups — 54 businesses</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">Your call list</p>
-      <h2>Proposal follow-ups — 54 businesses</h2>
       <details class="how"><summary>How it works</summary><p>On October 20–21 we sent AVA proposals to these 54 businesses — most received the full package by email; three received the proposal on its own, and two were reached through their website contact forms with the cover letter only. Each card shows exactly what that business received. Nobody has called them yet. Each card carries the phone number, the person to ask for, what we found about their business, and a ready-to-say opening line written for that business alone. The full sent files — English package and Persian version for each — live in the <a href="https://docs.google.com/spreadsheets/d/1TRez_Q5Uy39pU3dYlP0myoeZ7rQva1Xb2L4vLPPgNms/edit" target="_blank" rel="noopener">sent-packages register</a>.</p></details>
+    
     </div>
     <details class="box acc" style="margin-bottom:22px"><summary>
       <h3 style="margin-bottom:10px">The three goals of every call — nothing more</h3></summary>
@@ -4162,15 +4192,16 @@
 </article>
     </div>
     <p class="empty-msg" id="empty-msg">No business matches that search.</p>
+  </details>
   </div>
 </section>
 
 <section id="generator">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Proposal generator</span><h2>Build a new proposal package — right here</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">Proposal generator</p>
-      <h2>Build a new proposal package — right here</h2>
       <details class="how"><summary>How it works</summary><p>Found a business that isn't on the call list yet? Fill in what you found and this page builds the full NexAIS package for them: the founder's cover letter first, then the six-page proposal — in the locked NexAIS format, with the official prices, the demo line and the 7-day free trial as the call to action — card required upfront, charged only from day 8 if you continue. Prices, tiers and wording are fixed by format and can't be edited here — if a prospect doesn't fit the format, email <a href="mailto:info@nexais.ca">info@nexais.ca</a> instead of improvising.</p></details>
+    
     </div>
     <div class="draft-banner">
       <b>Every generated package is a DRAFT.</b> NexAIS reviews the final file before anything is sent — Zhaleh sees and approves the exact file first, no exceptions. Download the PDF, send it to NexAIS for review, and only send it to the prospect after approval. Generating a package also records the draft on the call list above, marked <b>“Proposal drafted — not sent”</b> — a new card for a new business, or a note on the card of a prospect who is already listed.
@@ -4268,15 +4299,16 @@
     </div>
     <div class="pkg-empty" id="pkg-empty">Your package preview will appear here — cover letter first, then the six proposal pages, exactly as the prospect will receive them.</div>
     <div class="pkg-pages" id="pkg-preview" style="display:none"></div>
+  </details>
   </div>
 </section>
 
 <section class="soft" id="scripts">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Call scripts</span><h2>The master script — word for word</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">Call scripts</p>
-      <h2>The master script — word for word</h2>
       <details class="how"><summary>How it works</summary><p>[Caller] is your name · [Business] is theirs · [Date] is October 20 or October 21, from their card · [Hook] is the personalized sentence on their card. Each call should run 60–90 seconds.</p></details>
+    
     </div>
     <details class="script-block acc"><summary>
       <h3>1 — The decision-maker is on the line (30 seconds)</h3></summary>
@@ -4316,15 +4348,16 @@
         <li>The <b>7-day free trial</b> runs on their own line first — card required upfront, charged only from day 8 if you continue — they decide after hearing her on real calls.</li>
       </ul>
     </details>
+  </details>
   </div>
 </section>
 
 <section id="rules">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Rules of the road</span><h2>How partners protect the NexAIS name</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">Rules of the road</p>
-      <h2>How partners protect the NexAIS name</h2>
       <p>These aren't fine print — they're what keeps every partner's commission safe and every promise we make true.</p>
+    
     </div>
     <div class="grid c2">
       <details class="box acc"><summary><h3>Prices are official and fixed</h3></summary><p>Starter $197 · Professional $399 · Grow $599 per month. Never discount, never negotiate, never invent a smaller package. The 7-day free trial — card required upfront, charged only from day 8 if you continue — is the only offer below Starter — use it instead of a discount.</p></details>
@@ -4334,15 +4367,16 @@
       <details class="box acc"><summary><h3>No spam, no bulk cold outreach</h3></summary><p>No mass emails, bulk DMs or robocalls in NexAIS's name. Introductions are personal, to businesses you can name, and if someone says "don't contact me again," it ends there — immediately and permanently.</p></details>
       <details class="box acc"><summary><h3>Be honest about who we are</h3></summary><p>Never claim a business is already a NexAIS customer unless NexAIS has confirmed it in writing. Prospects check — and one invented claim costs the whole team's credibility.</p></details>
     </div>
+  </details>
   </div>
 </section>
 
 <section class="soft" id="kit">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Sales kit</span><h2>Everything you need in your pocket</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">Sales kit</p>
-      <h2>Everything you need in your pocket</h2>
       <p>Approved materials only. Support for partners: <a href="mailto:info@nexais.ca">info@nexais.ca</a>.</p>
+    
     </div>
     <div class="grid c2">
       <div class="box kit-item">
@@ -4383,15 +4417,14 @@ nexais.ca</div>
         <button class="copy-btn" type="button" data-copy="tpl-email">Copy template</button>
       </details>
     </div>
+  </details>
   </div>
 </section>
 
 <section id="faq">
   <div class="wrap">
-    <div class="sec-head">
-      <p class="kicker">Partner FAQ</p>
-      <h2>Questions every new partner asks</h2>
-    </div>
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Partner FAQ</span><h2>Questions every new partner asks</h2></span></summary>
+    
     <details class="faq"><summary>Who closes the deal — me or NexAIS?</summary>
       <p>NexAIS does. Your job is the introduction and the follow-up: register the lead, get the prospect to hear the demo line, and book the 10-minute demo. The NexAIS team runs the demo, answers technical questions, quotes the setup fee in writing, and closes. Your commission is the same either way — you're paid for the relationship you started.</p></details>
     <details class="faq"><summary>When and how am I paid?</summary>
@@ -4406,15 +4439,16 @@ nexais.ca</div>
       <p>The first registration owns the lead. Register before you pitch — the registration email with your code is the timestamp that settles it. For businesses already in the tracker (the 54 proposals), work through the call list and log outcomes so the trail stays clear for everyone.</p></details>
     <details class="faq"><summary>Can I use my own AVA account setup fee-free?</summary>
       <p>Partners who refer five customers earn a waived setup fee on their own AVA installation. Ask the NexAIS team once your fifth referral is live and they'll apply it.</p></details>
+  </details>
   </div>
 </section>
 
 <section class="soft" id="join">
   <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Join the partner program</span><h2>Apply — we'll take it from there</h2></span></summary>
     <div class="sec-head">
-      <p class="kicker">Join the partner program</p>
-      <h2>Apply — we'll take it from there</h2>
       <p>Fill this in and send it. NexAIS replies with your personal referral code and your onboarding pack. Questions first? Email <a href="mailto:info@nexais.ca">info@nexais.ca</a> or hear the product yourself at +1 (437) 529-0400.</p>
+    
     </div>
     <div class="box">
       <form class="join-form" id="join-form">
@@ -4437,6 +4471,7 @@ nexais.ca</div>
         </div>
       </form>
     </div>
+  </details>
   </div>
 </section>
 
@@ -5757,6 +5792,7 @@ Object.assign(window.FA, {
       selectedGenerated = true;
       renderPipe();
       if (window.NEXAIS_refreshTracker) window.NEXAIS_refreshTracker();
+      if (window.NEXAIS_openSection) window.NEXAIS_openSection("call-list");
       selectedCard.scrollIntoView({ behavior:"smooth", block:"center" });
       return "existing";
     }
@@ -6158,6 +6194,36 @@ Object.assign(window.FA, {
       input.select();
     }
   });
+})();
+</script>
+<script>
+/* ================= collapsible main sections — menu opens + scrolls ================= */
+(function(){
+  "use strict";
+  function panelFor(id){
+    var sec = document.getElementById(id);
+    return sec ? sec.querySelector("details.sec-panel") : null;
+  }
+  window.NEXAIS_openSection = function(id){
+    var p = panelFor(id);
+    if (p) p.open = true;
+  };
+  document.addEventListener("click", function(e){
+    var t = e.target;
+    var a = t && t.closest ? t.closest('a[href^="#"]') : null;
+    if (!a) return;
+    var id = a.getAttribute("href").slice(1);
+    if (!id || !panelFor(id)) return;
+    var sec = document.getElementById(id);
+    e.preventDefault();
+    window.NEXAIS_openSection(id);
+    sec.scrollIntoView({ behavior:"smooth", block:"start" });
+    try { history.replaceState(null, "", "#" + id); } catch(err){}
+  });
+  var q = document.getElementById("q"), fg = document.getElementById("f-group");
+  if (q) q.addEventListener("input", function(){ window.NEXAIS_openSection("call-list"); });
+  if (fg) fg.addEventListener("change", function(){ window.NEXAIS_openSection("call-list"); });
+  if (location.hash && location.hash.length > 1) window.NEXAIS_openSection(location.hash.slice(1));
 })();
 </script>
 </body>
