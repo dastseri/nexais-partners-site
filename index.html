@@ -172,6 +172,15 @@
   .tracker select,.tracker input{margin-top:6px;padding:10px 12px;border:1px solid var(--panel-line);border-radius:9px;background:var(--panel);color:var(--ink);font:inherit;font-size:14.5px;text-transform:none;letter-spacing:0}
   .tracker .notes-l{flex:1;min-width:220px}
   .tracker .notes-l input{width:100%}
+  .tracker .actlog{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;flex-basis:100%;border-top:1px dashed var(--panel-line);padding-top:12px}
+  .actlog .act-btn{padding:10px 16px;font-size:14px}
+  .act-counts{margin:0 0 4px;font-size:14px;font-weight:700;color:var(--ink-2)}
+  .act-hist{margin-top:16px;border-top:1px dashed var(--panel-line);padding-top:12px}
+  .act-hist-t{font-size:12.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);margin:0}
+  .act-list{list-style:none;margin:8px 0 0;padding:0}
+  .act-list li{font-size:14px;color:var(--ink-2);padding:4px 0;border-bottom:1px dotted var(--panel-line)}
+  .act-list li:last-child{border-bottom:none}
+  .act-none{font-size:14px;color:var(--ink-3);margin:8px 0 0}
   .empty-msg{display:none;padding:26px;text-align:center;color:var(--ink-3);font-weight:600}
 
   /* scripts */
@@ -850,6 +859,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -866,6 +876,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Copper Creek Golf Club">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Copper Creek Golf Club">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="1" data-name="richmond hill golf club">
@@ -894,6 +917,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -910,6 +934,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Richmond Hill Golf Club">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Richmond Hill Golf Club">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="1" data-name="sassafraz">
@@ -938,6 +975,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -954,6 +992,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Sassafraz">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Sassafraz">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="1" data-name="the thornhill club">
@@ -982,6 +1033,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -998,6 +1050,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for The Thornhill Club">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for The Thornhill Club">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="1" data-name="islington golf club">
@@ -1026,6 +1091,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1042,6 +1108,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Islington Golf Club">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Islington Golf Club">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="1" data-name="aleria">
@@ -1070,6 +1149,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1086,6 +1166,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Aleria">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Aleria">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="1" data-name="konzelmann estate winery">
@@ -1114,6 +1207,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1130,6 +1224,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Konzelmann Estate Winery">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Konzelmann Estate Winery">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="1" data-name="château des charmes">
@@ -1158,6 +1265,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1174,6 +1282,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Château des Charmes">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Château des Charmes">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <div class="group-head" data-group="2"><h3>Priority 2 — Restaurants, venues &amp; wineries</h3></div>
@@ -1203,6 +1324,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1219,6 +1341,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Angus Glen Golf Club">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Angus Glen Golf Club">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="eagles nest golf club">
@@ -1247,6 +1382,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1263,6 +1399,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Eagles Nest Golf Club">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Eagles Nest Golf Club">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="bayview golf &amp; country club">
@@ -1291,6 +1440,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1307,6 +1457,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Bayview Golf &amp; Country Club">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Bayview Golf &amp; Country Club">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="château le parc">
@@ -1335,6 +1498,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1351,6 +1515,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Château Le Parc">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Château Le Parc">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="ascott parc event centre">
@@ -1379,6 +1556,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1395,6 +1573,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Ascott Parc Event Centre">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Ascott Parc Event Centre">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="le banquet hall">
@@ -1423,6 +1614,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1439,6 +1631,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Le Banquet Hall">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Le Banquet Hall">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="yu seafood">
@@ -1467,6 +1672,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1483,6 +1689,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Yu Seafood">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Yu Seafood">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="casa victoria">
@@ -1511,6 +1730,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1527,6 +1747,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Casa Victoria">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Casa Victoria">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="skyview fusion cuisine">
@@ -1555,6 +1788,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1571,6 +1805,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Skyview Fusion Cuisine">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Skyview Fusion Cuisine">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="stratus vineyards">
@@ -1599,6 +1846,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1615,6 +1863,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Stratus Vineyards">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Stratus Vineyards">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="two sisters vineyards">
@@ -1643,6 +1904,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1659,6 +1921,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Two Sisters Vineyards">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Two Sisters Vineyards">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="trius winery">
@@ -1687,6 +1962,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1703,6 +1979,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Trius Winery">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Trius Winery">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="wayne gretzky estates">
@@ -1731,6 +2020,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1747,6 +2037,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Wayne Gretzky Estates">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Wayne Gretzky Estates">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="vineland estates winery">
@@ -1775,6 +2078,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1791,6 +2095,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Vineland Estates Winery">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Vineland Estates Winery">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="the hare wine co.">
@@ -1819,6 +2136,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1835,6 +2153,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for The Hare Wine Co.">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for The Hare Wine Co.">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="reif estate winery">
@@ -1863,6 +2194,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1879,6 +2211,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Reif Estate Winery">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Reif Estate Winery">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="the foreign affair winery">
@@ -1907,6 +2252,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1923,6 +2269,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for The Foreign Affair Winery">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for The Foreign Affair Winery">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="megalomaniac wines">
@@ -1951,6 +2310,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -1967,6 +2327,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Megalomaniac Wines">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Megalomaniac Wines">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="ravine vineyard">
@@ -1995,6 +2368,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2011,6 +2385,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Ravine Vineyard">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Ravine Vineyard">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="snug harbour">
@@ -2039,6 +2426,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2055,6 +2443,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Snug Harbour">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Snug Harbour">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="posta italbar">
@@ -2083,6 +2484,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2099,6 +2501,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Posta Italbar">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Posta Italbar">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="via allegro ristorante">
@@ -2127,6 +2542,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2143,6 +2559,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Via Allegro Ristorante">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Via Allegro Ristorante">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="the marlowe">
@@ -2171,6 +2600,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2187,6 +2617,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for The Marlowe">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for The Marlowe">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="terroni">
@@ -2215,6 +2658,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2231,6 +2675,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Terroni">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Terroni">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="richmond station">
@@ -2259,6 +2716,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2275,6 +2733,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Richmond Station">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Richmond Station">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="chef reza persian grill">
@@ -2303,6 +2774,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2319,6 +2791,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Chef Reza Persian Grill">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Chef Reza Persian Grill">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="terra restaurant">
@@ -2347,6 +2832,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2363,6 +2849,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Terra Restaurant">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Terra Restaurant">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="sarpa restaurant">
@@ -2391,6 +2890,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2407,6 +2907,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Sarpa Restaurant">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Sarpa Restaurant">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="touro churrascaria">
@@ -2435,6 +2948,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2451,6 +2965,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Touro Churrascaria">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Touro Churrascaria">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="ato japanese restaurant">
@@ -2479,6 +3006,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2495,6 +3023,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for ATO Japanese Restaurant">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for ATO Japanese Restaurant">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="adrak">
@@ -2523,6 +3064,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2539,6 +3081,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Adrak">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Adrak">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="mangal prime">
@@ -2567,6 +3122,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2583,6 +3139,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Mangal Prime">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Mangal Prime">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="queen of persia">
@@ -2611,6 +3180,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2627,6 +3197,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Queen of Persia">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Queen of Persia">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="restaurant lucie">
@@ -2655,6 +3238,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2671,6 +3255,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Restaurant Lucie">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Restaurant Lucie">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="david duncan house">
@@ -2699,6 +3296,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2715,6 +3313,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for David Duncan House">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for David Duncan House">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="mississaugua golf &amp; country club">
@@ -2743,6 +3354,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2759,6 +3371,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Mississaugua Golf &amp; Country Club">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Mississaugua Golf &amp; Country Club">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="2" data-name="ladies&#x27; golf club of toronto">
@@ -2787,6 +3412,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2803,6 +3429,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Ladies&#x27; Golf Club of Toronto">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Ladies&#x27; Golf Club of Toronto">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <div class="group-head" data-group="3"><h3>Priority 3 — Clinics &amp; spas</h3></div>
@@ -2832,6 +3471,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2848,6 +3488,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Rejuuv Medi Spa">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Rejuuv Medi Spa">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="3" data-name="newdermamed">
@@ -2876,6 +3529,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2892,6 +3546,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for NewDermaMed">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for NewDermaMed">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="3" data-name="bellair laser clinic">
@@ -2920,6 +3587,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2936,6 +3604,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Bellair Laser Clinic">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Bellair Laser Clinic">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="3" data-name="q esthetics laser clinic">
@@ -2964,6 +3645,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -2980,6 +3662,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Q Esthetics Laser Clinic">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Q Esthetics Laser Clinic">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="3" data-name="renovo med spa">
@@ -3008,6 +3703,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -3024,6 +3720,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Renovo Med Spa">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Renovo Med Spa">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="3" data-name="skin med laser &amp; cosmetic clinic">
@@ -3052,6 +3761,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -3068,6 +3778,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for SKIN MED Laser &amp; Cosmetic Clinic">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for SKIN MED Laser &amp; Cosmetic Clinic">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="3" data-name="mederm esthetics">
@@ -3096,6 +3819,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -3112,6 +3836,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Mederm Esthetics">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Mederm Esthetics">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="3" data-name="hammam spa by céla">
@@ -3140,6 +3877,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -3156,6 +3894,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Hammam Spa by Céla">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Hammam Spa by Céla">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="3" data-name="sweetgrass spa">
@@ -3184,6 +3935,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -3200,6 +3952,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Sweetgrass Spa">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Sweetgrass Spa">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <div class="group-head" data-group="t"><h3>Transport — Trucking &amp; logistics follow-ups</h3><p>Three GTA carriers hiring dispatch and customer-service staff right now — the exact hours AVA covers. Full proposal packages PKG-069 to PKG-071 are prepared; the live proof to cite is AVA on the Tibox line, (647) 724-4006.</p></div>
@@ -3235,6 +4000,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -3251,6 +4017,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Transam Carriers">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Transam Carriers">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="t" data-name="sarai trucking">
@@ -3285,6 +4064,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -3301,6 +4081,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Sarai Trucking">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Sarai Trucking">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
 <article class="card" data-group="t" data-name="steed logistic">
@@ -3335,6 +4128,7 @@
       <p class="fill">Replace [Caller] with your name before you dial.</p>
     </details>
     
+      <div class="act-hist"><p class="act-hist-t">Action history</p><ul class="act-list"></ul><p class="act-none">No actions logged yet.</p></div>
   </details>
   <div class="tracker">
     <label>Outcome
@@ -3351,6 +4145,19 @@
     <label class="notes-l">Notes — name, direct email, callback time
       <input type="text" class="notes" placeholder="e.g. Spoke to Maria — demo Thu 3 PM" aria-label="Notes for Steed Logistic">
     </label>
+    <div class="actlog">
+      <label>Action type
+        <select class="act-type" aria-label="Action type for Steed Logistic">
+          <option value="Call">Call</option>
+          <option value="SMS">SMS</option>
+          <option value="Email">Email</option>
+          <option value="DM">DM</option>
+          <option value="Visit">Visit</option>
+        </select>
+      </label>
+      <button type="button" class="btn ghost act-btn">Log action</button>
+      <p class="act-counts">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p>
+    </div>
   </div>
 </article>
     </div>
@@ -4113,6 +4920,63 @@ Object.assign(window.FA, {
   updateProgress();
   window.NEXAIS_refreshTracker = function(){ applyFilter(); updateProgress(); };
 
+  /* ---- per-card action logger: type + count, same in-session pattern as the outcome tracker ---- */
+  var ACT_TYPES = ["Call", "SMS", "Email", "DM", "Visit"];
+  var ACT_COUNT_LABEL = { Call: "Calls", SMS: "SMS", Email: "Email", DM: "DM", Visit: "Visits" };
+  var ACT_FA_LABEL = { Call: "تماس", SMS: "پیامک", Email: "ایمیل", DM: "دایرکت", Visit: "مراجعه" };
+  function cardActions(c){ if (!c.__actions) c.__actions = []; return c.__actions; }
+  function actCounts(c){
+    var n = { Call: 0, SMS: 0, Email: 0, DM: 0, Visit: 0 };
+    cardActions(c).forEach(function(a){ if (Object.prototype.hasOwnProperty.call(n, a.t)) n[a.t]++; });
+    return n;
+  }
+  function actCountsText(c){
+    var n = actCounts(c), fa = window.LANG === "fa";
+    return ACT_TYPES.map(function(t){ return (fa ? ACT_FA_LABEL[t] : ACT_COUNT_LABEL[t]) + ": " + n[t]; }).join(" · ");
+  }
+  function actDateText(iso){
+    var d = new Date(iso + "T12:00:00");
+    return d.toLocaleDateString(window.LANG === "fa" ? "fa-IR" : "en-US", { month: "short", day: "numeric", year: "numeric" });
+  }
+  function renderCardActions(c){
+    var countsEl = c.querySelector(".act-counts");
+    if (countsEl) countsEl.textContent = actCountsText(c);
+    var list = c.querySelector(".act-list"), none = c.querySelector(".act-none");
+    if (list){
+      var acts = cardActions(c);
+      list.innerHTML = "";
+      acts.slice().reverse().forEach(function(a){
+        var li = document.createElement("li");
+        li.textContent = actDateText(a.d) + " — " + (window.LANG === "fa" ? ACT_FA_LABEL[a.t] : a.t);
+        list.appendChild(li);
+      });
+      if (none) none.style.display = acts.length ? "none" : "";
+    }
+  }
+  function renderAllActions(){ allCards().forEach(renderCardActions); }
+  window.NEXAIS_renderActions = renderAllActions;
+  window.NEXAIS_hasActions = function(c){ return !!(c && cardActions(c).length); };
+  window.NEXAIS_actionsLine = function(c){
+    if (!c || !cardActions(c).length) return "";
+    return tt("Actions: ", "اقدام‌ها: ") + actCountsText(c);
+  };
+  cardsBox.addEventListener("click", function(e){
+    var btn = e.target && e.target.closest ? e.target.closest(".act-btn") : null;
+    if (!btn) return;
+    var card = btn.closest(".card");
+    if (!card) return;
+    var sel = card.querySelector(".act-type");
+    var now = new Date();
+    var iso = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2) + "-" + ("0" + now.getDate()).slice(-2);
+    cardActions(card).push({ t: sel ? sel.value : "Call", d: iso });
+    renderCardActions(card);
+    var old = btn.textContent;
+    btn.textContent = tt("Logged ✓", "ثبت شد ✓");
+    setTimeout(function(){ btn.textContent = old; }, 1500);
+    btn.dispatchEvent(new Event("change", { bubbles: true }));
+  });
+  renderAllActions();
+
   function copyText(text, btn, doneLabel){
     function done(){ var old = btn.textContent; btn.textContent = doneLabel; setTimeout(function(){ btn.textContent = old; }, 1800); }
     if (navigator.clipboard && navigator.clipboard.writeText){
@@ -4128,12 +4992,15 @@ Object.assign(window.FA, {
   document.getElementById("copy-log").addEventListener("click", function(){
     var btn = this;
     var lines = [tt("AVA proposal follow-up — call log", "پیگیری پروپوزال AVA — گزارش تماس"), ""];
-    var done = logged();
+    var done = allCards().filter(function(c){
+      return logged().indexOf(c) >= 0 || cardActions(c).length > 0;
+    });
     if (!done.length){ lines.push(tt("No outcomes logged yet in this session.", "هنوز در این نشست نتیجه‌ای ثبت نشده است.")); }
     done.forEach(function(c){
       var name = c.querySelector("h4").textContent.replace(/^\s*\d+\s*/, "").trim();
       var st = c.querySelector(".status").value, nt = c.querySelector(".notes").value.trim();
-      lines.push("• " + name + " — " + st + (nt ? " — " + nt : ""));
+      var al = window.NEXAIS_actionsLine(c);
+      lines.push("• " + name + " — " + st + (nt ? " — " + nt : "") + (al ? " — " + al : ""));
     });
     copyText(lines.join("\n"), btn, tt("Call log copied ✓", "گزارش تماس کپی شد ✓"));
   });
@@ -4615,14 +5482,14 @@ Object.assign(window.FA, {
       '<p class="hook"><span>' + tt("Research:", "تحقیق:") + '</span> ' + (window.LANG === "fa"
         ? "پروندهٔ عمیق در " + esc(dateStr) + " درخواست شد — میز تحقیق NexAIS در حال ساخت آن است (چندمنبعی، متقاطع‌بررسی‌شده). تا وقتی پرونده برسد، اینجا هیچ ادعایی نیست."
         : "Deep dossier requested " + esc(dateStr) + " — the NexAIS research desk is building it (multi-source, cross-checked). Nothing here is claimed until the dossier lands.") + '</p>' +
-      '<div class="research-line"><span><b>' + tt("Research stage:", "مرحلهٔ تحقیق:") + '</b></span><select class="r-stage" aria-label="Research stage for ' + esc(biz) + '">' + stageOptions(researchStage || "Requested") + '</select></div></details>' +
+      '<div class="research-line"><span><b>' + tt("Research stage:", "مرحلهٔ تحقیق:") + '</b></span><select class="r-stage" aria-label="Research stage for ' + esc(biz) + '">' + stageOptions(researchStage || "Requested") + '</select></div>' + '<div class="act-hist"><p class="act-hist-t">' + tt("Action history", "تاریخچهٔ اقدام‌ها") + '</p><ul class="act-list"></ul><p class="act-none">' + tt("No actions logged yet.", "هنوز اقدامی ثبت نشده است.") + '</p></div>' + '</details>' +
       '<div class="tracker"><label>' + tt("Outcome", "نتیجه") + ' <select class="status" aria-label="Call outcome for ' + esc(biz) + '">' +
       '<option value="Not called" selected>' + tt("Not called", "تماس گرفته نشده") + '</option><option value="Reached decision-maker">' + tt("Reached decision-maker", "به تصمیم‌گیرنده رسیدم") + '</option>' +
       '<option value="Gatekeeper">' + tt("Gatekeeper", "منشی / واسطه") + '</option><option value="Voicemail left">' + tt("Voicemail left", "پیام صوتی گذاشته شد") + '</option>' +
       '<option value="Not interested">' + tt("Not interested", "علاقه‌ای نداشت") + '</option><option value="Callback scheduled">' + tt("Callback scheduled", "تماس مجدد برنامه‌ریزی شد") + '</option>' +
       '<option value="Demo booked">' + tt("Demo booked", "دمو رزرو شد") + '</option></select></label>' +
       '<label class="notes-l">' + tt("Notes — name, direct email, callback time", "یادداشت — نام، ایمیل مستقیم، زمان تماس مجدد") + ' <input type="text" class="notes" value="' +
-      esc("Research requested " + dateStr + " via the hub") + '" aria-label="Notes for ' + esc(biz) + '"></label></div>';
+      esc("Research requested " + dateStr + " via the hub") + '" aria-label="Notes for ' + esc(biz) + '"></label>' + '<div class="actlog"><label>' + tt("Action type", "نوع اقدام") + ' <select class="act-type" aria-label="Action type for ' + esc(biz) + '"><option value="Call">' + tt("Call", "تماس") + '</option><option value="SMS">' + tt("SMS", "پیامک") + '</option><option value="Email">' + tt("Email", "ایمیل") + '</option><option value="DM">' + tt("DM", "دایرکت") + '</option><option value="Visit">' + tt("Visit", "مراجعه") + '</option></select></label><button type="button" class="btn ghost act-btn">' + tt("Log action", "ثبت اقدام") + '</button><p class="act-counts">' + tt("Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0", "تماس: 0 · پیامک: 0 · ایمیل: 0 · دایرکت: 0 · مراجعه: 0") + '</p></div>' + '</div>';
     head.parentNode.insertBefore(card, head.nextSibling);
     draftCardEl = card;
     if (window.NEXAIS_refreshTracker) window.NEXAIS_refreshTracker();
@@ -4932,7 +5799,7 @@ Object.assign(window.FA, {
       '<p class="note">' + tt("Note: Draft only — Zhaleh at NexAIS reviews and approves the final file before anything is sent.", "توجه: فقط پیش‌نویس است — ژاله در NexAIS فایل نهایی را پیش از هر ارسالی بررسی و تأیید می‌کند.") + '</p>' +
       '<details class="opening"><summary>' + tt("Your opening line — word for word", "جملهٔ شروع شما — کلمه به کلمه") + '</summary><blockquote>' + esc(opening) + '</blockquote>' +
       '<p class="fill">' + tt("Replace [Caller] with your name before you dial.", "پیش از شماره‌گیری، [Caller] را با نام خودتان جایگزین کنید.") + '</p></details>' +
-      '<div class="research-line"><span><b>' + tt("Research stage:", "مرحلهٔ تحقیق:") + '</b></span><select class="r-stage" aria-label="Research stage for ' + esc(D.biz) + '">' + stageOptions("Package generated") + '</select><span>' + tt("The pipeline ends here — the draft is built; NexAIS review comes next.", "خط لوله اینجا تمام می‌شود — پیش‌نویس ساخته شده؛ قدم بعدی بررسی NexAIS است.") + '</span></div></details>' +
+      '<div class="research-line"><span><b>' + tt("Research stage:", "مرحلهٔ تحقیق:") + '</b></span><select class="r-stage" aria-label="Research stage for ' + esc(D.biz) + '">' + stageOptions("Package generated") + '</select><span>' + tt("The pipeline ends here — the draft is built; NexAIS review comes next.", "خط لوله اینجا تمام می‌شود — پیش‌نویس ساخته شده؛ قدم بعدی بررسی NexAIS است.") + '</span></div>' + '<div class="act-hist"><p class="act-hist-t">' + tt("Action history", "تاریخچهٔ اقدام‌ها") + '</p><ul class="act-list"></ul><p class="act-none">' + tt("No actions logged yet.", "هنوز اقدامی ثبت نشده است.") + '</p></div>' + '</details>' +
       '<div class="tracker"><label>' + tt("Outcome", "نتیجه") + ' <select class="status" aria-label="Call outcome for ' + esc(D.biz) + '">' +
       '<option value="Proposal drafted — not sent" selected>' + tt("Proposal drafted — not sent", "پروپوزال تولید شد — ارسال نشده") + '</option>' +
       '<option value="Not called">' + tt("Not called", "تماس گرفته نشده") + '</option><option value="Reached decision-maker">' + tt("Reached decision-maker", "به تصمیم‌گیرنده رسیدم") + '</option>' +
@@ -4941,7 +5808,7 @@ Object.assign(window.FA, {
       '<option value="Demo booked">' + tt("Demo booked", "دمو رزرو شد") + '</option></select></label>' +
       '<label class="notes-l">' + tt("Notes — name, direct email, callback time", "یادداشت — نام، ایمیل مستقیم، زمان تماس مجدد") + ' <input type="text" class="notes" value="' +
       esc("Package: " + TIERS[D.tier].name + (D.partner ? " · Partner " + D.partner : "") + (D.code ? " · Code " + D.code : "")) +
-      '" aria-label="Notes for ' + esc(D.biz) + '"></label></div>';
+      '" aria-label="Notes for ' + esc(D.biz) + '"></label>' + '<div class="actlog"><label>' + tt("Action type", "نوع اقدام") + ' <select class="act-type" aria-label="Action type for ' + esc(D.biz) + '"><option value="Call">' + tt("Call", "تماس") + '</option><option value="SMS">' + tt("SMS", "پیامک") + '</option><option value="Email">' + tt("Email", "ایمیل") + '</option><option value="DM">' + tt("DM", "دایرکت") + '</option><option value="Visit">' + tt("Visit", "مراجعه") + '</option></select></label><button type="button" class="btn ghost act-btn">' + tt("Log action", "ثبت اقدام") + '</button><p class="act-counts">' + tt("Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0", "تماس: 0 · پیامک: 0 · ایمیل: 0 · دایرکت: 0 · مراجعه: 0") + '</p></div>' + '</div>';
     head.parentNode.insertBefore(card, head.nextSibling);
     researchStage = "Package generated";
     renderPipe();
@@ -5075,7 +5942,15 @@ Object.assign(window.FA, {
   "For now all partners share this one temporary key — please don't share it outside the sales team. Personal per-partner keys will be issued inside this same app later; this app is standalone and separate from the client CRM.": "فعلاً همهٔ همکاران از همین یک کلید موقت مشترک استفاده می‌کنند — لطفاً آن را بیرون از تیم فروش به اشتراک نگذارید. کلیدهای شخصی هر همکار بعداً داخل همین اپ صادر می‌شود؛ این اپ مستقل است و از CRM مشتریان جداست.",
   "Details & script": "جزئیات و اسکریپت",
   "Phase details": "جزئیات فاز",
-  "How it works": "چطور کار می‌کند"
+  "How it works": "چطور کار می‌کند",
+  "Action type": "نوع اقدام",
+  "Log action": "ثبت اقدام",
+  "Call": "تماس",
+  "SMS": "پیامک",
+  "DM": "دایرکت",
+  "Visit": "مراجعه",
+  "Action history": "تاریخچهٔ اقدام‌ها",
+  "No actions logged yet.": "هنوز اقدامی ثبت نشده است."
 });
 (function(){
   "use strict";
@@ -5094,7 +5969,8 @@ Object.assign(window.FA, {
   function loggedCards(){
     return allCards().filter(function(c){
       var st = c.querySelector(".status"), nt = c.querySelector(".notes");
-      return (st && st.value !== "Not called") || (nt && nt.value.trim() !== "");
+      return (st && st.value !== "Not called") || (nt && nt.value.trim() !== "") ||
+             (window.NEXAIS_hasActions && window.NEXAIS_hasActions(c));
     });
   }
   function compose(){
@@ -5115,7 +5991,8 @@ Object.assign(window.FA, {
       if (!done.length) L.push(tt("No outcomes logged yet today.", "امروز هنوز نتیجه‌ای ثبت نشده است."));
       done.forEach(function(c){
         var st = c.querySelector(".status").value, nt = c.querySelector(".notes").value.trim();
-        L.push("• " + cardName(c) + " — " + st + (nt ? " — " + nt : ""));
+        var al = window.NEXAIS_actionsLine ? window.NEXAIS_actionsLine(c) : "";
+        L.push("• " + cardName(c) + " — " + st + (nt ? " — " + nt : "") + (al ? " — " + al : ""));
       });
       if (det) L.push(tt("Note: ", "یادداشت: ") + det);
     } else if (type === "lead"){
@@ -5252,6 +6129,7 @@ Object.assign(window.FA, {
     walkText(); walkAttrs();
     if (window.NEXAIS_refreshTracker) window.NEXAIS_refreshTracker();
     if (window.NEXAIS_renderPipe) window.NEXAIS_renderPipe();
+    if (window.NEXAIS_renderActions) window.NEXAIS_renderActions();
   }
   window.NEXAIS_setLang = function(l){ window.LANG = l; applyLang(); };
   document.getElementById("lang-en").addEventListener("click", function(){ window.NEXAIS_setLang("en"); });
