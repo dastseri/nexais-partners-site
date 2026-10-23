@@ -504,6 +504,7 @@
       <a href="#start">Getting Started</a>
       <a href="#plan">Action Plan</a>
       <a href="#call-list">Call List</a>
+      <a href="#research">Research</a>
       <a href="#generator">Generator</a>
       <a href="#scripts">Call Scripts</a>
       <a href="#kit">Sales Kit</a>
@@ -4196,6 +4197,49 @@
   </div>
 </section>
 
+<section class="soft" id="research">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Research queue</span><h2>Businesses to work on</h2></span></summary>
+    <div class="sec-head">
+      <p>Businesses NexAIS is researching next. Each one showed a live signal AVA can fix — most of them a hiring ad for the very work AVA supports. Add your own finds with the form below; when a business is ready, its Build dossier button loads it into the proposal generator with its known details filled in.</p>
+    </div>
+    <p class="progress-line" id="rq-count"></p>
+    <div id="rq-list"></div>
+    <div class="box" style="margin-top:22px">
+      <h3 style="margin-bottom:14px">Add a business</h3>
+      <form class="gen-form" id="rq-form">
+        <label>Business name *
+          <input type="text" id="rq-name" required placeholder="e.g. Charger Logistics" />
+        </label>
+        <label>City / area
+          <input type="text" id="rq-city" placeholder="e.g. Brampton" />
+        </label>
+        <label>Vertical
+          <select id="rq-vertical">
+            <option value="restaurant">Restaurant / venue</option>
+            <option value="transport" selected>Transport — trucking &amp; logistics</option>
+            <option value="clinic">Clinic / spa</option>
+            <option value="other">Other service business</option>
+          </select>
+        </label>
+        <label>Website
+          <input type="text" id="rq-web" placeholder="e.g. bellanotte.ca" />
+        </label>
+        <label>Phone
+          <input type="tel" id="rq-phone" placeholder="e.g. (905) 555-0123" />
+        </label>
+        <label>Note — the signal you noticed
+          <input type="text" id="rq-note" placeholder="e.g. Hiring a dispatcher right now" />
+        </label>
+        <div class="full">
+          <button class="btn primary" type="submit">Add to the research queue</button>
+        </div>
+      </form>
+    </div>
+    </details>
+  </div>
+</section>
+
 <section id="generator">
   <div class="wrap">
     <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Proposal generator</span><h2>Build a new proposal package — right here</h2></span></summary>
@@ -4506,6 +4550,14 @@ Object.assign(window.FA, {
   "Getting Started": "شروع کار",
   "Getting started": "شروع کار",
   "Call List": "لیست تماس",
+  "Research": "تحقیق",
+  "Research queue": "صف تحقیق",
+  "Businesses to work on": "کسب‌وکارهای در صف تحقیق",
+  "Businesses NexAIS is researching next. Each one showed a live signal AVA can fix — most of them a hiring ad for the very work AVA supports. Add your own finds with the form below; when a business is ready, its Build dossier button loads it into the proposal generator with its known details filled in.": "کسب‌وکارهایی که NexAIS در مرحلهٔ بعد رویشان تحقیق می‌کند. هر کدام نشانهٔ زنده‌ای نشان داده‌اند که AVA می‌تواند درستش کند — بیشترشان آگهی استخدام برای همان کاری است که AVA پشتیبانی می‌کند. یافته‌های خودتان را با فرم زیر اضافه کنید؛ وقتی کسب‌وکاری آماده شد، دکمهٔ «ساخت پرونده» آن را با جزئیات شناخته‌شده‌اش در مولّد پروپوزال بار می‌کند.",
+  "Add a business": "افزودن کسب‌وکار",
+  "Vertical": "حوزهٔ فعالیت",
+  "Note — the signal you noticed": "یادداشت — نشانه‌ای که متوجه شدید",
+  "Add to the research queue": "افزودن به صف تحقیق",
   "Generator": "مولّد پروپوزال",
   "Call Scripts": "اسکریپت‌های تماس",
   "Call scripts": "اسکریپت‌های تماس",
@@ -6224,6 +6276,108 @@ Object.assign(window.FA, {
   if (q) q.addEventListener("input", function(){ window.NEXAIS_openSection("call-list"); });
   if (fg) fg.addEventListener("change", function(){ window.NEXAIS_openSection("call-list"); });
   if (location.hash && location.hash.length > 1) window.NEXAIS_openSection(location.hash.slice(1));
+})();
+</script>
+<script>
+/* ================= research queue — businesses to work on ================= */
+(function(){
+  "use strict";
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  var queue = [
+    { name:"Charger Logistics", city:"Brampton", vertical:"transport", web:"", phone:"", noteEn:"Hiring Dispatch Logistician + Customer Service Specialist", noteFa:"در حال استخدام مسئول دیسپچ لجستیک و متخصص خدمات مشتری" },
+    { name:"Transformer Logistics", city:"Brampton", vertical:"transport", web:"", phone:"", noteEn:"Hiring Dispatcher", noteFa:"در حال استخدام دیسپچر" },
+    { name:"Canada Cartage", city:"Mississauga", vertical:"transport", web:"", phone:"", noteEn:"Hiring night-shift Dispatcher, 12:00–8:30 am", noteFa:"در حال استخدام دیسپچر شیفت شب، ۱۲:۰۰ تا ۸:۳۰ صبح" },
+    { name:"Westcan Bulk Transport / KAG", city:"Mississauga", vertical:"transport", web:"", phone:"", noteEn:"Hiring Logistics Specialist / Dispatcher", noteFa:"در حال استخدام متخصص لجستیک / دیسپچر" },
+    { name:"Lotus Transportation", city:"Brampton", vertical:"transport", web:"", phone:"", noteEn:"Dispatch role open", noteFa:"موقعیت شغلی دیسپچ باز است" },
+    { name:"DSV", city:"Guelph", vertical:"transport", web:"", phone:"", noteEn:"Hiring Dispatcher", noteFa:"در حال استخدام دیسپچر" },
+    { name:"2649098 Ontario Inc.", city:"Brampton", vertical:"transport", web:"", phone:"", noteEn:"Hiring Truck Dispatcher", noteFa:"در حال استخدام دیسپچر کامیون" }
+  ];
+  function rqLabel(v){
+    if (v === "restaurant") return tt("Restaurant / venue", "رستوران / مکان برگزاری");
+    if (v === "clinic") return tt("Clinic / spa", "کلینیک / اسپا");
+    if (v === "transport") return tt("Transport — trucking & logistics", "حمل‌ونقل — باربری و لجستیک");
+    return tt("Other service business", "کسب‌وکار خدماتی دیگر");
+  }
+  function renderQueue(){
+    var box = document.getElementById("rq-list");
+    if (!box) return;
+    var cnt = document.getElementById("rq-count");
+    if (cnt) cnt.innerHTML = "<b>" + queue.length + "</b> " + (window.LANG === "fa"
+      ? "کسب‌وکار در صف تحقیق — هنوز هیچ‌کدام پکیج ندارند؛ «ساخت پرونده» یکی را به مولّد پروپوزال می‌برد."
+      : "businesses in the research queue — none has a package yet; Build dossier moves one into the proposal generator.");
+    box.innerHTML = "";
+    queue.forEach(function(b, i){
+      var card = document.createElement("article");
+      card.className = "card";
+      var facts = "";
+      if (b.phone) facts += '<div><dt>' + tt("Phone", "تلفن") + '</dt><dd class="phone">' + esc(b.phone) + '</dd></div>';
+      if (b.web) facts += '<div><dt>' + tt("Website", "وب‌سایت") + '</dt><dd>' + esc(b.web) + '</dd></div>';
+      var note = window.LANG === "fa" ? (b.noteFa || b.noteEn) : b.noteEn;
+      card.innerHTML =
+        '<div class="card-top"><div><h4>' + esc(b.name) + '</h4>' +
+        '<p class="loc">' + esc(b.city || "—") + ' · ' + esc(rqLabel(b.vertical)) + '</p></div>' +
+        '<span class="badge p2">' + tt("In research queue", "در صف تحقیق") + '</span></div>' +
+        (facts ? '<dl class="facts">' + facts + '</dl>' : '') +
+        (note ? '<p class="hook"><span>' + tt("Signal:", "نشانه:") + '</span> ' + esc(note) + '</p>' : '') +
+        '<p class="prop-link"><button type="button" class="copy-btn" data-rq="' + i + '" style="margin-top:2px">' + tt("Build dossier", "ساخت پرونده") + '</button></p>';
+      box.appendChild(card);
+    });
+  }
+  window.NEXAIS_renderQueue = renderQueue;
+  renderQueue();
+
+  var list = document.getElementById("rq-list");
+  if (list) list.addEventListener("click", function(e){
+    var btn = e.target && e.target.closest ? e.target.closest("[data-rq]") : null;
+    if (!btn) return;
+    var b = queue[parseInt(btn.getAttribute("data-rq"), 10)];
+    if (!b) return;
+    var pick = document.getElementById("g-pick");
+    if (pick && pick.value !== "new"){
+      pick.value = "new";
+      pick.dispatchEvent(new Event("change"));
+    }
+    function setVal(id, v){ var el = document.getElementById(id); if (el) el.value = v || ""; }
+    setVal("g-biz", b.name);
+    setVal("g-city", b.city);
+    setVal("g-web", b.web);
+    setVal("g-phone", b.phone);
+    setVal("g-findings", b.noteEn);
+    var t = document.getElementById("g-type");
+    if (t) t.value = b.vertical === "restaurant" ? "restaurant" : (b.vertical === "clinic" ? "clinic" : "service");
+    if (window.NEXAIS_openSection) window.NEXAIS_openSection("generator");
+    var sec = document.getElementById("generator");
+    if (sec) sec.scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+
+  var form = document.getElementById("rq-form");
+  if (form) form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var nameEl = document.getElementById("rq-name");
+    var name = nameEl.value.trim();
+    if (!name) return;
+    var note = document.getElementById("rq-note").value.trim();
+    queue.unshift({
+      name: name,
+      city: document.getElementById("rq-city").value.trim(),
+      vertical: document.getElementById("rq-vertical").value,
+      web: document.getElementById("rq-web").value.trim(),
+      phone: document.getElementById("rq-phone").value.trim(),
+      noteEn: note, noteFa: note
+    });
+    renderQueue();
+    form.reset();
+    var first = document.querySelector("#rq-list .card");
+    if (first) first.scrollIntoView({ behavior:"smooth", block:"center" });
+  });
+
+  window.addEventListener("load", function(){
+    var orig = window.NEXAIS_setLang;
+    if (orig && !window.__nexaisQueuePatched){
+      window.__nexaisQueuePatched = true;
+      window.NEXAIS_setLang = function(l){ orig(l); renderQueue(); };
+    }
+  });
 })();
 </script>
 </body>
