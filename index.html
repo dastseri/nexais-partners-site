@@ -906,6 +906,10 @@
       </select>
       <button class="btn ghost" id="copy-log" type="button">Copy today's call log</button>
       <button class="btn ghost" id="print-list" type="button">Print phone list</button>
+      <button class="btn ghost" id="save-backup" type="button">Download backup</button>
+      <button class="btn ghost" id="load-backup" type="button">Restore backup</button>
+      <input type="file" id="load-backup-file" accept="application/json,.json" hidden>
+      <button class="btn ghost" id="set-user" type="button">Change user</button>
     </div>
     <p class="progress-line" id="progress">54 businesses · 0 outcomes logged in this session</p>
     <div id="cards">
@@ -5101,12 +5105,12 @@ Object.assign(window.FA, {
     if (window.LANG === "fa"){
       progress.innerHTML = "<b>" + cards.length + " کسب‌وکار</b> · " + n + " نتیجه در این نشست ثبت شده" +
         (demos ? " · <b>" + demos + " دمو رزرو شده</b>" : "") +
-        " — نتیجه‌ها در این نشست روی همین صفحه می‌مانند؛ برای سابقهٔ دائمی، گزارش تماس زیر را کپی کنید.";
+        " — نتیجه‌ها روی همین دستگاه ذخیره می‌شوند؛ آخر هر روز «دانلود نسخهٔ پشتیبان» را بزنید.";
       return;
     }
     progress.innerHTML = "<b>" + cards.length + " businesses</b> · " + n + " outcome" + (n === 1 ? "" : "s") +
       " logged in this session" + (demos ? " · <b>" + demos + " demo" + (demos === 1 ? "" : "s") + " booked</b>" : "") +
-      " — outcomes live on this page for this session; copy the call log below to keep the permanent record.";
+      " — outcomes are saved on this device; press Download backup at the end of each day.";
   }
   cardsBox.addEventListener("change", function(e){ if (e.target.classList.contains("status")) updateProgress(); });
   cardsBox.addEventListener("input", function(e){ if (e.target.classList.contains("notes")) updateProgress(); });
@@ -6815,6 +6819,131 @@ Object.assign(window.FA, {
       window.NEXAIS_setLang = function(l){ orig(l); relabelCardBtns(); };
     }
   });
+})();
+</script>
+
+<script>
+/* ================= saved call log — outcomes kept on this device + named activity log + backup ================= */
+(function(){
+  "use strict";
+  var STORE = "nexais-hub-calllog-v1", LOG = "nexais-hub-activity-v1", USER = "nexais-hub-user-v1";
+  var tt = window.tt || function(en){ return en; };
+  Object.assign(window.FA || {}, {
+    "Download backup": "دانلود نسخهٔ پشتیبان",
+    "Restore backup": "بازیابی نسخهٔ پشتیبان",
+    "Change user": "تغییر کاربر"
+  });
+  function get(k, d){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } }
+  function put(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+  var box = document.getElementById("cards");
+  if (!box) return;
+  function cards(){ return Array.prototype.slice.call(box.querySelectorAll(".card")); }
+  function keyOf(c){ var h = c.querySelector("h4"); return h ? h.textContent.replace(/^\s*\d+\s*/, "").trim() : ""; }
+  function user(){
+    var u = get(USER, "");
+    while (!u){
+      u = (window.prompt(tt("Your name (every result you log is saved under this name):",
+                            "نام شما (هر نتیجه‌ای که ثبت می‌کنید با این نام ذخیره می‌شود):")) || "").trim();
+      if (!u) { u = ""; if (!window.confirm(tt("A name is required to log results. Try again?", "برای ثبت نتیجه نام لازم است. دوباره؟"))) return "unknown"; }
+    }
+    put(USER, u); return u;
+  }
+  function snapshot(c){
+    var st = c.querySelector(".status"), nt = c.querySelector(".notes");
+    return { status: st ? st.value : "", notes: nt ? nt.value : "", actions: (c.__actions || []).slice() };
+  }
+  var saved = get(STORE, {});
+  var restoring = true;
+  /* restore saved state into the cards */
+  function restore(){
+    restoring = true;
+    cards().forEach(function(c){
+      var r = saved[keyOf(c)]; if (!r) return;
+      var st = c.querySelector(".status"), nt = c.querySelector(".notes");
+      if (st && r.status) st.value = r.status;
+      if (nt && typeof r.notes === "string") nt.value = r.notes;
+      if (Array.isArray(r.actions)) c.__actions = r.actions.slice();
+    });
+    if (window.NEXAIS_renderActions) window.NEXAIS_renderActions();
+    if (window.NEXAIS_refreshTracker) window.NEXAIS_refreshTracker();
+    restoring = false;
+  }
+  function record(c, what){
+    if (restoring) return;
+    var k = keyOf(c); if (!k) return;
+    var before = saved[k] || { status: "Not called", notes: "", actions: [] };
+    var after = snapshot(c);
+    var by = user(), at = new Date().toISOString();
+    after.by = by; after.at = at;
+    saved[k] = after;
+    var ok = put(STORE, saved);
+    var log = get(LOG, []);
+    var entry = { at: at, by: by, business: k, what: what };
+    if (what === "status") { entry.from = before.status; entry.to = after.status; }
+    if (what === "notes")  { entry.to = after.notes; }
+    if (what === "action") { var a = after.actions[after.actions.length - 1]; entry.to = a ? a.t : ""; }
+    log.push(entry); put(LOG, log);
+    if (!ok) alert(tt("This browser is not saving (private mode or storage full). Use Download backup now.",
+                      "این مرورگر ذخیره نمی‌کند (حالت خصوصی یا حافظه پر). همین الان «دانلود نسخهٔ پشتیبان» را بزنید."));
+  }
+  var noteTimers = {};
+  box.addEventListener("change", function(e){
+    var c = e.target.closest && e.target.closest(".card"); if (!c) return;
+    if (e.target.classList.contains("status")) record(c, "status");
+    else if (e.target.classList.contains("act-btn")) record(c, "action");
+  });
+  box.addEventListener("input", function(e){
+    if (!e.target.classList.contains("notes")) return;
+    var c = e.target.closest(".card"), k = keyOf(c);
+    clearTimeout(noteTimers[k]);
+    noteTimers[k] = setTimeout(function(){ record(c, "notes"); }, 1200);
+  });
+  /* backup: everything on this device, with the named activity log */
+  function stamp(){ var d = new Date(); return d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0"+d.getDate()).slice(-2); }
+  document.getElementById("save-backup").addEventListener("click", function(){
+    var data = { kind: "nexais-hub-backup", version: 1, exported_at: new Date().toISOString(),
+                 exported_by: get(USER, ""), cards: get(STORE, {}), activity: get(LOG, []) };
+    var blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "nexais-call-log-" + (get(USER, "user") || "user").replace(/\s+/g, "-") + "-" + stamp() + ".json";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 2000);
+  });
+  var fileIn = document.getElementById("load-backup-file");
+  document.getElementById("load-backup").addEventListener("click", function(){ fileIn.click(); });
+  fileIn.addEventListener("change", function(){
+    var f = fileIn.files && fileIn.files[0]; if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function(){
+      try {
+        var d = JSON.parse(rd.result);
+        if (!d || d.kind !== "nexais-hub-backup" || typeof d.cards !== "object") throw new Error("bad");
+        if (!window.confirm(tt("Restore this backup? Newer results on this device are kept; older ones are filled in from the file.",
+                               "این نسخهٔ پشتیبان بازیابی شود؟ نتیجه‌های جدیدتر این دستگاه حفظ می‌شوند و بقیه از فایل پر می‌شوند."))) return;
+        Object.keys(d.cards).forEach(function(k){
+          var cur = saved[k], inc = d.cards[k];
+          if (!cur || (inc.at && (!cur.at || inc.at > cur.at))) saved[k] = inc;
+        });
+        put(STORE, saved);
+        var log = get(LOG, []), seen = {};
+        log.forEach(function(x){ seen[x.at + "|" + x.by + "|" + x.business + "|" + x.what] = 1; });
+        (d.activity || []).forEach(function(x){ var id = x.at + "|" + x.by + "|" + x.business + "|" + x.what; if (!seen[id]) { log.push(x); seen[id] = 1; } });
+        log.sort(function(a, b){ return a.at < b.at ? -1 : a.at > b.at ? 1 : 0; });
+        put(LOG, log);
+        restore();
+        alert(tt("Backup restored ✓", "نسخهٔ پشتیبان بازیابی شد ✓"));
+      } catch(e){ alert(tt("That file is not a call-log backup.", "این فایل نسخهٔ پشتیبان گزارش تماس نیست.")); }
+      fileIn.value = "";
+    };
+    rd.readAsText(f);
+  });
+  document.getElementById("set-user").addEventListener("click", function(){
+    var cur = get(USER, "");
+    var u = (window.prompt(tt("Name for results logged on this device:", "نام برای نتیجه‌هایی که روی این دستگاه ثبت می‌شود:"), cur) || "").trim();
+    if (u) put(USER, u);
+  });
+  restore();
 })();
 </script>
 </body>
