@@ -218,7 +218,7 @@
   [dir="rtl"] .tl li{padding:0 54px 26px 0}
   [dir="rtl"] .tl .dot{left:auto;right:2px}
 
-  /* talk to Muse panel */
+  /* talk to AVA panel */
   .talk-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
   .talk-form label{font-weight:700;font-size:14px;display:block}
   .talk-form select,.talk-form input,.talk-form textarea{width:100%;padding:11px 12px;border:1px solid var(--panel-line);
@@ -227,6 +227,23 @@
   .msg-preview{background:var(--bg-soft) !important;font-size:14.5px;line-height:1.6}
   .talk-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:14px}
   .talk-actions .hint{font-size:13.5px;color:var(--ink-3)}
+  /* voice message — a primary way to talk to AVA, equal to typing */
+  .voice-box{margin-top:20px;border:2px solid var(--blue);background:var(--blue-soft);border-radius:var(--radius);padding:20px}
+  .voice-box h3{font-size:19px;margin-bottom:6px}
+  .voice-box .voice-desc{color:var(--ink-2);font-size:15px;max-width:68ch}
+  .voice-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:16px}
+  .voice-rec-btn{font-size:18px;padding:17px 28px;border-radius:12px;min-height:60px}
+  .voice-rec-btn.recording{background:#c0453e}
+  .voice-rec-btn.recording:hover{background:#a53832}
+  .voice-status{font-weight:800;font-size:15px;color:var(--ink)}
+  .voice-timer{font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink-2)}
+  .voice-result{margin-top:16px;background:var(--panel);border:1px solid var(--panel-line);border-radius:12px;padding:16px}
+  .voice-result audio{width:100%;max-width:520px;display:block}
+  .voice-result .voice-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
+  .voice-result .voice-actions .btn{padding:11px 18px;font-size:14.5px}
+  .voice-note{margin-top:10px;font-size:14px;color:var(--ink-2)}
+  .voice-stt{margin-top:12px;font-size:13.5px;color:var(--ink-2)}
+  @media (max-width:900px){ .voice-rec-btn{width:100%} }
   @media (max-width:900px){ .talk-form{grid-template-columns:1fr} }
 
   /* examples table */
@@ -783,7 +800,7 @@
           <h3>Demos, pilots — and the ad goes live</h3>
           <details class="phase-more">
             <summary>Phase details</summary>
-            <p>Run every 10-minute demo booked in Phase 1, and offer the 7-day free trial — card required upfront, charged only from day 8 if you continue — to every prospect who hears AVA and still hesitates. The approved Meta ad launches this week: Muse prepares the full launch pack, Zhaleh gives the final go, and the ad points at one thing only — calling the demo line. Keep working any card that asked for a callback.</p>
+            <p>Run every 10-minute demo booked in Phase 1, and offer the 7-day free trial — card required upfront, charged only from day 8 if you continue — to every prospect who hears AVA and still hesitates. The approved Meta ad launches this week: AVA prepares the full launch pack, Zhaleh gives the final go, and the ad points at one thing only — calling the demo line. Keep working any card that asked for a callback.</p>
           </details>
           <p class="target"><b>Target:</b> at least 8 demos held · at least 4 pilots started · Meta ad live.</p>
         </li>
@@ -810,10 +827,10 @@
         <li>
           <span class="dot">5</span>
           <p class="when">Phase 5 · Nov 19–22</p>
-          <h3>Review with Muse — keep what sold</h3>
+          <h3>Review with AVA — keep what sold</h3>
           <details class="phase-more">
             <summary>Phase details</summary>
-            <p>Send Muse the 30-day results from the panel below and review them together: calls, demos, the ad, the DMs — honestly, channel by channel. Kill what produced nothing, build the next 30 days around what produced pilots, and decide every AVA development request collected along the way in this same review.</p>
+            <p>Send AVA the 30-day results from the panel below and review them together: calls, demos, the ad, the DMs — honestly, channel by channel. Kill what produced nothing, build the next 30 days around what produced pilots, and decide every AVA development request collected along the way in this same review.</p>
           </details>
           <p class="target"><b>Target:</b> one written review · a decision on every open AVA request · next 30-day targets set.</p>
         </li>
@@ -824,10 +841,10 @@
       <details class="box acc"><summary>
         <h3>The daily rhythm</h3></summary>
         <ul class="checklist">
-          <li><span class="box-i"></span><span><b>08:00 — open this page.</b> Check today's phase and your call block. Decisions and updates from Muse land here.</span></li>
+          <li><span class="box-i"></span><span><b>08:00 — open this page.</b> Check today's phase and your call block. Decisions and updates from AVA land here.</span></li>
           <li><span class="box-i"></span><span><b>2:00–4:00 PM Tue–Thu — call block.</b> Cards in priority order, the script open beside you, outcome logged before the next dial.</span></li>
           <li><span class="box-i"></span><span><b>After every call — log it.</b> Outcome and notes on the card, immediately. An unlogged call counts as not made.</span></li>
-          <li><span class="box-i"></span><span><b>End of day — report to Muse.</b> Copy the call log in the Call List section, or use the report button in the panel below.</span></li>
+          <li><span class="box-i"></span><span><b>End of day — report to AVA.</b> Copy the call log in the Call List section, or use the report button in the panel below.</span></li>
         </ul>
       </details>
       <details class="box acc"><summary>
@@ -847,9 +864,9 @@
 
 <section class="soft" id="talk">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Connected to Muse</span><h2>Talk to Muse — from inside this page</h2></span></summary>
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Connected to AVA</span><h2>Talk to AVA — from inside this page</h2></span></summary>
     <div class="box">
-      <details class="how"><summary>How it works</summary><p style="color:var(--ink-2);font-size:15px;margin-top:6px">This page is a fixed snapshot, so it cannot send anything by itself — it is wired to Muse through you. Pick a message type, fill in the fields, and the panel writes the exact message. Copy it, paste it into your Muse chat, and Muse picks the work up from there: answers, follow-ups, and decisions come back in the chat and are folded into this page's next update. AVA development requests travel the same road — they are decided by Zhaleh and Muse together, and only then does anyone tell a prospect.</p></details>
+      <details class="how"><summary>How it works</summary><p style="color:var(--ink-2);font-size:15px;margin-top:6px">This page is a fixed snapshot, so it cannot send anything by itself — it is wired to AVA through you. Pick a message type, fill in the fields, and the panel writes the exact message. Copy it, paste it into your AVA chat, and AVA picks the work up from there: answers, follow-ups, and decisions come back in the chat and are folded into this page's next update. AVA development requests travel the same road — they are decided by Zhaleh and AVA together, and only then does anyone tell a prospect. Talking counts the same as typing: press the big voice button below, speak in English or Persian, check the words that appear, then copy the message — or download your recording and attach it in the chat.</p></details>
       <form class="talk-form" id="talk-form">
         <label>Message type
           <select id="m-type">
@@ -866,13 +883,38 @@
         <label class="full">Details
           <textarea id="m-details" rows="3" placeholder="e.g. The owner asked if AVA can take deposits — is that real today?"></textarea>
         </label>
-        <label class="full">Your message to Muse
+        <label class="full">Your message to AVA
           <textarea id="m-preview" class="msg-preview" rows="7" readonly></textarea>
         </label>
       </form>
+      <div class="voice-box" id="voice-box">
+        <h3>Talk to AVA — don't type</h3>
+        <p class="voice-desc">Sometimes you need to talk, not write. Press the big button, speak in English or Persian, and your words fill the Details box above as text you can check and edit. Your voice is also saved as a recording: download it and attach it in your AVA chat together with the copied message.</p>
+        <div class="voice-controls">
+          <label style="font-weight:700;font-size:14px">Voice language
+            <select id="v-lang" style="display:block;margin-top:6px;padding:11px 12px;border:1px solid var(--panel-line);border-radius:10px;background:var(--panel);color:var(--ink);font:inherit;font-size:15px">
+              <option value="en-US" selected>English</option>
+              <option value="fa-IR">فارسی (Persian)</option>
+            </select>
+          </label>
+          <button class="btn primary voice-rec-btn" type="button" id="v-record">Record a voice message for AVA</button>
+          <button class="btn ghost" type="button" id="v-stop" disabled>Stop recording</button>
+          <span class="voice-status" id="v-status" aria-live="polite">Not recording</span>
+          <span class="voice-timer" id="v-timer"></span>
+        </div>
+        <div class="voice-result" id="v-result" hidden>
+          <audio id="v-audio" controls preload="metadata"></audio>
+          <div class="voice-actions">
+            <a class="btn primary" id="v-download" href="#" download="ava-voice-message.webm">Download voice message</a>
+            <button class="btn ghost" type="button" id="v-rerecord">Re-record</button>
+          </div>
+          <p class="voice-note">Voice message ready. Download it, copy the message above, and attach the audio file in your AVA chat — the message text notes that a voice message is attached. Nothing is sent from this page automatically.</p>
+        </div>
+        <p class="voice-stt" id="v-stt-note">Speech-to-text runs in your browser where it is supported (Chrome and Edge). If it is not available, the recording and download still work — and you can type the key point in Details.</p>
+      </div>
       <div class="talk-actions">
-        <button class="btn primary" type="button" id="m-copy">Copy message for Muse</button>
-        <span class="hint">Then paste it into your Muse chat — that's the connection. Nothing here is sent automatically.</span>
+        <button class="btn primary" type="button" id="m-copy">Copy message for AVA</button>
+        <span class="hint">Then paste it into your AVA chat — that's the connection. Nothing here is sent automatically.</span>
       </div>
     </div>
     </details>
@@ -6064,7 +6106,7 @@ Object.assign(window.FA, {
 })();
 </script>
 <script>
-/* ================= sales action plan — FA strings + Talk to Muse panel ================= */
+/* ================= sales action plan — FA strings + Talk to AVA panel ================= */
 Object.assign(window.FA, {
   "Action Plan": "برنامهٔ اقدام",
   "Sales action plan": "برنامهٔ اقدام فروش",
@@ -6087,7 +6129,7 @@ Object.assign(window.FA, {
   "every Priority 1 business attempted · at least 10 cards end with a decision-maker conversation or a captured name + direct email.": "تلاش برای همهٔ کسب‌وکارهای اولویت ۱ · دست‌کم ۱۰ کارت با مکالمه با تصمیم‌گیرنده یا نام + ایمیل مستقیم ثبت‌شده تمام شود.",
   "Phase 2 · Oct 29 – Nov 4": "فاز ۲ · ۲۹ اکتبر تا ۴ نوامبر",
   "Demos, pilots — and the ad goes live": "دموها، پایلوت‌ها — و تبلیغ زنده می‌شود",
-  "Run every 10-minute demo booked in Phase 1, and offer the 7-day free trial — card required upfront, charged only from day 8 if you continue — to every prospect who hears AVA and still hesitates. The approved Meta ad launches this week: Muse prepares the full launch pack, Zhaleh gives the final go, and the ad points at one thing only — calling the demo line. Keep working any card that asked for a callback.": "هر دموی ۱۰دقیقه‌ای رزروشده در فاز ۱ را اجرا کنید و به هر مشتری بالقوه‌ای که AVA را شنید و هنوز مردد است، ۷ روز آزمایشی رایگان را پیشنهاد دهید — کارت بانکی از اول ثبت می‌شود؛ برداشت فقط از روز هشتم و فقط اگر ادامه بدهید. تبلیغ تأییدشدهٔ متا همین هفته لانچ می‌شود: Muse پک کامل لانچ را آماده می‌کند، ژاله تأیید نهایی را می‌دهد و تبلیغ فقط به یک چیز اشاره می‌کند — تماس با خط دمو. هر کارتی که درخواست تماس مجدد کرده را هم ادامه دهید.",
+  "Run every 10-minute demo booked in Phase 1, and offer the 7-day free trial — card required upfront, charged only from day 8 if you continue — to every prospect who hears AVA and still hesitates. The approved Meta ad launches this week: AVA prepares the full launch pack, Zhaleh gives the final go, and the ad points at one thing only — calling the demo line. Keep working any card that asked for a callback.": "هر دموی ۱۰دقیقه‌ای رزروشده در فاز ۱ را اجرا کنید و به هر مشتری بالقوه‌ای که AVA را شنید و هنوز مردد است، ۷ روز آزمایشی رایگان را پیشنهاد دهید — کارت بانکی از اول ثبت می‌شود؛ برداشت فقط از روز هشتم و فقط اگر ادامه بدهید. تبلیغ تأییدشدهٔ متا همین هفته لانچ می‌شود: آوا پک کامل لانچ را آماده می‌کند، ژاله تأیید نهایی را می‌دهد و تبلیغ فقط به یک چیز اشاره می‌کند — تماس با خط دمو. هر کارتی که درخواست تماس مجدد کرده را هم ادامه دهید.",
   "at least 8 demos held · at least 4 pilots started · Meta ad live.": "دست‌کم ۸ دمو برگزار شود · دست‌کم ۴ پایلوت شروع شود · تبلیغ متا زنده باشد.",
   "Phase 3 · Nov 5–11": "فاز ۳ · ۵ تا ۱۱ نوامبر",
   "Second wave, new doors": "موج دوم، درهای تازه",
@@ -6098,17 +6140,17 @@ Object.assign(window.FA, {
   "Every pilot gets its review call on day 7: what AVA answered, what she booked, what the owner heard on their own line. NexAIS quotes the one-time setup fee in writing; partners never quote it. Signed clients move to onboarding, and the partner logs the contract on the business's card so the commission trail is complete.": "هر پایلوت در روز هفتم تماس بررسی خودش را می‌گیرد: AVA به چه چیزهایی جواب داد، چه چیزهایی رزرو کرد، مالک روی خط خودش چه شنید. NexAIS هزینهٔ راه‌اندازی یک‌باره را کتبی اعلام می‌کند؛ همکاران هرگز آن را اعلام نمی‌کنند. مشتریان امضاکرده به آنبوردینگ می‌روند و همکار قرارداد را روی کارت آن کسب‌وکار ثبت می‌کند تا ردّ کمیسیون کامل باشد.",
   "every pilot has a decision · first AVA contracts signed.": "هر پایلوت یک تصمیم داشته باشد · اولین قراردادهای AVA امضا شود.",
   "Phase 5 · Nov 19–22": "فاز ۵ · ۱۹ تا ۲۲ نوامبر",
-  "Review with Muse — keep what sold": "بازبینی با Muse — آنچه فروخت را نگه دارید",
-  "Send Muse the 30-day results from the panel below and review them together: calls, demos, the ad, the DMs — honestly, channel by channel. Kill what produced nothing, build the next 30 days around what produced pilots, and decide every AVA development request collected along the way in this same review.": "نتایج ۳۰ روز را از پنل زیر برای Muse بفرستید و با هم بازبینی کنید: تماس‌ها، دموها، تبلیغ، دایرکت‌ها — صادقانه و کانال به کانال. آنچه هیچ خروجی‌ای نداد حذف شود، ۳۰ روز بعدی دور آنچه پایلوت آورد ساخته شود و هر درخواست توسعهٔ AVA که در این مسیر جمع شده، در همین بازبینی تصمیم‌گیری شود.",
+  "Review with AVA — keep what sold": "بازبینی با آوا — آنچه فروخت را نگه دارید",
+  "Send AVA the 30-day results from the panel below and review them together: calls, demos, the ad, the DMs — honestly, channel by channel. Kill what produced nothing, build the next 30 days around what produced pilots, and decide every AVA development request collected along the way in this same review.": "نتایج ۳۰ روز را از پنل زیر برای آوا بفرستید و با هم بازبینی کنید: تماس‌ها، دموها، تبلیغ، دایرکت‌ها — صادقانه و کانال به کانال. آنچه هیچ خروجی‌ای نداد حذف شود، ۳۰ روز بعدی دور آنچه پایلوت آورد ساخته شود و هر درخواست توسعهٔ AVA که در این مسیر جمع شده، در همین بازبینی تصمیم‌گیری شود.",
   "one written review · a decision on every open AVA request · next 30-day targets set.": "یک بازبینی کتبی · تصمیم دربارهٔ هر درخواست باز AVA · اهداف ۳۰ روز بعدی تعیین شود.",
   "The daily rhythm": "ریتم روزانه",
   "08:00 — open this page.": "ساعت ۸:۰۰ — این صفحه را باز کنید.",
-  "Check today's phase and your call block. Decisions and updates from Muse land here.": "فاز امروز و بلاک تماستان را ببینید. تصمیم‌ها و به‌روزرسانی‌های Muse اینجا می‌نشیند.",
+  "Check today's phase and your call block. Decisions and updates from AVA land here.": "فاز امروز و بلاک تماستان را ببینید. تصمیم‌ها و به‌روزرسانی‌های آوا اینجا می‌نشیند.",
   "2:00–4:00 PM Tue–Thu — call block.": "۲ تا ۴ بعدازظهر، سه‌شنبه تا پنجشنبه — بلاک تماس.",
   "Cards in priority order, the script open beside you, outcome logged before the next dial.": "کارت‌ها به ترتیب اولویت، اسکریپت باز کنارتان، نتیجه پیش از شمارهٔ بعدی ثبت شود.",
   "After every call — log it.": "بعد از هر تماس — ثبتش کنید.",
   "Outcome and notes on the card, immediately. An unlogged call counts as not made.": "نتیجه و یادداشت روی کارت، همان لحظه. تماسی که ثبت نشود، انجام‌نشده حساب می‌شود.",
-  "End of day — report to Muse.": "پایان روز — به Muse گزارش دهید.",
+  "End of day — report to AVA.": "پایان روز — به آوا گزارش دهید.",
   "Copy the call log in the Call List section, or use the report button in the panel below.": "گزارش تماس را از بخش لیست تماس کپی کنید، یا از دکمهٔ گزارش در پنل زیر استفاده کنید.",
   "Focus rules — sales, and only sales": "قوانین تمرکز — فروش، و فقط فروش",
   "One lead offer: AVA.": "یک پیشنهاد اصلی: AVA.",
@@ -6119,9 +6161,9 @@ Object.assign(window.FA, {
   "If a prospect needs something AVA doesn't do today, log it in the panel below — never say \"we'll add that\" on a call.": "اگر مشتری بالقوه چیزی می‌خواهد که AVA امروز انجام نمی‌دهد، آن را در پنل زیر ثبت کنید — هرگز در تماس نگویید «آن را اضافه می‌کنیم».",
   "If it doesn't end in a call, a demo, a pilot or a contract, it's out.": "اگر به تماس، دمو، پایلوت یا قرارداد ختم نمی‌شود، بیرون است.",
   "That test decides how every day in this plan is spent.": "همین آزمون تعیین می‌کند هر روز این برنامه چطور گذرانده شود.",
-  "Connected to Muse": "متصل به Muse",
-  "Talk to Muse — from inside this page": "با Muse صحبت کنید — از داخل همین صفحه",
-  "This page is a fixed snapshot, so it cannot send anything by itself — it is wired to Muse through you. Pick a message type, fill in the fields, and the panel writes the exact message. Copy it, paste it into your Muse chat, and Muse picks the work up from there: answers, follow-ups, and decisions come back in the chat and are folded into this page's next update. AVA development requests travel the same road — they are decided by Zhaleh and Muse together, and only then does anyone tell a prospect.": "این صفحه یک تصویر ثابت است، پس خودش نمی‌تواند چیزی بفرستد — از طریق شما به Muse وصل است. نوع پیام را انتخاب کنید، فیلدها را پر کنید و پنل متن دقیق پیام را می‌نویسد. آن را کپی کنید، در چت Muse پیست کنید و Muse کار را از همان‌جا برمی‌دارد: پاسخ‌ها، پیگیری‌ها و تصمیم‌ها در چت برمی‌گردند و در به‌روزرسانی بعدی این صفحه می‌نشینند. درخواست‌های توسعهٔ AVA هم از همین راه می‌روند — ژاله و Muse با هم درباره‌شان تصمیم می‌گیرند و تازه بعد از آن به مشتری چیزی گفته می‌شود.",
+  "Connected to AVA": "متصل به آوا",
+  "Talk to AVA — from inside this page": "با آوا صحبت کنید — از داخل همین صفحه",
+  "This page is a fixed snapshot, so it cannot send anything by itself — it is wired to AVA through you. Pick a message type, fill in the fields, and the panel writes the exact message. Copy it, paste it into your AVA chat, and AVA picks the work up from there: answers, follow-ups, and decisions come back in the chat and are folded into this page's next update. AVA development requests travel the same road — they are decided by Zhaleh and AVA together, and only then does anyone tell a prospect. Talking counts the same as typing: press the big voice button below, speak in English or Persian, check the words that appear, then copy the message — or download your recording and attach it in the chat.": "این صفحه یک تصویر ثابت است، پس خودش نمی‌تواند چیزی بفرستد — از طریق شما به آوا وصل است. نوع پیام را انتخاب کنید، فیلدها را پر کنید و پنل متن دقیق پیام را می‌نویسد. آن را کپی کنید، در چت آوا پیست کنید و آوا کار را از همان‌جا برمی‌دارد: پاسخ‌ها، پیگیری‌ها و تصمیم‌ها در چت برمی‌گردند و در به‌روزرسانی بعدی این صفحه می‌نشینند. درخواست‌های توسعهٔ AVA هم از همین راه می‌روند — ژاله و آوا با هم درباره‌شان تصمیم می‌گیرند و تازه بعد از آن به مشتری چیزی گفته می‌شود. حرف زدن دقیقاً مثل تایپ کردن است: دکمهٔ بزرگ صوتی زیر را بزنید، به انگلیسی یا فارسی صحبت کنید، کلماتی را که ظاهر می‌شوند بررسی کنید و پیام را کپی کنید — یا فایل ضبط‌شده‌تان را دانلود کنید و در چت پیوست کنید.",
   "Message type": "نوع پیام",
   "Daily check-in — what's on today": "چک‌این روزانه — امروز چه در برنامه است",
   "Report today's results": "گزارش نتایج امروز",
@@ -6132,9 +6174,9 @@ Object.assign(window.FA, {
   "e.g. Sassafraz": "مثلاً Sassafraz",
   "Details": "جزئیات",
   "e.g. The owner asked if AVA can take deposits — is that real today?": "مثلاً مالک پرسید آیا AVA می‌تواند بیعانه بگیرد — این امروز واقعاً شدنی است؟",
-  "Your message to Muse": "پیام شما به Muse",
-  "Copy message for Muse": "پیام را برای Muse کپی کن",
-  "Then paste it into your Muse chat — that's the connection. Nothing here is sent automatically.": "بعد آن را در چت Muse پیست کنید — اتصال همین است. اینجا هیچ‌چیز خودکار فرستاده نمی‌شود.",
+  "Your message to AVA": "پیام شما به آوا",
+  "Copy message for AVA": "پیام را برای آوا کپی کن",
+  "Then paste it into your AVA chat — that's the connection. Nothing here is sent automatically.": "بعد آن را در چت آوا پیست کنید — اتصال همین است. اینجا هیچ‌چیز خودکار فرستاده نمی‌شود.",
   "This hub is for the NexAIS sales team only. Enter the partner access key to open the sales app.": "این مرکز فقط برای تیم فروش NexAIS است. برای باز کردن اپ فروش، کلید دسترسی همکاران را وارد کنید.",
   "Partner access key — temporary shared key for this sales app": "کلید دسترسی همکاران — کلید مشترک موقت این اپ فروش",
   "For now all partners share this one temporary key — please don't share it outside the sales team. Personal per-partner keys will be issued inside this same app later; this app is standalone and separate from the client CRM.": "فعلاً همهٔ همکاران از همین یک کلید موقت مشترک استفاده می‌کنند — لطفاً آن را بیرون از تیم فروش به اشتراک نگذارید. کلیدهای شخصی هر همکار بعداً داخل همین اپ صادر می‌شود؛ این اپ مستقل است و از CRM مشتریان جداست.",
@@ -6191,8 +6233,8 @@ Object.assign(window.FA, {
     var tag = "[NexAIS Sales Partners hub] ", L = [];
     if (type === "daily"){
       L.push(tag + tt("Daily check-in — ", "چک‌این روزانه — ") + todayStr());
-      L.push(tt("Muse, run today's sales check-in for the NexAIS 30-day plan: which phase are we in, which cards are in today's call block, and what is overdue or waiting on a decision?",
-                "Muse، چک‌این فروش امروز برای برنامهٔ ۳۰روزهٔ NexAIS را اجرا کن: در کدام فاز هستیم، کدام کارت‌ها در بلاک تماس امروزند و چه چیزی عقب افتاده یا منتظر تصمیم است؟"));
+      L.push(tt("AVA, run today's sales check-in for the NexAIS 30-day plan: which phase are we in, which cards are in today's call block, and what is overdue or waiting on a decision?",
+                "آوا، چک‌این فروش امروز برای برنامهٔ ۳۰روزهٔ NexAIS را اجرا کن: در کدام فاز هستیم، کدام کارت‌ها در بلاک تماس امروزند و چه چیزی عقب افتاده یا منتظر تصمیم است؟"));
       if (biz) L.push(tt("Business: ", "کسب‌وکار: ") + biz);
       if (det) L.push(tt("Note: ", "یادداشت: ") + det);
     } else if (type === "report"){
@@ -6225,6 +6267,8 @@ Object.assign(window.FA, {
       if (biz) L.push(tt("Business: ", "کسب‌وکار: ") + biz);
       if (det) L.push(det);
     }
+    if (window.NEXAIS_voiceAttached) L.push(tt("Voice message attached — please listen to the attached audio file (I recorded it in this panel and downloaded it to attach here). My spoken words are also written in the Details above where speech-to-text was available.",
+              "پیام صوتی پیوست شده است — لطفاً فایل صوتی پیوست را گوش کنید (در همین پنل ضبطش کردم و برای پیوست‌کردن دانلودش کردم). اگر تبدیل گفتار به متن در دسترس بوده، حرف‌هایم در جزئیات بالا هم نوشته شده است."));
     return L.join("\n");
   }
   function refresh(){ preview.value = compose(); }
@@ -6250,7 +6294,7 @@ Object.assign(window.FA, {
     }
   }
   $("m-copy").addEventListener("click", function(){
-    copyText(preview.value, this, tt("Copied ✓ — now paste it to Muse", "کپی شد ✓ — حالا در چت Muse پیستش کن"));
+    copyText(preview.value, this, tt("Copied ✓ — now paste it to AVA", "کپی شد ✓ — حالا در چت آوا پیستش کن"));
   });
   refresh();
 
@@ -6831,7 +6875,9 @@ Object.assign(window.FA, {
   Object.assign(window.FA || {}, {
     "Download backup": "دانلود نسخهٔ پشتیبان",
     "Restore backup": "بازیابی نسخهٔ پشتیبان",
-    "Change user": "تغییر کاربر"
+    "Change user": "تغییر کاربر",
+    "Synced to Sheet ✓": "همگام‌سازی با شیت انجام شد ✓",
+    "waiting to sync": "در انتظار همگام‌سازی"
   });
   function get(k, d){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } }
   function put(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
@@ -6883,9 +6929,61 @@ Object.assign(window.FA, {
     if (what === "notes")  { entry.to = after.notes; }
     if (what === "action") { var a = after.actions[after.actions.length - 1]; entry.to = a ? a.t : ""; }
     log.push(entry); put(LOG, log);
+    var sq = get(QUEUE, []); sq.push(entry); put(QUEUE, sq);
+    flush();
     if (!ok) alert(tt("This browser is not saving (private mode or storage full). Use Download backup now.",
                       "این مرورگر ذخیره نمی‌کند (حالت خصوصی یا حافظه پر). همین الان «دانلود نسخهٔ پشتیبان» را بزنید."));
   }
+  /* ---- sheet sync: every logged activity entry is also sent to the private Google Sheet ---- */
+  var SHEET_URL = "https://script.google.com/macros/s/AKfycby0lpE705MSm2QJHdRvTnjWYa2qs7XWj1m-hFUR1WVpbsf7w5gaFcwkoyhPVvqwXHODUQ/exec";
+  var SHEET_TOKEN = "hubsync-afd71f45-a003d6a2";
+  var QUEUE = "nexais-hub-sheet-queue-v1", BACKFILLED = "nexais-hub-sheet-backfilled-v1";
+  var syncLine = null;
+  var progEl = document.getElementById("progress");
+  if (progEl) {
+    syncLine = document.createElement("p");
+    syncLine.className = "progress-line";
+    syncLine.id = "sheet-sync-line";
+    progEl.parentNode.insertBefore(syncLine, progEl.nextSibling);
+  }
+  function renderSync(){
+    if (!syncLine) return;
+    var n = get(QUEUE, []).length;
+    syncLine.textContent = n ? tt(n + " waiting to sync", n + " در انتظار همگام‌سازی")
+                             : tt("Synced to Sheet ✓", "همگام‌سازی با شیت انجام شد ✓");
+  }
+  function flush(){
+    if (!SHEET_URL) { renderSync(); return; }
+    var q = get(QUEUE, []);
+    if (!q.length) { renderSync(); return; }
+    var batch = q.slice(0, 100);
+    fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify({ token: SHEET_TOKEN, entries: batch }) }).then(function(){
+      var cur = get(QUEUE, []);
+      put(QUEUE, cur.slice(batch.length));
+      renderSync();
+      if (cur.length > batch.length) flush();
+    }).catch(function(){ renderSync(); });
+  }
+  /* one-time backfill: queue the whole existing activity log once */
+  if (!get(BACKFILLED, "")) {
+    var q0 = get(QUEUE, []);
+    get(LOG, []).forEach(function(x){ q0.push(x); });
+    put(QUEUE, q0);
+    put(BACKFILLED, "1");
+  }
+  renderSync();
+  flush();
+  window.addEventListener("online", flush);
+  setInterval(flush, 60000);
+  window.addEventListener("load", function(){
+    var orig = window.NEXAIS_setLang;
+    if (orig && !window.__sheetSyncPatched){
+      window.__sheetSyncPatched = true;
+      window.NEXAIS_setLang = function(l){ orig(l); renderSync(); };
+    }
+    renderSync();
+  });
   var noteTimers = {};
   box.addEventListener("change", function(e){
     var c = e.target.closest && e.target.closest(".card"); if (!c) return;
@@ -6944,6 +7042,137 @@ Object.assign(window.FA, {
     if (u) put(USER, u);
   });
   restore();
+})();
+</script>
+<script>
+/* ================= voice message for AVA — record, speech-to-text, download ================= */
+Object.assign(window.FA, {
+  "Talk to AVA — don't type": "با آوا حرف بزنید — تایپ نکنید",
+  "Sometimes you need to talk, not write. Press the big button, speak in English or Persian, and your words fill the Details box above as text you can check and edit. Your voice is also saved as a recording: download it and attach it in your AVA chat together with the copied message.": "گاهی لازم است حرف بزنید، نه اینکه بنویسید. دکمهٔ بزرگ را بزنید، به انگلیسی یا فارسی صحبت کنید و حرف‌هایتان به‌صورت متن در بخش جزئیات بالا می‌نشیند تا بررسی و ویرایشش کنید. صدایتان هم به‌صورت فایل ضبط ذخیره می‌شود: آن را دانلود کنید و همراه پیام کپی‌شده در چت آوا پیوست کنید.",
+  "Voice language": "زبان صحبت",
+  "Record a voice message for AVA": "ضبط پیام صوتی برای آوا",
+  "Stop recording": "توقف ضبط",
+  "Not recording": "در حال ضبط نیست",
+  "Recording… speak now": "در حال ضبط… حالا صحبت کنید",
+  "Download voice message": "دانلود پیام صوتی",
+  "Re-record": "ضبط دوباره",
+  "Voice message ready. Download it, copy the message above, and attach the audio file in your AVA chat — the message text notes that a voice message is attached. Nothing is sent from this page automatically.": "پیام صوتی آماده است. آن را دانلود کنید، پیام بالا را کپی کنید و فایل صوتی را در چت آوا پیوست کنید — در متن پیام نوشته شده که یک پیام صوتی پیوست است. از این صفحه هیچ‌چیز خودکار فرستاده نمی‌شود.",
+  "Speech-to-text runs in your browser where it is supported (Chrome and Edge). If it is not available, the recording and download still work — and you can type the key point in Details.": "تبدیل گفتار به متن در مرورگرهایی که پشتیبانی می‌کنند (کروم و اج) اجرا می‌شود. اگر در دسترس نباشد، ضبط و دانلود همچنان کار می‌کند — و می‌توانید نکتهٔ اصلی را در جزئیات تایپ کنید."
+});
+(function(){
+  "use strict";
+  function $(id){ return document.getElementById(id); }
+  var recBtn = $("v-record"), stopBtn = $("v-stop"), statusEl = $("v-status"), timerEl = $("v-timer"),
+      resultBox = $("v-result"), audioEl = $("v-audio"), dlEl = $("v-download"), reBtn = $("v-rerecord"),
+      detailsEl = $("m-details"), langSel = $("v-lang");
+  if (!recBtn || !detailsEl) return;
+  var stream = null, recorder = null, chunks = [], blobUrl = null, timerInt = null, startedAt = 0;
+  var recog = null, baseText = "", finalText = "", recording = false;
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+  function setStatus(en, fa){ statusEl.textContent = tt(en, fa); }
+  function fmt(ms){ var s = Math.floor(ms/1000); return Math.floor(s/60) + ":" + ("0" + (s%60)).slice(-2); }
+  function refreshPreview(){ detailsEl.dispatchEvent(new Event("input", { bubbles:true })); }
+  function startTimer(){ startedAt = Date.now(); timerEl.textContent = "0:00"; timerInt = setInterval(function(){ timerEl.textContent = fmt(Date.now() - startedAt); }, 500); }
+  function stopTimer(){ if (timerInt) clearInterval(timerInt); timerInt = null; }
+  function cleanupStream(){ if (stream){ stream.getTracks().forEach(function(t){ t.stop(); }); stream = null; } }
+  function startRecognition(){
+    if (!SR) return;
+    try {
+      recog = new SR();
+      recog.lang = langSel ? langSel.value : (window.LANG === "fa" ? "fa-IR" : "en-US");
+      recog.continuous = true; recog.interimResults = true;
+      baseText = detailsEl.value.trim(); finalText = "";
+      recog.onresult = function(e){
+        var interim = "";
+        for (var i = e.resultIndex; i < e.results.length; i++){
+          if (e.results[i].isFinal) finalText += e.results[i][0].transcript;
+          else interim += e.results[i][0].transcript;
+        }
+        var spoken = (finalText + interim).trim();
+        detailsEl.value = baseText ? baseText + (spoken ? " " + spoken : "") : spoken;
+        refreshPreview();
+      };
+      recog.onend = function(){ if (recording && recog){ try { recog.start(); } catch(err){} } };
+      recog.onerror = function(){ /* recording continues even if speech-to-text fails */ };
+      recog.start();
+    } catch(err){ recog = null; }
+  }
+  function stopRecognition(){ var r = recog; recog = null; if (r){ r.onend = null; try { r.stop(); } catch(err){} } }
+  function startRecording(){
+    if (recording) return;
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined"){
+      setStatus("Voice recording is not supported in this browser — record with your phone's voice recorder instead and attach that file in the chat.",
+                "ضبط صدا در این مرورگر پشتیبانی نمی‌شود — با ضبط‌صوت گوشی‌تان ضبط کنید و همان فایل را در چت پیوست کنید.");
+      return;
+    }
+    navigator.mediaDevices.getUserMedia({ audio:true }).then(function(st){
+      stream = st; chunks = [];
+      var mime = "";
+      ["audio/webm", "audio/mp4", "audio/ogg"].forEach(function(m){ if (!mime && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) mime = m; });
+      recorder = mime ? new MediaRecorder(st, { mimeType: mime }) : new MediaRecorder(st);
+      recorder.ondataavailable = function(e){ if (e.data && e.data.size) chunks.push(e.data); };
+      recorder.onstop = finishRecording;
+      recorder.start(250);
+      recording = true;
+      window.NEXAIS_voiceAttached = false;
+      resultBox.hidden = true;
+      recBtn.disabled = true; recBtn.classList.add("recording");
+      recBtn.textContent = tt("Recording… speak now", "در حال ضبط… حالا صحبت کنید");
+      stopBtn.disabled = false;
+      setStatus("Recording… speak now", "در حال ضبط… حالا صحبت کنید");
+      startTimer(); startRecognition();
+    }).catch(function(){
+      setStatus("Microphone blocked — allow microphone access in your browser, then try again. You can still type your message.",
+                "میکروفون مسدود است — دسترسی میکروفون را در مرورگرتان اجازه دهید و دوباره تلاش کنید. همچنان می‌توانید پیامتان را تایپ کنید.");
+    });
+  }
+  function finishRecording(){
+    recording = false; stopTimer(); stopRecognition(); cleanupStream();
+    recBtn.disabled = false; recBtn.classList.remove("recording");
+    recBtn.textContent = tt("Record a voice message for AVA", "ضبط پیام صوتی برای آوا");
+    stopBtn.disabled = true;
+    if (!chunks.length){ setStatus("Not recording", "در حال ضبط نیست"); return; }
+    var type = (recorder && recorder.mimeType) || "audio/webm";
+    var blob = new Blob(chunks, { type: type });
+    if (blobUrl) URL.revokeObjectURL(blobUrl);
+    blobUrl = URL.createObjectURL(blob);
+    audioEl.src = blobUrl;
+    var ext = type.indexOf("mp4") >= 0 ? "m4a" : (type.indexOf("ogg") >= 0 ? "ogg" : "webm");
+    var d = new Date(), pad = function(n){ return ("0" + n).slice(-2); };
+    dlEl.href = blobUrl;
+    dlEl.setAttribute("download", "ava-voice-message-" + d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + "-" + pad(d.getHours()) + pad(d.getMinutes()) + "." + ext);
+    resultBox.hidden = false;
+    window.NEXAIS_voiceAttached = true;
+    setStatus("Voice message ready", "پیام صوتی آماده است");
+    refreshPreview();
+  }
+  function stopRecording(){
+    if (recorder && recorder.state !== "inactive"){ try { recorder.stop(); } catch(err){ finishRecording(); } }
+    else if (recording){ finishRecording(); }
+  }
+  recBtn.addEventListener("click", startRecording);
+  stopBtn.addEventListener("click", stopRecording);
+  reBtn.addEventListener("click", function(){
+    window.NEXAIS_voiceAttached = false;
+    resultBox.hidden = true;
+    if (blobUrl){ URL.revokeObjectURL(blobUrl); blobUrl = null; }
+    audioEl.removeAttribute("src");
+    refreshPreview();
+    startRecording();
+  });
+  window.addEventListener("load", function(){
+    var orig = window.NEXAIS_setLang;
+    if (orig && !window.__nexaisVoicePatched){
+      window.__nexaisVoicePatched = true;
+      window.NEXAIS_setLang = function(l){
+        orig(l);
+        if (langSel && !recording) langSel.value = (l === "fa") ? "fa-IR" : "en-US";
+        if (!recording) recBtn.textContent = tt("Record a voice message for AVA", "ضبط پیام صوتی برای آوا");
+        refreshPreview();
+      };
+    }
+    if (langSel && window.LANG === "fa") langSel.value = "fa-IR";
+  });
 })();
 </script>
 </body>
