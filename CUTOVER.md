@@ -23,6 +23,7 @@ Node server that serves the hub **only after sign-in** with a CRM account. The h
 6. Make the GitHub repository private (Render keeps deploying from a private repo).
 
 ## Data on cutover day
+- **DONE 2026-10-24 in production:** 57 cards imported as M-0001…M-0057 (status approved, 57 unique). Do not re-run unless the hub gains new cards (re-running is safe; it skips existing ones).
 - **Import the 57 call cards as missions** (after step 3, before inviting partners):
   `python3 tools/import-hub-cards.py index.html out e46c9020-1e73-4322-9aef-7292df930215` writes `out/hub-cards.json` (review) and `out/hub-cards.sql`.
   The SQL is idempotent (skips businesses that already have an open mission). Dry run on 2026-10-24: 57 cards → 57 missions (M-0001…M-0057), 0 duplicates, 57 with phone, 54 with proposal link. Tested twice on a copy: second run adds nothing.
