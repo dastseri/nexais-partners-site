@@ -146,6 +146,7 @@
       el('div', { style: 'margin-top:8px' }, [summary]),
       el('p', { class: 'muted', text: [m.outcome ? t('Outcome: ', 'نتیجه: ') + m.outcome : '', m.next_step ? t('Next: ', 'قدم بعد: ') + m.next_step : ''].filter(Boolean).join(' · ') }),
       el('div', { class: 'row' }, [save, details]),
+      NX.consentPanel(m.id, true, say),
     ]);
   }
 

@@ -201,3 +201,14 @@ test('hub entry mapping', () => {
   assert.ok(mapHubEntry({ business: '', what: 'notes', to: 'hi' }).error);
   assert.ok(mapHubEntry({ business: 'A', what: 'status', to: 'Won' }).error);
 });
+
+test('consent API validates channel, basis and evidence, and writes with the user token', () => withServer(async (base, state) => {
+  const H = { Cookie: 'nx_at=tok-partner' };
+  assert.equal((await json(base, '/api/missions/m1/consents', { channel: 'fax', basis: 'express', evidence: 'said yes' }, H)).status, 400);
+  assert.equal((await json(base, '/api/missions/m1/consents', { channel: 'sms', basis: 'express', evidence: 'ok' }, H)).status, 400);
+  const r = await json(base, '/api/missions/m1/consents', { channel: 'sms', basis: 'express', evidence: 'Owner agreed to texts on call', source: 'call' }, H);
+  assert.equal(r.status, 201);
+  const ins = state.calls.find((c) => c.table === 'contact_consents' && c.op === 'insert');
+  assert.equal(ins.payload.mission_id, 'm1'); assert.equal(ins.payload.company_id, COMPANY); assert.equal(ins.user, 'u-partner');
+  assert.equal((await json(base, '/api/missions/m1/consents', { channel: 'sms', basis: 'express', evidence: 'Owner agreed' }, { ...H, Origin: 'https://evil.example' })).status, 403);
+}));

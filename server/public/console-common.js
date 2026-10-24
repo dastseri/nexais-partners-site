@@ -37,6 +37,51 @@
   NX.OUTCOMES = [['reached_decision_maker', 'Reached decision-maker', 'به تصمیم‌گیرنده رسیدم'], ['gatekeeper', 'Gatekeeper', 'منشی / واسطه'],
     ['voicemail_left', 'Voicemail left', 'پیام صوتی گذاشتم'], ['callback_scheduled', 'Callback scheduled', 'تماس مجدد برنامه‌ریزی شد'],
     ['demo_booked', 'Demo booked', 'دمو رزرو شد'], ['not_interested', 'Not interested', 'علاقه نداشت']];
+  NX.CHANNELS = [['sms', 'SMS', 'پیامک'], ['email', 'Email', 'ایمیل'], ['ai_call', 'AVA automated call', 'تماس خودکار AVA']];
+  NX.BASES = [['express', 'Express — they clearly said yes', 'صریح — خودشان گفتند بله'],
+    ['implied_inquiry', 'Implied — they asked us (6 months)', 'ضمنی — خودشان پرسیدند (۶ ماه)'],
+    ['implied_business_relationship', 'Implied — customer (2 years)', 'ضمنی — مشتری (۲ سال)'],
+    ['conspicuous_publication', 'Published address, relevant (email only)', 'آدرس منتشرشده و مرتبط (فقط ایمیل)']];
+  NX.label = function (list, key) { var x = list.filter(function (i) { return i[0] === key; })[0]; return x ? NX.t(x[1], x[2]) : key; };
+  // Consent panel for one mission (used by /team and /my).
+  NX.consentPanel = function (missionId, canAdd, say) {
+    var el = NX.el, t = NX.t;
+    var list = el('ul', { class: 'log' });
+    var channel = el('select'), basis = el('select');
+    NX.CHANNELS.forEach(function (c) { channel.appendChild(el('option', { value: c[0], text: t(c[1], c[2]) })); });
+    NX.BASES.forEach(function (b) { basis.appendChild(el('option', { value: b[0], text: t(b[1], b[2]) })); });
+    var evidence = el('textarea', { placeholder: t('How and when did they agree? (who, date, words used)', 'چگونه و کی رضایت دادند؟ (چه کسی، تاریخ، جمله)') });
+    var add = el('button', { type: 'button', class: 'primary', text: t('Record consent', 'ثبت رضایت') });
+    function load() {
+      NX.api('GET', '/api/missions/' + encodeURIComponent(missionId) + '/consents').then(function (j) {
+        list.textContent = '';
+        if (!j.consents.length) list.appendChild(el('li', { text: t('No consent on record. Do not text or email.', 'رضایتی ثبت نشده. پیامک یا ایمیل نفرستید.') }));
+        j.consents.forEach(function (c) {
+          var expired = c.expires_at && new Date(c.expires_at) < new Date();
+          var state = c.withdrawn_at ? t('WITHDRAWN', 'لغو شده') + ' ' + NX.when(c.withdrawn_at) : (expired ? t('EXPIRED', 'منقضی') : t('active', 'فعال'));
+          var li = el('li', { text: NX.label(NX.CHANNELS, c.channel) + ' · ' + NX.label(NX.BASES, c.basis) + ' · ' + state + ' · ' + c.evidence + ' ' });
+          if (!c.withdrawn_at) {
+            var w = el('button', { type: 'button', text: t('Record STOP / withdrawal', 'ثبت لغو (STOP)') });
+            w.addEventListener('click', function () {
+              NX.api('POST', '/api/consents/' + encodeURIComponent(c.id) + '/withdraw', { note: 'Withdrawn (recorded in partner app)' }).then(load).catch(function (e) { say(e.message); });
+            });
+            li.appendChild(w);
+          }
+          list.appendChild(li);
+        });
+      }).catch(function (e) { say(e.message); });
+    }
+    add.addEventListener('click', function () {
+      NX.api('POST', '/api/missions/' + encodeURIComponent(missionId) + '/consents', { channel: channel.value, basis: basis.value, evidence: evidence.value, source: 'call' })
+        .then(function () { evidence.value = ''; say(t('Consent recorded', 'رضایت ثبت شد'), true); load(); }).catch(function (e) { say(e.message); });
+    });
+    var body = [list];
+    if (canAdd) body.push(el('div', { class: 'grid', style: 'margin-top:6px' }, [channel, basis]), evidence, el('div', { class: 'row', style: 'margin-top:6px' }, [add]),
+      el('p', { class: 'warn', text: t('Permission from NexAIS is not consent from the contact. Every text must name NexAIS and offer STOP.', 'اجازهٔ NexAIS رضایت مخاطب نیست. هر پیامک باید نام NexAIS و گزینهٔ لغو (STOP) داشته باشد.') }));
+    var d = el('details', {}, [el('summary', { text: t('Consent (texts, emails, AVA calls)', 'رضایت (پیامک، ایمیل، تماس AVA)') })].concat(body));
+    d.addEventListener('toggle', function () { if (d.open) load(); });
+    return d;
+  };
   NX.when = function (iso) { try { return new Date(iso).toLocaleString(fa ? 'fa-IR' : 'en-CA', { dateStyle: 'medium', timeStyle: 'short' }); } catch (e) { return iso; } };
   NX.describe = function (a) {
     var map = { request: ['registered', 'ثبت کرد'], approval: ['approved', 'تأیید کرد'], assignment: ['assigned', 'سپرد'], status_change: ['changed status', 'وضعیت را تغییر داد'],
@@ -47,6 +92,7 @@
     if (a.from_value || a.to_value) parts.push((a.from_value ? a.from_value + ' → ' : '') + (a.to_value || ''));
     if (a.outcome) { var o = NX.OUTCOMES.filter(function (x) { return x[0] === a.outcome; })[0]; parts.push(o ? NX.t(o[1], o[2]) : a.outcome); }
     if (a.notes) parts.push('— ' + a.notes);
+    if (a.consent_ok === false) parts.push(NX.t('(no consent on record)', '(رضایت ثبت‌شده‌ای نبود)'));
     return NX.when(a.created_at) + ' · ' + parts.join(' ');
   };
 })();

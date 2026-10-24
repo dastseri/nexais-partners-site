@@ -112,6 +112,7 @@
       }).catch(function (e) { say(e.message); });
     });
     parts.push(details);
+    if (mine) parts.push(NX.consentPanel(m.id, true, say));
     return el('div', { class: 'card' }, parts);
   }
 

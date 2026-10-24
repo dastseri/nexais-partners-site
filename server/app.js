@@ -300,6 +300,46 @@ export function createApp(options) {
     } catch (err) { return next(err); }
   });
 
+  // ---- consent records (CASL / CRTC) -----------------------------------------------------
+  const CONSENT_CHANNELS = new Set(['sms', 'email', 'ai_call']);
+  const CONSENT_BASES = new Set(['express', 'implied_inquiry', 'implied_business_relationship', 'conspicuous_publication']);
+  const CONSENT_SOURCES = new Set(['call', 'form', 'email', 'sms', 'in_person', 'website']);
+
+  app.get('/api/missions/:id/consents', requireMember, async (req, res, next) => {
+    try {
+      const { data, error } = await req.session.db.from('contact_consents')
+        .select('id, channel, basis, evidence, source, obtained_at, expires_at, withdrawn_at, withdrawal_note')
+        .eq('mission_id', req.params.id).order('obtained_at', { ascending: false });
+      if (error) return res.status(400).json({ error: error.message });
+      return res.set('Cache-Control', 'no-store').json({ consents: data || [] });
+    } catch (err) { return next(err); }
+  });
+
+  app.post('/api/missions/:id/consents', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      const b = req.body || {};
+      if (!CONSENT_CHANNELS.has(b.channel) || !CONSENT_BASES.has(b.basis)) return res.status(400).json({ error: 'Choose a channel and a legal basis' });
+      const evidence = String(b.evidence || '').trim();
+      if (evidence.length < 5) return res.status(400).json({ error: 'Describe how and when consent was given' });
+      const row = { company_id: companyId, mission_id: req.params.id, channel: b.channel, basis: b.basis,
+        evidence: evidence.slice(0, 2000), source: CONSENT_SOURCES.has(b.source) ? b.source : 'call' };
+      const { error } = await req.session.db.from('contact_consents').insert(row);
+      if (error) return res.status(403).json({ error: error.message });
+      return res.status(201).json({ ok: true });
+    } catch (err) { return next(err); }
+  });
+
+  app.post('/api/consents/:id/withdraw', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      const note = String(req.body?.note || 'Withdrawn').slice(0, 500);
+      const { data, error } = await req.session.db.from('contact_consents')
+        .update({ withdrawn_at: new Date().toISOString(), withdrawal_note: note }).eq('id', req.params.id).select('id').maybeSingle();
+      if (error) return res.status(403).json({ error: error.message });
+      if (!data) return res.status(404).json({ error: 'Consent not found' });
+      return res.json({ ok: true });
+    } catch (err) { return next(err); }
+  });
+
   // ---- team console data ----------------------------------------------------------------
   function requireTeam(req, res, next) {
     if (req.member.role === 'partner') return res.status(403).json({ error: 'Team only' });
@@ -326,7 +366,7 @@ export function createApp(options) {
     try {
       const db = req.session.db;
       let q = db.from('partner_activity_log')
-        .select('id, mission_id, actor_user, actor_agent_id, action, outcome, from_value, to_value, notes, created_at')
+        .select('id, mission_id, actor_user, actor_agent_id, action, outcome, from_value, to_value, notes, consent_ok, created_at')
         .eq('company_id', companyId).order('created_at', { ascending: false }).limit(200);
       if (req.query.mission_id) q = q.eq('mission_id', String(req.query.mission_id));
       const { data, error } = await q;
