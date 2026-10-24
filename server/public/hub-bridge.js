@@ -33,7 +33,16 @@
       if (!x || !x.at || x.at < start || x.by !== S.name) return; // only this person's entries since sign-in
       var id = idOf(x);
       if (seen[id]) return;
-      seen[id] = 1; queue.push(x); added = true;
+      seen[id] = 1; added = true;
+      // Notes are saved while the person types: keep only the latest unsent note per business,
+      // and hold it briefly so half-typed versions never reach the CRM.
+      if (x.what === 'notes') {
+        queue = queue.filter(function (q) { return !(q.what === 'notes' && q.business === x.business); });
+        queue.push(Object.assign({}, x, { holdUntil: Date.now() + 20000 }));
+        setTimeout(flush, 20500);
+        return;
+      }
+      queue.push(x);
     });
     if (added) { rawSet(SEEN, JSON.stringify(seen)); rawSet(QUEUE, JSON.stringify(queue)); setTimeout(flush, 0); }
   }
@@ -49,8 +58,13 @@
     if (flushing) return;
     var queue = get(QUEUE, []);
     if (!queue.length) { render(); return; }
+    var now = Date.now();
+    var index = -1;
+    for (var i = 0; i < queue.length; i++) { if (!queue[i].holdUntil || queue[i].holdUntil <= now) { index = i; break; } }
+    if (index < 0) { render(); return; }
     flushing = true;
-    var entry = queue[0];
+    var entry = queue[index];
+    var entryId = idOf(entry);
     fetch('/api/hub/activity', {
       method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ at: entry.at, business: entry.business, what: entry.what, from: entry.from, to: entry.to }),
@@ -58,7 +72,7 @@
       if (r.status === 401) { location.replace('/login'); return 'stop'; }
       // 4xx other than 401/429: the CRM refused this entry (e.g. no permission) — drop it, keep it on the device log.
       if (r.ok || (r.status >= 400 && r.status < 500 && r.status !== 429)) {
-        var q = get(QUEUE, []); q.shift(); rawSet(QUEUE, JSON.stringify(q));
+        var q = get(QUEUE, []).filter(function (x) { return idOf(x) !== entryId; }); rawSet(QUEUE, JSON.stringify(q));
         if (!r.ok) console.warn('[hub] CRM refused an entry', r.status, entry.business);
         return 'next';
       }
