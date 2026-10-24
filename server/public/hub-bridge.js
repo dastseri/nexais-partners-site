@@ -87,7 +87,13 @@
     var out = document.createElement('button'); out.type = 'button'; out.textContent = 'Sign out';
     out.setAttribute('style', 'background:#fff;color:#14171c;border:0;border-radius:6px;padding:4px 8px;cursor:pointer;font:inherit');
     out.addEventListener('click', signOut);
-    bar.appendChild(who); bar.appendChild(statusEl); bar.appendChild(out);
+    bar.appendChild(who); bar.appendChild(statusEl);
+    if (S.role === 'team' || S.role === 'admin') {
+      var team = document.createElement('a'); team.href = '/team'; team.textContent = 'Team console';
+      team.setAttribute('style', 'color:#fff;text-decoration:underline');
+      bar.appendChild(team);
+    }
+    bar.appendChild(out);
     document.body.appendChild(bar);
     render(); flush();
   });

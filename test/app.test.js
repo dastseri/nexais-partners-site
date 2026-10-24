@@ -114,11 +114,29 @@ test('login success sets HttpOnly Secure SameSite cookies and opens the hub', ()
   assert.equal(r.status, 200);
   const cookies = r.headers.getSetCookie();
   assert.ok(cookies.some((c) => c.startsWith('nx_at=tok-partner') && /HttpOnly/.test(c) && /Secure/.test(c) && /SameSite=Lax/.test(c)));
-  const hub = await getAs(base, '/', 'nx_at=tok-partner');
-  const html = await hub.text();
-  assert.equal(hub.status, 200); assert.match(html, /SECRET-PROSPECT-LIST/);
+  const my = await getAs(base, '/my', 'nx_at=tok-partner');
+  const html = await my.text();
+  assert.equal(my.status, 200); assert.doesNotMatch(html, /SECRET-PROSPECT-LIST/);
   assert.match(html, /window\.NEXAIS_SESSION=\{"name":"Pat Partner","role":"partner"\}/);
-  assert.match(html, /\/app\/hub-bridge\.js/); assert.equal(hub.headers.get('cache-control'), 'no-store');
+  assert.equal(my.headers.get('cache-control'), 'no-store');
+  const hub = await getAs(base, '/', 'nx_at=tok-admin'); const hubHtml = await hub.text();
+  assert.match(hubHtml, /SECRET-PROSPECT-LIST/); assert.match(hubHtml, /\/app\/hub-bridge\.js/);
+}));
+
+test('partners never receive the hub prospect list; they get their own console', () => withServer(async (base) => {
+  const r = await getAs(base, '/', 'nx_at=tok-partner');
+  assert.equal(r.status, 302); assert.equal(r.headers.get('location'), '/my');
+  const my = await getAs(base, '/my', 'nx_at=tok-partner'); const html = await my.text();
+  assert.equal(my.status, 200); assert.doesNotMatch(html, /SECRET-PROSPECT-LIST/); assert.match(html, /"role":"partner"/);
+  const team = await getAs(base, '/team', 'nx_at=tok-partner'); assert.equal(team.status, 302); assert.equal(team.headers.get('location'), '/my');
+  assert.equal((await getAs(base, '/api/team/partners', 'nx_at=tok-partner')).status, 403);
+}));
+
+test('team gets the hub and the team console', () => withServer(async (base) => {
+  const hub = await getAs(base, '/', 'nx_at=tok-team'); assert.equal(hub.status, 200); assert.match(await hub.text(), /SECRET-PROSPECT-LIST/);
+  const team = await getAs(base, '/team', 'nx_at=tok-team'); assert.equal(team.status, 200); assert.match(await team.text(), /Team console/);
+  assert.equal((await getAs(base, '/api/team/partners', 'nx_at=tok-team')).status, 200);
+  assert.equal((await getAs(base, '/app/console-common.js')).status, 200);
 }));
 
 test('signed-in non-member sees no-access page, never the hub', () => withServer(async (base) => {
@@ -128,7 +146,7 @@ test('signed-in non-member sees no-access page, never the hub', () => withServer
 
 test('expired access token is refreshed from the refresh cookie', () => withServer(async (base, state) => {
   state.expired.add('tok-partner');
-  const r = await getAs(base, '/', 'nx_at=tok-partner; nx_rt=rt-good');
+  const r = await getAs(base, '/my', 'nx_at=tok-partner; nx_rt=rt-good');
   // refresh returns the same (fake) token which is still marked expired for getUser, but the refreshed user is used
   assert.equal(r.status, 200);
   assert.ok(r.headers.getSetCookie().some((c) => c.startsWith('nx_rt=rt-new')));
@@ -149,7 +167,7 @@ test('forgot password answers the same for any email; reset needs a valid recove
 }));
 
 test('session name is escaped in the page (no script injection)', () => withServer(async (base) => {
-  const html = await (await getAs(base, '/', 'nx_at=tok-xss')).text();
+  const html = await (await getAs(base, '/my', 'nx_at=tok-xss')).text();
   assert.doesNotMatch(html, /<\/script><script>alert/);
   assert.match(html, /\\u003c\/script\\u003e/);
 }));

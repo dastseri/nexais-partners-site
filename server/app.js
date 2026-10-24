@@ -300,6 +300,49 @@ export function createApp(options) {
     } catch (err) { return next(err); }
   });
 
+  // ---- team console data ----------------------------------------------------------------
+  function requireTeam(req, res, next) {
+    if (req.member.role === 'partner') return res.status(403).json({ error: 'Team only' });
+    return next();
+  }
+
+  app.get('/api/team/partners', requireMember, requireTeam, async (req, res, next) => {
+    try {
+      const db = req.session.db;
+      const [agents, perms] = await Promise.all([
+        db.from('sales_agents').select('id, full_name, email, status, role').eq('company_id', companyId).order('full_name'),
+        db.from('partner_permissions').select('agent_id, can_call, can_sms').eq('company_id', companyId),
+      ]);
+      if (agents.error) return res.status(400).json({ error: agents.error.message });
+      const byAgent = new Map((perms.data || []).map((p) => [p.agent_id, p]));
+      const partners = (agents.data || [])
+        .filter((a) => !INACTIVE_AGENT.has(String(a.status || '').toLowerCase()))
+        .map((a) => ({ id: a.id, name: a.full_name || a.email, role: a.role, can_call: !!byAgent.get(a.id)?.can_call, can_sms: !!byAgent.get(a.id)?.can_sms }));
+      return res.set('Cache-Control', 'no-store').json({ partners });
+    } catch (err) { return next(err); }
+  });
+
+  app.get('/api/activity', requireMember, async (req, res, next) => {
+    try {
+      const db = req.session.db;
+      let q = db.from('partner_activity_log')
+        .select('id, mission_id, actor_user, actor_agent_id, action, outcome, from_value, to_value, notes, created_at')
+        .eq('company_id', companyId).order('created_at', { ascending: false }).limit(200);
+      if (req.query.mission_id) q = q.eq('mission_id', String(req.query.mission_id));
+      const { data, error } = await q;
+      if (error) return res.status(400).json({ error: error.message });
+      // Names: team sees partner names; partners see their own name and "NexAIS team" for others.
+      const names = new Map();
+      if (req.member.role !== 'partner') {
+        const { data: agents } = await db.from('sales_agents').select('id, full_name, auth_user_id, user_id').eq('company_id', companyId);
+        (agents || []).forEach((a) => { if (a.auth_user_id) names.set(a.auth_user_id, a.full_name); if (a.user_id) names.set(a.user_id, a.full_name); });
+      }
+      names.set(req.session.user.id, req.member.name);
+      const rows = (data || []).map((r) => ({ ...r, actor_name: names.get(r.actor_user) || (r.actor_user ? 'NexAIS team' : 'System') }));
+      return res.set('Cache-Control', 'no-store').json({ activity: rows });
+    } catch (err) { return next(err); }
+  });
+
   // The hub's in-page call log mirrors each new entry here.
   app.post('/api/hub/activity', requireMember, sameOrigin, async (req, res, next) => {
     try {
@@ -332,7 +375,22 @@ export function createApp(options) {
     if (hubHtml === null) hubHtml = readFileSync(hubHtmlPath, 'utf8');
     return hubHtml;
   }
+  function bootScript(req) {
+    return `<script>window.NEXAIS_SESSION=${escapeJsonForHtml({ name: req.member.name, role: req.member.role })};</script>`;
+  }
+  app.get('/team', requireMember, (req, res) => {
+    if (req.member.role === 'partner') return res.redirect(302, '/my');
+    return res.type('html').set('Cache-Control', 'no-store').send(page('team.html').replace('<!--BOOT-->', bootScript(req)));
+  });
+  app.get('/my', requireMember, (req, res) => {
+    res.type('html').set('Cache-Control', 'no-store').send(page('my.html').replace('<!--BOOT-->', bootScript(req)));
+  });
+  app.get('/app/console.css', (req, res) => res.type('css').send(page('console.css')));
+  app.get('/app/console-common.js', (req, res) => res.type('application/javascript').send(page('console-common.js')));
+
+  // The hub holds the team's full prospect list, so partners get their own console instead.
   app.get(['/', '/index.html'], requireMember, (req, res) => {
+    if (req.member.role === 'partner') return res.redirect(302, '/my');
     const boot = `<script>window.NEXAIS_SESSION=${escapeJsonForHtml({ name: req.member.name, role: req.member.role })};</script>`
       + '<script src="/app/hub-bridge.js"></script>';
     const html = hub().replace(/<head>/i, (m) => `${m}\n${boot}`);

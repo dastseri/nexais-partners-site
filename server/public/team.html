@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>NexAIS Sales Partners — Team console</title>
+<link rel="stylesheet" href="/app/console.css">
+<!--BOOT-->
+<script src="/app/console-common.js"></script>
+</head>
+<body>
+<header>
+  <div><span class="brand">Nex<b>AIS</b></span> · <span data-en="Team console" data-fa="کنسول تیم">Team console</span> <span class="who" id="who"></span></div>
+  <nav>
+    <button class="tab" data-tab="missions" aria-selected="true" data-en="Missions" data-fa="مأموریت‌ها">Missions</button>
+    <button class="tab" data-tab="partners" aria-selected="false" data-en="Partners" data-fa="پارتنرها">Partners</button>
+    <button class="tab" data-tab="activity" aria-selected="false" data-en="Activity log" data-fa="لاگ فعالیت">Activity log</button>
+    <a href="/"><button type="button" data-en="Call hub" data-fa="هاب تماس">Call hub</button></a>
+    <button type="button" id="lang">فارسی</button>
+    <button type="button" id="out" data-en="Sign out" data-fa="خروج">Sign out</button>
+  </nav>
+</header>
+<main>
+  <p id="msg" class="msg" role="status" aria-live="polite"></p>
+
+  <section id="tab-missions">
+    <div class="card">
+      <h2 data-en="New mission (team-initiated)" data-fa="مأموریت جدید (از طرف تیم)">New mission (team-initiated)</h2>
+      <form id="new" class="grid">
+        <input id="n-name" required placeholder="Business name · نام کسب‌وکار">
+        <input id="n-city" placeholder="City · شهر">
+        <input id="n-vertical" placeholder="Industry · صنعت">
+        <input id="n-phone" type="tel" placeholder="Public phone · تلفن عمومی">
+        <input id="n-web" type="url" placeholder="Website · وب‌سایت">
+        <button class="primary" type="submit" data-en="Create" data-fa="ساخت">Create</button>
+      </form>
+      <p class="muted" data-en="Duplicates are refused: one open mission per business." data-fa="تکراری پذیرفته نمی‌شود: برای هر کسب‌وکار فقط یک مأموریت باز.">Duplicates are refused: one open mission per business.</p>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <select id="filter"></select>
+      <input id="search" placeholder="Search · جستجو">
+      <span class="muted" id="count"></span>
+    </div>
+    <div id="missions"></div>
+  </section>
+
+  <section id="tab-partners" hidden>
+    <div class="card">
+      <h2 data-en="Channel permissions per partner" data-fa="دسترسی کانال‌ها برای هر پارتنر">Channel permissions per partner</h2>
+      <p class="muted" data-en="Default is off. Email is closed for partners. Every change is recorded in the activity log." data-fa="پیش‌فرض بسته است. ایمیل برای پارتنرها بسته است. هر تغییر در لاگ ثبت می‌شود.">Default is off. Email is closed for partners. Every change is recorded in the activity log.</p>
+      <p class="warn" data-en="SMS permission is not consent: only text people who have agreed to receive messages (CASL)." data-fa="اجازهٔ پیامک به معنی رضایت مخاطب نیست: فقط به کسانی پیامک بدهید که رضایت داده‌اند (CASL).">SMS permission is not consent: only text people who have agreed to receive messages (CASL).</p>
+      <div id="partners"></div>
+    </div>
+  </section>
+
+  <section id="tab-activity" hidden>
+    <div class="card">
+      <h2 data-en="Activity log (latest 200, append-only)" data-fa="لاگ فعالیت (۲۰۰ مورد آخر، غیرقابل ویرایش)">Activity log (latest 200, append-only)</h2>
+      <ul class="log" id="activity"></ul>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  'use strict';
+  var NXs = window.NEXAIS_SESSION || {}, el = NX.el, t = NX.t;
+  var state = { missions: [], partners: [], filter: 'open', q: '' };
+  var msg = document.getElementById('msg');
+  function say(text, ok) { msg.textContent = text || ''; msg.className = 'msg ' + (ok ? 'ok' : 'err'); }
+  document.getElementById('who').textContent = '· ' + (NXs.name || '') + ' (' + (NXs.role || '') + ')';
+  document.getElementById('out').addEventListener('click', NX.signOut);
+  document.getElementById('lang').addEventListener('click', NX.toggleLang);
+  NX.onLang = function () { document.getElementById('lang').textContent = NX.fa() ? 'English' : 'فارسی'; fillFilter(); renderMissions(); renderPartners(); loadActivity(); };
+
+  document.querySelectorAll('button.tab').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('button.tab').forEach(function (x) { x.setAttribute('aria-selected', String(x === b)); });
+      ['missions', 'partners', 'activity'].forEach(function (k) { document.getElementById('tab-' + k).hidden = k !== b.dataset.tab; });
+      if (b.dataset.tab === 'activity') loadActivity();
+    });
+  });
+
+  function fillFilter() {
+    var f = document.getElementById('filter'); f.textContent = '';
+    [['open', t('Open missions', 'مأموریت‌های باز')], ['all', t('All', 'همه')]].concat(NX.STATUS.map(function (s) { return [s, NX.status(s)]; }))
+      .forEach(function (o) { f.appendChild(el('option', { value: o[0], text: o[1], selected: o[0] === state.filter })); });
+  }
+  document.getElementById('filter').addEventListener('change', function (e) { state.filter = e.target.value; renderMissions(); });
+  document.getElementById('search').addEventListener('input', function (e) { state.q = e.target.value.toLowerCase(); renderMissions(); });
+
+  // Show partner names instead of internal ids in assignment / permission entries.
+  function named(a) {
+    var c = Object.assign({}, a);
+    if (c.action === 'assignment') { c.from_value = partnerName(c.from_value) || (c.from_value ? c.from_value : ''); c.to_value = partnerName(c.to_value) || c.to_value; }
+    if (c.action === 'permission_change' && c.notes) c.notes = partnerName(c.notes) || c.notes;
+    return c;
+  }
+  function partnerName(id) { var p = state.partners.filter(function (x) { return x.id === id; })[0]; return p ? p.name : ''; }
+
+  function renderMissions() {
+    var box = document.getElementById('missions'); box.textContent = '';
+    var list = state.missions.filter(function (m) {
+      var open = ['won', 'lost', 'closed', 'rejected'].indexOf(m.status) < 0;
+      if (state.filter === 'open' && !open) return false;
+      if (state.filter !== 'open' && state.filter !== 'all' && m.status !== state.filter) return false;
+      return !state.q || (m.business_name + ' ' + (m.city || '') + ' ' + m.mission_code).toLowerCase().indexOf(state.q) >= 0;
+    });
+    document.getElementById('count').textContent = list.length + ' / ' + state.missions.length;
+    list.forEach(function (m) { box.appendChild(missionCard(m)); });
+  }
+
+  function missionCard(m) {
+    var assign = el('select', {}, [el('option', { value: '', text: t('— not assigned —', '— سپرده نشده —') })]);
+    state.partners.forEach(function (p) { assign.appendChild(el('option', { value: p.id, text: p.name, selected: p.id === m.assigned_agent_id })); });
+    var status = el('select');
+    NX.STATUS.forEach(function (s) { status.appendChild(el('option', { value: s, text: NX.status(s), selected: s === m.status })); });
+    var summary = el('textarea', { placeholder: t('Approved research summary shown to the partner', 'خلاصهٔ تحقیق تأییدشده که پارتنر می‌بیند') });
+    summary.value = m.partner_summary || '';
+    var proposal = el('input', { type: 'url', placeholder: t('Proposal link', 'لینک پروپوزال') }); proposal.value = m.proposal_link || '';
+    var save = el('button', { class: 'primary', type: 'button', text: t('Save', 'ذخیره') });
+    var history = el('ul', { class: 'log' });
+    var details = el('details', {}, [el('summary', { text: t('History', 'سابقه') }), history]);
+    details.addEventListener('toggle', function () {
+      if (!details.open) return;
+      NX.api('GET', '/api/activity?mission_id=' + encodeURIComponent(m.id)).then(function (j) {
+        history.textContent = '';
+        j.activity.forEach(function (a) { history.appendChild(el('li', { text: NX.describe(named(a)) })); });
+        if (!j.activity.length) history.appendChild(el('li', { text: t('No activity yet', 'هنوز فعالیتی نیست') }));
+      }).catch(function (e) { say(e.message); });
+    });
+    save.addEventListener('click', function () {
+      var patch = { status: status.value, partner_summary: summary.value || null, proposal_link: proposal.value || null, assigned_agent_id: assign.value || null };
+      save.disabled = true;
+      NX.api('PATCH', '/api/missions/' + encodeURIComponent(m.id), patch).then(function () { say(t('Saved ', 'ذخیره شد ') + m.mission_code, true); return load(); })
+        .catch(function (e) { say(e.message); }).finally(function () { save.disabled = false; });
+    });
+    return el('div', { class: 'card' }, [
+      el('div', { class: 'row' }, [el('span', { class: 'code', text: m.mission_code }), el('h3', { text: m.business_name }),
+        el('span', { class: 'pill ' + m.status, text: NX.status(m.status) }),
+        el('span', { class: 'muted', text: [m.city, m.vertical, m.public_phone, m.origin === 'partner_initiated' ? t('from a partner', 'معرفی پارتنر') : ''].filter(Boolean).join(' · ') })]),
+      el('div', { class: 'grid', style: 'margin-top:10px' }, [
+        el('label', { class: 'muted' }, [t('Assigned partner', 'پارتنر مسئول'), el('br'), assign]),
+        el('label', { class: 'muted' }, [t('Status', 'وضعیت'), el('br'), status]),
+        el('label', { class: 'muted' }, [t('Proposal', 'پروپوزال'), el('br'), proposal])]),
+      el('div', { style: 'margin-top:8px' }, [summary]),
+      el('p', { class: 'muted', text: [m.outcome ? t('Outcome: ', 'نتیجه: ') + m.outcome : '', m.next_step ? t('Next: ', 'قدم بعد: ') + m.next_step : ''].filter(Boolean).join(' · ') }),
+      el('div', { class: 'row' }, [save, details]),
+    ]);
+  }
+
+  function renderPartners() {
+    var box = document.getElementById('partners'); box.textContent = '';
+    if (!state.partners.length) box.appendChild(el('p', { class: 'muted', text: t('No active partners yet.', 'هنوز پارتنر فعالی نیست.') }));
+    state.partners.forEach(function (p) {
+      var call = el('input', { type: 'checkbox', checked: p.can_call }), sms = el('input', { type: 'checkbox', checked: p.can_sms });
+      function save() {
+        NX.api('PUT', '/api/permissions/' + encodeURIComponent(p.id), { can_call: call.checked, can_sms: sms.checked })
+          .then(function () { p.can_call = call.checked; p.can_sms = sms.checked; say(t('Permissions saved for ', 'دسترسی ذخیره شد برای ') + p.name, true); })
+          .catch(function (e) { call.checked = p.can_call; sms.checked = p.can_sms; say(e.message); });
+      }
+      call.addEventListener('change', save); sms.addEventListener('change', save);
+      box.appendChild(el('div', { class: 'row', style: 'border-top:1px solid var(--line);padding:8px 0' }, [
+        el('strong', { text: p.name }), el('span', { class: 'muted', text: p.role || '' }),
+        el('label', {}, [call, ' ' + t('Phone calls', 'تماس تلفنی')]), el('label', {}, [sms, ' ' + t('SMS', 'پیامک')]),
+        el('span', { class: 'muted', text: t('Email: closed', 'ایمیل: بسته') })]));
+    });
+  }
+
+  function loadActivity() {
+    NX.api('GET', '/api/activity').then(function (j) {
+      var codes = {}; state.missions.forEach(function (m) { codes[m.id] = m.mission_code + ' ' + m.business_name; });
+      var ul = document.getElementById('activity'); ul.textContent = '';
+      j.activity.forEach(function (a) { ul.appendChild(el('li', { text: (a.mission_id ? '[' + (codes[a.mission_id] || '') + '] ' : '') + NX.describe(named(a)) })); });
+      if (!j.activity.length) ul.appendChild(el('li', { text: t('No activity yet', 'هنوز فعالیتی نیست') }));
+    }).catch(function (e) { say(e.message); });
+  }
+
+  document.getElementById('new').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var body = { business_name: document.getElementById('n-name').value.trim(), city: document.getElementById('n-city').value.trim() || null,
+      vertical: document.getElementById('n-vertical').value.trim() || null, public_phone: document.getElementById('n-phone').value.trim() || null,
+      website: document.getElementById('n-web').value.trim() || null };
+    if (!body.business_name) return say(t('Business name is required.', 'نام کسب‌وکار لازم است.'));
+    NX.api('POST', '/api/missions', body).then(function (j) { say(t('Created ', 'ساخته شد ') + j.mission.mission_code, true); e.target.reset(); return load(); })
+      .catch(function (err) { say(err.message); });
+  });
+
+  function load() {
+    return Promise.all([NX.api('GET', '/api/missions'), NX.api('GET', '/api/team/partners')]).then(function (r) {
+      state.missions = r[0].missions || []; state.partners = r[1].partners || [];
+      renderMissions(); renderPartners();
+    }).catch(function (e) { say(e.message); });
+  }
+  NX.applyLang(); document.getElementById('lang').textContent = NX.fa() ? 'English' : 'فارسی';
+  fillFilter(); load();
+})();
+</script>
+</body>
+</html>
