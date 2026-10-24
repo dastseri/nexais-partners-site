@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>NexAIS Sales Partners — Sign in</title>
+<link rel="stylesheet" href="/app/auth.css">
+</head>
+<body>
+<main class="box">
+  <p class="brand">Nex<b>AIS</b></p>
+  <h1 data-en="Sales Partners — sign in" data-fa="همکاران فروش — ورود">Sales Partners — sign in</h1>
+  <p class="sub" data-en="Use the account NexAIS created for you. Accounts are created by the NexAIS admin only." data-fa="با حسابی که NexAIS برای شما ساخته وارد شوید. حساب‌ها فقط توسط ادمین NexAIS ساخته می‌شوند.">Use the account NexAIS created for you. Accounts are created by the NexAIS admin only.</p>
+  <form id="login" novalidate>
+    <label><span data-en="Email" data-fa="ایمیل">Email</span><input id="email" type="email" autocomplete="username" required></label>
+    <label><span data-en="Password" data-fa="رمز عبور">Password</span><input id="password" type="password" autocomplete="current-password" required></label>
+    <button id="go" type="submit" data-en="Sign in" data-fa="ورود">Sign in</button>
+    <p id="msg" class="msg" role="status" aria-live="polite"></p>
+  </form>
+  <div class="row">
+    <a href="#" id="forgot" data-en="Forgot password?" data-fa="رمز را فراموش کرده‌اید؟">Forgot password?</a>
+    <button class="lang" id="lang" type="button">فارسی</button>
+  </div>
+</main>
+<script>
+(function () {
+  var fa = false;
+  try { fa = localStorage.getItem('nexais-auth-lang') === 'fa'; } catch (e) {}
+  function t(en, f) { return fa ? f : en; }
+  function apply() {
+    document.documentElement.lang = fa ? 'fa' : 'en';
+    document.documentElement.dir = fa ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-en]').forEach(function (el) { el.textContent = el.getAttribute(fa ? 'data-fa' : 'data-en'); });
+    document.getElementById('lang').textContent = fa ? 'English' : 'فارسی';
+  }
+  document.getElementById('lang').addEventListener('click', function () {
+    fa = !fa; try { localStorage.setItem('nexais-auth-lang', fa ? 'fa' : 'en'); } catch (e) {} apply();
+  });
+  apply();
+  var msg = document.getElementById('msg'), go = document.getElementById('go');
+  function say(text, ok) { msg.textContent = text; msg.className = 'msg ' + (ok ? 'ok' : 'err'); }
+  function post(url, body) {
+    return fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, body: j }; }); });
+  }
+  document.getElementById('login').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('email').value.trim(), password = document.getElementById('password').value;
+    if (!email || !password) return say(t('Enter your email and password.', 'ایمیل و رمز عبور را وارد کنید.'));
+    go.disabled = true; say('');
+    post('/api/auth/login', { email: email, password: password }).then(function (r) {
+      if (r.ok) { location.replace('/'); return; }
+      go.disabled = false;
+      if (r.status === 403) return say(t('This account is not part of the NexAIS partner program.', 'این حساب عضو برنامهٔ همکاران NexAIS نیست.'));
+      if (r.status === 429) return say(t('Too many attempts. Try again in 15 minutes.', 'تلاش زیاد بود. ۱۵ دقیقهٔ دیگر دوباره امتحان کنید.'));
+      say(t('Email or password is not correct.', 'ایمیل یا رمز عبور درست نیست.'));
+    }).catch(function () { go.disabled = false; say(t('Network problem. Try again.', 'مشکل اتصال. دوباره امتحان کنید.')); });
+  });
+  document.getElementById('forgot').addEventListener('click', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('email').value.trim();
+    if (!email) return say(t('Type your email above first.', 'اول ایمیل خود را بالا بنویسید.'));
+    post('/api/auth/forgot', { email: email }).then(function () {
+      say(t('If this email has an account, a reset link is on its way.', 'اگر این ایمیل حساب داشته باشد، لینک تغییر رمز ارسال شد.'), true);
+    });
+  });
+})();
+</script>
+</body>
+</html>
