@@ -53,6 +53,8 @@ class RealImportContractTests(unittest.TestCase):
                  "پروپوزال اصلاح‌شده برای Terroni", "ایمیل -> info@terroni.com", "ارسال شد"],
                 ["2026-11-09", "ZhioStudio", "A different company", "ارسال",
                  "پروپوزال", "ایمیل -> person@example.invalid", "ارسال شد"],
+                ["2026-11-09", "NexAIS", "Test Insta Company", "ارسال",
+                 "دایرکت مرحله ۲", "دایرکت اینستاگرام", "ارسال تأیید شد"],
                 ["2026-11-09", "NexAIS", "Terroni", "دریافت",
                  "جواب به ایمیل", "ایمیل", "پاسخ"],
                 ["2026-11-09", "NexAIS", "Unverified DM", "ارسال",
@@ -68,21 +70,21 @@ class RealImportContractTests(unittest.TestCase):
                    "--out", str(output), "--index", str(ROOT / "index.html")]
             first = subprocess.run(cmd, text=True, capture_output=True, check=True)
             first_counts = json.loads(first.stdout)
-            self.assertEqual(first_counts["added"], 2)
+            self.assertEqual(first_counts["added"], 3)
             self.assertEqual(first_counts["excluded_other_projects"], 1)
             self.assertEqual(first_counts["skipped"], 1)
             self.assertEqual(first_counts["quarantined_unconfirmed"], 2)
             records = [json.loads(row) for row in output.read_text(encoding="utf-8").splitlines()]
-            self.assertEqual(len(records), 2)
-            self.assertEqual(len({r["id"] for r in records}), 2)
-            self.assertTrue(all(r["body_text"] == "" for r in records))
+            self.assertEqual(len(records), 3)
+            self.assertEqual(len({r["id"] for r in records}), 3)
+            self.assertTrue(all(r["body_text"] == "" for r in records))\n            self.assertEqual(next(r["channel"] for r in records if r["business_name"]=="Test Insta Company"),"dm")
             self.assertTrue(all(r["subject"] == "" for r in records))
             self.assertTrue(all(r["sent_at"].endswith("-05:00") for r in records))
             second = subprocess.run(cmd, text=True, capture_output=True, check=True)
             second_counts = json.loads(second.stdout)
             self.assertEqual(second_counts["added"], 0)
-            self.assertEqual(second_counts["duplicate"], 2)
-            self.assertEqual(len(output.read_text(encoding="utf-8").splitlines()), 2)
+            self.assertEqual(second_counts["duplicate"], 3)
+            self.assertEqual(len(output.read_text(encoding="utf-8").splitlines()), 3)
 
 
 if __name__ == "__main__":
