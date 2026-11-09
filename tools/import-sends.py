@@ -115,8 +115,10 @@ def read_eml(eml_file):
         "attachment": next((str(p.get_filename()) for p in msg.walk() if p.get_filename() and p.get_filename().lower().endswith(".pdf")), "")
     }
 
-def stable_id(day,biz,stage,to_email,message_id):
-    key="|".join([str(day),normal(biz),stage,to_email.lower(),str(message_id or "")])
+def stable_id(day,biz,stage,to_email,message_id,source_summary):
+    # Distinct sends on the same day must remain distinct unless id/message_id or
+    # the original register row contents prove they are the same entry.
+    key="|".join([str(day),normal(biz),stage,to_email.lower(),str(message_id or ""),str(source_summary or "")])
     return "snd-"+str(day)+"-"+slug(biz)+"-"+hashlib.sha256(key.encode()).hexdigest()[:12]
 
 def read_csv(fp):
@@ -195,7 +197,7 @@ def build(row,cards,eml_dir,eml_index):
     if full and not to_email and full["recipients"]:to_email=full["recipients"][0]
     is_email=bool(to_email) or ("ایمیل" in channel) or ("email" in channel.lower())
     result={
-        "id":stable_id(day,biz,stage,to_email,message_id),
+        "id":stable_id(day,biz,stage,to_email,message_id,summary),
         "business_slug":phone_card.get("slug") or slug(biz),
         "business_name":biz,
         "stage":stage, "sent_at":stamp.isoformat(timespec="seconds"),
@@ -244,7 +246,7 @@ def main():
             val=json.loads(line);existing.append(val)
             seen_ids.add(val.get("id"))
             if val.get("message_id"):seen_mids.add(val["message_id"])
-            seen_semantic.add((str(val.get("sent_at",""))[:10],normal(val.get("business_name")),val.get("stage"),val.get("to_email","").lower()))
+            seen_semantic.add((str(val.get("sent_at",""))[:10],normal(val.get("business_name")),val.get("stage"),val.get("to_email","").lower(),str(val.get("source_summary",""))))
     stats={"source_rows":len(sources),"existing":len(existing),"added":0,"duplicate":0,"skipped":0,"excluded_other_projects":0,"quarantined_unconfirmed":0,"unmatched_cards":[],"full_bodies_added":0}
     pending=[]
     for _,row in sources:
@@ -256,7 +258,7 @@ def main():
         if not rec:
             stats["quarantined_unconfirmed" if kind=="aggregate_or_unconfirmed" else "skipped"]+=1
             continue
-        semantic=(rec["sent_at"][:10],normal(rec["business_name"]),rec["stage"],rec["to_email"].lower())
+        semantic=(rec["sent_at"][:10],normal(rec["business_name"]),rec["stage"],rec["to_email"].lower(),str(rec.get("source_summary","")))
         if rec["id"] in seen_ids or (rec["message_id"] and rec["message_id"] in seen_mids) or semantic in seen_semantic:
             stats["duplicate"]+=1;continue
         seen_ids.add(rec["id"]);seen_semantic.add(semantic)
