@@ -39,7 +39,16 @@ function loadJSONL(file){try{return fs.readFileSync(file,"utf8").split(/\r?\n/).
 function sends(){const ids=new Set(),mids=new Set(),items=[];
  for(const r of loadJSONL(SENDS_PATH)){if(!r||typeof r.id!=="string"||!stageSet.has(r.stage)||!statusSet.has(r.status)||typeof r.business_name!=="string"||typeof r.sent_at!=="string")continue;
  if(ids.has(r.id)||(r.message_id&&mids.has(r.message_id)))continue;ids.add(r.id);if(r.message_id)mids.add(r.message_id);items.push(r);}
- return appendStatus(loadJSONL(EVENTS_PATH),items).sort((a,b)=>Date.parse(b.sent_at)-Date.parse(a.sent_at));
+ const allowed=["id","business_slug","business_name","stage","sent_at","time_precision","channel","from","to_email","phone","subject","body_text","attachment","status","message_id","reply_note","replied_at"];
+ return appendStatus(loadJSONL(EVENTS_PATH),items).map(record=>{
+  // Never leak raw Jarvis source_summary or any operational/internal notes.
+  const publicRecord={};
+  allowed.forEach(k=>{if(Object.prototype.hasOwnProperty.call(record,k))publicRecord[k]=record[k];});
+  if((record.status==="bounced"||record.status==="replied")&&record.status_note){
+   publicRecord.status_note=String(record.status_note).slice(0,180);
+  }
+  return publicRecord;
+ }).sort((a,b)=>Date.parse(b.sent_at)-Date.parse(a.sent_at));
 }
 function isOriginValid(req){const origin=req.headers.origin;const host=req.headers.host;if(!origin||!host)return false;try{return new URL(origin).host===host&&new URL(origin).protocol==="https:"||(!IS_PRODUCTION&&new URL(origin).host===host&&new URL(origin).protocol==="http:");}catch{return false;}}
 function parseBody(req){return new Promise((resolve,reject)=>{let data="",length=0;req.on("data",b=>{length+=b.length;if(length>MAX_BODY){reject(new Error("Request too large"));req.destroy();return;}data+=b.toString("utf8");});req.on("end",()=>{try{resolve(JSON.parse(data));}catch{reject(new Error("Invalid JSON"));}});req.on("error",reject);});}
