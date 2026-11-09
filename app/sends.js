@@ -272,7 +272,14 @@
       const box = node("div", "send-global-item");
       const name = node("h3", "", rec.business_name || rec.business_slug || "");
       name.style.cssText = "font-size:15px;margin:15px 0 5px";
-      box.append(name, entry(rec)); feed.append(box);
+      box.append(name);
+      const knownPhone = validPhone(rec.phone);
+      if (knownPhone) {
+        const tel = node("a", "send-phone", knownPhone);
+        tel.href = "tel:" + knownPhone.replace(/[^\d+]/g, "");
+        box.append(tel);
+      } else box.append(node("p", "send-missing-phone", tr("noPhone")));
+      box.append(entry(rec)); feed.append(box);
     });
   }
   function renderDirectory() {
