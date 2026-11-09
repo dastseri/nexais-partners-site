@@ -6394,25 +6394,30 @@ Object.assign(window.FA, {
 })();
 </script>
 <script>
-/* ================= entry gate — shared team access key ================= */
+/* This HTML is now served ONLY after standalone server authentication.
+   No shared partner key is embedded in the browser. */
 (function(){
   "use strict";
-  var KEY = "nexais-partners";
+  window.NEXAIS_hubAuthenticated = true;
   var gate = document.getElementById("gate");
-  function unlock(){ gate.style.display = "none"; document.body.classList.remove("locked"); }
-  var ok = false;
-  try { ok = sessionStorage.getItem("nexais-gate-ok") === "1"; } catch(e){}
-  if (ok){ unlock(); return; }
-  var input = document.getElementById("gate-key");
-  if (input) input.focus();
-  document.getElementById("gate-form").addEventListener("submit", function(e){
-    e.preventDefault();
-    if (input.value.trim() === KEY){
-      try { sessionStorage.setItem("nexais-gate-ok", "1"); } catch(e){}
-      unlock();
-    } else {
-      document.getElementById("gate-err").style.display = "block";
-      input.select();
+  if(gate) gate.style.display = "none";
+  document.body.classList.remove("locked");
+  window.addEventListener("DOMContentLoaded",function(){
+    var nav = document.querySelector(".topnav");
+    if(!nav || document.getElementById("partners-signout"))return;
+    var btn = document.createElement("button");
+    btn.id = "partners-signout";
+    btn.type = "button";
+    btn.className = "copy-btn";
+    btn.style.margin = "0";
+    btn.textContent = (window.LANG === "fa") ? "خروج" : "Sign out";
+    btn.addEventListener("click",function(){
+      fetch("/api/logout",{method:"POST",credentials:"same-origin"}).finally(function(){location.replace("/login");});
+    });
+    nav.appendChild(btn);
+    var previous = window.NEXAIS_setLang;
+    if(previous){
+      window.NEXAIS_setLang = function(lang){previous(lang);btn.textContent = (lang==="fa") ? "خروج" : "Sign out";};
     }
   });
 })();
@@ -7175,5 +7180,6 @@ Object.assign(window.FA, {
   });
 })();
 </script>
+<script src="/app/sends.js" defer></script>
 </body>
 </html>
