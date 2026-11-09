@@ -189,6 +189,7 @@ def main():
     ap.add_argument("--mirror",type=Path,help="Optional original correspondence-log.md")
     ap.add_argument("--eml-dir",type=Path,help="Optional genuine raw Sent .eml files for exact body")
     ap.add_argument("--out",type=Path,required=True,help="Protected data path outside public repo")
+    ap.add_argument("--include-other-projects",action="store_true",help="Explicit admin approval to expose unrelated projects to Partners")
     ap.add_argument("--index",type=Path,default=REPO/"index.html")
     ap.add_argument("--report",type=Path,help="Path for private import summary")
     args=ap.parse_args()
@@ -211,9 +212,13 @@ def main():
             seen_ids.add(val.get("id"))
             if val.get("message_id"):seen_mids.add(val["message_id"])
             seen_semantic.add((str(val.get("sent_at",""))[:10],normal(val.get("business_name")),val.get("stage"),val.get("to_email","").lower()))
-    stats={"source_rows":len(sources),"existing":len(existing),"added":0,"duplicate":0,"skipped":0,"unmatched_cards":[],"full_bodies_added":0}
+    stats={"source_rows":len(sources),"existing":len(existing),"added":0,"duplicate":0,"skipped":0,"excluded_other_projects":0,"unmatched_cards":[],"full_bodies_added":0}
     pending=[]
     for _,row in sources:
+        group=normal(row.get("بخش",""))
+        if not args.include_other_projects and ("zhiostudio" in group or "tibox" in group):
+            stats["excluded_other_projects"]+=1
+            continue
         rec,kind=build(row,cards,args.eml_dir,emls)
         if not rec:stats["skipped"]+=1;continue
         semantic=(rec["sent_at"][:10],normal(rec["business_name"]),rec["stage"],rec["to_email"].lower())
