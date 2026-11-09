@@ -44,3 +44,10 @@
 
 ## Follow-up correction
 On re-audit, 12 historical Instagram DM attempts had explicit pending, failed or unknown delivery evidence. They were segregated into a separate protected verification-hold ledger; do not display them as confirmed sends. The Import script now quarantines these statuses on fresh imports, with tests. The 233 remaining entries are candidates for history display, **not** independent provider-delivery confirmations. Internal Jarvis notes are removed by the API field allowlist.
+
+## Second-pass validation
+- Source ledger remains unchanged at 245 candidate entries; 12 explicit DM non-deliveries/uncertain attempts are held outside the display ledger. The protected revised display ledger contains 233 entries across 85 businesses: 194 email, 37 Instagram DM, 2 web form.
+- Known existing-card phones are present on 196 of these 233 entries. Full sent bodies and independently verified original subjects remain absent in all 233.
+- The importer now preserves the `dm` channel and quarantines explicit non-confirmed sends, with a dedicated regression test.
+- API responses omit imported internal `source_summary` and generic operational `status_note` for ordinary sends. It is still necessary to review status/reply notes before sharing with all partners.
+- Latest code must continue to pass CI and real authenticated mobile QA; no production cutover is authorized.
