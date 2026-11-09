@@ -27,7 +27,7 @@
       copied: "Copied", unavailable: "Full text not archived for this send",
       loading: "Loading secure send history…", failed: "Send history unavailable. Sign in or contact the administrator.",
       noResults: "No matching sends.", count: "sends", last: "last", from: "From", to: "To",
-      subject: "Subject", attachment: "Attachment", reply: "Reply", channel: "Channel",
+      subject: "Subject", missingSubject: "Subject not archived", attachment: "Attachment", reply: "Reply", channel: "Channel",
       proposal: "Proposal", stage2: "Stage 2", stage3: "Stage 3", letter: "Letter", other: "Other",
       sent: "Sent", delivered: "Delivered", bounced: "Bounced", replied: "Replied",
       all: "All", directory: "Businesses not in the call list"
@@ -40,7 +40,7 @@
       copied: "کپی شد", unavailable: "متن کامل برای این ارسال آرشیو نشده است",
       loading: "در حال بارگذاری امن سوابق ارسال…", failed: "سوابق ارسال در دسترس نیست. وارد شوید یا با مدیر تماس بگیرید.",
       noResults: "ارسالی مطابق فیلتر پیدا نشد.", count: "ارسال", last: "آخرین", from: "فرستنده", to: "گیرنده",
-      subject: "موضوع", attachment: "پیوست", reply: "پاسخ", channel: "کانال",
+      subject: "موضوع", missingSubject: "موضوع ایمیل آرشیو نشده", attachment: "پیوست", reply: "پاسخ", channel: "کانال",
       proposal: "پروپوزال", stage2: "مرحله ۲", stage3: "مرحله ۳", letter: "نامه", other: "سایر",
       sent: "ارسال شد", delivered: "تحویل شد", bounced: "برگشت خورد", replied: "پاسخ داده شد",
       all: "همه", directory: "کسب‌وکارهای خارج از لیست تماس"
@@ -97,7 +97,7 @@
     const summary = node("summary", "send-summary");
     const pill = node("span", "send-chip", tr(rec.stage));
     pill.dataset.stage = rec.stage;
-    summary.append(pill, node("span", "send-subject", rec.subject || tr("unavailable")),
+    summary.append(pill, node("span", "send-subject", rec.subject || tr("missingSubject")),
       node("time", "send-time", timeText(rec)), node("span", "send-status", tr(rec.status)));
     panel.append(summary);
     const body = node("div", "send-entry-body");
@@ -153,7 +153,7 @@
       } else head.append(node("span", "send-missing-phone", tr("noPhone")));
       {
         const line = node("div", "send-card-count",
-          STAGES.slice(0, 3).map(stage => tr(stage) + " " + (sends.some(s => s.stage === stage) ? "✓" : "—")).join(" · "));
+          STAGES.map(stage => tr(stage) + " " + (sends.some(s => s.stage === stage) ? "✓" : "—")).join(" · "));
         line.append(node("span", "", " · " + sends.length + " " + tr("count") + " · " + tr("last") + " " + timeText(sends[0])));
         head.append(line);
       }
@@ -303,7 +303,7 @@
         link.href = "tel:" + phone.replace(/[^\d+]/g, "");
         card.append(link);
       } else card.append(node("p", "send-missing-phone", tr("noPhone")));
-      card.append(node("p", "send-card-count", STAGES.slice(0,3).map(stage =>
+      card.append(node("p", "send-card-count", STAGES.map(stage =>
         tr(stage)+" "+(sends.some(x => x.stage === stage) ? "✓" : "—")).join(" · ")));
       const details = node("details", "");
       details.append(node("summary", "", tr("toBusiness")+" · "+sends.length+" "+tr("count")));
