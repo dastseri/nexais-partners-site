@@ -23,6 +23,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - run: python3 -m pip install openpyxl==3.1.5
       - run: npm test
       - run: python3 -m py_compile tools/import-sends.py tools/append-send.py
       - run: python3 -m unittest discover -s test -p 'test_*.py'
