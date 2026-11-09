@@ -55,6 +55,10 @@ class RealImportContractTests(unittest.TestCase):
                  "پروپوزال", "ایمیل -> person@example.invalid", "ارسال شد"],
                 ["2026-11-09", "NexAIS", "Terroni", "دریافت",
                  "جواب به ایمیل", "ایمیل", "پاسخ"],
+                ["2026-11-09", "NexAIS", "Unverified DM", "ارسال",
+                 "دایرکت آزمایشی", "دایرکت اینستاگرام", "نتیجه نامشخص — هیچ رشته‌ای ساخته نشده"],
+                ["2026-11-09", "NexAIS", "Failed DM", "ارسال",
+                 "دایرکت ناموفق", "دایرکت اینستاگرام", "ننشست — تحویل تأیید نشد"],
             ]
             with register.open("w", encoding="utf-8-sig", newline="") as handle:
                 writer = csv.writer(handle)
@@ -67,6 +71,7 @@ class RealImportContractTests(unittest.TestCase):
             self.assertEqual(first_counts["added"], 2)
             self.assertEqual(first_counts["excluded_other_projects"], 1)
             self.assertEqual(first_counts["skipped"], 1)
+            self.assertEqual(first_counts["quarantined_unconfirmed"], 2)
             records = [json.loads(row) for row in output.read_text(encoding="utf-8").splitlines()]
             self.assertEqual(len(records), 2)
             self.assertEqual(len({r["id"] for r in records}), 2)
