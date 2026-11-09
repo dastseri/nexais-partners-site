@@ -4,6 +4,20 @@
   const API = "/api/sends";
   const STAGES = ["proposal", "stage2", "stage3", "letter", "other"];
   const STATUSES = ["sent", "delivered", "bounced", "replied"];
+  // Confirmed historical Jarvis short names; no fuzzy matches or guessed identity.
+  const KNOWN_ALIASES = {
+    "ascottparceventcentre": ["ascottparc"],
+    "bayviewgolfandcountryclub": ["bayviewgcc"],
+    "mississauguagolfandcountryclub": ["mississauguagcc"],
+    "ladiesgolfcluboftoronto": ["ladiesgcoftoronto"],
+    "terrarestaurant": ["terra"],
+    "viaallegroristorante": ["viaallegro"],
+    "chefrezapersiangrill": ["chefreza"],
+    "vinelandestateswinery": ["vinelandestates"],
+    "angusglengolfclub": ["angusglen"],
+    "eaglesnestgolfclub": ["eaglesnest"],
+    "islingtongolfclub": ["islingtongc"]
+  };
   const words = {
     en: {
       sends: "Sends", title: "Sends — HQ correspondence", intro: "Emails sent by NexAIS headquarters. Manual partner actions remain in Action history.",
@@ -106,11 +120,16 @@
     body.append(full); panel.append(body);
     return panel;
   }
+  function keysForName(name) {
+    const key = normalize(name);
+    return new Set([key].concat(KNOWN_ALIASES[key] || []));
+  }
   function forCard(card) {
     const name = cardName(card);
-    const slug = card.dataset.businessSlug || normalize(name);
-    return records.filter(r => normalize(r.business_slug) === normalize(slug) ||
-      normalize(r.business_name) === normalize(name));
+    const keys = keysForName(name);
+    if (card.dataset.businessSlug) keys.add(normalize(card.dataset.businessSlug));
+    return records.filter(r => keys.has(normalize(r.business_slug)) ||
+      keys.has(normalize(r.business_name)));
   }
   function renderCards() {
     all("#cards .card").forEach(card => {
@@ -263,7 +282,8 @@
     grid.replaceChildren();
     outer.querySelector("summary").textContent = tr("directory");
     if (state !== "ready") { outer.hidden = true; return; }
-    const known = new Set(all("#cards .card").map(c => normalize(cardName(c))));
+    const known = new Set();
+    all("#cards .card").forEach(c => keysForName(cardName(c)).forEach(key => known.add(key)));
     const byBusiness = new Map();
     records.forEach(rec => {
       const key = normalize(rec.business_name);
