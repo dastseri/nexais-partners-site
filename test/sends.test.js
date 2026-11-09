@@ -119,3 +119,37 @@ test("verified short business names render without fuzzy matching or guessed pho
  assert.match(appJs,/No phone on file/);
  assert.doesNotMatch(appJs,/Muse/);
 });
+
+test("private API omits internal Jarvis operational notes while preserving exact sent content",async()=>{
+ const original={
+  id:"test-secure-1",business_slug:"test-company",business_name:"Test Company",
+  stage:"proposal",sent_at:"2026-11-09T11:45:00-05:00",channel:"email",
+  from:"sender@example.invalid",to_email:"recipient@example.invalid",phone:"",
+  subject:"Original",body_text:"Original full email\\nSecond line",attachment:"",
+  status:"sent",message_id:"test-private-1",reply_note:null,
+  source_summary:"INTERNAL JARVIS SECRET NOTE",status_note:"INTERNAL OWNER INSTRUCTIONS",
+  internal_debug_token:"NEVER_EXPOSE"
+ };
+ fs.writeFileSync(sendsFile,JSON.stringify(original)+"\n");
+ try {
+  const items=hub.sends();
+  assert.equal(items.length,1);
+  assert.equal(items[0].body_text,original.body_text);
+  assert.equal(items[0].subject,"Original");
+  assert.equal(items[0].source_summary,undefined);
+  assert.equal(items[0].status_note,undefined);
+  assert.equal(items[0].internal_debug_token,undefined);
+  await withServer(async base=>{
+   const login=await fetch(base+"/api/login",{method:"POST",
+     headers:{"Content-Type":"application/json","Origin":base},
+     body:JSON.stringify({username:"local-test-admin",password:"correct-password"})});
+   assert.equal(login.status,200);
+   const cookie=login.headers.get("set-cookie").split(";")[0];
+   const read=await fetch(base+"/api/sends",{headers:{Cookie:cookie}});
+   assert.equal(read.status,200);
+   const json=await read.text();
+   assert.doesNotMatch(json,/INTERNAL JARVIS SECRET NOTE|INTERNAL OWNER INSTRUCTIONS|NEVER_EXPOSE/);
+   assert.match(json,/Original full email/);
+  });
+ }finally {fs.unlinkSync(sendsFile);}
+});
