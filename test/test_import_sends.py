@@ -77,7 +77,8 @@ class RealImportContractTests(unittest.TestCase):
             records = [json.loads(row) for row in output.read_text(encoding="utf-8").splitlines()]
             self.assertEqual(len(records), 3)
             self.assertEqual(len({r["id"] for r in records}), 3)
-            self.assertTrue(all(r["body_text"] == "" for r in records))\n            self.assertEqual(next(r["channel"] for r in records if r["business_name"]=="Test Insta Company"),"dm")
+            self.assertTrue(all(r["body_text"] == "" for r in records))
+            self.assertEqual(next(r["channel"] for r in records if r["business_name"]=="Test Insta Company"),"dm")
             self.assertTrue(all(r["subject"] == "" for r in records))
             self.assertTrue(all(r["sent_at"].endswith("-05:00") for r in records))
             second = subprocess.run(cmd, text=True, capture_output=True, check=True)
