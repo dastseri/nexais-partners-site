@@ -28,7 +28,7 @@ Deploy a private instance with persistent encrypted storage. Provision accounts 
    Omit `--mirror` or `--eml-dir` if those source files are not available. The importer is idempotent against existing `id`, provider `message_id`, and same-day business/stage/recipient fallback. Missing exact sent text stays `body_text:""`; the interface says it was not archived. Unknown or ambiguous dates and times are not presented as verified times.
 4. Inspect report and unmatched business names. Records not matching existing cards still appear in global Sends; do not guess contact phones.
 
-**Caution:** the Jarvis register includes communications for other businesses/projects; review approved audience and scope before importing them for partner visibility. The importer does not automatically exclude rows outside NexAIS because it must not delete real correspondence silently. Admin must approve the authorized audience and subset before enabling partner accounts.
+**Caution:** the Jarvis register includes communications for other businesses/projects; review approved audience and scope before importing them for partner visibility. By default the importer skips rows tagged ZhioStudio, Tibox, or mixed NexAIS/ZhioStudio and reports their count as excluded. Importing those other projects requires an explicit admin decision and the `--include-other-projects` flag. Review industry-tagged rows as well before partner access. Skipped rows remain unchanged in the original Jarvis register.
 
 ## Capture new sends at HQ
 After an email is really sent, export an exact JSON record with the sent body (not a draft) using the schema from the issue. Append:
