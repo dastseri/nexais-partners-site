@@ -80,3 +80,42 @@ test("no public files or directory traversal through private endpoint",async()=>
   assert.equal((await fetch(base+"/server.js")).status,404);
  });
 });
+
+test("append-only delivery event changes current status without modifying the original send",()=>{
+ const original={
+  id:"test-send-1",business_slug:"test-company",business_name:"Test Company",
+  stage:"proposal",sent_at:"2026-11-09T11:45:00-05:00",channel:"email",
+  from:"test@example.invalid",to_email:"recipient@example.invalid",phone:"",
+  subject:"Sent subject",body_text:"First line\\nSecond line",attachment:"",
+  status:"sent",message_id:"test-provider-message-1",reply_note:null
+ };
+ fs.writeFileSync(sendsFile,JSON.stringify(original)+"\\n");
+ const event={send_id:"test-send-1",event_id:"test-status-1",at:"2026-11-09T12:00:00-05:00",status:"replied",reply_note:"Requested callback",replied_at:"2026-11-09T12:00:00-05:00"};
+ fs.writeFileSync(process.env.PARTNERS_SEND_STATUS_PATH,JSON.stringify(event)+"\\n");
+ const result=hub.sends();
+ assert.equal(result.length,1);
+ assert.equal(result[0].status,"replied");
+ assert.equal(result[0].reply_note,"Requested callback");
+ assert.equal(result[0].body_text,original.body_text);
+ assert.equal(JSON.parse(fs.readFileSync(sendsFile,"utf8")).status,"sent");
+ fs.unlinkSync(sendsFile);fs.unlinkSync(process.env.PARTNERS_SEND_STATUS_PATH);
+});
+test("server rejects duplicate id and provider message ID in private JSONL",()=>{
+ const records=[
+  {id:"s1",message_id:"m1",stage:"proposal",status:"sent",sent_at:"2026-11-09T11:40:00-05:00",business_name:"One"},
+  {id:"s1",message_id:"m2",stage:"proposal",status:"sent",sent_at:"2026-11-09T11:41:00-05:00",business_name:"One"},
+  {id:"s3",message_id:"m1",stage:"letter",status:"sent",sent_at:"2026-11-09T11:42:00-05:00",business_name:"One"},
+  {id:"s4",message_id:"m4",stage:"stage2",status:"sent",sent_at:"2026-11-09T11:43:00-05:00",business_name:"Two"}
+ ];
+ fs.writeFileSync(sendsFile,records.map(x=>JSON.stringify(x)).join("\\n")+"\\n");
+ const result=hub.sends();
+ assert.deepEqual(result.map(x=>x.id),["s4","s1"]);
+ fs.unlinkSync(sendsFile);
+});
+test("verified short business names render without fuzzy matching or guessed phones",()=>{
+ assert.match(appJs,/KNOWN_ALIASES/);
+ assert.match(appJs,/ascottparceventcentre/);
+ assert.match(appJs,/bayviewgolfandcountryclub/);
+ assert.match(appJs,/No phone on file/);
+ assert.doesNotMatch(appJs,/Muse/);
+});
