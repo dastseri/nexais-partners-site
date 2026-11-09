@@ -280,7 +280,7 @@
       const phone = phoneRecord && validPhone(phoneRecord.phone);
       if (phone) {
         const link = node("a", "send-phone", phone);
-        link.href = "tel:" + phone.replace(/[^\\d+]/g, "");
+        link.href = "tel:" + phone.replace(/[^\d+]/g, "");
         card.append(link);
       } else card.append(node("p", "send-missing-phone", tr("noPhone")));
       card.append(node("p", "send-card-count", STAGES.slice(0,3).map(stage =>
