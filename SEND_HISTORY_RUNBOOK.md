@@ -19,13 +19,13 @@ This repo is **public**, and the old `index.html` shipped all phone numbers and 
 Deploy a private instance with persistent encrypted storage. Provision accounts before cutover; no self-signup exists. Production must not use the shared team key, the Static Site host, or public GitHub data file. Configure network ACL and operations backups of the private ledger. The web app has no write endpoint; only signed-in users can read it.
 
 ## Import existing REAL correspondence
-1. Export the original Jarvis Hub tab **مکاتبات** to a private UTF-8 CSV. Do not change the Sheet or the existing activity sync.
+1. Use the original Jarvis Hub workbook (XLSX) or export only the original **مکاتبات** tab to a private UTF-8 CSV. The source stays read-only; do not change the Sheet or the existing activity sync.
 2. Optional: make the original `correspondence-log.md` available locally, and supply a directory of actual outbound `.eml` files if full bodies must be recovered. Never reconstruct a body from a summary.
 3. Run from a trusted machine:
    ```bash
-   python3 tools/import-sends.py --csv /secure/jarvis-correspondence.csv --mirror /secure/correspondence-log.md --eml-dir /secure/sent-eml --out /secure/sends.jsonl --report /secure/sends-import-report.json
+   python3 tools/import-sends.py --xlsx /secure/jarvis-hub.xlsx --mirror /secure/correspondence-log.md --eml-dir /secure/sent-eml --out /secure/sends.jsonl --report /secure/sends-import-report.json
    ```
-   Omit `--mirror` or `--eml-dir` if those source files are not available. The importer is idempotent against existing `id`, provider `message_id`, and same-day business/stage/recipient fallback. Missing exact sent text stays `body_text:""`; the interface says it was not archived. Unknown or ambiguous dates and times are not presented as verified times.
+   Use `--csv /secure/jarvis-correspondence.csv` instead of `--xlsx` when the original workbook is unavailable. Omit `--mirror` or `--eml-dir` if those source files are not available. Both formats parse the same seven Jarvis fields; they must be tested against real source exports before a production migration. The importer is idempotent against existing `id`, provider `message_id`, and same-day business/stage/recipient fallback. Missing exact sent text stays `body_text:""`; the interface says it was not archived. Unknown or ambiguous dates and times are not presented as verified times.
 4. Inspect report and unmatched business names. Records not matching existing cards still appear in global Sends; do not guess contact phones.
 
 **Caution:** the Jarvis register includes communications for other businesses/projects; review approved audience and scope before importing them for partner visibility. By default the importer skips rows tagged ZhioStudio, Tibox, or mixed NexAIS/ZhioStudio and reports their count as excluded. Importing those other projects requires an explicit admin decision and the `--include-other-projects` flag. Review industry-tagged rows as well before partner access. Skipped rows remain unchanged in the original Jarvis register.
