@@ -5,7 +5,7 @@
  */
 "use strict";
 const http=require("node:http"),fs=require("node:fs"),path=require("node:path"),crypto=require("node:crypto"),url=require("node:url");
-const ROOT=path.resolve(__dirname,"..");
+const ROOT=path.resolve(__dirname);
 const PORT=Number(process.env.PORT||10000);
 const SECRET=process.env.PARTNERS_SESSION_SECRET||"";
 const USERS_PATH=process.env.PARTNERS_USERS_FILE||"";
