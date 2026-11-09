@@ -3,7 +3,7 @@
 No mock data, no Sheet modifications. Full body is loaded only from a matched raw .eml.
 Usage:
   python3 tools/import-sends.py --csv /secure/jarvis-correspondence.csv --eml-dir /secure/sent-eml --out /secure/sends.jsonl
-  python3 tools/import-sends.py --csv /secure/jarvis-correspondence.csv --out /secure/sends.jsonl
+  python3 tools/import-sends.py --xlsx /secure/jarvis-hub.xlsx --out /secure/sends.jsonl
 CSV: export the actual Google Sheet tab "مکاتبات" as UTF-8 CSV. Optional --mirror markdown table.
 """
 import argparse, csv, hashlib, json, re, sys, unicodedata
@@ -126,6 +126,28 @@ def read_csv(fp):
             raise ValueError("CSV must contain original Jarvis correspondence columns: "+", ".join(COLS))
         for line,row in enumerate(reader,2): yield line,row
 
+def read_xlsx(fp):
+    """Read the exact Jarvis tab from an actual XLSX export, without editing the workbook."""
+    try:
+        from openpyxl import load_workbook
+    except ImportError as exc:
+        raise RuntimeError("Install openpyxl to import a genuine XLSX export") from exc
+    workbook=load_workbook(fp, read_only=True, data_only=True)
+    try:
+        tab=workbook["مکاتبات"]
+        tab.reset_dimensions()
+        values=tab.iter_rows(values_only=True)
+        header=next(values,None)
+        if header is None or not set(COLS).issubset(set(str(x) for x in header if x is not None)):
+            raise ValueError("Jarvis XLSX tab 'مکاتبات' has missing or changed columns")
+        indexes={str(v):i for i,v in enumerate(header) if v is not None}
+        for row_num,cells in enumerate(values,2):
+            record={col:str(cells[indexes[col]] if indexes[col] < len(cells) and cells[indexes[col]] is not None else "") for col in COLS}
+            if any(record.values()):
+                yield row_num,record
+    finally:
+        workbook.close()
+
 def read_mirror(fp):
     # Markdown is only a second source when there is a proper table with same Jarvis headers.
     text=fp.read_text(encoding="utf-8")
@@ -194,7 +216,9 @@ def build(row,cards,eml_dir,eml_index):
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--csv",type=Path,required=True,help="Actual Jarvis correspondence tab exported as CSV")
+    source=ap.add_mutually_exclusive_group(required=True)
+    source.add_argument("--csv",type=Path,help="Actual Jarvis correspondence tab exported as CSV")
+    source.add_argument("--xlsx",type=Path,help="Original Jarvis Hub workbook with مکاتبات tab")
     ap.add_argument("--mirror",type=Path,help="Optional original correspondence-log.md")
     ap.add_argument("--eml-dir",type=Path,help="Optional genuine raw Sent .eml files for exact body")
     ap.add_argument("--out",type=Path,required=True,help="Protected data path outside public repo")
@@ -210,7 +234,7 @@ def main():
     if args.eml_dir:
         if not args.eml_dir.is_dir():raise SystemExit("EML dir not found")
         emls={p.name.lower():p for p in args.eml_dir.rglob("*.eml") if p.is_file()}
-    sources=list(read_csv(args.csv))
+    sources=list(read_xlsx(args.xlsx) if args.xlsx else read_csv(args.csv))
     if args.mirror: sources+=list(read_mirror(args.mirror))
     seen_ids=set();seen_mids=set();seen_semantic=set()
     existing=[]
