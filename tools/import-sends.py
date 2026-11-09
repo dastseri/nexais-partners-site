@@ -171,7 +171,12 @@ def build(row,cards,eml_dir,eml_index):
     if biz.startswith("کمپین AVA") or " / " in biz:
         return None,"aggregate_or_unconfirmed"
     verification=str(row.get("وضعیت","")).strip()
-    if "تایم" in verification and "بچ متوقف" in verification:
+    # Attempted, failed or pending DM is not a confirmed send. Keep in the
+    # private source register for investigation; never show it as SENT.
+    if ("تایم" in verification and "بچ متوقف" in verification) or re.search(
+        r"(?:^\s*ننشست\b|^\s*نتیجه\s+نامشخص|^\s*در\s+انتظار\s+تأیید|هیچ\s+رشته‌ای\s+ساخته\s+نشده)",
+        verification
+    ):
         return None,"aggregate_or_unconfirmed"
     summary=str(row.get("خلاصه","")).strip();channel=str(row.get("کانال / لینک","")).strip()
     note=str(row.get("وضعیت","")).strip()
