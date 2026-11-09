@@ -13,6 +13,34 @@ HEADERS = ["تاریخ", "بخش", "طرف مکاتبه", "جهت", "خلاصه"
 
 
 class RealImportContractTests(unittest.TestCase):
+    def test_original_workbook_import_reads_only_correspondence_tab(self):
+        from openpyxl import Workbook
+        with tempfile.TemporaryDirectory(prefix="partners-workbook-test-") as tmp:
+            root = Path(tmp)
+            book = root / "jarvis-source.xlsx"
+            output = root / "sends.jsonl"
+            wb = Workbook()
+            sheet = wb.active
+            sheet.title = "مکاتبات"
+            sheet.append(HEADERS)
+            sheet.append(["2026-11-09", "NexAIS", "Terroni", "ارسال",
+                          "پروپوزال ثبت‌شده", "ایمیل -> info@terroni.com", "ارسال شد"])
+            other = wb.create_sheet("کارها")
+            other.append(["NOT PART OF CORRESPONDENCE"])
+            wb.save(book)
+            cmd = [sys.executable, str(IMPORTER), "--xlsx", str(book),
+                   "--out", str(output), "--index", str(ROOT / "index.html")]
+            result = subprocess.run(cmd, text=True, capture_output=True, check=True)
+            self.assertEqual(json.loads(result.stdout)["added"], 1)
+            again = subprocess.run(cmd, text=True, capture_output=True, check=True)
+            self.assertEqual(json.loads(again.stdout)["added"], 0)
+            record = json.loads(output.read_text(encoding="utf-8").strip())
+            self.assertEqual(record["business_name"], "Terroni")
+            self.assertEqual(record["stage"], "proposal")
+            self.assertEqual(record["sent_at"], "2026-11-09T12:00:00-05:00")
+            self.assertEqual(record["time_precision"], "date")
+            self.assertEqual(record["body_text"], "")
+
     def test_reimport_is_idempotent_and_distinct_same_day_mail_is_retained(self):
         with tempfile.TemporaryDirectory(prefix="partners-import-test-") as tmp:
             root = Path(tmp)
