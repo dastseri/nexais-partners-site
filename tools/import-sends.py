@@ -207,7 +207,7 @@ def build(row,cards,eml_dir,eml_index):
         "business_name":biz,
         "stage":stage, "sent_at":stamp.isoformat(timespec="seconds"),
         "time_precision":precision,
-        "channel":"email" if is_email else ("form" if "فرم" in channel else "other"),
+        "channel":"email" if is_email else ("dm" if ("دایرکت" in channel or "instagram" in channel.lower()) else ("form" if "فرم" in channel else "other")),
         "from":full.get("from","") or from_email, "to_email":to_email,
         "phone":phone_card.get("phone",""),
         "subject":full.get("subject",""),
