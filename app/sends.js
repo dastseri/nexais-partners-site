@@ -16,7 +16,7 @@
       subject: "Subject", attachment: "Attachment", reply: "Reply", channel: "Channel",
       proposal: "Proposal", stage2: "Stage 2", stage3: "Stage 3", letter: "Letter", other: "Other",
       sent: "Sent", delivered: "Delivered", bounced: "Bounced", replied: "Replied",
-      all: "All"
+      all: "All", directory: "Businesses not in the call list"
     },
     fa: {
       sends: "ارسال‌ها", title: "ارسال‌ها — مکاتبات دفتر مرکزی", intro: "ایمیل‌های ارسال‌شده از دفتر مرکزی NexAIS. اقدامات دستی همکاران جداگانه ثبت می‌شوند.",
@@ -29,7 +29,7 @@
       subject: "موضوع", attachment: "پیوست", reply: "پاسخ", channel: "کانال",
       proposal: "پروپوزال", stage2: "مرحله ۲", stage3: "مرحله ۳", letter: "نامه", other: "سایر",
       sent: "ارسال شد", delivered: "تحویل شد", bounced: "برگشت خورد", replied: "پاسخ داده شد",
-      all: "همه"
+      all: "همه", directory: "کسب‌وکارهای خارج از لیست تماس"
     }
   };
   let records = [], state = "loading", stageFilter = "", statusFilter = "", searchFilter = "";
@@ -132,7 +132,7 @@
           original.getAttribute("href") : "tel:" + phone.replace(/[^\d+]/g, ""));
         head.append(link);
       } else head.append(node("span", "send-missing-phone", tr("noPhone")));
-      if (sends.length) {
+      {
         const line = node("div", "send-card-count",
           STAGES.slice(0, 3).map(stage => tr(stage) + " " + (sends.some(s => s.stage === stage) ? "✓" : "—")).join(" · "));
         line.append(node("span", "", " · " + sends.length + " " + tr("count") + " · " + tr("last") + " " + timeText(sends[0])));
@@ -177,7 +177,13 @@
     controls.append(stage, status, search);
     details.append(controls);
     const feed = node("div", "send-global-feed"); feed.id = "send-global-feed";
-    details.append(feed); wrap.append(details); section.append(wrap);
+    details.append(feed);
+    const directory = node("details", "send-extra-businesses");
+    directory.id = "send-extra-businesses";
+    directory.append(node("summary", "send-directory-title", tr("directory")));
+    directory.append(node("div", "send-directory-grid"));
+    details.append(directory);
+    wrap.append(details); section.append(wrap);
     const before = $("#research");
     if (before) before.before(section); else document.querySelector("main")?.append(section) || document.body.append(section);
     const nav = $(".topnav");
@@ -211,6 +217,14 @@
       .send-controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
       .send-controls select,.send-controls input{min-width:120px;flex:1 1 160px;padding:10px;border:1px solid var(--panel-line);background:var(--panel);color:var(--ink);font:inherit;border-radius:9px}
       .send-global-feed .send-entry{margin:10px 0}
+      .send-extra-businesses{margin-top:22px;border-top:1px solid var(--panel-line);padding-top:15px}
+      .send-directory-title{font-weight:800;cursor:pointer;color:var(--blue-dark)}
+      .send-directory-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px;margin-top:15px}
+      .send-directory-card{border:1px solid var(--panel-line);background:var(--panel);border-radius:12px;padding:14px;min-width:0}
+      .send-directory-card h4{font-size:16px;overflow-wrap:anywhere}
+      .send-directory-card .send-phone{display:block;margin-top:6px}
+      .send-directory-card>details{margin-top:8px}
+      .send-directory-card>details>summary{color:var(--blue-dark);font-size:13px;font-weight:700;cursor:pointer}
       @media(max-width:600px){.send-controls>*{width:100%}.send-summary{gap:5px}.send-entry-body{padding:10px}}
     `;
     document.head.append(css);
@@ -242,12 +256,48 @@
       box.append(name, entry(rec)); feed.append(box);
     });
   }
+  function renderDirectory() {
+    const outer = $("#send-extra-businesses");
+    if (!outer) return;
+    const grid = $(".send-directory-grid", outer);
+    grid.replaceChildren();
+    outer.querySelector("summary").textContent = tr("directory");
+    if (state !== "ready") { outer.hidden = true; return; }
+    const known = new Set(all("#cards .card").map(c => normalize(cardName(c))));
+    const byBusiness = new Map();
+    records.forEach(rec => {
+      const key = normalize(rec.business_name);
+      if (!key || known.has(key)) return;
+      if (!byBusiness.has(key)) byBusiness.set(key, []);
+      byBusiness.get(key).push(rec);
+    });
+    outer.hidden = byBusiness.size === 0;
+    for (const sends of byBusiness.values()) {
+      const first = sends[0];
+      const card = node("article", "send-directory-card");
+      card.append(node("h4", "", first.business_name));
+      const phoneRecord = sends.find(x => validPhone(x.phone));
+      const phone = phoneRecord && validPhone(phoneRecord.phone);
+      if (phone) {
+        const link = node("a", "send-phone", phone);
+        link.href = "tel:" + phone.replace(/[^\\d+]/g, "");
+        card.append(link);
+      } else card.append(node("p", "send-missing-phone", tr("noPhone")));
+      card.append(node("p", "send-card-count", STAGES.slice(0,3).map(stage =>
+        tr(stage)+" "+(sends.some(x => x.stage === stage) ? "✓" : "—")).join(" · ")));
+      const details = node("details", "");
+      details.append(node("summary", "", tr("toBusiness")+" · "+sends.length+" "+tr("count")));
+      sends.forEach(x => details.append(entry(x)));
+      card.append(details);
+      grid.append(card);
+    }
+  }
   function renderAll() {
     createGlobal();
     $("#send-feed-title").textContent = tr("title");
     $("#send-feed-intro").textContent = tr("intro");
     const link = $("#send-nav"); if (link) link.textContent = tr("sends");
-    updateFilters(); renderCards(); renderFeed();
+    updateFilters(); renderCards(); renderFeed(); renderDirectory();
   }
   function checkRecord(r) {
     return r && typeof r.id === "string" && typeof r.business_name === "string" &&
