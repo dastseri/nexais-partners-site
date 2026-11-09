@@ -141,6 +141,14 @@ def build(row,cards,eml_dir,eml_index):
     if not day:return None,"bad_date"
     biz=str(row.get("طرف مکاتبه","")).strip()
     if not biz:return None,"missing_business"
+    original_biz=biz
+    if biz.startswith("نامهٔ همکاری ارجاعی —"):
+        biz=biz.split("—",1)[1].strip()
+    if biz.startswith("کمپین AVA") or " / " in biz:
+        return None,"aggregate_or_unconfirmed"
+    verification=str(row.get("وضعیت","")).strip()
+    if "تایم" in verification and "بچ متوقف" in verification:
+        return None,"aggregate_or_unconfirmed"
     summary=str(row.get("خلاصه","")).strip();channel=str(row.get("کانال / لینک","")).strip()
     note=str(row.get("وضعیت","")).strip()
     recipient=EMAIL.findall(channel)
@@ -213,7 +221,7 @@ def main():
             seen_ids.add(val.get("id"))
             if val.get("message_id"):seen_mids.add(val["message_id"])
             seen_semantic.add((str(val.get("sent_at",""))[:10],normal(val.get("business_name")),val.get("stage"),val.get("to_email","").lower()))
-    stats={"source_rows":len(sources),"existing":len(existing),"added":0,"duplicate":0,"skipped":0,"excluded_other_projects":0,"unmatched_cards":[],"full_bodies_added":0}
+    stats={"source_rows":len(sources),"existing":len(existing),"added":0,"duplicate":0,"skipped":0,"excluded_other_projects":0,"quarantined_unconfirmed":0,"unmatched_cards":[],"full_bodies_added":0}
     pending=[]
     for _,row in sources:
         group=normal(row.get("بخش",""))
@@ -221,7 +229,9 @@ def main():
             stats["excluded_other_projects"]+=1
             continue
         rec,kind=build(row,cards,args.eml_dir,emls)
-        if not rec:stats["skipped"]+=1;continue
+        if not rec:
+            stats["quarantined_unconfirmed" if kind=="aggregate_or_unconfirmed" else "skipped"]+=1
+            continue
         semantic=(rec["sent_at"][:10],normal(rec["business_name"]),rec["stage"],rec["to_email"].lower())
         if rec["id"] in seen_ids or (rec["message_id"] and rec["message_id"] in seen_mids) or semantic in seen_semantic:
             stats["duplicate"]+=1;continue
