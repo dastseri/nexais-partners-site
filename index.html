@@ -6326,7 +6326,7 @@ Object.assign(window.FA, {
   var ATTRS = ["placeholder", "aria-label", "alt", "label"];
   function norm(s){ return String(s).replace(/\s+/g, " ").trim(); }
   function skip(el){
-    return !el || (el.closest && (el.closest(".pkg-page") || el.closest("#print-root") || el.closest(".tpl") || el.closest("script") || el.closest("style")));
+    return !el || (el.closest && (el.closest(".pkg-page") || el.closest("#print-root") || el.closest(".tpl") || el.closest(".send-entry") || el.closest("script") || el.closest("style")));
   }
   function walkText(){
     if (window.LANG !== "fa"){
