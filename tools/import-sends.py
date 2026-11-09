@@ -145,6 +145,7 @@ def build(row,cards,eml_dir,eml_index):
     note=str(row.get("وضعیت","")).strip()
     recipient=EMAIL.findall(channel)
     to_email=recipient[-1] if recipient else ""
+    from_email=recipient[0] if len(recipient)>1 and recipient[0].lower()!=to_email.lower() else ""
     stage=detect_stage(summary)
     message=MSGID.search(summary+" "+note)
     message_id=message.group(1) if message else ""
@@ -170,7 +171,7 @@ def build(row,cards,eml_dir,eml_index):
         "stage":stage, "sent_at":stamp.isoformat(timespec="seconds"),
         "time_precision":precision,
         "channel":"email" if is_email else ("form" if "فرم" in channel else "other"),
-        "from":full.get("from",""), "to_email":to_email,
+        "from":full.get("from","") or from_email, "to_email":to_email,
         "phone":phone_card.get("phone",""),
         "subject":full.get("subject",""),
         "body_text":full.get("body_text",""),
