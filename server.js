@@ -56,8 +56,9 @@ function normalizedSlug(value){
 function scopedAppHtml(user){
  const html=fs.readFileSync(path.join(ROOT,"index.html"),"utf8");
  const identity=JSON.stringify(user.username).replace(/</g,"\\u003c").replace(/>/g,"\\u003e");
+ const role=JSON.stringify(user.role);
  const withIdentity=content=>content.replace("</head>",
-  "<script>window.NEXAIS_userId="+identity+";</script></head>");
+  "<script>window.NEXAIS_userId="+identity+";window.NEXAIS_userRole="+role+";</script></head>");
  if(user.role==="admin")return withIdentity(html);
  // Authorize before serving HTML, not via JS/CSS card hiding.
  // Fail closed if the legacy page markup changes and the extraction no longer matches.
