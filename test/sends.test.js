@@ -216,3 +216,31 @@ test("partner HTML response excludes unassigned legacy cards and research queue"
   });
  }finally{fs.writeFileSync(users,originalUsers);}
 });
+
+test("authenticated partner identity scopes local call-log and Sheet queue without changing payload",async()=>{
+ assert.match(html,/NEXAIS_userRole === "partner"/);
+ assert.match(html,/nexais-hub-sheet-queue-v1" \+ scope/);
+ assert.match(html,/nexais-hub-activity-v1" \+ scope/);
+ assert.match(html,/entries: batch/);
+ const source=JSON.parse(fs.readFileSync(users,"utf8"));
+ const saltX=crypto.randomBytes(16);
+ source.push({username:"partition-partner",role:"partner",active:true,business_slugs:[],
+  password_salt:saltX.toString("hex"),password_hash:crypto.scryptSync("correct-password",saltX,64).toString("hex")});
+ const original=fs.readFileSync(users,"utf8");
+ fs.writeFileSync(users,JSON.stringify(source));
+ try {
+  await withServer(async base=>{
+   const response=await fetch(base+"/api/login",{method:"POST",
+    headers:{"Content-Type":"application/json","Origin":base},
+    body:JSON.stringify({username:"partition-partner",password:"correct-password"})});
+   assert.equal(response.status,200);
+   const cookie=response.headers.get("set-cookie").split(";")[0];
+   const page=await fetch(base+"/app",{headers:{Cookie:cookie}});
+   assert.equal(page.status,200);
+   const out=await page.text();
+   assert.match(out,/window\.NEXAIS_userId="partition-partner"/);
+   assert.match(out,/window\.NEXAIS_userRole="partner"/);
+   assert.doesNotMatch(out,/window\.NEXAIS_userRole="admin"/);
+  });
+ }finally {fs.writeFileSync(users,original);}
+});
