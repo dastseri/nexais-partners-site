@@ -1,6 +1,6 @@
 # NexAIS Partners Hub — Secure Send History
 
-**Standalone**: no CRM login, CRM data, new public signup or outbound sending. Owners centrally provision partner accounts using `tools/create-partner-user.js`. Existing manual activity log and its Google Sheet sync payload remain untouched.
+**Standalone**: no CRM login, CRM data, new public signup or outbound sending. Owners centrally provision partner accounts using `tools/create-partner-user.js`. For partner accounts, the owner must explicitly assign `--business-slugs`; no assignments means no send-history records. The admin role sees the full approved HQ send feed. Existing manual activity log and its Google Sheet sync payload remain untouched.
 
 ## Why the server is required
 This repo is **public**, and the old `index.html` shipped all phone numbers and a reusable browser-side shared key. Both the card HTML and new correspondence body text are private business information. `server.js` protects the entire hub page, images, and `GET /api/sends` with a signed HttpOnly session cookie. The new server, not the historical Render Static Site, must serve `partner.nexais.ca` after secure cutover.
@@ -48,7 +48,7 @@ No automatic send from Partners Hub; no Sheet payload updates. Subsequent import
 Owner/admin creates users outside the app:
 ```bash
 PARTNERS_NEW_PASSWORD='[secure input]' node tools/create-partner-user.js --user zhaleh --role admin --file /secure/partners-users.json
-PARTNERS_NEW_PASSWORD='[secure input]' node tools/create-partner-user.js --user salespartner --role partner --file /secure/partners-users.json
+PARTNERS_NEW_PASSWORD='[secure input]' node tools/create-partner-user.js --user salespartner --role partner --business-slugs york-radiology,terroni --file /secure/partners-users.json
 ```
 Do NOT put real passwords on shell command lines, in source control, or into logs. Prefer protected stdin or a securely injected environment secret.
 
@@ -59,3 +59,6 @@ Rollback: restore the prior service/domain target; keep the new private ledger s
 
 ## Verified facts at task creation
 As inspected on Nov 9, 2026: default `main` contains one large `index.html`, an embedded shared-key gate, and a separate Google Sheet activity sync; PR #1 proposes CRM-based authentication but is not merged. This feature uses no PR #1 CRM integration. The Jarvis `مکاتبات` tab has 259 nonheader rows in the inspected first 260 rows. Some entries include unrelated ZhioStudio mail, so migration must be reviewed for intended Partner Hub scope. The Nov 9 York Radiology register entry is present but not itself a source of the complete body text.
+
+## Partner-scoped authorization
+The protected `/api/sends` endpoint enforces an owner-provisioned business slug allowlist on every request. A partner without assigned slugs receives an empty list; the admin role sees all approved HQ correspondence. Changing the private users file revokes access without requiring a new login. **Important limitation:** the legacy `index.html` includes the pre-existing call-list data, phone numbers and business details for all partners; this release restricts the new send-history API, but is NOT a complete per-partner isolation of that legacy HTML. Full card-list isolation requires a separate reviewed migration and authenticated rendering. Do not claim comprehensive cross-partner privacy based on API tests alone.
