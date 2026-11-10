@@ -7,6 +7,11 @@ const fs=require("node:fs"),path=require("node:path"),crypto=require("node:crypt
 const args=process.argv.slice(2);
 const arg=(k)=>{const i=args.indexOf(k);return i<0?null:args[i+1]};
 const username=arg("--user"),role=arg("--role")||"partner",file=arg("--file");
+const assigned=arg("--business-slugs");
+const businessSlugs=assigned==null?null:assigned.split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
+if(businessSlugs && (businessSlugs.some(x=>!/^[a-z0-9][a-z0-9-]*$/.test(x)) || new Set(businessSlugs).size!==businessSlugs.length)){
+ console.error("Invalid or duplicate --business-slugs");process.exit(2);
+}
 if(!username||!/^[a-zA-Z0-9._-]{3,64}$/.test(username)||!["admin","partner"].includes(role)||!file){
  console.error("Usage: node tools/create-partner-user.js --user NAME --role admin|partner --file PRIVATE_JSON_FILE");
  process.exit(2);
@@ -18,6 +23,7 @@ function write(pass){
  const salt=crypto.randomBytes(32);
  const record={username,role,active:true,password_salt:salt.toString("hex"),password_hash:crypto.scryptSync(pass,salt,64).toString("hex")};
  const existing=users.findIndex(x=>x.username===username);
+ if(role==="partner") record.business_slugs=businessSlugs || (existing>=0 && Array.isArray(users[existing].business_slugs)?users[existing].business_slugs:[]);
  if(existing>=0)users[existing]=record;else users.push(record);
  fs.mkdirSync(path.dirname(path.resolve(file)),{recursive:true,mode:0o700});
  fs.writeFileSync(file,JSON.stringify(users,null,2)+"\n",{mode:0o600});
