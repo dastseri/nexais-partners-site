@@ -126,7 +126,7 @@ test("private API omits internal Jarvis operational notes while preserving exact
   stage:"proposal",sent_at:"2026-11-09T11:45:00-05:00",channel:"email",
   from:"sender@example.invalid",to_email:"recipient@example.invalid",phone:"",
   subject:"Original",body_text:"Original full email\\nSecond line",attachment:"",
-  status:"sent",message_id:"test-private-1",reply_note:null,
+  status:"bounced",message_id:"test-private-1",reply_note:null,
   source_summary:"INTERNAL JARVIS SECRET NOTE",status_note:"INTERNAL OWNER INSTRUCTIONS",
   internal_debug_token:"NEVER_EXPOSE"
  };
