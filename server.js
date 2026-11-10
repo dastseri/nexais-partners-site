@@ -25,7 +25,24 @@ function makeSession(user){const value=Buffer.from(JSON.stringify({user,exp:Date
 function userList(){try{const text=USERS_PATH?fs.readFileSync(USERS_PATH,"utf8"):(process.env.PARTNERS_USERS_JSON||"[]");const list=JSON.parse(text);return Array.isArray(list)?list:[];}catch(e){console.error("Could not load user configuration:",e.message);return [];}}
 function session(req) {const token=parseCookies(req)[cookieName]||"",idx=token.lastIndexOf(".");if(idx<1)return null;const encoded=token.slice(0,idx),mac=token.slice(idx+1);
  if(!safeEq(sign(encoded),mac))return null;
- try{const data=JSON.parse(Buffer.from(encoded,"base64url").toString());if(!data.user||!Number.isFinite(data.exp)||data.exp<Date.now())return null;const user=userList().find(u=>u.username===data.user&&u.active!==false);return user?{username:user.username,role:user.role||"partner"}:null;}catch{return null;}
+ try{const data=JSON.parse(Buffer.from(encoded,"base64url").toString());if(!data.user||!Number.isFinite(data.exp)||data.exp<Date.now())return null;const user=userList().find(u=>u.username===data.user&&u.active!==false);
+  if(!user)return null;
+  const role=user.role==="admin"?"admin":"partner";
+  // These are read afresh from the administrator-controlled private user file:
+  // changing assignments or disabling a user takes effect immediately.
+  const business_slugs=Array.isArray(user.business_slugs)?user.business_slugs.filter(
+   x=>typeof x==="string"&&/^[a-z0-9][a-z0-9-]*$/.test(x)
+  ):[];
+  return {username:user.username,role,business_slugs};
+ }catch{return null;}
+}
+function allowedSends(user){
+ if(!user)return [];
+ const all=sends();
+ if(user.role==="admin")return all;
+ if(!user.business_slugs.length)return [];
+ const permitted=new Set(user.business_slugs);
+ return all.filter(r=>typeof r.business_slug==="string"&&permitted.has(r.business_slug.toLowerCase()));
 }
 function headers(extra={}){return Object.assign({"X-Content-Type-Options":"nosniff","Referrer-Policy":"no-referrer","X-Frame-Options":"DENY","Cache-Control":"no-store, private","Content-Security-Policy":"default-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; connect-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; object-src 'none'; upgrade-insecure-requests"},extra);}
 function reply(res,status,data,ct="application/json; charset=utf-8",extra={}){res.writeHead(status,headers({"Content-Type":ct,...extra}));res.end(ct.startsWith("application/json")?JSON.stringify(data):data);}
@@ -79,10 +96,10 @@ async function handler(req,res){const pathname=new URL(req.url,"http://localhost
  }
  if(pathname==="/"||pathname==="/app"){if(!session(req))return reply(res,302,"","text/plain",{"Location":"/login"});return sendFile(res,path.join(ROOT,"index.html"),"text/html; charset=utf-8");}
  if(pathname==="/api/session"){const u=session(req);return u?reply(res,200,{authenticated:true,user:u.username,role:u.role}):reply(res,401,{authenticated:false});}
- if(pathname==="/api/sends"){if(req.method!=="GET")return reply(res,405,{error:"Method not allowed"});if(!session(req))return reply(res,401,{error:"Unauthenticated"});try{return reply(res,200,{sends:sends()});}catch(e){console.error("send read failed",e.message);return reply(res,503,{error:"Send history not available"});}}
+ if(pathname==="/api/sends"){if(req.method!=="GET")return reply(res,405,{error:"Method not allowed"});const viewer=session(req);if(!viewer)return reply(res,401,{error:"Unauthenticated"});try{return reply(res,200,{sends:allowedSends(viewer)});}catch(e){console.error("send read failed",e.message);return reply(res,503,{error:"Send history not available"});}}
  if(allowedFiles.has(pathname)&&req.method==="GET"){if(!session(req))return reply(res,401,{error:"Unauthenticated"});return sendFile(res,allowedFiles.get(pathname),"text/javascript; charset=utf-8");}
  if(pathname.startsWith("/assets/")&&req.method==="GET"){if(!session(req))return reply(res,401,{error:"Unauthenticated"});const asset=pathname.slice("/assets/".length);if(!/^[a-zA-Z0-9_.-]+$/.test(asset))return reply(res,404,{error:"Not found"});const ext=path.extname(asset).toLowerCase();const types={".jpg":"image/jpeg",".jpeg":"image/jpeg",".png":"image/png",".webp":"image/webp",".svg":"image/svg+xml",".gif":"image/gif"};if(!types[ext])return reply(res,404,{error:"Not found"});return sendFile(res,path.join(ROOT,"assets",asset),types[ext]);}
  return reply(res,404,{error:"Not found"});
 }
 if(require.main===module)http.createServer((req,res)=>{Promise.resolve(handler(req,res)).catch(err=>{console.error(err);if(!res.headersSent)reply(res,500,{error:"Internal error"});});}).listen(PORT,()=>console.log("Partners Hub on port",PORT));
-module.exports={handler,sends,loadJSONL,appendStatus,makeSession,session,validStatus:statusSet};
+module.exports={handler,sends,allowedSends,loadJSONL,appendStatus,makeSession,session,validStatus:statusSet};
