@@ -193,3 +193,26 @@ test("partners can only read owner-assigned businesses while admin sees the comp
   });
  }finally{fs.unlinkSync(sendsFile);fs.writeFileSync(users,JSON.stringify(userRecords.slice(0,1)));}
 });
+
+test("partner HTML response excludes unassigned legacy cards and research queue",async()=>{
+ const originalUsers=fs.readFileSync(users,"utf8");
+ const salt2=crypto.randomBytes(16);
+ const scoped={username:"legacy-scoped",role:"partner",active:true,business_slugs:["copper-creek-golf-club"],
+   password_salt:salt2.toString("hex"),password_hash:crypto.scryptSync("scoped-password",salt2,64).toString("hex")};
+ fs.writeFileSync(users,JSON.stringify([...JSON.parse(originalUsers),scoped]));
+ try{
+  await withServer(async base=>{
+   const login=await fetch(base+"/api/login",{method:"POST",headers:{"Origin":base,"Content-Type":"application/json"},
+    body:JSON.stringify({username:"legacy-scoped",password:"scoped-password"})});
+   assert.equal(login.status,200);
+   const cookie=login.headers.get("set-cookie").split(";")[0];
+   const app=await fetch(base+"/app",{headers:{Cookie:cookie}});
+   assert.equal(app.status,200);
+   const htmlText=await app.text();
+   assert.match(htmlText,/data-name="copper creek golf club"/);
+   assert.doesNotMatch(htmlText,/data-name="richmond hill golf club"/);
+   assert.doesNotMatch(htmlText,/3rdparty@dayandrossinc\.ca/);
+   assert.doesNotMatch(htmlText,/ross\.tyrell@sunbeltrentals\.com/);
+  });
+ }finally{fs.writeFileSync(users,originalUsers);}
+});
