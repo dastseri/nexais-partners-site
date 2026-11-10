@@ -63,7 +63,7 @@
     return text;
   }
   function timeText(rec) {
-    if (!rec.sent_at || !Number.isFinite(new Date(rec.sent_at).getTime())) return "";
+    if (!rec || !rec.sent_at || !Number.isFinite(new Date(rec.sent_at).getTime())) return "";
     const opts = { timeZone:"America/Toronto", year:"numeric", month:"short", day:"numeric" };
     if (rec.time_precision !== "date") { opts.hour = "2-digit"; opts.minute = "2-digit"; }
     return new Intl.DateTimeFormat(window.LANG === "fa" ? "fa-IR" : "en-CA", opts).format(new Date(rec.sent_at));
@@ -154,7 +154,9 @@
       {
         const line = node("div", "send-card-count",
           STAGES.map(stage => tr(stage) + " " + (sends.some(s => s.stage === stage) ? "✓" : "—")).join(" · "));
-        line.append(node("span", "", " · " + sends.length + " " + tr("count") + " · " + tr("last") + " " + timeText(sends[0])));
+        const count = " · " + sends.length + " " + tr("count");
+        const last = sends.length ? " · " + tr("last") + " " + timeText(sends[0]) : "";
+        line.append(node("span", "", count + last));
         head.append(line);
       }
       const more = $("details.card-more", card);
