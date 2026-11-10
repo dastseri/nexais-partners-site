@@ -6878,7 +6878,7 @@ Object.assign(window.FA, {
   // Scope existing browser activity to the authenticated server-side account.
   // Admin keeps historical keys; each partner gets a distinct namespace.
   var activeUser = String(window.NEXAIS_userId || "");
-  var scope = activeUser && activeUser !== "zhaleh" && activeUser !== "admin"
+  var scope = activeUser && window.NEXAIS_userRole === "partner"
     ? "::partner::" + activeUser : "";
   var STORE = "nexais-hub-calllog-v1" + scope,
       LOG = "nexais-hub-activity-v1" + scope,
