@@ -153,3 +153,43 @@ test("private API omits internal Jarvis operational notes while preserving exact
   });
  }finally {fs.unlinkSync(sendsFile);}
 });
+
+test("partners can only read owner-assigned businesses while admin sees the complete ledger",async()=>{
+ const userRecords=JSON.parse(fs.readFileSync(users,"utf8"));
+ const assignedSalt=crypto.randomBytes(16);
+ const unassignedSalt=crypto.randomBytes(16);
+ userRecords.push({username:"scoped-partner",role:"partner",active:true,business_slugs:["company-one"],
+   password_salt:assignedSalt.toString("hex"),password_hash:crypto.scryptSync("partner-password",assignedSalt,64).toString("hex")});
+ userRecords.push({username:"unassigned-partner",role:"partner",active:true,business_slugs:[],
+   password_salt:unassignedSalt.toString("hex"),password_hash:crypto.scryptSync("unassigned-password",unassignedSalt,64).toString("hex")});
+ fs.writeFileSync(users,JSON.stringify(userRecords));
+ const history=[
+  {id:"privacy-1",business_slug:"company-one",business_name:"Company One",stage:"proposal",status:"sent",sent_at:"2026-11-09T11:00:00-05:00",to_email:"one@example.invalid",body_text:"ONE CONFIDENTIAL CONTENT"},
+  {id:"privacy-2",business_slug:"company-two",business_name:"Company Two",stage:"proposal",status:"sent",sent_at:"2026-11-09T12:00:00-05:00",to_email:"two@example.invalid",body_text:"TWO CONFIDENTIAL CONTENT"}
+ ];
+ fs.writeFileSync(sendsFile,history.map(r=>JSON.stringify(r)).join("\n")+"\n");
+ try {
+  await withServer(async base=>{
+   async function login(username,password){
+    const r=await fetch(base+"/api/login",{method:"POST",headers:{"Content-Type":"application/json","Origin":base},body:JSON.stringify({username,password})});
+    assert.equal(r.status,200);return r.headers.get("set-cookie").split(";")[0];
+   }
+   const partnerCookie=await login("scoped-partner","partner-password");
+   const scoped=await fetch(base+"/api/sends",{headers:{Cookie:partnerCookie}});
+   assert.equal(scoped.status,200);
+   const partnerResult=await scoped.json();
+   assert.deepEqual(partnerResult.sends.map(x=>x.id),["privacy-1"]);
+   assert.doesNotMatch(JSON.stringify(partnerResult),/TWO CONFIDENTIAL CONTENT|two@example.invalid/);
+   const unassignedCookie=await login("unassigned-partner","unassigned-password");
+   const unassigned=await fetch(base+"/api/sends",{headers:{Cookie:unassignedCookie}});
+   assert.deepEqual((await unassigned.json()).sends,[]);
+   const adminCookie=await login("local-test-admin","correct-password");
+   const admin=await fetch(base+"/api/sends",{headers:{Cookie:adminCookie}});
+   assert.equal((await admin.json()).sends.length,2);
+   userRecords[1].business_slugs=[];
+   fs.writeFileSync(users,JSON.stringify(userRecords));
+   const revoked=await fetch(base+"/api/sends",{headers:{Cookie:partnerCookie}});
+   assert.deepEqual((await revoked.json()).sends,[]);
+  });
+ }finally{fs.unlinkSync(sendsFile);fs.writeFileSync(users,JSON.stringify(userRecords.slice(0,1)));}
+});
