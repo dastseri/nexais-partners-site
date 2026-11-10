@@ -58,3 +58,8 @@ On re-audit, 12 historical Instagram DM attempts had explicit pending, failed or
 - [GitHub Actions run 42902789139](https://github.com/dastseri/nexais-partners-site/actions/runs/42902789139) passed, including the scoped-data and revocation regression test.
 - **Residual privacy risk:** pre-existing `index.html` still embeds a shared cross-partner call list, including phone numbers. Filtering the new send-history API does not isolate that legacy HTML. Protecting all business details per partner would need a separate design/authorization review before release.
 - Repo remains public and live Render service remains a Static Site until separately approved cutover. No live account provisioning or real-data upload has been done.
+
+## November 10 — legacy card HTML scoping (non-production branch)
+- Server now removes unassigned `<article class="card">` blocks from the HTML before responding to partner sessions; administrator receives the full existing hub. It also removes the legacy static research queue script containing other business contact entries from partner HTML. Malformed or changed card extraction returns a 503, not an unfiltered HTML page.
+- Test: [GitHub Actions 42907599875](https://github.com/dastseri/nexais-partners-site/actions/runs/42907599875), passed. A partner assigned only Copper Creek did not receive the Richmond Hill card or the known static research-queue email addresses.
+- **Residual limitation:** this is a targeted hardening, NOT a complete noninterference audit of all legacy inline JS/static markup, locally cached activity, generated proposals or partner-owned leads. Full partner data segregation and site-wide manual activity authorization remain a release gate. No deployment or production credential changes.
