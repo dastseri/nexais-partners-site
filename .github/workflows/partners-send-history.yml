@@ -1,0 +1,34 @@
+name: Partners Send History QA
+on:
+  push:
+    branches: [feature/partners-send-history-secure]
+  pull_request:
+    paths:
+      - 'server.js'
+      - 'index.html'
+      - 'app/sends.js'
+      - 'tools/import-sends.py'
+      - 'tools/append-send.py'
+      - 'tools/create-partner-user.js'
+      - 'test/**'
+      - 'package.json'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 -m pip install openpyxl==3.1.5
+      - run: npm test
+      - run: python3 -m py_compile tools/import-sends.py tools/append-send.py
+      - run: python3 -m unittest discover -s test -p 'test_*.py'
+      - name: Prevent private sends from being committed
+        run: |
+          if git ls-files | grep -E '(^|/)(sends\.jsonl|send-status-events\.jsonl|partners-users\.json|.*\.eml)$'; then
+            echo "Private data found in public git"; exit 1
+          fi

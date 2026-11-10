@@ -6326,7 +6326,7 @@ Object.assign(window.FA, {
   var ATTRS = ["placeholder", "aria-label", "alt", "label"];
   function norm(s){ return String(s).replace(/\s+/g, " ").trim(); }
   function skip(el){
-    return !el || (el.closest && (el.closest(".pkg-page") || el.closest("#print-root") || el.closest(".tpl") || el.closest("script") || el.closest("style")));
+    return !el || (el.closest && (el.closest(".pkg-page") || el.closest("#print-root") || el.closest(".tpl") || el.closest(".send-entry") || el.closest("script") || el.closest("style")));
   }
   function walkText(){
     if (window.LANG !== "fa"){
@@ -6394,25 +6394,30 @@ Object.assign(window.FA, {
 })();
 </script>
 <script>
-/* ================= entry gate — shared team access key ================= */
+/* This HTML is now served ONLY after standalone server authentication.
+   No shared partner key is embedded in the browser. */
 (function(){
   "use strict";
-  var KEY = "nexais-partners";
+  window.NEXAIS_hubAuthenticated = true;
   var gate = document.getElementById("gate");
-  function unlock(){ gate.style.display = "none"; document.body.classList.remove("locked"); }
-  var ok = false;
-  try { ok = sessionStorage.getItem("nexais-gate-ok") === "1"; } catch(e){}
-  if (ok){ unlock(); return; }
-  var input = document.getElementById("gate-key");
-  if (input) input.focus();
-  document.getElementById("gate-form").addEventListener("submit", function(e){
-    e.preventDefault();
-    if (input.value.trim() === KEY){
-      try { sessionStorage.setItem("nexais-gate-ok", "1"); } catch(e){}
-      unlock();
-    } else {
-      document.getElementById("gate-err").style.display = "block";
-      input.select();
+  if(gate) gate.style.display = "none";
+  document.body.classList.remove("locked");
+  window.addEventListener("DOMContentLoaded",function(){
+    var nav = document.querySelector(".topnav");
+    if(!nav || document.getElementById("partners-signout"))return;
+    var btn = document.createElement("button");
+    btn.id = "partners-signout";
+    btn.type = "button";
+    btn.className = "copy-btn";
+    btn.style.margin = "0";
+    btn.textContent = (window.LANG === "fa") ? "خروج" : "Sign out";
+    btn.addEventListener("click",function(){
+      fetch("/api/logout",{method:"POST",credentials:"same-origin"}).finally(function(){location.replace("/login");});
+    });
+    nav.appendChild(btn);
+    var previous = window.NEXAIS_setLang;
+    if(previous){
+      window.NEXAIS_setLang = function(lang){previous(lang);btn.textContent = (lang==="fa") ? "خروج" : "Sign out";};
     }
   });
 })();
@@ -6870,7 +6875,14 @@ Object.assign(window.FA, {
 /* ================= saved call log — outcomes kept on this device + named activity log + backup ================= */
 (function(){
   "use strict";
-  var STORE = "nexais-hub-calllog-v1", LOG = "nexais-hub-activity-v1", USER = "nexais-hub-user-v1";
+  // Scope existing browser activity to the authenticated server-side account.
+  // Admin keeps historical keys; each partner gets a distinct namespace.
+  var activeUser = String(window.NEXAIS_userId || "");
+  var scope = activeUser && window.NEXAIS_userRole === "partner"
+    ? "::partner::" + activeUser : "";
+  var STORE = "nexais-hub-calllog-v1" + scope,
+      LOG = "nexais-hub-activity-v1" + scope,
+      USER = "nexais-hub-user-v1" + scope;
   var tt = window.tt || function(en){ return en; };
   Object.assign(window.FA || {}, {
     "Download backup": "دانلود نسخهٔ پشتیبان",
@@ -6937,7 +6949,7 @@ Object.assign(window.FA, {
   /* ---- sheet sync: every logged activity entry is also sent to the private Google Sheet ---- */
   var SHEET_URL = "https://script.google.com/macros/s/AKfycby0lpE705MSm2QJHdRvTnjWYa2qs7XWj1m-hFUR1WVpbsf7w5gaFcwkoyhPVvqwXHODUQ/exec";
   var SHEET_TOKEN = "hubsync-afd71f45-a003d6a2";
-  var QUEUE = "nexais-hub-sheet-queue-v1", BACKFILLED = "nexais-hub-sheet-backfilled-v1";
+  var QUEUE = "nexais-hub-sheet-queue-v1" + scope, BACKFILLED = "nexais-hub-sheet-backfilled-v1" + scope;
   var syncLine = null;
   var progEl = document.getElementById("progress");
   if (progEl) {
@@ -7175,5 +7187,6 @@ Object.assign(window.FA, {
   });
 })();
 </script>
+<script src="/app/sends.js" defer></script>
 </body>
 </html>

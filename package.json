@@ -1,0 +1,13 @@
+{
+  "name": "nexais-partners-hub",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Standalone authenticated Partners Hub and private send history",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,11 @@
+node_modules/
+private/
+*.eml
+*.csv
+*.sqlite
+.env
+.env.*
+!*.example
+sends.jsonl
+send-status-events.jsonl
+partners-users.json
