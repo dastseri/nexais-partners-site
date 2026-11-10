@@ -6875,7 +6875,14 @@ Object.assign(window.FA, {
 /* ================= saved call log — outcomes kept on this device + named activity log + backup ================= */
 (function(){
   "use strict";
-  var STORE = "nexais-hub-calllog-v1", LOG = "nexais-hub-activity-v1", USER = "nexais-hub-user-v1";
+  // Scope existing browser activity to the authenticated server-side account.
+  // Admin keeps historical keys; each partner gets a distinct namespace.
+  var activeUser = String(window.NEXAIS_userId || "");
+  var scope = activeUser && activeUser !== "zhaleh" && activeUser !== "admin"
+    ? "::partner::" + activeUser : "";
+  var STORE = "nexais-hub-calllog-v1" + scope,
+      LOG = "nexais-hub-activity-v1" + scope,
+      USER = "nexais-hub-user-v1" + scope;
   var tt = window.tt || function(en){ return en; };
   Object.assign(window.FA || {}, {
     "Download backup": "دانلود نسخهٔ پشتیبان",
@@ -6942,7 +6949,7 @@ Object.assign(window.FA, {
   /* ---- sheet sync: every logged activity entry is also sent to the private Google Sheet ---- */
   var SHEET_URL = "https://script.google.com/macros/s/AKfycby0lpE705MSm2QJHdRvTnjWYa2qs7XWj1m-hFUR1WVpbsf7w5gaFcwkoyhPVvqwXHODUQ/exec";
   var SHEET_TOKEN = "hubsync-afd71f45-a003d6a2";
-  var QUEUE = "nexais-hub-sheet-queue-v1", BACKFILLED = "nexais-hub-sheet-backfilled-v1";
+  var QUEUE = "nexais-hub-sheet-queue-v1" + scope, BACKFILLED = "nexais-hub-sheet-backfilled-v1" + scope;
   var syncLine = null;
   var progEl = document.getElementById("progress");
   if (progEl) {
