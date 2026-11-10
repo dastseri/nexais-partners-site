@@ -38,7 +38,7 @@ function appendStatus(events,r){const result=new Map(r.map(x=>[x.id,{...x}]));fo
 function loadJSONL(file){try{return fs.readFileSync(file,"utf8").split(/\r?\n/).filter(Boolean).map((line,i)=>{try{return JSON.parse(line);}catch{console.error("Malformed JSONL line",path.basename(file),i+1);return null;}}).filter(Boolean);}catch(e){if(e.code==="ENOENT")return [];throw e;}}
 function sends(){const ids=new Set(),mids=new Set(),items=[];
  for(const r of loadJSONL(SENDS_PATH)){if(!r||typeof r.id!=="string"||!stageSet.has(r.stage)||!statusSet.has(r.status)||typeof r.business_name!=="string"||typeof r.sent_at!=="string")continue;
- if(ids.has(r.id)||(r.message_id&&mids.has(r.message_id)))continue;ids.add(r.id);if(r.message_id)mids.add(r.message_id);items.push(r);}
+ if(ids.has(r.id)||(r.message_id&&mids.has(r.message_id)))continue;ids.add(r.id);if(r.message_id)mids.add(r.message_id);items.push({...r,status_note:null});}
  const allowed=["id","business_slug","business_name","stage","sent_at","time_precision","channel","from","to_email","phone","subject","body_text","attachment","status","message_id","reply_note","replied_at"];
  return appendStatus(loadJSONL(EVENTS_PATH),items).map(record=>{
   // Never leak raw Jarvis source_summary or any operational/internal notes.
