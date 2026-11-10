@@ -51,3 +51,10 @@ On re-audit, 12 historical Instagram DM attempts had explicit pending, failed or
 - The importer now preserves the `dm` channel and quarantines explicit non-confirmed sends, with a dedicated regression test.
 - API responses omit imported internal `source_summary` and generic operational `status_note` for ordinary sends. It is still necessary to review status/reply notes before sharing with all partners.
 - Latest code must continue to pass CI and real authenticated mobile QA; no production cutover is authorized.
+
+## November 10, 2026 — access review
+- Fixed the new sends API to enforce administrator-provisioned `business_slugs` for partner accounts; unassigned users get no send-history rows, admin role can read the entire approved feed, and changing assignments applies on the next request.
+- Owner-side offline user-provisioning utility accepts validated `--business-slugs` without public self-registration. Auth stays standalone, no CRM endpoints.
+- [GitHub Actions run 42902789139](https://github.com/dastseri/nexais-partners-site/actions/runs/42902789139) passed, including the scoped-data and revocation regression test.
+- **Residual privacy risk:** pre-existing `index.html` still embeds a shared cross-partner call list, including phone numbers. Filtering the new send-history API does not isolate that legacy HTML. Protecting all business details per partner would need a separate design/authorization review before release.
+- Repo remains public and live Render service remains a Static Site until separately approved cutover. No live account provisioning or real-data upload has been done.
