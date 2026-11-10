@@ -55,7 +55,10 @@ function normalizedSlug(value){
 }
 function scopedAppHtml(user){
  const html=fs.readFileSync(path.join(ROOT,"index.html"),"utf8");
- if(user.role==="admin")return html;
+ const identity=JSON.stringify(user.username).replace(/</g,"\\u003c").replace(/>/g,"\\u003e");
+ const withIdentity=content=>content.replace("</head>",
+  "<script>window.NEXAIS_userId="+identity+";</script></head>");
+ if(user.role==="admin")return withIdentity(html);
  // Authorize before serving HTML, not via JS/CSS card hiding.
  // Fail closed if the legacy page markup changes and the extraction no longer matches.
  const cards=html.match(/<article class="card"[^>]*>[\s\S]*?<\/article>/g)||[];
@@ -75,7 +78,7 @@ function scopedAppHtml(user){
   return assigned.has(normalizedSlug(match[1]))?card:"";
  });
  if(seen!==cards.length)throw new Error("Legacy card count changed during filtering");
- return reduced;
+ return withIdentity(reduced);
 }
 function serveApp(req,res){
  const viewer=session(req);
