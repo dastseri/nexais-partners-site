@@ -47,6 +47,43 @@ function allowedSends(user){
 function headers(extra={}){return Object.assign({"X-Content-Type-Options":"nosniff","Referrer-Policy":"no-referrer","X-Frame-Options":"DENY","Cache-Control":"no-store, private","Content-Security-Policy":"default-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'; connect-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; object-src 'none'; upgrade-insecure-requests"},extra);}
 function reply(res,status,data,ct="application/json; charset=utf-8",extra={}){res.writeHead(status,headers({"Content-Type":ct,...extra}));res.end(ct.startsWith("application/json")?JSON.stringify(data):data);}
 function sendFile(res,file,ct){try{const stat=fs.statSync(file);if(!stat.isFile())return reply(res,404,{error:"Not found"});const data=fs.readFileSync(file);reply(res,200,data,ct);}catch{return reply(res,404,{error:"Not found"});}}
+
+function normalizedSlug(value){
+ return String(value||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"")
+  .toLowerCase().replace(/&/g," and ").replace(/[^a-z0-9]+/g,"-")
+  .replace(/^-|-$/g,"");
+}
+function scopedAppHtml(user){
+ const html=fs.readFileSync(path.join(ROOT,"index.html"),"utf8");
+ if(user.role==="admin")return html;
+ // Authorize before serving HTML, not via JS/CSS card hiding.
+ // Fail closed if the legacy page markup changes and the extraction no longer matches.
+ const cards=html.match(/<article class="card"[^>]*>[\s\S]*?<\/article>/g)||[];
+ const queueTag="/* ================= research queue — businesses to work on ================= */";
+ const begin=html.indexOf(queueTag);
+ if(cards.length<1||begin<0)throw new Error("Legacy HTML structure changed; partner scoping blocked");
+ const queueOpen=html.lastIndexOf("<script>",begin),queueClose=html.indexOf("</script>",begin);
+ if(queueOpen<0||queueClose<0)throw new Error("Unsafe legacy research queue");
+ // No research list is released to unassigned partner accounts.
+ let reduced=html.slice(0,queueOpen)+html.slice(queueClose+"</script>".length);
+ const assigned=new Set(user.business_slugs);
+ let seen=0;
+ reduced=reduced.replace(/<article class="card"[^>]*>[\s\S]*?<\/article>/g,card=>{
+  const match=card.match(/\bdata-name="([^"]+)"/);
+  if(!match)throw new Error("Card without server-resolvable business identity");
+  seen++;
+  return assigned.has(normalizedSlug(match[1]))?card:"";
+ });
+ if(seen!==cards.length)throw new Error("Legacy card count changed during filtering");
+ return reduced;
+}
+function serveApp(req,res){
+ const viewer=session(req);
+ if(!viewer)return reply(res,302,"","text/plain",{"Location":"/login"});
+ try{return reply(res,200,scopedAppHtml(viewer),"text/html; charset=utf-8");}
+ catch(e){console.error("Protected partner page unavailable:",e.message);return reply(res,503,{error:"Protected page unavailable"});}
+}
+
 function appendStatus(events,r){const result=new Map(r.map(x=>[x.id,{...x}]));for(const item of events){const base=result.get(item.send_id);if(!base||!statusSet.has(item.status))continue;
   base.status=item.status;if(item.status_note!=null)base.status_note=String(item.status_note);
   if(item.reply_note!=null)base.reply_note=String(item.reply_note);
@@ -94,7 +131,7 @@ async function handler(req,res){const pathname=new URL(req.url,"http://localhost
   if(!isOriginValid(req))return reply(res,403,{error:"Origin denied"});
   return reply(res,200,{ok:true},"application/json; charset=utf-8",{"Set-Cookie":`${cookieName}=; HttpOnly; SameSite=Strict; Path=/; Max-Age=0${IS_PRODUCTION?"; Secure":""}`});
  }
- if(pathname==="/"||pathname==="/app"){if(!session(req))return reply(res,302,"","text/plain",{"Location":"/login"});return sendFile(res,path.join(ROOT,"index.html"),"text/html; charset=utf-8");}
+ if(pathname==="/"||pathname==="/app")return serveApp(req,res);
  if(pathname==="/api/session"){const u=session(req);return u?reply(res,200,{authenticated:true,user:u.username,role:u.role}):reply(res,401,{authenticated:false});}
  if(pathname==="/api/sends"){if(req.method!=="GET")return reply(res,405,{error:"Method not allowed"});const viewer=session(req);if(!viewer)return reply(res,401,{error:"Unauthenticated"});try{return reply(res,200,{sends:allowedSends(viewer)});}catch(e){console.error("send read failed",e.message);return reply(res,503,{error:"Send history not available"});}}
  if(allowedFiles.has(pathname)&&req.method==="GET"){if(!session(req))return reply(res,401,{error:"Unauthenticated"});return sendFile(res,allowedFiles.get(pathname),"text/javascript; charset=utf-8");}
@@ -102,4 +139,4 @@ async function handler(req,res){const pathname=new URL(req.url,"http://localhost
  return reply(res,404,{error:"Not found"});
 }
 if(require.main===module)http.createServer((req,res)=>{Promise.resolve(handler(req,res)).catch(err=>{console.error(err);if(!res.headersSent)reply(res,500,{error:"Internal error"});});}).listen(PORT,()=>console.log("Partners Hub on port",PORT));
-module.exports={handler,sends,allowedSends,loadJSONL,appendStatus,makeSession,session,validStatus:statusSet};
+module.exports={handler,sends,allowedSends,scopedAppHtml,normalizedSlug,loadJSONL,appendStatus,makeSession,session,validStatus:statusSet};
