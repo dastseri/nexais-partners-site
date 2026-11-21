@@ -573,6 +573,7 @@
       <a href="#generator">Generator</a>
       <a href="#close">Close the Deal</a>
       <a href="#scripts">Call Scripts</a>
+      <a href="#script-builder">Script Builder</a>
       <a href="#kit">Sales Kit</a>
       <a href="#faq">FAQ</a>
       <a href="#join">Join</a>
@@ -4570,6 +4571,65 @@ Thank you — as soon as this comes back, we start building your AVA.
   </div>
 </section>
 
+<section id="script-builder">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Call script builder</span><h2>Build your call script — pick the business, get the words</h2></span></summary>
+    <div class="sec-head">
+      <details class="how"><summary>How it works</summary><p>Tell this page who you're calling and what kind of call it is, and it writes you a complete call script: a warm opening, a 30-second pitch written for that kind of business, the demo-line invitation, the free-trial close, answers to the three pushbacks you'll hear most, and a clean ending. The script is a guide, not a teleprompter — edit it, make it sound like you, then call. Everything in it is true and safe to say: official prices only, no promised features, no discounts beyond official policy.</p></details>
+    </div>
+    <div class="box">
+      <form class="gen-form" id="cs-form" style="margin-top:6px">
+        <label>Business name *
+          <input type="text" id="cs-biz" required placeholder="e.g. Bella Notte Ristorante" />
+        </label>
+        <label>Business type
+          <select id="cs-type">
+            <option value="restaurant" selected>Restaurant</option>
+            <option value="clinic">Clinic / dental</option>
+            <option value="salon">Salon / spa</option>
+            <option value="hvac">HVAC</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="auto">Auto service</option>
+            <option value="law">Law office</option>
+            <option value="realestate">Real estate</option>
+            <option value="trades">Other trades / services</option>
+          </select>
+        </label>
+        <label>Contact person's name (optional)
+          <input type="text" id="cs-contact" placeholder="e.g. Maria Rossi" />
+        </label>
+        <label>Call scenario
+          <select id="cs-scenario">
+            <option value="first" selected>First call — new business</option>
+            <option value="followup">Follow-up call</option>
+            <option value="demo">Demo invitation</option>
+            <option value="close">Trial-offer close</option>
+          </select>
+        </label>
+        <label>Your name (partner) *
+          <input type="text" id="cs-partner" required placeholder="e.g. Poorya Rahmati" />
+        </label>
+        <label>Your referral code (optional)
+          <input type="text" id="cs-code" placeholder="e.g. NEX-P004" />
+        </label>
+        <div class="full">
+          <button class="btn primary" type="submit">Build my script</button>
+          <p class="gen-error" id="cs-error">Please add the business name and your own name — the script is personalised from them.</p>
+        </div>
+      </form>
+    </div>
+    <div class="box" style="margin-top:18px">
+      <h3>Your call script — in English, ready to edit</h3>
+      <p>The script is always generated in English, because that's the language of the call — even if you're reading this page in Persian. Read it through, adjust anything you like in the box, and Copy takes the version you see.</p>
+      <textarea class="tpl" id="cs-out" rows="30">Fill in the business above, pick its type and the call you're making, then press “Build my script” — your complete call script appears here, ready to edit.</textarea>
+      <button class="copy-btn" type="button" data-copy="cs-out">Copy script</button>
+      <p class="fineprint">You can edit the text in the box first — Copy takes the version you see.</p>
+      <p class="fineprint">Say it like a person, not a recording — and when the call ends, log the outcome on the business's card in the Call List. An unlogged call counts as not made.</p>
+    </div>
+    </details>
+  </div>
+</section>
+
 <section class="soft" id="scripts">
   <div class="wrap">
     <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Call scripts</span><h2>The master script — word for word</h2></span></summary>
@@ -7376,6 +7436,167 @@ Object.assign(window.FA, {
     render();
   });
   render();
+})();
+</script>
+<script>
+/* ================= call script builder — FA strings + generator logic ================= */
+Object.assign(window.FA, {
+  "Script Builder": "سازندهٔ اسکریپت",
+  "Call script builder": "سازندهٔ اسکریپت تماس",
+  "Build your call script — pick the business, get the words": "اسکریپت تماستان را بسازید — کسب‌وکار را انتخاب کنید، متن را بگیرید",
+  "Tell this page who you're calling and what kind of call it is, and it writes you a complete call script: a warm opening, a 30-second pitch written for that kind of business, the demo-line invitation, the free-trial close, answers to the three pushbacks you'll hear most, and a clean ending. The script is a guide, not a teleprompter — edit it, make it sound like you, then call. Everything in it is true and safe to say: official prices only, no promised features, no discounts beyond official policy.": "به این صفحه بگویید به چه کسی زنگ می‌زنید و چه نوع تماسی است، و برایتان یک اسکریپت کامل تماس می‌نویسد: شروعی گرم، یک معرفی ۳۰ ثانیه‌ای نوشته‌شده برای همان نوع کسب‌وکار، دعوت به خط دمو، بستن با دورهٔ آزمایشی رایگان، جواب سه مخالفتی که بیشتر از همه می‌شنوید، و پایانی تمیز. اسکریپت یک راهنماست، نه متن خواندنی از رو — ویرایشش کنید، شبیه خودتانش کنید، بعد زنگ بزنید. همه‌چیز در آن درست و امن برای گفتن است: فقط قیمت‌های رسمی، بدون وعدهٔ امکاناتی که نیست، و بدون تخفیف فراتر از سیاست رسمی.",
+  "Contact person's name (optional)": "نام شخص تماس (اختیاری)",
+  "Call scenario": "سناریوی تماس",
+  "Your name (partner) *": "نام شما (شریک) *",
+  "Your referral code (optional)": "کد معرف شما (اختیاری)",
+  "Restaurant": "رستوران",
+  "Clinic / dental": "کلینیک / دندان‌پزشکی",
+  "Salon / spa": "سالن / اسپا",
+  "HVAC": "تهویه و گرمایش (HVAC)",
+  "Plumbing": "لوله‌کشی",
+  "Auto service": "خدمات خودرو",
+  "Law office": "دفتر حقوقی",
+  "Real estate": "املاک",
+  "Other trades / services": "سایر مشاغل فنی / خدماتی",
+  "First call — new business": "تماس اول — کسب‌وکار جدید",
+  "Follow-up call": "تماس پیگیری",
+  "Demo invitation": "دعوت به دمو",
+  "Trial-offer close": "بستن با پیشنهاد دورهٔ آزمایشی",
+  "e.g. Bella Notte Ristorante": "مثلاً Bella Notte Ristorante",
+  "e.g. Maria Rossi": "مثلاً Maria Rossi",
+  "e.g. Poorya Rahmati": "مثلاً Poorya Rahmati",
+  "e.g. NEX-P004": "مثلاً NEX-P004",
+  "Build my script": "اسکریپت من را بساز",
+  "Please add the business name and your own name — the script is personalised from them.": "لطفاً نام کسب‌وکار و نام خودتان را اضافه کنید — اسکریپت از روی همین‌ها شخصی‌سازی می‌شود.",
+  "Your call script — in English, ready to edit": "اسکریپت تماس شما — به انگلیسی، آمادهٔ ویرایش",
+  "The script is always generated in English, because that's the language of the call — even if you're reading this page in Persian. Read it through, adjust anything you like in the box, and Copy takes the version you see.": "اسکریپت همیشه به انگلیسی ساخته می‌شود، چون زبان تماس همین است — حتی اگر این صفحه را فارسی می‌خوانید. متن را کامل بخوانید، هر جایش را خواستید در کادر تغییر دهید، و دکمهٔ کپی همان نسخه‌ای را می‌گیرد که می‌بینید.",
+  "Copy script": "کپی اسکریپت",
+  "Say it like a person, not a recording — and when the call ends, log the outcome on the business's card in the Call List. An unlogged call counts as not made.": "مثل یک آدم بگوییدش، نه مثل یک ضبط صوتی — و وقتی تماس تمام شد، نتیجه را روی کارت همان کسب‌وکار در فهرست تماس ثبت کنید. تماس ثبت‌نشده، انجام‌نشده حساب می‌شود."
+});
+(function(){
+  "use strict";
+  function $(id){ return document.getElementById(id); }
+  var form = $("cs-form");
+  if (!form) return;
+  var DEMO = "+1 (437) 529-0400";
+  var V = {
+    restaurant: { label: "Restaurant", plural: "restaurants",
+      miss: "When the room is full, the phone rings out — and a caller who can't book with you books somewhere else within the minute.",
+      jobs: "takes reservations and phone orders from your live menu and reads every order back, captures large parties and catering in full, and confirms everything by text",
+      jobsShort: "books the table, takes the order from your live menu and reads it back, and confirms it by text",
+      busy: "the room is full and the phones won't stop" },
+    clinic: { label: "Clinic / dental", plural: "clinics and dental practices",
+      miss: "A new patient who hits voicemail rarely leaves a message — they just call the next clinic on the list.",
+      jobs: "books, changes and confirms appointments, answers the everyday questions about hours and services, and captures every new-patient enquiry in full",
+      jobsShort: "books the appointment, answers the everyday questions, and captures every new-patient enquiry",
+      busy: "your front desk has a line and the phones won't stop" },
+    salon: { label: "Salon / spa", plural: "salons and spas",
+      miss: "While your hands are with a client, every unanswered call is a booking that goes to the salon down the street.",
+      jobs: "books and rebooks appointments, helps fill cancellations, and sends confirmation and reminder texts so chairs don't sit empty",
+      jobsShort: "books the appointment and confirms it by text, so your chairs stay full",
+      busy: "you're with a client and can't get to the phone" },
+    hvac: { label: "HVAC", plural: "HVAC companies",
+      miss: "When you're on a roof or under a furnace, the phone goes to voicemail — and a homeowner with no heat calls the next company on Google.",
+      jobs: "answers while you're on a job, captures the caller's name, address and problem, and flags urgent no-heat calls straight to you",
+      jobsShort: "captures the caller's name, address and problem, and flags the urgent calls straight to you",
+      busy: "you're out on jobs all day" },
+    plumbing: { label: "Plumbing", plural: "plumbing companies",
+      miss: "A leak doesn't wait for a callback — the caller phones down the list until someone answers, and that someone gets the job.",
+      jobs: "answers every call, captures the caller's name, address and the problem, and flags emergencies like burst pipes straight to you",
+      jobsShort: "captures the name, address and the problem, and flags emergencies straight to you",
+      busy: "you're under a sink or out on a call" },
+    auto: { label: "Auto service", plural: "auto shops",
+      miss: "While the bays are full and the desk is slammed, booking and estimate calls ring out — and those drivers book with the shop that answers.",
+      jobs: "books service appointments, answers the everyday questions about hours and services, and captures every caller's details",
+      jobsShort: "books the service appointment and captures every caller's details",
+      busy: "the bays are full and the desk is slammed" },
+    law: { label: "Law office", plural: "law firms",
+      miss: "A prospective client who reaches voicemail after hours usually calls the next firm — first impressions decide who gets the retainer.",
+      jobs: "answers professionally around the clock, takes the caller's name, number and a short summary of their matter, and books consultations into your calendar",
+      jobsShort: "takes the caller's details and a short summary of their matter, and books the consultation",
+      busy: "you're in meetings or in court" },
+    realestate: { label: "Real estate", plural: "real estate agents and brokerages",
+      miss: "A buyer calling about a listing won't leave a voicemail — they call the next agent whose sign they saw.",
+      jobs: "answers listing enquiries, captures buyer and seller leads with their details, and books showings and callbacks for you",
+      jobsShort: "captures the lead's details and books the showing or callback",
+      busy: "you're out at showings" },
+    trades: { label: "Other trades / services", plural: "trades and service businesses",
+      miss: "When you're on site with your hands full, calls go unanswered — and most callers simply dial the next name on the list.",
+      jobs: "answers every call, captures the caller's name, address and what they need, and books estimates and jobs for you",
+      jobsShort: "captures the caller's name, address and what they need, and books the estimate",
+      busy: "you're on site with your hands full" }
+  };
+  var SCEN = { first: "First call — new business", followup: "Follow-up call", demo: "Demo invitation", close: "Trial-offer close" };
+  function opening(sc, d){
+    var greet = d.contact ? "Am I speaking with " + d.contact + "? " : "";
+    if (sc === "followup") return "Hi, this is " + d.partner + " from NexAIS, here in Richmond Hill. " + greet +
+      "I'm following up on the proposal we emailed " + d.biz + " about AVA, our AI receptionist — I just want to make sure it reached the right person, and to offer you the two-minute live version.";
+    if (sc === "demo") return "Hi, this is " + d.partner + " calling from NexAIS, here in Richmond Hill. " + greet +
+      "I'm calling with a two-minute invitation: our AI receptionist, AVA, is live on a demo line right now, and I'd love you to hear her answer a call the way she would answer yours at " + d.biz + ".";
+    if (sc === "close") return "Hi, this is " + d.partner + " from NexAIS. " + greet +
+      "Thanks for making the time. You've heard AVA on the demo line, so this call is just about getting your free trial started — I'll keep it short.";
+    return "Hi, this is " + d.partner + " calling from NexAIS, here in Richmond Hill. " +
+      (d.contact ? greet : "Could I speak with the owner or the manager for a quick minute? ") +
+      "I'll keep this short — I work with " + d.v.plural + " on one specific thing: the calls that come in when nobody can get to the phone.";
+  }
+  function trialClose(sc, d){
+    if (sc === "close") return "Here's exactly how the trial works. AVA runs on your own line for 7 days, free. You put a card on file — nothing is charged today, and nothing at all if you cancel inside the 7 days; the first charge lands on day 8, only if you continue. If the timing is tight, the trial can start 7, 14 or 30 days out instead. And right now, for Black Friday — until November 30 — the one-time setup fee is waived completely. " +
+      (d.type === "restaurant"
+        ? "Restaurants start on our Professional plan at $399 a month — that's the plan with the full booking system behind her. "
+        : "The plans are simple: Starter is $197 a month, Professional is $399, and Grow is $599 — and there is no charge at all until the trial ends and you choose to continue. ") +
+      "We build everything from a short intake form — about five minutes of your time — and you decide after hearing her on your real calls.";
+    return "All I'm asking for is ten minutes this week to show you how she would sound on your own line — and the easiest way to judge her is the 7-day free trial: she runs on your real calls, you put a card on file, and nothing is charged today, or at all if you cancel inside the 7 days — the first charge is day 8, only if you continue. The trial can also start 7, 14 or 30 days out if that timing is better, and right now, for Black Friday — until November 30 — the one-time setup fee is waived. Is Thursday or Friday better for the ten minutes?";
+  }
+  function build(d){
+    var v = d.v;
+    var L = [];
+    L.push("CALL SCRIPT — " + d.biz + " (" + v.label + ") · " + SCEN[d.scenario]);
+    L.push("Prepared for " + d.partner + (d.code ? " · Referral code: " + d.code : ""));
+    L.push("");
+    L.push("1 — OPENING");
+    L.push(opening(d.scenario, d));
+    L.push("");
+    L.push("2 — THE 30-SECOND PITCH");
+    L.push(v.miss + " That's exactly what AVA does. AVA is our AI receptionist at NexAIS: she answers your phone in seconds, 24/7 — she " + v.jobs + ". You get a short summary of every call, so nothing slips through — and she never calls in sick and never puts anyone on hold.");
+    L.push("");
+    L.push("3 — HEAR HER YOURSELF");
+    L.push("You don't have to take my word for it — our demo line is live right now: " + DEMO + ". Call it from your own phone and hear exactly how she answers. Thirty seconds of hearing her beats ten minutes of me explaining her.");
+    L.push("");
+    L.push("4 — THE FREE-TRIAL CLOSE");
+    L.push(trialClose(d.scenario, d));
+    L.push("");
+    L.push("5 — IF THEY PUSH BACK");
+    L.push("“We're too busy for this right now.”");
+    L.push("“Honestly, that's exactly when AVA earns her keep — she answers while " + v.busy + ". The trial runs on your own line and we set everything up; the only thing it needs from you is the ten minutes.”");
+    L.push("“We already have someone — or a system — for that.”");
+    L.push("“That makes sense — most places we talk to do. The difference is AVA doesn't just take a message: she " + v.jobsShort + ". Try the demo line — " + DEMO + " — and compare her with what you have now.”");
+    L.push("“Just send me the information.”");
+    L.push("“Of course — I'll send everything in writing right after this call, prices included. And honestly, the fastest two-minute version of the whole thing is the demo line itself: " + DEMO + ". If she impresses you there, the trial is the next step.”");
+    L.push("");
+    L.push("6 — CLOSE + NEXT STEP");
+    L.push("So here's the next step: I'll start your 7-day free trial and send you the short intake form — five minutes to fill in — and once it's back, we build your AVA and she goes live on your line. " +
+      (d.code ? "Everything runs under my referral code, " + d.code + ", so it's all tracked to me and I stay your contact. " : "") +
+      "I'll also log this call on your card on our side, so everything we agreed is on record. Thanks for your time" + (d.contact ? ", " + d.contact : "") + " — I think you'll enjoy hearing her answer your phone.");
+    return L.join("\n");
+  }
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var biz = $("cs-biz").value.trim();
+    var partner = $("cs-partner").value.trim();
+    var err = $("cs-error");
+    if (!biz || !partner){ err.style.display = "block"; return; }
+    err.style.display = "none";
+    var type = $("cs-type").value;
+    $("cs-out").value = build({
+      biz: biz,
+      partner: partner,
+      contact: $("cs-contact").value.trim(),
+      code: $("cs-code").value.trim(),
+      type: type,
+      scenario: $("cs-scenario").value,
+      v: V[type] || V.trades
+    });
+  });
 })();
 </script>
 </body>
