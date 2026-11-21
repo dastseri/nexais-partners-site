@@ -512,6 +512,11 @@
   .gate-err{display:none;color:#c0453e;font-weight:700;font-size:14.5px;margin-top:12px}
   .gate-note{margin-top:18px;font-size:13.5px;color:var(--ink-3);border-top:1px dashed var(--panel-line);padding-top:14px}
   #gate .gate-lang{margin:18px 0 0}
+  .signed-in{margin:0;font-size:13.5px;font-weight:700;color:var(--ink-2)}
+  .activity-list{list-style:none;margin:0;padding:0}
+  .activity-list li{padding:8px 0;border-bottom:1px dashed var(--panel-line);font-size:14.5px}
+  .activity-list li:last-child{border-bottom:none}
+  .activity-list .at-time{color:var(--ink-3);font-size:13px}
 
   /* ---- language toggle + Persian (RTL) ---- */
   .lang-toggle{display:flex;gap:0;margin-left:10px;border:1px solid var(--panel-line);border-radius:999px;overflow:hidden;flex:none}
@@ -545,13 +550,13 @@
     <h2 id="gate-h">Sales Partners — team access</h2>
     <p class="gate-sub">This hub is for the NexAIS sales team only. Enter the partner access key to open the sales app.</p>
     <form id="gate-form">
-      <label>Partner access key — temporary shared key for this sales app
+      <label>Your personal access key
         <input type="password" id="gate-key" autocomplete="off" placeholder="Access key" />
       </label>
       <button class="btn primary" type="submit">Enter the hub</button>
-      <p class="gate-err" id="gate-err">That key doesn't match — ask the NexAIS team for the current key and try again.</p>
+      <p class="gate-err" id="gate-err">That key doesn't match — keys are personal, so check your typing or ask Zhaleh for your own key.</p>
     </form>
-    <p class="gate-note">For now all partners share this one temporary key — please don't share it outside the sales team. Personal per-partner keys will be issued inside this same app later; this app is standalone and separate from the client CRM.</p>
+    <p class="gate-note">Access keys are personal — one key per person, issued by Zhaleh only. Please don't share your key with anyone; if you don't have one yet, ask Zhaleh. This app is standalone and separate from the client CRM.</p>
     <div class="lang-toggle gate-lang" role="group" aria-label="Language">
       <button type="button" id="gate-lang-en" class="on">EN</button>
       <button type="button" id="gate-lang-fa">فارسی</button>
@@ -568,6 +573,7 @@
       <a href="#start">Getting Started</a>
       <a href="#plan">Action Plan</a>
       <a href="#call-list">Call List</a>
+      <a href="#my-activity">My Activity</a>
       <a href="#research">Research</a>
       <a href="#ai-requests">AI Requests</a>
       <a href="#generator">Generator</a>
@@ -581,6 +587,7 @@
       <button type="button" id="lang-en" class="on">EN</button>
       <button type="button" id="lang-fa">فارسی</button>
     </div>
+    <p class="signed-in" id="signed-in" hidden></p>
   </div>
 </header>
 
@@ -4293,6 +4300,24 @@
   </div>
 </section>
 
+<section id="my-activity">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">My activity</span><h2>What you've done in this hub — on this device</h2></span></summary>
+    <div class="sec-head">
+      <details class="how"><summary>How it works</summary><p>Every action you take in this hub — call outcomes you log, scripts and proposals you build, payment links and texts you copy — is recorded here with your name and the time. The log lives on this device only; nothing leaves it until you copy the log and send it to AVA or Zhaleh yourself.</p></details>
+    </div>
+    <div class="box">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+        <button class="btn ghost" type="button" id="my-log-copy">Copy my log</button>
+        <p class="fineprint" style="margin:0">Send the copied log to AVA or Zhaleh so your work lands on the shared record.</p>
+      </div>
+      <ul class="activity-list" id="activity-list"></ul>
+      <p class="fineprint" id="activity-empty">Nothing logged yet on this device.</p>
+    </div>
+    </details>
+  </div>
+</section>
+
 <section class="soft" id="research">
   <div class="wrap">
     <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Research queue</span><h2>Businesses to work on</h2></span></summary>
@@ -5183,7 +5208,7 @@ Object.assign(window.FA, {
   "This hub is for the NexAIS sales team only. Enter the team access key to continue.": "این مرکز فقط برای تیم فروش NexAIS است. برای ادامه، کلید دسترسی تیم را وارد کنید.",
   "Access key": "کلید دسترسی",
   "Enter the hub": "ورود به مرکز",
-  "That key doesn't match — ask the NexAIS team for the current key and try again.": "این کلید درست نیست — کلید فعلی را از تیم NexAIS بگیرید و دوباره تلاش کنید.",
+  "That key doesn't match — keys are personal, so check your typing or ask Zhaleh for your own key.": "این کلید درست نیست — کلیدها شخصی‌اند؛ تایپتان را بررسی کنید یا کلید خودتان را از ژاله بگیرید.",
   "For now this is one shared team key — please don't share it outside the sales team. Full individual logins for each partner arrive with the CRM version of this hub.": "فعلاً این یک کلید مشترک تیمی است — لطفاً آن را بیرون از تیم فروش به اشتراک نگذارید. ورود اختصاصی هر همکار با نسخهٔ CRM این مرکز می‌آید."
 });
 </script>
@@ -6275,8 +6300,14 @@ Object.assign(window.FA, {
   "Copy message for AVA": "پیام را برای آوا کپی کن",
   "Then paste it into your AVA chat — that's the connection. Nothing here is sent automatically.": "بعد آن را در چت آوا پیست کنید — اتصال همین است. اینجا هیچ‌چیز خودکار فرستاده نمی‌شود.",
   "This hub is for the NexAIS sales team only. Enter the partner access key to open the sales app.": "این مرکز فقط برای تیم فروش NexAIS است. برای باز کردن اپ فروش، کلید دسترسی همکاران را وارد کنید.",
-  "Partner access key — temporary shared key for this sales app": "کلید دسترسی همکاران — کلید مشترک موقت این اپ فروش",
-  "For now all partners share this one temporary key — please don't share it outside the sales team. Personal per-partner keys will be issued inside this same app later; this app is standalone and separate from the client CRM.": "فعلاً همهٔ همکاران از همین یک کلید موقت مشترک استفاده می‌کنند — لطفاً آن را بیرون از تیم فروش به اشتراک نگذارید. کلیدهای شخصی هر همکار بعداً داخل همین اپ صادر می‌شود؛ این اپ مستقل است و از CRM مشتریان جداست.",
+  "Your personal access key": "کلید دسترسی شخصی شما",
+  "Access keys are personal — one key per person, issued by Zhaleh only. Please don't share your key with anyone; if you don't have one yet, ask Zhaleh. This app is standalone and separate from the client CRM.": "کلیدهای دسترسی شخصی‌اند — برای هر نفر یک کلید، و فقط ژاله آن را صادر می‌کند. لطفاً کلیدتان را با هیچ‌کس به اشتراک نگذارید؛ اگر هنوز کلید ندارید، از ژاله بگیرید. این اپ مستقل است و از CRM مشتریان جداست.",
+  "My Activity": "فعالیت من",
+  "What you've done in this hub — on this device": "کارهایی که در این مرکز انجام داده‌اید — روی این دستگاه",
+  "Every action you take in this hub — call outcomes you log, scripts and proposals you build, payment links and texts you copy — is recorded here with your name and the time. The log lives on this device only; nothing leaves it until you copy the log and send it to AVA or Zhaleh yourself.": "هر کاری که در این مرکز انجام می‌دهید — نتیجهٔ تماس‌هایی که ثبت می‌کنید، اسکریپت‌ها و پروپوزال‌هایی که می‌سازید، لینک‌های پرداخت و متن‌هایی که کپی می‌کنید — اینجا با نام و ساعت شما ثبت می‌شود. این گزارش فقط روی همین دستگاه می‌ماند؛ هیچ‌چیز از آن خارج نمی‌شود تا وقتی خودتان گزارش را کپی کنید و برای آوا یا ژاله بفرستید.",
+  "Copy my log": "کپی گزارش من",
+  "Send the copied log to AVA or Zhaleh so your work lands on the shared record.": "گزارش کپی‌شده را برای آوا یا ژاله بفرستید تا کارتان در سابقهٔ مشترک ثبت شود.",
+  "Nothing logged yet on this device.": "هنوز چیزی روی این دستگاه ثبت نشده است.",
   "Details & script": "جزئیات و اسکریپت",
   "Phase details": "جزئیات فاز",
   "How it works": "چطور کار می‌کند",
@@ -6491,12 +6522,49 @@ Object.assign(window.FA, {
 })();
 </script>
 <script>
-/* ================= entry gate — shared team access key ================= */
+/* ================= entry gate — personal per-partner access keys ================= */
 (function(){
   "use strict";
-  var KEY = "nexais-partners";
+  /* One personal key per person — issued by Zhaleh only (account creation is
+     centralized). Key -> { name, role }. The old shared key no longer works. */
+  var KEYS = {
+    "sorrel-falcon-7253": { name: "Zhaleh Dastsari", role: "admin" },
+    "rowan-citrus-5872": { name: "Ali Rahmati", role: "partner" },
+    "alder-tundra-9668": { name: "Poorya Rahmati", role: "partner" },
+    "zenith-mosaic-2846": { name: "Sougol Fazeli", role: "partner" }
+  };
   var gate = document.getElementById("gate");
-  function unlock(){ gate.style.display = "none"; document.body.classList.remove("locked"); }
+  function signedUser(){
+    try { var u = sessionStorage.getItem("nexais-gate-user"); return u ? JSON.parse(u) : null; } catch(e){ return null; }
+  }
+  function showIdentity(){
+    var u = signedUser(); if (!u || !u.name) return;
+    var tt = window.tt || function(en){ return en; };
+    var el = document.getElementById("signed-in");
+    if (el){
+      el.hidden = false;
+      el.textContent = tt("Signed in as ", "وارد شده‌اید به‌عنوان ") + u.name +
+        (u.role === "admin" ? tt(" (admin)", " (مدیر)") : "");
+    }
+    /* prefill the partner-name fields from the signed-in identity */
+    ["cs-partner", "g-partner"].forEach(function(id){
+      var f = document.getElementById(id);
+      if (f && !f.value) f.value = u.name;
+    });
+    /* keep the name stamped on results logged on this device in step with the key used */
+    try { localStorage.setItem("nexais-hub-user-v1", JSON.stringify(u.name)); } catch(e){}
+  }
+  function unlock(){ gate.style.display = "none"; document.body.classList.remove("locked"); showIdentity(); }
+  window.NEXAIS_showIdentity = showIdentity;
+  /* keep the identity line in the right language after a language switch */
+  window.addEventListener("load", function(){
+    var orig = window.NEXAIS_setLang;
+    if (orig && !window.__gateLangPatched){
+      window.__gateLangPatched = true;
+      window.NEXAIS_setLang = function(l){ orig(l); showIdentity(); };
+    }
+    showIdentity();
+  });
   var ok = false;
   try { ok = sessionStorage.getItem("nexais-gate-ok") === "1"; } catch(e){}
   if (ok){ unlock(); return; }
@@ -6504,14 +6572,122 @@ Object.assign(window.FA, {
   if (input) input.focus();
   document.getElementById("gate-form").addEventListener("submit", function(e){
     e.preventDefault();
-    if (input.value.trim() === KEY){
-      try { sessionStorage.setItem("nexais-gate-ok", "1"); } catch(e){}
+    var person = KEYS[(input.value || "").trim().toLowerCase()];
+    if (person){
+      try {
+        sessionStorage.setItem("nexais-gate-ok", "1");
+        sessionStorage.setItem("nexais-gate-user", JSON.stringify(person));
+      } catch(e){}
       unlock();
     } else {
       document.getElementById("gate-err").style.display = "block";
       input.select();
     }
   });
+})();
+</script>
+<script>
+/* ================= my activity — personal log of hub actions, kept on this device ================= */
+(function(){
+  "use strict";
+  var LOG = "nexais-hub-activity-v1", HUBUSER = "nexais-hub-user-v1";
+  var tt = window.tt || function(en){ return en; };
+  function get(k, d){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } }
+  function put(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+  function $(id){ return document.getElementById(id); }
+  function who(){
+    try { var u = JSON.parse(sessionStorage.getItem("nexais-gate-user") || "null"); if (u && u.name) return u.name; } catch(e){}
+    return get(HUBUSER, "") || "unknown";
+  }
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function describe(e){
+    var b = e.business || "";
+    if (e.what === "status") return tt("Call outcome logged", "نتیجهٔ تماس ثبت شد") + (b ? " — " + b : "") + (e.to ? ": " + e.to : "");
+    if (e.what === "notes") return tt("Note saved", "یادداشت ذخیره شد") + (b ? " — " + b : "");
+    if (e.what === "action") return tt("Action logged", "اقدام ثبت شد") + (b ? " — " + b : "") + (e.to ? ": " + e.to : "");
+    if (e.what === "script") return tt("Call script built", "اسکریپت تماس ساخته شد") + (b ? " — " + b : "");
+    if (e.what === "proposal") return tt("Proposal package generated", "پکیج پروپوزال ساخته شد") + (b ? " — " + b : "");
+    if (e.what === "paylink-open") return tt("Payment link opened", "لینک پرداخت باز شد") + (e.to ? " — " + e.to : "");
+    if (e.what === "paylink-copy") return tt("Payment link copied", "لینک پرداخت کپی شد") + (e.to ? " — " + e.to : "");
+    if (e.what === "copy"){
+      var labels = {
+        "tpl-intake": tt("Intake form copied", "فرم اطلاعات کپی شد"),
+        "tpl-dm": tt("Template copied (DM)", "قالب کپی شد (پیام مستقیم)"),
+        "tpl-email": tt("Template copied (email)", "قالب کپی شد (ایمیل)"),
+        "cs-out": tt("Call script copied", "اسکریپت تماس کپی شد")
+      };
+      return labels[e.to] || tt("Text copied", "متن کپی شد");
+    }
+    return e.what || "";
+  }
+  function fmtTime(iso){
+    var d = new Date(iso);
+    return isNaN(d.getTime()) ? (iso || "") : d.toLocaleString();
+  }
+  function renderActivity(){
+    var list = $("activity-list"), empty = $("activity-empty");
+    if (!list) return;
+    var entries = get(LOG, []).slice().reverse();
+    list.innerHTML = entries.map(function(e){
+      return "<li><span class=\"at-time\">" + esc(fmtTime(e.at)) + "</span> · <b>" + esc(e.by || "") + "</b> — " + esc(describe(e)) + "</li>";
+    }).join("");
+    if (empty) empty.style.display = entries.length ? "none" : "";
+  }
+  window.NEXAIS_renderActivity = renderActivity;
+  window.NEXAIS_logActivity = function(what, business, to){
+    var log = get(LOG, []);
+    log.push({ at: new Date().toISOString(), by: who(), business: business || "", what: what, to: to || "" });
+    put(LOG, log);
+    renderActivity();
+  };
+  /* ---- hooks into the hub's existing actions (logging only; nothing else changes) ---- */
+  var csForm = $("cs-form");
+  if (csForm) csForm.addEventListener("submit", function(){
+    var b = $("cs-biz"); window.NEXAIS_logActivity("script", b ? b.value.trim() : "", "");
+  });
+  var genForm = $("gen-form");
+  if (genForm) genForm.addEventListener("submit", function(){
+    var b = $("g-biz"); window.NEXAIS_logActivity("proposal", b ? b.value.trim() : "", "");
+  });
+  function planLabel(){ var v = $("cl-v-plan"); return v ? v.textContent.trim() : ""; }
+  var clOpen = $("cl-open");
+  if (clOpen) clOpen.addEventListener("click", function(){ window.NEXAIS_logActivity("paylink-open", "", planLabel()); });
+  var clCopy = $("cl-copy");
+  if (clCopy) clCopy.addEventListener("click", function(){ window.NEXAIS_logActivity("paylink-copy", "", planLabel()); });
+  document.addEventListener("click", function(e){
+    var btn = e.target && e.target.closest ? e.target.closest("[data-copy]") : null;
+    if (btn) window.NEXAIS_logActivity("copy", "", btn.getAttribute("data-copy") || "");
+  });
+  /* ---- copy my log: the partner sends it to AVA / Zhaleh themselves ---- */
+  function copyText(text, btn){
+    function done(){ if (btn){ var old = btn.textContent; btn.textContent = tt("Copied ✓", "کپی شد ✓"); setTimeout(function(){ btn.textContent = old; }, 1600); } }
+    function fallback(){
+      var ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); } catch(e){}
+      document.body.removeChild(ta); done();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+  }
+  var copyBtn = $("my-log-copy");
+  if (copyBtn) copyBtn.addEventListener("click", function(){
+    var lines = [tt("NexAIS Partners — my activity log", "NexAIS Partners — گزارش فعالیت من"), ""];
+    get(LOG, []).slice().reverse().forEach(function(e){
+      lines.push(fmtTime(e.at) + " — " + (e.by || "") + " — " + describe(e));
+    });
+    copyText(lines.join("\n"), copyBtn);
+  });
+  window.addEventListener("load", function(){
+    var orig = window.NEXAIS_setLang;
+    if (orig && !window.__activityLangPatched){
+      window.__activityLangPatched = true;
+      window.NEXAIS_setLang = function(l){ orig(l); renderActivity(); };
+    }
+    renderActivity();
+  });
+  renderActivity();
 })();
 </script>
 <script>
