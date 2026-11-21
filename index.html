@@ -72,10 +72,7 @@
   /* learn & reference — grouped after the daily work, visually quieter */
   .reference-group{background:var(--bg-soft)}
   .reference-group section,.reference-group section.soft{background:transparent}
-  .reference-divider{padding:34px 0 6px;scroll-margin-top:74px}
-  .reference-divider .wrap{border-top:2px solid var(--panel-line);padding-top:26px}
-  .reference-divider h2{font-size:26px;margin-bottom:6px}
-  .reference-divider p{color:var(--ink-2)}
+  .reference-group{padding:30px 0 42px}
   .reference-group details.sec-panel>summary h2{font-size:26px}
   @media (max-width:900px){
     .start-head{display:block}
@@ -337,6 +334,44 @@
   @media (max-width:900px){
     details.sec-panel>summary h2{font-size:23px}
     section:has(> .wrap > details.sec-panel[open]){padding:32px 0 42px}
+  }
+
+  /* close-panel structure — every major section is one uniform card with a header bar */
+  details.sec-panel{background:var(--panel);border:1px solid var(--panel-line);border-radius:16px;
+    box-shadow:var(--shadow);padding:20px 22px}
+  details.sec-panel[open]{padding-bottom:26px}
+  details.sec-panel>summary{align-items:flex-start}
+  details.sec-panel>summary::after{margin-top:11px}
+  details.sec-panel>summary h2{font-size:21px;line-height:1.3}
+  .reference-group details.sec-panel>summary h2{font-size:21px}
+  details.sec-panel>summary .kicker{margin-bottom:4px}
+  .step-num{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;
+    background:var(--blue);color:#fff;font-weight:800;font-size:16px;flex:none;margin-top:1px}
+  .step-purpose{display:block;color:var(--ink-2);font-size:14.5px;line-height:1.45;margin-top:5px}
+
+  /* learn & reference — one collapsible group card holding the topic cards */
+  details.ref-panel{background:var(--panel);border:1px solid var(--panel-line);border-radius:16px;
+    box-shadow:var(--shadow);padding:20px 22px;scroll-margin-top:74px}
+  details.ref-panel>summary{cursor:pointer;list-style:none;display:flex;align-items:flex-start;gap:14px;border-radius:8px}
+  details.ref-panel>summary::-webkit-details-marker{display:none}
+  details.ref-panel>summary::after{content:"";flex:none;width:9px;height:9px;margin-inline-start:auto;margin-top:11px;
+    border-right:2.5px solid var(--blue);border-bottom:2.5px solid var(--blue);transform:rotate(-45deg)}
+  [dir="rtl"] details.ref-panel>summary::after{transform:rotate(135deg)}
+  details.ref-panel[open]>summary::after{transform:rotate(45deg)}
+  details.ref-panel>summary:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+  details.ref-panel>summary:hover h2{color:var(--blue-dark)}
+  details.ref-panel>summary .sec-sum-text{flex:1;min-width:0}
+  details.ref-panel>summary .kicker{display:block;margin-bottom:4px}
+  details.ref-panel>summary h2{font-size:21px;line-height:1.3}
+  .ref-body>section{padding-left:0;padding-right:0}
+  .ref-body>section:first-child{padding-top:10px}
+  .ref-body>section:last-child{padding-bottom:2px}
+  @media (max-width:640px){
+    details.sec-panel{padding:16px}
+    details.sec-panel>summary h2{font-size:19px}
+    .reference-group details.sec-panel>summary h2{font-size:19px}
+    details.ref-panel{padding:16px}
+    details.ref-panel>summary h2{font-size:19px}
   }
 
   /* AI research & sales requests — partner view */
@@ -676,7 +711,7 @@
 
 <section id="call-list">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Your call list</span><h2>Proposal follow-ups — 54 businesses</h2></span></summary>
+    <details class="sec-panel" open><summary><span class="step-num">1</span><span class="sec-sum-text"><span class="kicker">Your call list</span><h2>Proposal follow-ups — 54 businesses</h2><span class="step-purpose">Open your business list and work through the calls.</span></span></summary>
     <div class="sec-head">
       <details class="how"><summary>How it works</summary><p>On October 20–21 we sent AVA proposals to these 54 businesses — most received the full package by email; three received the proposal on its own, and two were reached through their website contact forms with the cover letter only. Each card shows exactly what that business received. Each card carries the phone number, the person to ask for, what we found about their business, and a ready-to-say opening line written for that business alone. The full sent files — English package and Persian version for each — live in the <a href="https://docs.google.com/spreadsheets/d/1TRez_Q5Uy39pU3dYlP0myoeZ7rQva1Xb2L4vLPPgNms/edit" target="_blank" rel="noopener">sent-packages register</a>.</p></details>
     
@@ -4044,7 +4079,7 @@
 
 <section id="script-builder">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Call script builder</span><h2>Build your call script — pick the business, get the words</h2></span></summary>
+    <details class="sec-panel"><summary><span class="step-num">2</span><span class="sec-sum-text"><span class="kicker">Call script builder</span><h2>Build your call script — pick the business, get the words</h2><span class="step-purpose">Get the words for this business and this call.</span></span></summary>
     <div class="sec-head">
       <details class="how"><summary>How it works</summary><p>Tell this page who you're calling and what kind of call it is, and it writes you a complete call script: a warm opening, a 30-second pitch written for that kind of business, the demo-line invitation, the free-trial close, answers to the three pushbacks you'll hear most, and a clean ending. The script is a guide, not a teleprompter — edit it, make it sound like you, then call. Everything in it is true and safe to say: official prices only, no promised features, no discounts beyond official policy.</p></details>
     </div>
@@ -4103,7 +4138,7 @@
 
 <section id="close">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Close the deal</span><h2>Start the trial — payment link, terms &amp; intake form</h2></span></summary>
+    <details class="sec-panel"><summary><span class="step-num">3</span><span class="sec-sum-text"><span class="kicker">Close the deal</span><h2>Start the trial — payment link, terms &amp; intake form</h2><span class="step-purpose">Start the free trial and send the payment link.</span></span></summary>
     <div class="sec-head">
       <p>When a business says yes, everything for the close is here: pick the plan and the free-trial length, confirm the payment terms, then send the client the payment link and the intake form below. The client enters their own name, phone and card on the secure Stripe page. Nothing is charged today — the first charge lands on the day the free trial ends.</p>
     </div>
@@ -4197,7 +4232,7 @@ Thank you — as soon as this comes back, we start building your AVA.
 
 <section id="generator">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Proposal generator</span><h2>Build a new proposal package — right here</h2></span></summary>
+    <details class="sec-panel"><summary><span class="step-num">4</span><span class="sec-sum-text"><span class="kicker">Proposal generator</span><h2>Build a new proposal package — right here</h2><span class="step-purpose">Create a package for a business that is not on the list.</span></span></summary>
     <div class="sec-head">
       <details class="how"><summary>How it works</summary><p>Found a business that isn't on the call list yet? Fill in what you found and this page builds the full NexAIS package for them: the founder's cover letter first, then the six-page proposal — in the locked NexAIS format, with the official prices, the demo line and the 7-day free trial as the call to action — card required upfront, charged only from day 8 if you continue. Prices, tiers and wording are fixed by format and can't be edited here — if a prospect doesn't fit the format, email <a href="mailto:info@nexais.ca">info@nexais.ca</a> instead of improvising.</p></details>
     
@@ -4304,7 +4339,7 @@ Thank you — as soon as this comes back, we start building your AVA.
 
 <section id="my-activity">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">My activity</span><h2>What you've done in this hub — on this device</h2></span></summary>
+    <details class="sec-panel"><summary><span class="step-num">5</span><span class="sec-sum-text"><span class="kicker">My activity</span><h2>What you've done in this hub — on this device</h2><span class="step-purpose">See and copy the work logged on this device.</span></span></summary>
     <div class="sec-head">
       <details class="how"><summary>How it works</summary><p>Every action you take in this hub — call outcomes you log, scripts and proposals you build, payment links and texts you copy — is recorded here with your name and the time. The log lives on this device only; nothing leaves it until you copy the log and send it to AVA or Zhaleh yourself.</p></details>
     </div>
@@ -4321,13 +4356,10 @@ Thank you — as soon as this comes back, we start building your AVA.
 </section>
 
 <div class="reference-group">
-<div class="reference-divider" id="reference">
   <div class="wrap">
-    <p class="kicker">Learn & reference</p>
-    <h2>Everything else, when you need it</h2>
-    <p>Guides, rules, materials and answers — kept below the daily work.</p>
-  </div>
-</div>
+    <details class="ref-panel" id="reference">
+      <summary><span class="sec-sum-text"><span class="kicker">Learn & reference</span><h2>Everything else, when you need it</h2><span class="step-purpose">Guides, rules, materials and answers — kept below the daily work.</span></span></summary>
+      <div class="ref-body">
 <section class="soft" id="offer">
   <div class="wrap">
     <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">What you're selling</span><h2>AVA — AI that doesn't just answer. It gets work done.</h2></span></summary>
@@ -4909,6 +4941,9 @@ nexais.ca</textarea>
   </details>
   </div>
 </section>
+      </div>
+    </details>
+  </div>
 </div>
 
 <footer>
@@ -6838,6 +6873,21 @@ Object.assign(window.FA, {
   var q = document.getElementById("q"), fg = document.getElementById("f-group");
   if (q) q.addEventListener("input", function(){ window.NEXAIS_openSection("call-list"); });
   if (fg) fg.addEventListener("change", function(){ window.NEXAIS_openSection("call-list"); });
+  if (location.hash && location.hash.length > 1) window.NEXAIS_openSection(location.hash.slice(1));
+})();
+</script>
+<script>
+/* ================= learn & reference — opening a topic also opens the group ================= */
+(function(){
+  "use strict";
+  var orig = window.NEXAIS_openSection;
+  if (!orig) return;
+  window.NEXAIS_openSection = function(id){
+    orig(id);
+    var ref = document.getElementById("reference");
+    var sec = document.getElementById(id);
+    if (ref && sec && (sec === ref || ref.contains(sec))) ref.open = true;
+  };
   if (location.hash && location.hash.length > 1) window.NEXAIS_openSection(location.hash.slice(1));
 })();
 </script>
