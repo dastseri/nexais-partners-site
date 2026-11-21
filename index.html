@@ -50,9 +50,7 @@
   .brand{font-weight:800;font-size:19px;white-space:nowrap}
   .brand b{color:var(--blue);font-weight:800}
   .brand span{color:var(--ink-3);font-weight:600;font-size:13px;margin-left:8px}
-  .topnav{display:flex;flex-wrap:wrap;gap:2px 4px;margin-left:auto}
-  .topnav a{color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:700;padding:7px 11px;border-radius:8px;white-space:nowrap}
-  .topnav a:hover{background:var(--blue-soft);color:var(--blue-dark)}
+  .topbar .lang-toggle{margin-left:auto}
 
 
   /* start here — the five working destinations, in sales-flow order */
@@ -102,7 +100,6 @@
   .stat{background:var(--panel);border:1px solid var(--panel-line);border-radius:var(--radius);padding:12px 16px;box-shadow:var(--shadow)}
   .stat b{display:block;font-size:20px}
   .stat span{font-size:13px;color:var(--ink-3);font-weight:600}
-  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
   .btn{display:inline-block;text-decoration:none;font-weight:800;font-size:15px;padding:13px 22px;border-radius:10px;border:1px solid transparent;cursor:pointer}
   .btn.primary{background:var(--blue);color:#fff}
   .btn.primary:hover{background:var(--blue-dark)}
@@ -561,7 +558,7 @@
   .lang-toggle button{font:inherit;font-size:13.5px;font-weight:800;padding:7px 14px;border:none;background:var(--panel);color:var(--ink-2);cursor:pointer}
   .lang-toggle button.on{background:var(--blue);color:#fff}
   html[lang="fa"] body{font-family:"Vazirmatn","Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif}
-  [dir="rtl"] .topnav{margin-left:0;margin-right:auto}
+  [dir="rtl"] .topbar .lang-toggle{margin-left:0;margin-right:auto}
   [dir="rtl"] .lang-toggle{margin-left:0;margin-right:10px}
   [dir="rtl"] .brand span{margin-left:0;margin-right:8px}
   [dir="rtl"] .card h4 .num{margin-right:0;margin-left:6px}
@@ -602,17 +599,9 @@
   </div>
 </div>
 
-<header class="topbar">
+<header class="topbar" id="top">
   <div class="wrap">
     <div class="brand">Nex<b>AIS</b><span>Sales Partners</span></div>
-    <nav class="topnav">
-      <a href="#call-list">Call List</a>
-      <a href="#script-builder">Script Builder</a>
-      <a href="#close">Close the Deal</a>
-      <a href="#generator">Generator</a>
-      <a href="#my-activity">My Activity</a>
-      <a href="#reference">More</a>
-    </nav>
     <div class="lang-toggle" role="group" aria-label="Language">
       <button type="button" id="lang-en" class="on">EN</button>
       <button type="button" id="lang-fa">فارسی</button>
@@ -671,10 +660,6 @@
           <div class="stat"><b>30% + 10%</b><span>First month, then monthly for the life of the contract</span></div>
           <div class="stat"><b>7 days</b><span>7-day free trial — card required upfront, charged only from day 8 if you continue</span></div>
           <div class="stat"><b>54</b><span>Proposals already sent — follow-ups below</span></div>
-        </div>
-        <div class="cta-row">
-          <a class="btn primary" href="#call-list">Open your call list</a>
-          <a class="btn ghost" href="#join">Become a partner</a>
         </div>
       </div>
       <figure class="hero-fig">
@@ -4939,6 +4924,7 @@ nexais.ca</textarea>
     <div>
       <p><a href="https://docs.google.com/spreadsheets/d/1TRez_Q5Uy39pU3dYlP0myoeZ7rQva1Xb2L4vLPPgNms/edit" target="_blank" rel="noopener">Sent-packages register</a></p>
       <p>Commission examples assume clients stay subscribed and paying.</p>
+      <p><a href="#top">↑ Start</a></p>
     </div>
   </div>
 </footer>
@@ -4956,7 +4942,6 @@ Object.assign(window.FA, {
   "Commissions": "کمیسیون‌ها",
   "Getting Started": "شروع کار",
   "Getting started": "شروع کار",
-  "Call List": "لیست تماس",
   "Research": "تحقیق",
   "Research queue": "صف تحقیق",
   "Businesses to work on": "کسب‌وکارهای در صف تحقیق",
@@ -4965,7 +4950,6 @@ Object.assign(window.FA, {
   "Vertical": "حوزهٔ فعالیت",
   "Note — the signal you noticed": "یادداشت — نشانه‌ای که متوجه شدید",
   "Add to the research queue": "افزودن به صف تحقیق",
-  "Generator": "مولّد پروپوزال",
   "Call Scripts": "اسکریپت‌های تماس",
   "Call scripts": "اسکریپت‌های تماس",
   "Sales Kit": "کیت فروش",
@@ -4973,6 +4957,7 @@ Object.assign(window.FA, {
   "FAQ": "سؤالات متداول",
   "Join": "عضویت",
   "Start here": "از اینجا شروع کنید",
+  "↑ Start": "↑ شروع",
   "What do you want to do?": "می‌خواهید چه کار کنید؟",
   "Pick the next step — the page takes you straight there.": "قدم بعدی را انتخاب کنید — صفحه شما را مستقیم به همان‌جا می‌برد.",
   "Make calls": "تماس بگیرید",
@@ -4980,13 +4965,11 @@ Object.assign(window.FA, {
   "Build a call script": "اسکریپت تماس بسازید",
   "Get the words for this business and this call.": "متن مناسب این کسب‌وکار و این تماس را آماده کنید.",
   "Close a deal": "معامله را ببندید",
-  "Close the Deal": "بستن معامله",
   "Start the free trial and send the payment link.": "دورهٔ آزمایشی رایگان را شروع کنید و لینک پرداخت را بفرستید.",
   "Build a proposal": "پروپوزال بسازید",
   "Create a package for a business that is not on the list.": "برای کسب‌وکاری که در فهرست نیست، یک پکیج بسازید.",
   "My activity": "فعالیت من",
   "See and copy the work logged on this device.": "کارهای ثبت‌شده روی این دستگاه را ببینید و کپی کنید.",
-  "More": "بیشتر",
   "Learn & reference": "یادگیری و مرجع",
   "Everything else, when you need it": "هر چیز دیگری، هر وقت لازم داشتید",
   "Guides, rules, materials and answers — kept below the daily work.": "راهنماها، قوانین، مواد فروش و پاسخ‌ها — پایین‌تر از کارهای روزانه نگه داشته شده‌اند.",
@@ -4997,8 +4980,6 @@ Object.assign(window.FA, {
   "7 days": "۷ روز",
   "7-day free trial — card required upfront, charged only from day 8 if you continue": "۷ روز آزمایشی رایگان — کارت بانکی از اول ثبت می‌شود؛ برداشت فقط از روز هشتم و فقط اگر ادامه بدهید",
   "Proposals already sent — follow-ups below": "پروپوزال ارسال شده — پیگیری‌ها در ادامه",
-  "Open your call list": "لیست تماس‌تان را باز کنید",
-  "Become a partner": "همکار فروش شوید",
   "The official AVA flyer — the only AVA image used in NexAIS materials.": "فلایر رسمی AVA — تنها تصویر AVA که در همهٔ مواد NexAIS استفاده می‌شود.",
   "AVA, the NexAIS AI receptionist — branded partner flyer: answers calls, books appointments, captures every lead, 24/7": "AVA، منشی هوش مصنوعی NexAIS — فلایر رسمی همکاران: به تماس‌ها پاسخ می‌دهد، نوبت رزرو می‌کند، هر لید را ثبت می‌کند، شبانه‌روزی",
   "Your strongest proof is live.": "قوی‌ترین سند شما زنده است.",
@@ -6443,7 +6424,6 @@ Object.assign(window.FA, {
   "This hub is for the NexAIS sales team only. Enter the partner access key to open the sales app.": "این مرکز فقط برای تیم فروش NexAIS است. برای باز کردن اپ فروش، کلید دسترسی همکاران را وارد کنید.",
   "Your personal access key": "کلید دسترسی شخصی شما",
   "Access keys are personal — one key per person, issued by Zhaleh only. Please don't share your key with anyone; if you don't have one yet, ask Zhaleh. This app is standalone and separate from the client CRM.": "کلیدهای دسترسی شخصی‌اند — برای هر نفر یک کلید، و فقط ژاله آن را صادر می‌کند. لطفاً کلیدتان را با هیچ‌کس به اشتراک نگذارید؛ اگر هنوز کلید ندارید، از ژاله بگیرید. این اپ مستقل است و از CRM مشتریان جداست.",
-  "My Activity": "فعالیت من",
   "What you've done in this hub — on this device": "کارهایی که در این مرکز انجام داده‌اید — روی این دستگاه",
   "Every action you take in this hub — call outcomes you log, scripts and proposals you build, payment links and texts you copy — is recorded here with your name and the time. The log lives on this device only; nothing leaves it until you copy the log and send it to AVA or Zhaleh yourself.": "هر کاری که در این مرکز انجام می‌دهید — نتیجهٔ تماس‌هایی که ثبت می‌کنید، اسکریپت‌ها و پروپوزال‌هایی که می‌سازید، لینک‌های پرداخت و متن‌هایی که کپی می‌کنید — اینجا با نام و ساعت شما ثبت می‌شود. این گزارش فقط روی همین دستگاه می‌ماند؛ هیچ‌چیز از آن خارج نمی‌شود تا وقتی خودتان گزارش را کپی کنید و برای آوا یا ژاله بفرستید.",
   "Copy my log": "کپی گزارش من",
@@ -7698,7 +7678,6 @@ Object.assign(window.FA, {
 <script>
 /* ================= call script builder — FA strings + generator logic ================= */
 Object.assign(window.FA, {
-  "Script Builder": "سازندهٔ اسکریپت",
   "Call script builder": "سازندهٔ اسکریپت تماس",
   "Build your call script — pick the business, get the words": "اسکریپت تماستان را بسازید — کسب‌وکار را انتخاب کنید، متن را بگیرید",
   "Tell this page who you're calling and what kind of call it is, and it writes you a complete call script: a warm opening, a 30-second pitch written for that kind of business, the demo-line invitation, the free-trial close, answers to the three pushbacks you'll hear most, and a clean ending. The script is a guide, not a teleprompter — edit it, make it sound like you, then call. Everything in it is true and safe to say: official prices only, no promised features, no discounts beyond official policy.": "به این صفحه بگویید به چه کسی زنگ می‌زنید و چه نوع تماسی است، و برایتان یک اسکریپت کامل تماس می‌نویسد: شروعی گرم، یک معرفی ۳۰ ثانیه‌ای نوشته‌شده برای همان نوع کسب‌وکار، دعوت به خط دمو، بستن با دورهٔ آزمایشی رایگان، جواب سه مخالفتی که بیشتر از همه می‌شنوید، و پایانی تمیز. اسکریپت یک راهنماست، نه متن خواندنی از رو — ویرایشش کنید، شبیه خودتانش کنید، بعد زنگ بزنید. همه‌چیز در آن درست و امن برای گفتن است: فقط قیمت‌های رسمی، بدون وعدهٔ امکاناتی که نیست، و بدون تخفیف فراتر از سیاست رسمی.",
