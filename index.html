@@ -54,6 +54,44 @@
   .topnav a{color:var(--ink-2);text-decoration:none;font-size:14px;font-weight:700;padding:7px 11px;border-radius:8px;white-space:nowrap}
   .topnav a:hover{background:var(--blue-soft);color:var(--blue-dark)}
 
+
+  /* start here — the five working destinations, in sales-flow order */
+  .start-here{background:var(--blue-soft);border-bottom:1px solid var(--panel-line);padding:28px 0 32px}
+  .start-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
+  .start-head h2{font-size:28px}
+  .start-head .start-intro{color:var(--ink-2);font-size:15.5px;max-width:360px}
+  .start-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+  .start-tile{display:flex;flex-direction:column;gap:8px;min-height:142px;padding:18px;
+    background:var(--panel);border:2px solid var(--panel-line);border-radius:16px;box-shadow:var(--shadow);
+    color:var(--ink);text-decoration:none}
+  .start-tile:hover,.start-tile:focus-visible{border-color:var(--blue);color:var(--blue-dark)}
+  .start-tile:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+  .start-step{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;
+    background:var(--blue);color:#fff;font-weight:800;font-size:14px;flex:none}
+  .start-tile strong{font-size:17px;line-height:1.25}
+  .start-tile .start-desc{color:var(--ink-2);font-size:14px;line-height:1.45}
+
+  /* learn & reference — grouped after the daily work, visually quieter */
+  .reference-group{background:var(--bg-soft)}
+  .reference-group section,.reference-group section.soft{background:transparent}
+  .reference-divider{padding:34px 0 6px;scroll-margin-top:74px}
+  .reference-divider .wrap{border-top:2px solid var(--panel-line);padding-top:26px}
+  .reference-divider h2{font-size:26px;margin-bottom:6px}
+  .reference-divider p{color:var(--ink-2)}
+  .reference-group details.sec-panel>summary h2{font-size:26px}
+  @media (max-width:900px){
+    .start-head{display:block}
+    .start-head .start-intro{margin-top:8px}
+    .start-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .start-tile:last-child{grid-column:span 2}
+    .reference-group details.sec-panel>summary h2{font-size:21px}
+  }
+  @media (max-width:520px){
+    .start-grid{grid-template-columns:1fr}
+    .start-tile{min-height:0}
+    .start-tile:last-child{grid-column:auto}
+  }
+
   /* hero */
   .hero{padding:48px 0 40px}
   .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
@@ -568,21 +606,12 @@
   <div class="wrap">
     <div class="brand">Nex<b>AIS</b><span>Sales Partners</span></div>
     <nav class="topnav">
-      <a href="#offer">The Offer</a>
-      <a href="#earn">Commissions</a>
-      <a href="#start">Getting Started</a>
-      <a href="#plan">Action Plan</a>
       <a href="#call-list">Call List</a>
-      <a href="#my-activity">My Activity</a>
-      <a href="#research">Research</a>
-      <a href="#ai-requests">AI Requests</a>
-      <a href="#generator">Generator</a>
-      <a href="#close">Close the Deal</a>
-      <a href="#scripts">Call Scripts</a>
       <a href="#script-builder">Script Builder</a>
-      <a href="#kit">Sales Kit</a>
-      <a href="#faq">FAQ</a>
-      <a href="#join">Join</a>
+      <a href="#close">Close the Deal</a>
+      <a href="#generator">Generator</a>
+      <a href="#my-activity">My Activity</a>
+      <a href="#reference">More</a>
     </nav>
     <div class="lang-toggle" role="group" aria-label="Language">
       <button type="button" id="lang-en" class="on">EN</button>
@@ -591,6 +620,46 @@
     <p class="signed-in" id="signed-in" hidden></p>
   </div>
 </header>
+
+<div class="start-here">
+  <div class="wrap">
+    <div class="start-head">
+      <div>
+        <p class="kicker">Start here</p>
+        <h2>What do you want to do?</h2>
+      </div>
+      <p class="start-intro">Pick the next step — the page takes you straight there.</p>
+    </div>
+    <div class="start-grid">
+      <a class="start-tile" href="#call-list">
+        <span class="start-step">1</span>
+        <strong>Make calls</strong>
+        <span class="start-desc">Open your business list and work through the calls.</span>
+      </a>
+      <a class="start-tile" href="#script-builder">
+        <span class="start-step">2</span>
+        <strong>Build a call script</strong>
+        <span class="start-desc">Get the words for this business and this call.</span>
+      </a>
+      <a class="start-tile" href="#close">
+        <span class="start-step">3</span>
+        <strong>Close a deal</strong>
+        <span class="start-desc">Start the free trial and send the payment link.</span>
+      </a>
+      <a class="start-tile" href="#generator">
+        <span class="start-step">4</span>
+        <strong>Build a proposal</strong>
+        <span class="start-desc">Create a package for a business that is not on the list.</span>
+      </a>
+      <a class="start-tile" href="#my-activity">
+        <span class="start-step">5</span>
+        <strong>My activity</strong>
+        <span class="start-desc">See and copy the work logged on this device.</span>
+      </a>
+    </div>
+  </div>
+</div>
+
 
 <div class="hero">
   <div class="wrap">
@@ -619,319 +688,6 @@
     </div>
   </div>
 </div>
-
-<section class="soft" id="offer">
-  <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">What you're selling</span><h2>AVA — AI that doesn't just answer. It gets work done.</h2></span></summary>
-    <div class="sec-head">
-      <details class="how"><summary>How it works</summary><p>A missed call can be a missed customer. AVA answers in seconds, around the clock: reservations and appointments booked, phone orders taken from the business's own live menu and read back before they're placed, large parties and catering captured in full on the first call, returning customers recognized, and every booking confirmed by text. She speaks multiple languages and remembers your customers.</p></details>
-    
-    </div>
-    <div class="grid c3">
-      <div class="box plan">
-        <span class="tag">Starter</span>
-        <p class="price">$197<small> /month</small></p>
-        <p>Receptionist only — for businesses that need every call answered.</p>
-        <ul>
-          <li>AVA answers calls 24/7</li>
-          <li>Lead capture &amp; call summaries</li>
-          <li>Text follow-up</li>
-          <li class="no">No CRM, no app</li>
-        </ul>
-      </div>
-      <div class="box plan pop">
-        <span class="pop-tag">Most businesses start here</span>
-        <span class="tag">Professional</span>
-        <p class="price">$399<small> /month</small></p>
-        <p>AVA plus the system behind her — the full front desk.</p>
-        <ul>
-          <li>Everything in Starter</li>
-          <li>CRM + app included</li>
-          <li>Reservations &amp; orders in one system</li>
-          <li>Customer history AVA remembers</li>
-        </ul>
-      </div>
-      <div class="box plan">
-        <span class="tag">Grow</span>
-        <p class="price">$599<small> /month</small></p>
-        <p>Everything in Professional, plus we run their visibility.</p>
-        <ul>
-          <li>Everything in Professional</li>
-          <li>Website design &amp; management</li>
-          <li>Instagram management</li>
-          <li>General visibility &amp; marketing services</li>
-        </ul>
-      </div>
-    </div>
-    <div class="rule-note">
-      <b>Read this before you quote anyone:</b> Restaurants always start at <b>Professional ($399/mo)</b> — Starter is never offered to a restaurant, because they need the CRM and app for reservations and orders. There is no package smaller than Starter. The only offer below Starter is the <b>7-day free trial</b> — card required upfront, charged only from day 8 if you continue. A one-time setup fee applies and varies with the size of the deployment and the number of phone lines — it is quoted by NexAIS in writing, never by you on a call.
-    </div>
-  </details>
-  </div>
-</section>
-
-<section id="earn">
-  <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Commissions</span><h2>What you earn — and how it stacks</h2></span></summary>
-    <div class="sec-head">
-      <details class="how"><summary>How it works</summary><p>On monthly AVA contracts you earn <b>30% of the first month</b>, then <b>10% of every month for the life of the contract</b>. On one-time projects — websites, films, design work — you earn <b>20% of the project value</b>, paid when the client has paid in full. Commissions are calculated on amounts actually received from the client and are paid monthly.</p></details>
-    
-    </div>
-    <div class="grid c2" style="margin-bottom:22px">
-      <details class="box acc"><summary>
-        <span class="tag">Worked example · monthly</span>
-        <h3>One Professional client — $399/mo</h3></summary>
-        <table class="ex-table">
-          <tr><th>When</th><th class="num">You earn</th></tr>
-          <tr><td>Month 1 (30% of $399)</td><td class="num">$119.70</td></tr>
-          <tr><td>Every month after (10%)</td><td class="num">$39.90 /mo</td></tr>
-          <tr class="total"><td>First 12 months, one client</td><td class="num">$558.60</td></tr>
-        </table>
-      </details>
-      <details class="box acc"><summary>
-        <span class="tag">Worked example · monthly</span>
-        <h3>One Grow client — $599/mo</h3></summary>
-        <table class="ex-table">
-          <tr><th>When</th><th class="num">You earn</th></tr>
-          <tr><td>Month 1 (30% of $599)</td><td class="num">$179.70</td></tr>
-          <tr><td>Every month after (10%)</td><td class="num">$59.90 /mo</td></tr>
-          <tr class="total"><td>First 12 months, one client</td><td class="num">$838.60</td></tr>
-        </table>
-      </details>
-    </div>
-    <details class="box acc" style="margin-bottom:22px"><summary>
-      <span class="tag">The stack effect</span>
-      <h3>Five active clients, paying you every month</h3></summary>
-      <p style="margin-bottom:12px">Recurring commission is where this becomes real income. Five Professional clients who stay subscribed pay you <b>5 × $39.90 = $199.50 every month</b> — before any new sale. Keep signing and the base keeps growing:</p>
-      <table class="ex-table">
-        <tr><th>Active clients (Professional)</th><th class="num">Your monthly recurring</th><th class="num">Per year</th></tr>
-        <tr><td>5 clients</td><td class="num">$199.50 /mo</td><td class="num">$2,394</td></tr>
-        <tr><td>10 clients</td><td class="num">$399.00 /mo</td><td class="num">$4,788</td></tr>
-        <tr><td>20 clients</td><td class="num">$798.00 /mo</td><td class="num">$9,576</td></tr>
-      </table>
-      <p class="fineprint">Plus 30% of the first month on every new contract, and 20% on one-time projects (for example, a website from $1,500 pays you $300+ once the client has paid in full). Examples assume clients stay subscribed and paying; commissions are calculated on amounts actually received.</p>
-    </details>
-    <div class="box calc">
-      <div>
-        <h3 style="margin-bottom:16px">Run your own numbers</h3>
-        <label>New clients you sign per month: <span class="val" id="c-n-lab">2</span>
-          <input type="range" id="c-n" min="1" max="10" value="2" />
-        </label>
-        <label>Plan they choose
-          <select id="c-plan">
-            <option value="197">Starter — $197/mo</option>
-            <option value="399" selected>Professional — $399/mo</option>
-            <option value="599">Grow — $599/mo</option>
-          </select>
-        </label>
-        <details class="how"><summary>How it works</summary><p class="fineprint">Assumes every client stays subscribed and paying, and each new cohort starts at the beginning of a month. Month 1 of each contract pays 30%; every month after pays 10%, for the life of the contract.</p></details>
-      </div>
-      <div class="calc-out">
-        <div class="row"><span>Your monthly recurring by month 6</span><b id="c-m6">$0</b></div>
-        <div class="row"><span>Your monthly recurring by month 12</span><b id="c-m12">$0</b></div>
-        <div class="row big"><span>Total earned in your first 12 months</span><b id="c-tot">$0</b></div>
-      </div>
-    </div>
-  </details>
-  </div>
-</section>
-
-<section class="soft" id="start">
-  <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Getting started</span><h2>From application to your first registered lead</h2></span></summary>
-    <div class="sec-head">
-      <p>Four steps and you're selling. Most partners complete them inside a week.</p>
-    
-    </div>
-    <div class="steps">
-      <div class="step"><span class="n">1</span><h3>Apply</h3><p>Send your application with the form at the bottom of this page. Tell us your territory and the kinds of businesses you know.</p></div>
-      <div class="step"><span class="n">2</span><h3>Get your referral code</h3><p>NexAIS issues your personal referral code. It is how every introduction, demo and sale is credited to you — use it everywhere.</p></div>
-      <div class="step"><span class="n">3</span><h3>Download the sales kit</h3><p>The flyer, the demo line and the intro templates are in the Sales Kit section below. Call the demo line yourself first — know exactly what you're selling.</p></div>
-      <div class="step"><span class="n">4</span><h3>Register your first lead</h3><p>Send the lead's business name, contact and your code to <a href="mailto:info@nexais.ca">info@nexais.ca</a> before you pitch them. First registration owns the lead — see attribution below.</p></div>
-    </div>
-    <div class="grid c2" style="margin-top:22px">
-      <details class="box acc"><summary>
-        <h3>Your first 7 days</h3></summary>
-        <ul class="checklist">
-          <li><span class="box-i"></span><span><b>Day 1:</b> Apply and receive your referral code.</span></li>
-          <li><span class="box-i"></span><span><b>Day 2:</b> Call AVA on the demo line, +1 (437) 529-0400. Ask her to book a table. Time how fast she answers.</span></li>
-          <li><span class="box-i"></span><span><b>Day 3:</b> List 20 businesses you already know — restaurants, clinics, salons, trades — where the phone decides who gets the job.</span></li>
-          <li><span class="box-i"></span><span><b>Day 4:</b> Register your first 5 leads with your code before contacting any of them.</span></li>
-          <li><span class="box-i"></span><span><b>Days 5–6:</b> Make your first introductions with the kit templates. Lead with the demo line, never with price.</span></li>
-          <li><span class="box-i"></span><span><b>Day 7:</b> Follow up every introduction. Book the 10-minute demos — NexAIS runs them and closes.</span></li>
-        </ul>
-      </details>
-      <details class="box acc"><summary>
-        <h3>How attribution works</h3></summary>
-        <ul>
-          <li><b>First registration wins.</b> A lead is credited to the partner who registered it first — by the registration email and referral code.</li>
-          <li><b>Your code travels with the introduction.</b> Put it in every email, DM and referral you make, so the trail always leads back to you.</li>
-          <li><b>Duplicates resolve to the first registration.</b> If two partners register the same business, the earliest registration keeps the lead.</li>
-          <li><b>The tracker on this page is the shared record.</b> For the 54 proposals already sent, the call list below — with your outcome on each card — is the follow-up trail everyone works from. Log the outcome the moment the call ends; an unlogged call counts as not made.</li>
-        </ul>
-      </details>
-    </div>
-  </details>
-  </div>
-</section>
-
-<section id="plan">
-  <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Sales action plan</span><h2>The 30-day plan — sales only, starting today</h2></span></summary>
-    <div class="sec-head">
-      <details class="how"><summary>How it works</summary><p>This hub has one job for the next 30 days: turn the work already done into paying AVA clients. No new offers, no new discounts, no side projects. Every step below runs from today — Friday, October 23 — to Sunday, November 22, 2026, and feeds the same three things: calls, demos, pilots.</p></details>
-    
-    </div>
-
-    <details class="box acc" style="margin-bottom:22px"><summary>
-      <h3 style="margin-bottom:10px">Where we stand — Friday, October 23, 2026</h3></summary>
-      <ul class="rules-list" style="list-style:none;padding:0">
-        <li><b>54 proposals sent, 0 replies.</b> They went out October 20–21 and not one business has answered. The proposal was only step one — the follow-up call is the step that was missing, and it starts now.</li>
-        <li><b>The Meta ad is approved — and not launched.</b> Approved October 22, but the launch pack still has to go live. It is a Phase 2 task in the timeline below, with a date on it — not a someday item.</li>
-        <li><b>A competitor is already selling our pitch.</b> Digiparter, a Toronto AI firm, publicly offers an "AI team" at $500/month plus a $150 setup fee. AVA Professional is $399/month, live today, with a 7-day free trial — card required upfront, charged only from day 8 if you continue. We don't copy their tactics — we out-call them.</li>
-        <li><b>Our closing tools are ready.</b> The demo line is live 24/7, every card in the call list has its own opening line, and the 7-day free trial — card required upfront, charged only from day 8 if you continue — is the offer that closes. Nothing else has to be built before we sell.</li>
-      </ul>
-    </details>
-
-    <div class="box" style="margin-bottom:22px">
-      <h3 style="margin-bottom:14px">The timeline — October 23 to November 22</h3>
-      <ol class="tl">
-        <li>
-          <span class="dot">1</span>
-          <p class="when">Phase 1 · Oct 23–28</p>
-          <h3>Work the warm list first</h3>
-          <details class="phase-more">
-            <summary>Phase details</summary>
-            <p>Start with the Priority 1 cards in the call list below — the named decision-makers, plus the two form submissions that still need the full PDF sent. Call blocks are Tuesday and Wednesday, 2:00–4:00 PM. Maximum two attempts per business; on the second attempt, leave the voicemail script and stop. Log the outcome on the card the moment you hang up.</p>
-          </details>
-          <p class="target"><b>Target:</b> every Priority 1 business attempted · at least 10 cards end with a decision-maker conversation or a captured name + direct email.</p>
-        </li>
-        <li>
-          <span class="dot">2</span>
-          <p class="when">Phase 2 · Oct 29 – Nov 4</p>
-          <h3>Demos, pilots — and the ad goes live</h3>
-          <details class="phase-more">
-            <summary>Phase details</summary>
-            <p>Run every 10-minute demo booked in Phase 1, and offer the 7-day free trial — card required upfront, charged only from day 8 if you continue — to every prospect who hears AVA and still hesitates. The approved Meta ad launches this week: AVA prepares the full launch pack, Zhaleh gives the final go, and the ad points at one thing only — calling the demo line. Keep working any card that asked for a callback.</p>
-          </details>
-          <p class="target"><b>Target:</b> at least 8 demos held · at least 4 pilots started · Meta ad live.</p>
-        </li>
-        <li>
-          <span class="dot">3</span>
-          <p class="when">Phase 3 · Nov 5–11</p>
-          <h3>Second wave, new doors</h3>
-          <details class="phase-more">
-            <summary>Phase details</summary>
-            <p>Work the Priority 2 and 3 cards the same way — two attempts, everything logged. Re-send the full package to every direct email captured in wave one. Each partner also registers 10 new businesses from their own network before pitching any of them, and runs the DM and Alignable introductions from the Sales Kit. First registration still owns the lead.</p>
-          </details>
-          <p class="target"><b>Target:</b> all 54 businesses attempted · 10 new registered leads per partner.</p>
-        </li>
-        <li>
-          <span class="dot">4</span>
-          <p class="when">Phase 4 · Nov 12–18</p>
-          <h3>Pilots decide — first contracts</h3>
-          <details class="phase-more">
-            <summary>Phase details</summary>
-            <p>Every pilot gets its review call on day 7: what AVA answered, what she booked, what the owner heard on their own line. NexAIS quotes the one-time setup fee in writing; partners never quote it. Signed clients move to onboarding, and the partner logs the contract on the business's card so the commission trail is complete.</p>
-          </details>
-          <p class="target"><b>Target:</b> every pilot has a decision · first AVA contracts signed.</p>
-        </li>
-        <li>
-          <span class="dot">5</span>
-          <p class="when">Phase 5 · Nov 19–22</p>
-          <h3>Review with AVA — keep what sold</h3>
-          <details class="phase-more">
-            <summary>Phase details</summary>
-            <p>Send AVA the 30-day results from the panel below and review them together: calls, demos, the ad, the DMs — honestly, channel by channel. Kill what produced nothing, build the next 30 days around what produced pilots, and decide every AVA development request collected along the way in this same review.</p>
-          </details>
-          <p class="target"><b>Target:</b> one written review · a decision on every open AVA request · next 30-day targets set.</p>
-        </li>
-      </ol>
-    </div>
-
-    <div class="grid c2" style="margin-bottom:22px">
-      <details class="box acc"><summary>
-        <h3>The daily rhythm</h3></summary>
-        <ul class="checklist">
-          <li><span class="box-i"></span><span><b>08:00 — open this page.</b> Check today's phase and your call block. Decisions and updates from AVA land here.</span></li>
-          <li><span class="box-i"></span><span><b>2:00–4:00 PM Tue–Thu — call block.</b> Cards in priority order, the script open beside you, outcome logged before the next dial.</span></li>
-          <li><span class="box-i"></span><span><b>After every call — log it.</b> Outcome and notes on the card, immediately. An unlogged call counts as not made.</span></li>
-          <li><span class="box-i"></span><span><b>End of day — report to AVA.</b> Copy the call log in the Call List section, or use the report button in the panel below.</span></li>
-        </ul>
-      </details>
-      <details class="box acc"><summary>
-        <h3>Focus rules — sales, and only sales</h3></summary>
-        <ul>
-          <li><b>One lead offer: AVA.</b> Contracts and pilots first. Websites and films are follow-on work through NexAIS — never the opening pitch of this plan.</li>
-          <li><b>Prices never move.</b> No discounts, no smaller package, no setup number from you. The 7-day free trial — card required upfront, charged only from day 8 if you continue — is the only concession.</li>
-          <li><b>A missing feature is a request, not a promise.</b> If a prospect needs something AVA doesn't do today, log it in the panel below — never say "we'll add that" on a call.</li>
-          <li><b>If it doesn't end in a call, a demo, a pilot or a contract, it's out.</b> That test decides how every day in this plan is spent.</li>
-        </ul>
-      </details>
-    </div>
-
-  </details>
-  </div>
-</section>
-
-<section class="soft" id="talk">
-  <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Connected to AVA</span><h2>Talk to AVA — from inside this page</h2></span></summary>
-    <div class="box">
-      <details class="how"><summary>How it works</summary><p style="color:var(--ink-2);font-size:15px;margin-top:6px">This page is a fixed snapshot, so it cannot send anything by itself — it is wired to AVA through you. Pick a message type, fill in the fields, and the panel writes the exact message. Copy it, paste it into your AVA chat, and AVA picks the work up from there: answers, follow-ups, and decisions come back in the chat and are folded into this page's next update. AVA development requests travel the same road — they are decided by Zhaleh and AVA together, and only then does anyone tell a prospect. Talking counts the same as typing: press the big voice button below, speak in English or Persian, check the words that appear, then copy the message — or download your recording and attach it in the chat.</p></details>
-      <form class="talk-form" id="talk-form">
-        <label>Message type
-          <select id="m-type">
-            <option value="daily">Daily check-in — what's on today</option>
-            <option value="report">Report today's results</option>
-            <option value="lead">Register a new lead</option>
-            <option value="dev">AVA development request</option>
-            <option value="question">Question or blocker</option>
-          </select>
-        </label>
-        <label>Business (if relevant)
-          <input type="text" id="m-biz" placeholder="e.g. Sassafraz" />
-        </label>
-        <label class="full">Details
-          <textarea id="m-details" rows="3" placeholder="e.g. The owner asked if AVA can take deposits — is that real today?"></textarea>
-        </label>
-        <label class="full">Your message to AVA
-          <textarea id="m-preview" class="msg-preview" rows="7" readonly></textarea>
-        </label>
-      </form>
-      <div class="voice-box" id="voice-box">
-        <h3>Talk to AVA — don't type</h3>
-        <p class="voice-desc">Sometimes you need to talk, not write. Press the big button, speak in English or Persian, and your words fill the Details box above as text you can check and edit. Your voice is also saved as a recording: download it and attach it in your AVA chat together with the copied message.</p>
-        <div class="voice-controls">
-          <label style="font-weight:700;font-size:14px">Voice language
-            <select id="v-lang" style="display:block;margin-top:6px;padding:11px 12px;border:1px solid var(--panel-line);border-radius:10px;background:var(--panel);color:var(--ink);font:inherit;font-size:15px">
-              <option value="en-US" selected>English</option>
-              <option value="fa-IR">فارسی (Persian)</option>
-            </select>
-          </label>
-          <button class="btn primary voice-rec-btn" type="button" id="v-record">Record a voice message for AVA</button>
-          <button class="btn ghost" type="button" id="v-stop" disabled>Stop recording</button>
-          <span class="voice-status" id="v-status" aria-live="polite">Not recording</span>
-          <span class="voice-timer" id="v-timer"></span>
-        </div>
-        <div class="voice-result" id="v-result" hidden>
-          <audio id="v-audio" controls preload="metadata"></audio>
-          <div class="voice-actions">
-            <a class="btn primary" id="v-download" href="#" download="ava-voice-message.webm">Download voice message</a>
-            <button class="btn ghost" type="button" id="v-rerecord">Re-record</button>
-          </div>
-          <p class="voice-note">Voice message ready. Download it, copy the message above, and attach the audio file in your AVA chat — the message text notes that a voice message is attached. Nothing is sent from this page automatically.</p>
-        </div>
-        <p class="voice-stt" id="v-stt-note">Speech-to-text runs in your browser where it is supported (Chrome and Edge). If it is not available, the recording and download still work — and you can type the key point in Details.</p>
-      </div>
-      <div class="talk-actions">
-        <button class="btn primary" type="button" id="m-copy">Copy message for AVA</button>
-        <span class="hint">Then paste it into your AVA chat — that's the connection. Nothing here is sent automatically.</span>
-      </div>
-    </div>
-    </details>
-  </div>
-</section>
 
 <section id="call-list">
   <div class="wrap">
@@ -4301,95 +4057,154 @@
   </div>
 </section>
 
-<section id="my-activity">
+<section id="script-builder">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">My activity</span><h2>What you've done in this hub — on this device</h2></span></summary>
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Call script builder</span><h2>Build your call script — pick the business, get the words</h2></span></summary>
     <div class="sec-head">
-      <details class="how"><summary>How it works</summary><p>Every action you take in this hub — call outcomes you log, scripts and proposals you build, payment links and texts you copy — is recorded here with your name and the time. The log lives on this device only; nothing leaves it until you copy the log and send it to AVA or Zhaleh yourself.</p></details>
+      <details class="how"><summary>How it works</summary><p>Tell this page who you're calling and what kind of call it is, and it writes you a complete call script: a warm opening, a 30-second pitch written for that kind of business, the demo-line invitation, the free-trial close, answers to the three pushbacks you'll hear most, and a clean ending. The script is a guide, not a teleprompter — edit it, make it sound like you, then call. Everything in it is true and safe to say: official prices only, no promised features, no discounts beyond official policy.</p></details>
     </div>
     <div class="box">
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
-        <button class="btn ghost" type="button" id="my-log-copy">Copy my log</button>
-        <p class="fineprint" style="margin:0">Send the copied log to AVA or Zhaleh so your work lands on the shared record.</p>
-      </div>
-      <ul class="activity-list" id="activity-list"></ul>
-      <p class="fineprint" id="activity-empty">Nothing logged yet on this device.</p>
-    </div>
-    </details>
-  </div>
-</section>
-
-<section class="soft" id="research">
-  <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Research queue</span><h2>Businesses to work on</h2></span></summary>
-    <div class="sec-head">
-      <p>Businesses NexAIS is researching next. Each one showed a live signal AVA can fix — most of them a hiring ad for the very work AVA supports. Add your own finds with the form below; when a business is ready, its Build dossier button loads it into the proposal generator with its known details filled in.</p>
-    </div>
-    <p class="progress-line" id="rq-count"></p>
-    <div id="rq-list"></div>
-    <div class="box" style="margin-top:22px">
-      <h3 style="margin-bottom:14px">Add a business</h3>
-      <form class="gen-form" id="rq-form">
+      <form class="gen-form" id="cs-form" style="margin-top:6px">
         <label>Business name *
-          <input type="text" id="rq-name" required placeholder="e.g. Charger Logistics" />
+          <input type="text" id="cs-biz" required placeholder="e.g. Bella Notte Ristorante" />
         </label>
-        <label>City / area
-          <input type="text" id="rq-city" placeholder="e.g. Brampton" />
-        </label>
-        <label>Vertical
-          <select id="rq-vertical">
-            <option value="restaurant">Restaurant / venue</option>
-            <option value="transport" selected>Transport — trucking &amp; logistics</option>
-            <option value="clinic">Clinic / spa</option>
-            <option value="other">Other service business</option>
+        <label>Business type
+          <select id="cs-type">
+            <option value="restaurant" selected>Restaurant</option>
+            <option value="clinic">Clinic / dental</option>
+            <option value="salon">Salon / spa</option>
+            <option value="hvac">HVAC</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="auto">Auto service</option>
+            <option value="law">Law office</option>
+            <option value="realestate">Real estate</option>
+            <option value="trades">Other trades / services</option>
           </select>
         </label>
-        <label>Website
-          <input type="text" id="rq-web" placeholder="e.g. bellanotte.ca" />
+        <label>Contact person's name (optional)
+          <input type="text" id="cs-contact" placeholder="e.g. Maria Rossi" />
         </label>
-        <label>Phone
-          <input type="tel" id="rq-phone" placeholder="e.g. (905) 555-0123" />
+        <label>Call scenario
+          <select id="cs-scenario">
+            <option value="first" selected>First call — new business</option>
+            <option value="followup">Follow-up call</option>
+            <option value="demo">Demo invitation</option>
+            <option value="close">Trial-offer close</option>
+          </select>
         </label>
-        <label>Note — the signal you noticed
-          <input type="text" id="rq-note" placeholder="e.g. Hiring a dispatcher right now" />
+        <label>Your name (partner) *
+          <input type="text" id="cs-partner" required placeholder="e.g. Poorya Rahmati" />
+        </label>
+        <label>Your referral code (optional)
+          <input type="text" id="cs-code" placeholder="e.g. NEX-P004" />
         </label>
         <div class="full">
-          <button class="btn primary" type="submit">Add to the research queue</button>
+          <button class="btn primary" type="submit">Build my script</button>
+          <p class="gen-error" id="cs-error">Please add the business name and your own name — the script is personalised from them.</p>
         </div>
       </form>
+    </div>
+    <div class="box" style="margin-top:18px">
+      <h3>Your call script — in English, ready to edit</h3>
+      <p>The script is always generated in English, because that's the language of the call — even if you're reading this page in Persian. Read it through, adjust anything you like in the box, and Copy takes the version you see.</p>
+      <textarea class="tpl" id="cs-out" rows="30">Fill in the business above, pick its type and the call you're making, then press “Build my script” — your complete call script appears here, ready to edit.</textarea>
+      <button class="copy-btn" type="button" data-copy="cs-out">Copy script</button>
+      <p class="fineprint">You can edit the text in the box first — Copy takes the version you see.</p>
+      <p class="fineprint">Say it like a person, not a recording — and when the call ends, log the outcome on the business's card in the Call List. An unlogged call counts as not made.</p>
     </div>
     </details>
   </div>
 </section>
 
-<section class="soft" id="ai-requests">
+<section id="close">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Partner view</span><h2>AI Research &amp; Sales Requests</h2></span></summary>
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Close the deal</span><h2>Start the trial — payment link, terms &amp; intake form</h2></span></summary>
     <div class="sec-head">
-      <p>You submit a request; the Growth engine researches it and the Sales engine decides the proposal. Your part stays simple: submit, track and execute — and log the sales outcome on every Ready request. Results flow back to Growth and Sales, so the next proposals are better than the last.</p>
+      <p>When a business says yes, everything for the close is here: pick the plan and the free-trial length, confirm the payment terms, then send the client the payment link and the intake form below. The client enters their own name, phone and card on the secure Stripe page. Nothing is charged today — the first charge lands on the day the free trial ends.</p>
     </div>
-    <h3 style="margin-bottom:14px">Research Requests</h3>
-    <div id="rr-list"></div>
-    <div class="box" style="margin-top:22px">
-      <h3 style="margin-bottom:8px">+ New Research Request</h3>
-      <p style="color:var(--ink-2);font-size:15px;margin-bottom:14px">Enter a company, website, industry or topic and request the analysis.</p>
-      <form class="gen-form" id="rr-form">
-        <label>Company *
-          <input type="text" id="rr-company" required placeholder="e.g. Charger Logistics" />
-        </label>
-        <label>Website
-          <input type="text" id="rr-website" placeholder="e.g. bellanotte.ca" />
-        </label>
-        <label>Industry
-          <input type="text" id="rr-industry" placeholder="e.g. Logistics" />
-        </label>
-        <label>Topic / Note
-          <input type="text" id="rr-topic" placeholder="e.g. After-hours dispatch coverage" />
-        </label>
-        <div class="full">
-          <button class="btn primary" type="submit">Submit request</button>
+    <div class="box">
+      <div class="calc">
+        <div>
+          <label>Plan
+            <select id="cl-plan">
+              <option value="starter">Starter — $197/mo</option>
+              <option value="professional" selected>Professional — $399/mo</option>
+              <option value="grow">Grow — $599/mo</option>
+            </select>
+          </label>
+          <label>Free trial length
+            <select id="cl-trial">
+              <option value="7" selected>7 days free</option>
+              <option value="14">14 days free</option>
+              <option value="30">30 days free</option>
+            </select>
+          </label>
+          <label>Payment term
+            <select id="cl-term">
+              <option value="1" selected>Monthly — no discount</option>
+              <option value="3">3 months — 1% off</option>
+              <option value="6">6 months — 3% off</option>
+              <option value="12">12 months — 5% off</option>
+            </select>
+          </label>
+          <label>Special discount % — only with written NexAIS approval
+            <input type="text" id="cl-disc" inputmode="numeric" placeholder="e.g. 10" />
+          </label>
+          <label>Referral code
+            <input type="text" id="cl-ref" placeholder="e.g. POORYA-01" />
+          </label>
+          <label class="close-check"><input type="checkbox" id="cl-setup" /><span>Include the one-time setup fee (waived for Black Friday)</span></label>
         </div>
-      </form>
+        <div class="calc-out">
+          <div class="row"><span>Plan</span><b id="cl-v-plan">Professional — $399/mo</b></div>
+          <div class="row"><span>Term discount</span><b id="cl-v-term">—</b></div>
+          <div class="row"><span>Special discount</span><b id="cl-v-spec">—</b></div>
+          <div class="row"><span>Monthly after discounts</span><b id="cl-v-monthly">$399.00</b></div>
+          <div class="row"><span>Setup fee</span><b id="cl-v-setup">Waived — Black Friday</b></div>
+          <div class="row big"><span>Due today</span><b id="cl-v-due">$0</b></div>
+        </div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <a class="btn primary" id="cl-open" href="https://buy.stripe.com/bJebJ16a4e7Dencglg8ww0j" target="_blank" rel="noopener">Open the client's payment link</a>
+        <button class="btn ghost" type="button" id="cl-copy">Copy payment link</button>
+      </div>
+      <p class="fineprint" id="cl-note">No charge today — the first charge lands on the day the free trial ends. The client enters their own name, phone and card on the Stripe page.</p>
+    </div>
+    <div class="box" style="margin-top:18px">
+      <h3>Client intake form — send it with the payment link</h3>
+      <p>Copy this form and send it to the client together with the payment link. They fill in each blank and send it back — it is everything NexAIS needs to build their AVA and prepare the agreement.</p>
+      <textarea class="tpl" id="tpl-intake" rows="32">Hi! To get your AVA set up, please complete this short form and send it back. It takes about five minutes, and it is everything we need to build your receptionist and prepare your agreement.
+
+1) Legal business name: ______________________________
+2) Business name customers know (trading name): ______________________________
+3) Business address: ______________________________
+4) Your name (the person signing): ______________________________
+5) Your title: ______________________________
+6) Email: ______________________________
+7) Phone: ______________________________
+8) Business hours: ______________________________
+9) Your services (list them, one per line):
+______________________________
+______________________________
+______________________________
+10) Prices AVA may quote to callers: ______________________________
+11) How AVA should greet your callers: ______________________________
+12) Number for urgent transfers: ______________________________
+13) Who receives booking confirmations (name + email or phone): ______________________________
+14) Languages your callers speak: ______________________________
+15) Questions callers ask most, with your answers:
+______________________________
+______________________________
+______________________________
+16) Anything AVA must never say or promise: ______________________________
+17) Website and social pages: ______________________________
+18) Your plan and trial start (Starter / Professional / Grow — 7, 14 or 30 days): ______________________________
+19) Anything else we should know: ______________________________
+
+Thank you — as soon as this comes back, we start building your AVA.
+— NexAIS</textarea>
+      <button class="copy-btn" type="button" data-copy="tpl-intake">Copy intake form</button>
+      <p class="fineprint">You can edit the text in the box first — Copy takes the version you see.</p>
     </div>
     </details>
   </div>
@@ -4502,154 +4317,357 @@
   </div>
 </section>
 
-<section id="close">
+<section id="my-activity">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Close the deal</span><h2>Start the trial — payment link, terms &amp; intake form</h2></span></summary>
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">My activity</span><h2>What you've done in this hub — on this device</h2></span></summary>
     <div class="sec-head">
-      <p>When a business says yes, everything for the close is here: pick the plan and the free-trial length, confirm the payment terms, then send the client the payment link and the intake form below. The client enters their own name, phone and card on the secure Stripe page. Nothing is charged today — the first charge lands on the day the free trial ends.</p>
+      <details class="how"><summary>How it works</summary><p>Every action you take in this hub — call outcomes you log, scripts and proposals you build, payment links and texts you copy — is recorded here with your name and the time. The log lives on this device only; nothing leaves it until you copy the log and send it to AVA or Zhaleh yourself.</p></details>
     </div>
     <div class="box">
-      <div class="calc">
-        <div>
-          <label>Plan
-            <select id="cl-plan">
-              <option value="starter">Starter — $197/mo</option>
-              <option value="professional" selected>Professional — $399/mo</option>
-              <option value="grow">Grow — $599/mo</option>
-            </select>
-          </label>
-          <label>Free trial length
-            <select id="cl-trial">
-              <option value="7" selected>7 days free</option>
-              <option value="14">14 days free</option>
-              <option value="30">30 days free</option>
-            </select>
-          </label>
-          <label>Payment term
-            <select id="cl-term">
-              <option value="1" selected>Monthly — no discount</option>
-              <option value="3">3 months — 1% off</option>
-              <option value="6">6 months — 3% off</option>
-              <option value="12">12 months — 5% off</option>
-            </select>
-          </label>
-          <label>Special discount % — only with written NexAIS approval
-            <input type="text" id="cl-disc" inputmode="numeric" placeholder="e.g. 10" />
-          </label>
-          <label>Referral code
-            <input type="text" id="cl-ref" placeholder="e.g. POORYA-01" />
-          </label>
-          <label class="close-check"><input type="checkbox" id="cl-setup" /><span>Include the one-time setup fee (waived for Black Friday)</span></label>
-        </div>
-        <div class="calc-out">
-          <div class="row"><span>Plan</span><b id="cl-v-plan">Professional — $399/mo</b></div>
-          <div class="row"><span>Term discount</span><b id="cl-v-term">—</b></div>
-          <div class="row"><span>Special discount</span><b id="cl-v-spec">—</b></div>
-          <div class="row"><span>Monthly after discounts</span><b id="cl-v-monthly">$399.00</b></div>
-          <div class="row"><span>Setup fee</span><b id="cl-v-setup">Waived — Black Friday</b></div>
-          <div class="row big"><span>Due today</span><b id="cl-v-due">$0</b></div>
-        </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:10px">
+        <button class="btn ghost" type="button" id="my-log-copy">Copy my log</button>
+        <p class="fineprint" style="margin:0">Send the copied log to AVA or Zhaleh so your work lands on the shared record.</p>
       </div>
-      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-        <a class="btn primary" id="cl-open" href="https://buy.stripe.com/bJebJ16a4e7Dencglg8ww0j" target="_blank" rel="noopener">Open the client's payment link</a>
-        <button class="btn ghost" type="button" id="cl-copy">Copy payment link</button>
-      </div>
-      <p class="fineprint" id="cl-note">No charge today — the first charge lands on the day the free trial ends. The client enters their own name, phone and card on the Stripe page.</p>
-    </div>
-    <div class="box" style="margin-top:18px">
-      <h3>Client intake form — send it with the payment link</h3>
-      <p>Copy this form and send it to the client together with the payment link. They fill in each blank and send it back — it is everything NexAIS needs to build their AVA and prepare the agreement.</p>
-      <textarea class="tpl" id="tpl-intake" rows="32">Hi! To get your AVA set up, please complete this short form and send it back. It takes about five minutes, and it is everything we need to build your receptionist and prepare your agreement.
-
-1) Legal business name: ______________________________
-2) Business name customers know (trading name): ______________________________
-3) Business address: ______________________________
-4) Your name (the person signing): ______________________________
-5) Your title: ______________________________
-6) Email: ______________________________
-7) Phone: ______________________________
-8) Business hours: ______________________________
-9) Your services (list them, one per line):
-______________________________
-______________________________
-______________________________
-10) Prices AVA may quote to callers: ______________________________
-11) How AVA should greet your callers: ______________________________
-12) Number for urgent transfers: ______________________________
-13) Who receives booking confirmations (name + email or phone): ______________________________
-14) Languages your callers speak: ______________________________
-15) Questions callers ask most, with your answers:
-______________________________
-______________________________
-______________________________
-16) Anything AVA must never say or promise: ______________________________
-17) Website and social pages: ______________________________
-18) Your plan and trial start (Starter / Professional / Grow — 7, 14 or 30 days): ______________________________
-19) Anything else we should know: ______________________________
-
-Thank you — as soon as this comes back, we start building your AVA.
-— NexAIS</textarea>
-      <button class="copy-btn" type="button" data-copy="tpl-intake">Copy intake form</button>
-      <p class="fineprint">You can edit the text in the box first — Copy takes the version you see.</p>
+      <ul class="activity-list" id="activity-list"></ul>
+      <p class="fineprint" id="activity-empty">Nothing logged yet on this device.</p>
     </div>
     </details>
   </div>
 </section>
 
-<section id="script-builder">
+<div class="reference-group">
+<div class="reference-divider" id="reference">
   <div class="wrap">
-    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Call script builder</span><h2>Build your call script — pick the business, get the words</h2></span></summary>
+    <p class="kicker">Learn & reference</p>
+    <h2>Everything else, when you need it</h2>
+    <p>Guides, rules, materials and answers — kept below the daily work.</p>
+  </div>
+</div>
+<section class="soft" id="offer">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">What you're selling</span><h2>AVA — AI that doesn't just answer. It gets work done.</h2></span></summary>
     <div class="sec-head">
-      <details class="how"><summary>How it works</summary><p>Tell this page who you're calling and what kind of call it is, and it writes you a complete call script: a warm opening, a 30-second pitch written for that kind of business, the demo-line invitation, the free-trial close, answers to the three pushbacks you'll hear most, and a clean ending. The script is a guide, not a teleprompter — edit it, make it sound like you, then call. Everything in it is true and safe to say: official prices only, no promised features, no discounts beyond official policy.</p></details>
+      <details class="how"><summary>How it works</summary><p>A missed call can be a missed customer. AVA answers in seconds, around the clock: reservations and appointments booked, phone orders taken from the business's own live menu and read back before they're placed, large parties and catering captured in full on the first call, returning customers recognized, and every booking confirmed by text. She speaks multiple languages and remembers your customers.</p></details>
+    
     </div>
-    <div class="box">
-      <form class="gen-form" id="cs-form" style="margin-top:6px">
+    <div class="grid c3">
+      <div class="box plan">
+        <span class="tag">Starter</span>
+        <p class="price">$197<small> /month</small></p>
+        <p>Receptionist only — for businesses that need every call answered.</p>
+        <ul>
+          <li>AVA answers calls 24/7</li>
+          <li>Lead capture &amp; call summaries</li>
+          <li>Text follow-up</li>
+          <li class="no">No CRM, no app</li>
+        </ul>
+      </div>
+      <div class="box plan pop">
+        <span class="pop-tag">Most businesses start here</span>
+        <span class="tag">Professional</span>
+        <p class="price">$399<small> /month</small></p>
+        <p>AVA plus the system behind her — the full front desk.</p>
+        <ul>
+          <li>Everything in Starter</li>
+          <li>CRM + app included</li>
+          <li>Reservations &amp; orders in one system</li>
+          <li>Customer history AVA remembers</li>
+        </ul>
+      </div>
+      <div class="box plan">
+        <span class="tag">Grow</span>
+        <p class="price">$599<small> /month</small></p>
+        <p>Everything in Professional, plus we run their visibility.</p>
+        <ul>
+          <li>Everything in Professional</li>
+          <li>Website design &amp; management</li>
+          <li>Instagram management</li>
+          <li>General visibility &amp; marketing services</li>
+        </ul>
+      </div>
+    </div>
+    <div class="rule-note">
+      <b>Read this before you quote anyone:</b> Restaurants always start at <b>Professional ($399/mo)</b> — Starter is never offered to a restaurant, because they need the CRM and app for reservations and orders. There is no package smaller than Starter. The only offer below Starter is the <b>7-day free trial</b> — card required upfront, charged only from day 8 if you continue. A one-time setup fee applies and varies with the size of the deployment and the number of phone lines — it is quoted by NexAIS in writing, never by you on a call.
+    </div>
+  </details>
+  </div>
+</section>
+
+<section id="earn">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Commissions</span><h2>What you earn — and how it stacks</h2></span></summary>
+    <div class="sec-head">
+      <details class="how"><summary>How it works</summary><p>On monthly AVA contracts you earn <b>30% of the first month</b>, then <b>10% of every month for the life of the contract</b>. On one-time projects — websites, films, design work — you earn <b>20% of the project value</b>, paid when the client has paid in full. Commissions are calculated on amounts actually received from the client and are paid monthly.</p></details>
+    
+    </div>
+    <div class="grid c2" style="margin-bottom:22px">
+      <details class="box acc"><summary>
+        <span class="tag">Worked example · monthly</span>
+        <h3>One Professional client — $399/mo</h3></summary>
+        <table class="ex-table">
+          <tr><th>When</th><th class="num">You earn</th></tr>
+          <tr><td>Month 1 (30% of $399)</td><td class="num">$119.70</td></tr>
+          <tr><td>Every month after (10%)</td><td class="num">$39.90 /mo</td></tr>
+          <tr class="total"><td>First 12 months, one client</td><td class="num">$558.60</td></tr>
+        </table>
+      </details>
+      <details class="box acc"><summary>
+        <span class="tag">Worked example · monthly</span>
+        <h3>One Grow client — $599/mo</h3></summary>
+        <table class="ex-table">
+          <tr><th>When</th><th class="num">You earn</th></tr>
+          <tr><td>Month 1 (30% of $599)</td><td class="num">$179.70</td></tr>
+          <tr><td>Every month after (10%)</td><td class="num">$59.90 /mo</td></tr>
+          <tr class="total"><td>First 12 months, one client</td><td class="num">$838.60</td></tr>
+        </table>
+      </details>
+    </div>
+    <details class="box acc" style="margin-bottom:22px"><summary>
+      <span class="tag">The stack effect</span>
+      <h3>Five active clients, paying you every month</h3></summary>
+      <p style="margin-bottom:12px">Recurring commission is where this becomes real income. Five Professional clients who stay subscribed pay you <b>5 × $39.90 = $199.50 every month</b> — before any new sale. Keep signing and the base keeps growing:</p>
+      <table class="ex-table">
+        <tr><th>Active clients (Professional)</th><th class="num">Your monthly recurring</th><th class="num">Per year</th></tr>
+        <tr><td>5 clients</td><td class="num">$199.50 /mo</td><td class="num">$2,394</td></tr>
+        <tr><td>10 clients</td><td class="num">$399.00 /mo</td><td class="num">$4,788</td></tr>
+        <tr><td>20 clients</td><td class="num">$798.00 /mo</td><td class="num">$9,576</td></tr>
+      </table>
+      <p class="fineprint">Plus 30% of the first month on every new contract, and 20% on one-time projects (for example, a website from $1,500 pays you $300+ once the client has paid in full). Examples assume clients stay subscribed and paying; commissions are calculated on amounts actually received.</p>
+    </details>
+    <div class="box calc">
+      <div>
+        <h3 style="margin-bottom:16px">Run your own numbers</h3>
+        <label>New clients you sign per month: <span class="val" id="c-n-lab">2</span>
+          <input type="range" id="c-n" min="1" max="10" value="2" />
+        </label>
+        <label>Plan they choose
+          <select id="c-plan">
+            <option value="197">Starter — $197/mo</option>
+            <option value="399" selected>Professional — $399/mo</option>
+            <option value="599">Grow — $599/mo</option>
+          </select>
+        </label>
+        <details class="how"><summary>How it works</summary><p class="fineprint">Assumes every client stays subscribed and paying, and each new cohort starts at the beginning of a month. Month 1 of each contract pays 30%; every month after pays 10%, for the life of the contract.</p></details>
+      </div>
+      <div class="calc-out">
+        <div class="row"><span>Your monthly recurring by month 6</span><b id="c-m6">$0</b></div>
+        <div class="row"><span>Your monthly recurring by month 12</span><b id="c-m12">$0</b></div>
+        <div class="row big"><span>Total earned in your first 12 months</span><b id="c-tot">$0</b></div>
+      </div>
+    </div>
+  </details>
+  </div>
+</section>
+
+<section class="soft" id="start">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Getting started</span><h2>From application to your first registered lead</h2></span></summary>
+    <div class="sec-head">
+      <p>Four steps and you're selling. Most partners complete them inside a week.</p>
+    
+    </div>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><h3>Apply</h3><p>Send your application with the form at the bottom of this page. Tell us your territory and the kinds of businesses you know.</p></div>
+      <div class="step"><span class="n">2</span><h3>Get your referral code</h3><p>NexAIS issues your personal referral code. It is how every introduction, demo and sale is credited to you — use it everywhere.</p></div>
+      <div class="step"><span class="n">3</span><h3>Download the sales kit</h3><p>The flyer, the demo line and the intro templates are in the Sales Kit section below. Call the demo line yourself first — know exactly what you're selling.</p></div>
+      <div class="step"><span class="n">4</span><h3>Register your first lead</h3><p>Send the lead's business name, contact and your code to <a href="mailto:info@nexais.ca">info@nexais.ca</a> before you pitch them. First registration owns the lead — see attribution below.</p></div>
+    </div>
+    <div class="grid c2" style="margin-top:22px">
+      <details class="box acc"><summary>
+        <h3>Your first 7 days</h3></summary>
+        <ul class="checklist">
+          <li><span class="box-i"></span><span><b>Day 1:</b> Apply and receive your referral code.</span></li>
+          <li><span class="box-i"></span><span><b>Day 2:</b> Call AVA on the demo line, +1 (437) 529-0400. Ask her to book a table. Time how fast she answers.</span></li>
+          <li><span class="box-i"></span><span><b>Day 3:</b> List 20 businesses you already know — restaurants, clinics, salons, trades — where the phone decides who gets the job.</span></li>
+          <li><span class="box-i"></span><span><b>Day 4:</b> Register your first 5 leads with your code before contacting any of them.</span></li>
+          <li><span class="box-i"></span><span><b>Days 5–6:</b> Make your first introductions with the kit templates. Lead with the demo line, never with price.</span></li>
+          <li><span class="box-i"></span><span><b>Day 7:</b> Follow up every introduction. Book the 10-minute demos — NexAIS runs them and closes.</span></li>
+        </ul>
+      </details>
+      <details class="box acc"><summary>
+        <h3>How attribution works</h3></summary>
+        <ul>
+          <li><b>First registration wins.</b> A lead is credited to the partner who registered it first — by the registration email and referral code.</li>
+          <li><b>Your code travels with the introduction.</b> Put it in every email, DM and referral you make, so the trail always leads back to you.</li>
+          <li><b>Duplicates resolve to the first registration.</b> If two partners register the same business, the earliest registration keeps the lead.</li>
+          <li><b>The tracker on this page is the shared record.</b> For the 54 proposals already sent, the call list below — with your outcome on each card — is the follow-up trail everyone works from. Log the outcome the moment the call ends; an unlogged call counts as not made.</li>
+        </ul>
+      </details>
+    </div>
+  </details>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Sales action plan</span><h2>The 30-day plan — sales only, starting today</h2></span></summary>
+    <div class="sec-head">
+      <details class="how"><summary>How it works</summary><p>This hub has one job for the next 30 days: turn the work already done into paying AVA clients. No new offers, no new discounts, no side projects. Every step below runs from today — Friday, October 23 — to Sunday, November 22, 2026, and feeds the same three things: calls, demos, pilots.</p></details>
+    
+    </div>
+
+    <details class="box acc" style="margin-bottom:22px"><summary>
+      <h3 style="margin-bottom:10px">Where we stand — Friday, October 23, 2026</h3></summary>
+      <ul class="rules-list" style="list-style:none;padding:0">
+        <li><b>54 proposals sent, 0 replies.</b> They went out October 20–21 and not one business has answered. The proposal was only step one — the follow-up call is the step that was missing, and it starts now.</li>
+        <li><b>The Meta ad is approved — and not launched.</b> Approved October 22, but the launch pack still has to go live. It is a Phase 2 task in the timeline below, with a date on it — not a someday item.</li>
+        <li><b>A competitor is already selling our pitch.</b> Digiparter, a Toronto AI firm, publicly offers an "AI team" at $500/month plus a $150 setup fee. AVA Professional is $399/month, live today, with a 7-day free trial — card required upfront, charged only from day 8 if you continue. We don't copy their tactics — we out-call them.</li>
+        <li><b>Our closing tools are ready.</b> The demo line is live 24/7, every card in the call list has its own opening line, and the 7-day free trial — card required upfront, charged only from day 8 if you continue — is the offer that closes. Nothing else has to be built before we sell.</li>
+      </ul>
+    </details>
+
+    <div class="box" style="margin-bottom:22px">
+      <h3 style="margin-bottom:14px">The timeline — October 23 to November 22</h3>
+      <ol class="tl">
+        <li>
+          <span class="dot">1</span>
+          <p class="when">Phase 1 · Oct 23–28</p>
+          <h3>Work the warm list first</h3>
+          <details class="phase-more">
+            <summary>Phase details</summary>
+            <p>Start with the Priority 1 cards in the call list below — the named decision-makers, plus the two form submissions that still need the full PDF sent. Call blocks are Tuesday and Wednesday, 2:00–4:00 PM. Maximum two attempts per business; on the second attempt, leave the voicemail script and stop. Log the outcome on the card the moment you hang up.</p>
+          </details>
+          <p class="target"><b>Target:</b> every Priority 1 business attempted · at least 10 cards end with a decision-maker conversation or a captured name + direct email.</p>
+        </li>
+        <li>
+          <span class="dot">2</span>
+          <p class="when">Phase 2 · Oct 29 – Nov 4</p>
+          <h3>Demos, pilots — and the ad goes live</h3>
+          <details class="phase-more">
+            <summary>Phase details</summary>
+            <p>Run every 10-minute demo booked in Phase 1, and offer the 7-day free trial — card required upfront, charged only from day 8 if you continue — to every prospect who hears AVA and still hesitates. The approved Meta ad launches this week: AVA prepares the full launch pack, Zhaleh gives the final go, and the ad points at one thing only — calling the demo line. Keep working any card that asked for a callback.</p>
+          </details>
+          <p class="target"><b>Target:</b> at least 8 demos held · at least 4 pilots started · Meta ad live.</p>
+        </li>
+        <li>
+          <span class="dot">3</span>
+          <p class="when">Phase 3 · Nov 5–11</p>
+          <h3>Second wave, new doors</h3>
+          <details class="phase-more">
+            <summary>Phase details</summary>
+            <p>Work the Priority 2 and 3 cards the same way — two attempts, everything logged. Re-send the full package to every direct email captured in wave one. Each partner also registers 10 new businesses from their own network before pitching any of them, and runs the DM and Alignable introductions from the Sales Kit. First registration still owns the lead.</p>
+          </details>
+          <p class="target"><b>Target:</b> all 54 businesses attempted · 10 new registered leads per partner.</p>
+        </li>
+        <li>
+          <span class="dot">4</span>
+          <p class="when">Phase 4 · Nov 12–18</p>
+          <h3>Pilots decide — first contracts</h3>
+          <details class="phase-more">
+            <summary>Phase details</summary>
+            <p>Every pilot gets its review call on day 7: what AVA answered, what she booked, what the owner heard on their own line. NexAIS quotes the one-time setup fee in writing; partners never quote it. Signed clients move to onboarding, and the partner logs the contract on the business's card so the commission trail is complete.</p>
+          </details>
+          <p class="target"><b>Target:</b> every pilot has a decision · first AVA contracts signed.</p>
+        </li>
+        <li>
+          <span class="dot">5</span>
+          <p class="when">Phase 5 · Nov 19–22</p>
+          <h3>Review with AVA — keep what sold</h3>
+          <details class="phase-more">
+            <summary>Phase details</summary>
+            <p>Send AVA the 30-day results from the panel below and review them together: calls, demos, the ad, the DMs — honestly, channel by channel. Kill what produced nothing, build the next 30 days around what produced pilots, and decide every AVA development request collected along the way in this same review.</p>
+          </details>
+          <p class="target"><b>Target:</b> one written review · a decision on every open AVA request · next 30-day targets set.</p>
+        </li>
+      </ol>
+    </div>
+
+    <div class="grid c2" style="margin-bottom:22px">
+      <details class="box acc"><summary>
+        <h3>The daily rhythm</h3></summary>
+        <ul class="checklist">
+          <li><span class="box-i"></span><span><b>08:00 — open this page.</b> Check today's phase and your call block. Decisions and updates from AVA land here.</span></li>
+          <li><span class="box-i"></span><span><b>2:00–4:00 PM Tue–Thu — call block.</b> Cards in priority order, the script open beside you, outcome logged before the next dial.</span></li>
+          <li><span class="box-i"></span><span><b>After every call — log it.</b> Outcome and notes on the card, immediately. An unlogged call counts as not made.</span></li>
+          <li><span class="box-i"></span><span><b>End of day — report to AVA.</b> Copy the call log in the Call List section, or use the report button in the panel below.</span></li>
+        </ul>
+      </details>
+      <details class="box acc"><summary>
+        <h3>Focus rules — sales, and only sales</h3></summary>
+        <ul>
+          <li><b>One lead offer: AVA.</b> Contracts and pilots first. Websites and films are follow-on work through NexAIS — never the opening pitch of this plan.</li>
+          <li><b>Prices never move.</b> No discounts, no smaller package, no setup number from you. The 7-day free trial — card required upfront, charged only from day 8 if you continue — is the only concession.</li>
+          <li><b>A missing feature is a request, not a promise.</b> If a prospect needs something AVA doesn't do today, log it in the panel below — never say "we'll add that" on a call.</li>
+          <li><b>If it doesn't end in a call, a demo, a pilot or a contract, it's out.</b> That test decides how every day in this plan is spent.</li>
+        </ul>
+      </details>
+    </div>
+
+  </details>
+  </div>
+</section>
+
+<section class="soft" id="research">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Research queue</span><h2>Businesses to work on</h2></span></summary>
+    <div class="sec-head">
+      <p>Businesses NexAIS is researching next. Each one showed a live signal AVA can fix — most of them a hiring ad for the very work AVA supports. Add your own finds with the form below; when a business is ready, its Build dossier button loads it into the proposal generator with its known details filled in.</p>
+    </div>
+    <p class="progress-line" id="rq-count"></p>
+    <div id="rq-list"></div>
+    <div class="box" style="margin-top:22px">
+      <h3 style="margin-bottom:14px">Add a business</h3>
+      <form class="gen-form" id="rq-form">
         <label>Business name *
-          <input type="text" id="cs-biz" required placeholder="e.g. Bella Notte Ristorante" />
+          <input type="text" id="rq-name" required placeholder="e.g. Charger Logistics" />
         </label>
-        <label>Business type
-          <select id="cs-type">
-            <option value="restaurant" selected>Restaurant</option>
-            <option value="clinic">Clinic / dental</option>
-            <option value="salon">Salon / spa</option>
-            <option value="hvac">HVAC</option>
-            <option value="plumbing">Plumbing</option>
-            <option value="auto">Auto service</option>
-            <option value="law">Law office</option>
-            <option value="realestate">Real estate</option>
-            <option value="trades">Other trades / services</option>
+        <label>City / area
+          <input type="text" id="rq-city" placeholder="e.g. Brampton" />
+        </label>
+        <label>Vertical
+          <select id="rq-vertical">
+            <option value="restaurant">Restaurant / venue</option>
+            <option value="transport" selected>Transport — trucking &amp; logistics</option>
+            <option value="clinic">Clinic / spa</option>
+            <option value="other">Other service business</option>
           </select>
         </label>
-        <label>Contact person's name (optional)
-          <input type="text" id="cs-contact" placeholder="e.g. Maria Rossi" />
+        <label>Website
+          <input type="text" id="rq-web" placeholder="e.g. bellanotte.ca" />
         </label>
-        <label>Call scenario
-          <select id="cs-scenario">
-            <option value="first" selected>First call — new business</option>
-            <option value="followup">Follow-up call</option>
-            <option value="demo">Demo invitation</option>
-            <option value="close">Trial-offer close</option>
-          </select>
+        <label>Phone
+          <input type="tel" id="rq-phone" placeholder="e.g. (905) 555-0123" />
         </label>
-        <label>Your name (partner) *
-          <input type="text" id="cs-partner" required placeholder="e.g. Poorya Rahmati" />
-        </label>
-        <label>Your referral code (optional)
-          <input type="text" id="cs-code" placeholder="e.g. NEX-P004" />
+        <label>Note — the signal you noticed
+          <input type="text" id="rq-note" placeholder="e.g. Hiring a dispatcher right now" />
         </label>
         <div class="full">
-          <button class="btn primary" type="submit">Build my script</button>
-          <p class="gen-error" id="cs-error">Please add the business name and your own name — the script is personalised from them.</p>
+          <button class="btn primary" type="submit">Add to the research queue</button>
         </div>
       </form>
     </div>
-    <div class="box" style="margin-top:18px">
-      <h3>Your call script — in English, ready to edit</h3>
-      <p>The script is always generated in English, because that's the language of the call — even if you're reading this page in Persian. Read it through, adjust anything you like in the box, and Copy takes the version you see.</p>
-      <textarea class="tpl" id="cs-out" rows="30">Fill in the business above, pick its type and the call you're making, then press “Build my script” — your complete call script appears here, ready to edit.</textarea>
-      <button class="copy-btn" type="button" data-copy="cs-out">Copy script</button>
-      <p class="fineprint">You can edit the text in the box first — Copy takes the version you see.</p>
-      <p class="fineprint">Say it like a person, not a recording — and when the call ends, log the outcome on the business's card in the Call List. An unlogged call counts as not made.</p>
+    </details>
+  </div>
+</section>
+
+<section class="soft" id="ai-requests">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Partner view</span><h2>AI Research &amp; Sales Requests</h2></span></summary>
+    <div class="sec-head">
+      <p>You submit a request; the Growth engine researches it and the Sales engine decides the proposal. Your part stays simple: submit, track and execute — and log the sales outcome on every Ready request. Results flow back to Growth and Sales, so the next proposals are better than the last.</p>
+    </div>
+    <h3 style="margin-bottom:14px">Research Requests</h3>
+    <div id="rr-list"></div>
+    <div class="box" style="margin-top:22px">
+      <h3 style="margin-bottom:8px">+ New Research Request</h3>
+      <p style="color:var(--ink-2);font-size:15px;margin-bottom:14px">Enter a company, website, industry or topic and request the analysis.</p>
+      <form class="gen-form" id="rr-form">
+        <label>Company *
+          <input type="text" id="rr-company" required placeholder="e.g. Charger Logistics" />
+        </label>
+        <label>Website
+          <input type="text" id="rr-website" placeholder="e.g. bellanotte.ca" />
+        </label>
+        <label>Industry
+          <input type="text" id="rr-industry" placeholder="e.g. Logistics" />
+        </label>
+        <label>Topic / Note
+          <input type="text" id="rr-topic" placeholder="e.g. After-hours dispatch coverage" />
+        </label>
+        <div class="full">
+          <button class="btn primary" type="submit">Submit request</button>
+        </div>
+      </form>
     </div>
     </details>
   </div>
@@ -4802,6 +4820,65 @@ nexais.ca</textarea>
   </div>
 </section>
 
+<section class="soft" id="talk">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Connected to AVA</span><h2>Talk to AVA — from inside this page</h2></span></summary>
+    <div class="box">
+      <details class="how"><summary>How it works</summary><p style="color:var(--ink-2);font-size:15px;margin-top:6px">This page is a fixed snapshot, so it cannot send anything by itself — it is wired to AVA through you. Pick a message type, fill in the fields, and the panel writes the exact message. Copy it, paste it into your AVA chat, and AVA picks the work up from there: answers, follow-ups, and decisions come back in the chat and are folded into this page's next update. AVA development requests travel the same road — they are decided by Zhaleh and AVA together, and only then does anyone tell a prospect. Talking counts the same as typing: press the big voice button below, speak in English or Persian, check the words that appear, then copy the message — or download your recording and attach it in the chat.</p></details>
+      <form class="talk-form" id="talk-form">
+        <label>Message type
+          <select id="m-type">
+            <option value="daily">Daily check-in — what's on today</option>
+            <option value="report">Report today's results</option>
+            <option value="lead">Register a new lead</option>
+            <option value="dev">AVA development request</option>
+            <option value="question">Question or blocker</option>
+          </select>
+        </label>
+        <label>Business (if relevant)
+          <input type="text" id="m-biz" placeholder="e.g. Sassafraz" />
+        </label>
+        <label class="full">Details
+          <textarea id="m-details" rows="3" placeholder="e.g. The owner asked if AVA can take deposits — is that real today?"></textarea>
+        </label>
+        <label class="full">Your message to AVA
+          <textarea id="m-preview" class="msg-preview" rows="7" readonly></textarea>
+        </label>
+      </form>
+      <div class="voice-box" id="voice-box">
+        <h3>Talk to AVA — don't type</h3>
+        <p class="voice-desc">Sometimes you need to talk, not write. Press the big button, speak in English or Persian, and your words fill the Details box above as text you can check and edit. Your voice is also saved as a recording: download it and attach it in your AVA chat together with the copied message.</p>
+        <div class="voice-controls">
+          <label style="font-weight:700;font-size:14px">Voice language
+            <select id="v-lang" style="display:block;margin-top:6px;padding:11px 12px;border:1px solid var(--panel-line);border-radius:10px;background:var(--panel);color:var(--ink);font:inherit;font-size:15px">
+              <option value="en-US" selected>English</option>
+              <option value="fa-IR">فارسی (Persian)</option>
+            </select>
+          </label>
+          <button class="btn primary voice-rec-btn" type="button" id="v-record">Record a voice message for AVA</button>
+          <button class="btn ghost" type="button" id="v-stop" disabled>Stop recording</button>
+          <span class="voice-status" id="v-status" aria-live="polite">Not recording</span>
+          <span class="voice-timer" id="v-timer"></span>
+        </div>
+        <div class="voice-result" id="v-result" hidden>
+          <audio id="v-audio" controls preload="metadata"></audio>
+          <div class="voice-actions">
+            <a class="btn primary" id="v-download" href="#" download="ava-voice-message.webm">Download voice message</a>
+            <button class="btn ghost" type="button" id="v-rerecord">Re-record</button>
+          </div>
+          <p class="voice-note">Voice message ready. Download it, copy the message above, and attach the audio file in your AVA chat — the message text notes that a voice message is attached. Nothing is sent from this page automatically.</p>
+        </div>
+        <p class="voice-stt" id="v-stt-note">Speech-to-text runs in your browser where it is supported (Chrome and Edge). If it is not available, the recording and download still work — and you can type the key point in Details.</p>
+      </div>
+      <div class="talk-actions">
+        <button class="btn primary" type="button" id="m-copy">Copy message for AVA</button>
+        <span class="hint">Then paste it into your AVA chat — that's the connection. Nothing here is sent automatically.</span>
+      </div>
+    </div>
+    </details>
+  </div>
+</section>
+
 <section id="faq">
   <div class="wrap">
     <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Partner FAQ</span><h2>Questions every new partner asks</h2></span></summary>
@@ -4855,6 +4932,7 @@ nexais.ca</textarea>
   </details>
   </div>
 </section>
+</div>
 
 <footer>
   <div class="wrap cols">
@@ -4902,6 +4980,24 @@ Object.assign(window.FA, {
   "Sales kit": "کیت فروش",
   "FAQ": "سؤالات متداول",
   "Join": "عضویت",
+  "Start here": "از اینجا شروع کنید",
+  "What do you want to do?": "می‌خواهید چه کار کنید؟",
+  "Pick the next step — the page takes you straight there.": "قدم بعدی را انتخاب کنید — صفحه شما را مستقیم به همان‌جا می‌برد.",
+  "Make calls": "تماس بگیرید",
+  "Open your business list and work through the calls.": "فهرست کسب‌وکارها را باز کنید و تماس‌ها را یکی‌یکی انجام دهید.",
+  "Build a call script": "اسکریپت تماس بسازید",
+  "Get the words for this business and this call.": "متن مناسب این کسب‌وکار و این تماس را آماده کنید.",
+  "Close a deal": "معامله را ببندید",
+  "Close the Deal": "بستن معامله",
+  "Start the free trial and send the payment link.": "دورهٔ آزمایشی رایگان را شروع کنید و لینک پرداخت را بفرستید.",
+  "Build a proposal": "پروپوزال بسازید",
+  "Create a package for a business that is not on the list.": "برای کسب‌وکاری که در فهرست نیست، یک پکیج بسازید.",
+  "My activity": "فعالیت من",
+  "See and copy the work logged on this device.": "کارهای ثبت‌شده روی این دستگاه را ببینید و کپی کنید.",
+  "More": "بیشتر",
+  "Learn & reference": "یادگیری و مرجع",
+  "Everything else, when you need it": "هر چیز دیگری، هر وقت لازم داشتید",
+  "Guides, rules, materials and answers — kept below the daily work.": "راهنماها، قوانین، مواد فروش و پاسخ‌ها — پایین‌تر از کارهای روزانه نگه داشته شده‌اند.",
   "Sell the receptionist that": "منشی‌ای را بفروشید که",
   "never misses a call.": "هیچ تماسی را از دست نمی‌دهد.",
   "This is the working hub for everyone who markets and sells NexAIS. AVA is our AI receptionist for local businesses — she answers every call 24/7, books appointments and reservations, takes orders, and follows up by text. Your job is the introduction and the follow-up. Ours is the demo, the setup, and the close.": "این مرکز کاری همهٔ کسانی است که بازاریابی و فروش NexAIS را انجام می‌دهند. AVA منشی هوش مصنوعی ما برای کسب‌وکارهای محلی است — شبانه‌روزی به همهٔ تماس‌ها پاسخ می‌دهد، نوبت و رزرو می‌گیرد، سفارش ثبت می‌کند و با پیامک پیگیری می‌کند. کار شما معرفی و پیگیری است؛ دمو، راه‌اندازی و بستن فروش با ماست.",
