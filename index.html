@@ -323,6 +323,9 @@
     font:inherit;font-weight:800;font-size:13.5px;padding:8px 14px;border-radius:8px;cursor:pointer}
   .copy-btn:hover{border-color:var(--blue)}
   .tpl{background:var(--bg-soft);border-radius:10px;padding:14px 16px;font-size:14.5px;color:var(--ink);margin-top:10px;line-height:1.6;white-space:pre-wrap}
+  textarea.tpl{width:100%;box-sizing:border-box;border:1px solid var(--panel-line);font-family:inherit;resize:vertical;display:block}
+  .close-check{display:flex;gap:10px;align-items:flex-start;font-weight:700;font-size:14px}
+  .close-check input{margin-top:3px;width:18px;height:18px;accent-color:var(--blue);flex:none}
 
   /* proposal generator */
   .draft-banner{background:var(--warn-soft);border:1px solid var(--panel-line);border-radius:var(--radius);
@@ -568,6 +571,7 @@
       <a href="#research">Research</a>
       <a href="#ai-requests">AI Requests</a>
       <a href="#generator">Generator</a>
+      <a href="#close">Close the Deal</a>
       <a href="#scripts">Call Scripts</a>
       <a href="#kit">Sales Kit</a>
       <a href="#faq">FAQ</a>
@@ -4472,6 +4476,100 @@
   </div>
 </section>
 
+<section id="close">
+  <div class="wrap">
+    <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Close the deal</span><h2>Start the trial — payment link, terms &amp; intake form</h2></span></summary>
+    <div class="sec-head">
+      <p>When a business says yes, everything for the close is here: pick the plan and the free-trial length, confirm the payment terms, then send the client the payment link and the intake form below. The client enters their own name, phone and card on the secure Stripe page. Nothing is charged today — the first charge lands on the day the free trial ends.</p>
+    </div>
+    <div class="box">
+      <div class="calc">
+        <div>
+          <label>Plan
+            <select id="cl-plan">
+              <option value="starter">Starter — $197/mo</option>
+              <option value="professional" selected>Professional — $399/mo</option>
+              <option value="grow">Grow — $599/mo</option>
+            </select>
+          </label>
+          <label>Free trial length
+            <select id="cl-trial">
+              <option value="7" selected>7 days free</option>
+              <option value="14">14 days free</option>
+              <option value="30">30 days free</option>
+            </select>
+          </label>
+          <label>Payment term
+            <select id="cl-term">
+              <option value="1" selected>Monthly — no discount</option>
+              <option value="3">3 months — 1% off</option>
+              <option value="6">6 months — 3% off</option>
+              <option value="12">12 months — 5% off</option>
+            </select>
+          </label>
+          <label>Special discount % — only with written NexAIS approval
+            <input type="text" id="cl-disc" inputmode="numeric" placeholder="e.g. 10" />
+          </label>
+          <label>Referral code
+            <input type="text" id="cl-ref" placeholder="e.g. POORYA-01" />
+          </label>
+          <label class="close-check"><input type="checkbox" id="cl-setup" /><span>Include the one-time setup fee (waived for Black Friday)</span></label>
+        </div>
+        <div class="calc-out">
+          <div class="row"><span>Plan</span><b id="cl-v-plan">Professional — $399/mo</b></div>
+          <div class="row"><span>Term discount</span><b id="cl-v-term">—</b></div>
+          <div class="row"><span>Special discount</span><b id="cl-v-spec">—</b></div>
+          <div class="row"><span>Monthly after discounts</span><b id="cl-v-monthly">$399.00</b></div>
+          <div class="row"><span>Setup fee</span><b id="cl-v-setup">Waived — Black Friday</b></div>
+          <div class="row big"><span>Due today</span><b id="cl-v-due">$0</b></div>
+        </div>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <a class="btn primary" id="cl-open" href="https://buy.stripe.com/bJebJ16a4e7Dencglg8ww0j" target="_blank" rel="noopener">Open the client's payment link</a>
+        <button class="btn ghost" type="button" id="cl-copy">Copy payment link</button>
+      </div>
+      <p class="fineprint" id="cl-note">No charge today — the first charge lands on the day the free trial ends. The client enters their own name, phone and card on the Stripe page.</p>
+    </div>
+    <div class="box" style="margin-top:18px">
+      <h3>Client intake form — send it with the payment link</h3>
+      <p>Copy this form and send it to the client together with the payment link. They fill in each blank and send it back — it is everything NexAIS needs to build their AVA and prepare the agreement.</p>
+      <textarea class="tpl" id="tpl-intake" rows="32">Hi! To get your AVA set up, please complete this short form and send it back. It takes about five minutes, and it is everything we need to build your receptionist and prepare your agreement.
+
+1) Legal business name: ______________________________
+2) Business name customers know (trading name): ______________________________
+3) Business address: ______________________________
+4) Your name (the person signing): ______________________________
+5) Your title: ______________________________
+6) Email: ______________________________
+7) Phone: ______________________________
+8) Business hours: ______________________________
+9) Your services (list them, one per line):
+______________________________
+______________________________
+______________________________
+10) Prices AVA may quote to callers: ______________________________
+11) How AVA should greet your callers: ______________________________
+12) Number for urgent transfers: ______________________________
+13) Who receives booking confirmations (name + email or phone): ______________________________
+14) Languages your callers speak: ______________________________
+15) Questions callers ask most, with your answers:
+______________________________
+______________________________
+______________________________
+16) Anything AVA must never say or promise: ______________________________
+17) Website and social pages: ______________________________
+18) Your plan and trial start (Starter / Professional / Grow — 7, 14 or 30 days): ______________________________
+19) Anything else we should know: ______________________________
+
+Thank you — as soon as this comes back, we start building your AVA.
+— NexAIS</textarea>
+      <button class="copy-btn" type="button" data-copy="tpl-intake">Copy intake form</button>
+      <p class="fineprint">You can edit the text in the box first — Copy takes the version you see.</p>
+    </div>
+    </details>
+  </div>
+</section>
+
 <section class="soft" id="scripts">
   <div class="wrap">
     <details class="sec-panel"><summary><span class="sec-sum-text"><span class="kicker">Call scripts</span><h2>The master script — word for word</h2></span></summary>
@@ -4556,7 +4654,7 @@
     
     </div>
     <div class="grid c2">
-      <details class="box acc"><summary><h3>Prices are official and fixed</h3></summary><p>Starter $197 · Professional $399 · Grow $599 per month. Never discount, never negotiate, never invent a smaller package. The 7-day free trial — card required upfront, charged only from day 8 if you continue — is the only offer below Starter — use it instead of a discount.</p></details>
+      <details class="box acc"><summary><h3>Prices are official — discounts are policy, not negotiation</h3></summary><p>Starter $197 · Professional $399 · Grow $599 per month. The list prices never change, and they are never negotiated one-to-one or replaced with an invented package. The only discounts are the official ones, applied in the Close the Deal section: paying by term — 3 months saves 1%, 6 months saves 3%, 12 months saves 5%; monthly billing has no discount — plus a special discount only when NexAIS has approved it in writing for that client. Anything beyond that is not a discount we offer.</p></details>
       <details class="box acc"><summary><h3>Never quote a setup fee</h3></summary><p>The one-time setup fee varies with deployment size and phone lines. NexAIS quotes it in writing after the demo — only in writing, only by NexAIS. On a call, say exactly that.</p></details>
       <details class="box acc"><summary><h3>Never promise a feature AVA doesn't have</h3></summary><p>If you're not sure she does it, don't say she does. Use the confidence list in the Call Scripts section — everything there is real and in the proposals. For anything else: "I'll confirm that in writing for you."</p></details>
       <details class="box acc"><summary><h3>Only approved materials</h3></summary><p>Use the flyer, templates and wording from this hub — nothing self-made with the NexAIS or AVA name, and never a different image of AVA than the official flyer portrait.</p></details>
@@ -4591,13 +4689,14 @@
       <details class="box acc"><summary>
         <h3>Intro template — DM / text</h3></summary>
         <p>Short, personal, no prices in the first outreach — lead with the missed call and the demo.</p>
-        <div class="tpl" id="tpl-dm">Hi [Name], I'm [Your Name] with NexAIS here in Richmond Hill. We built AVA, an AI receptionist who answers a business's phone 24/7 — bookings, orders, questions — so no customer is ever lost to a missed call. You don't have to take my word for it: she's live at (437) 529-0400. Call her and ask her to book something. If she impresses you, I'll set up a 7-day free trial on your own line — card required upfront, charged only from day 8 if you continue. — [Your Name], code [YOUR CODE]</div>
+        <textarea class="tpl" id="tpl-dm" rows="7" aria-label="Intro template — DM / text">Hi [Name], I'm [Your Name] with NexAIS here in Richmond Hill. We built AVA, an AI receptionist who answers a business's phone 24/7 — bookings, orders, questions — so no customer is ever lost to a missed call. You don't have to take my word for it: she's live at (437) 529-0400. Call her and ask her to book something. If she impresses you, I'll set up a 7-day free trial on your own line — card required upfront, charged only from day 8 if you continue. — [Your Name], code [YOUR CODE]</textarea>
         <button class="copy-btn" type="button" data-copy="tpl-dm">Copy template</button>
+        <p class="fineprint">You can edit the text in the box first — Copy takes the version you see.</p>
       </details>
       <details class="box acc"><summary>
         <h3>Intro template — email</h3></summary>
         <p>Subject: <b>The call [Business] missed last night</b></p>
-        <div class="tpl" id="tpl-email">Hi [Name],
+        <textarea class="tpl" id="tpl-email" rows="17" aria-label="Intro template — email">Hi [Name],
 
 When a customer calls [Business] after hours, during the rush, or while your team is with another guest — who answers? For most businesses, nobody does, and that caller phones the next name on the list.
 
@@ -4609,8 +4708,9 @@ Ten minutes this week and I'll show you exactly how she'd sound at [Business].
 
 [Your Name]
 NexAIS Sales Partner · Referral code [YOUR CODE]
-nexais.ca</div>
+nexais.ca</textarea>
         <button class="copy-btn" type="button" data-copy="tpl-email">Copy template</button>
+        <p class="fineprint">You can edit the text in the box first — Copy takes the version you see.</p>
       </details>
     </div>
   </details>
@@ -4630,7 +4730,7 @@ nexais.ca</div>
     <details class="faq"><summary>Can I also earn on ZhioStudio websites and films?</summary>
       <p>Yes. NexAIS also sells websites and creative production (through ZhioStudio) — restaurant sites from $1,500, cinematic sites at $3,500, AI 3D menu films from $197. Those are one-time projects: you earn 20% of the project value, paid when the client has paid in full. The Grow plan already bundles website and Instagram management for AVA clients.</p></details>
     <details class="faq"><summary>A prospect asks for a discount. What do I say?</summary>
-      <p>"Our prices are the same for every client — what I can do is start you on the 7-day free trial: card required upfront, charged only from day 8 if you continue." Prices are official and fixed; there is no discount to give, and offering one breaks the partner rules.</p></details>
+      <p>"Our prices are the same for every client — and the official term savings apply automatically when you pay by term: 3 months saves 1%, 6 months 3%, 12 months 5%. What I can do right now is start your free trial." Discounts are policy, not negotiation: never offer anything beyond the official term discounts and a special discount NexAIS has approved in writing for that client.</p></details>
     <details class="faq"><summary>What if two partners approach the same business?</summary>
       <p>The first registration owns the lead. Register before you pitch — the registration email with your code is the timestamp that settles it. For businesses already in the tracker (the 54 proposals), work through the call list and log outcomes so the trail stays clear for everyone.</p></details>
     <details class="faq"><summary>Can I use my own AVA account setup fee-free?</summary>
@@ -4993,8 +5093,6 @@ Object.assign(window.FA, {
   "Rules of the road": "قوانین مسیر",
   "How partners protect the NexAIS name": "همکاران چطور از نام NexAIS محافظت می‌کنند",
   "These aren't fine print — they're what keeps every partner's commission safe and every promise we make true.": "این‌ها ریزخط نیستند — همان چیزهایی‌اند که کمیسیون هر همکار را امن و هر قولی را که می‌دهیم واقعی نگه می‌دارند.",
-  "Prices are official and fixed": "قیمت‌ها رسمی و ثابت‌اند",
-  "Starter $197 · Professional $399 · Grow $599 per month. Never discount, never negotiate, never invent a smaller package. The 7-day free trial — card required upfront, charged only from day 8 if you continue — is the only offer below Starter — use it instead of a discount.": "Starter ‎$197 · Professional ‎$399 · Grow ‎$599 در ماه. هرگز تخفیف ندهید، هرگز چانه نزنید، هرگز پکیج کوچک‌تری نسازید. ۷ روز آزمایشی رایگان — کارت بانکی از اول ثبت می‌شود؛ برداشت فقط از روز هشتم و فقط اگر ادامه بدهید — تنها پیشنهاد پایین‌تر از Starter است — به‌جای تخفیف از آن استفاده کنید.",
   "Never quote a setup fee": "هرگز هزینهٔ راه‌اندازی اعلام نکنید",
   "The one-time setup fee varies with deployment size and phone lines. NexAIS quotes it in writing after the demo — only in writing, only by NexAIS. On a call, say exactly that.": "هزینهٔ راه‌اندازی یک‌باره بسته به ابعاد استقرار و تعداد خطوط متفاوت است. NexAIS آن را پس از دمو کتبی اعلام می‌کند — فقط کتبی، فقط NexAIS. در تماس دقیقاً همین را بگویید.",
   "Never promise a feature AVA doesn't have": "هرگز قابلیتی را که AVA ندارد قول ندهید",
@@ -5029,7 +5127,6 @@ Object.assign(window.FA, {
   "Can I also earn on ZhioStudio websites and films?": "آیا از وب‌سایت‌ها و فیلم‌های ZhioStudio هم درآمد دارم؟",
   "Yes. NexAIS also sells websites and creative production (through ZhioStudio) — restaurant sites from $1,500, cinematic sites at $3,500, AI 3D menu films from $197. Those are one-time projects: you earn 20% of the project value, paid when the client has paid in full. The Grow plan already bundles website and Instagram management for AVA clients.": "بله. NexAIS وب‌سایت و تولید خلاقانه هم می‌فروشد (از طریق ZhioStudio) — وب‌سایت رستوران از $1,500، وب‌سایت سینمایی $3,500، فیلم‌های منوی سه‌بعدی هوش مصنوعی از $197. این‌ها پروژه‌های یک‌باره‌اند: ۲۰٪ از ارزش پروژه می‌گیرید، وقتی پرداخت می‌شود که مشتری کامل پرداخت کرده باشد. پکیج Grow مدیریت وب‌سایت و اینستاگرام را برای مشتریان AVA از قبل شامل می‌شود.",
   "A prospect asks for a discount. What do I say?": "مشتری تخفیف می‌خواهد. چه بگویم؟",
-  "\"Our prices are the same for every client — what I can do is start you on the 7-day free trial: card required upfront, charged only from day 8 if you continue.\" Prices are official and fixed; there is no discount to give, and offering one breaks the partner rules.": "«قیمت‌های ما برای همهٔ مشتری‌ها یکی است — کاری که می‌توانم بکنم این است که شما را با ۷ روز آزمایشی رایگان شروع کنم: کارت بانکی از اول ثبت می‌شود؛ برداشت فقط از روز هشتم و فقط اگر ادامه بدهید.» قیمت‌ها رسمی و ثابت‌اند؛ تخفیفی برای دادن وجود ندارد و پیشنهادش قوانین همکاری را می‌شکند.",
   "What if two partners approach the same business?": "اگر دو همکار به یک کسب‌وکار مراجعه کنند چه می‌شود؟",
   "The first registration owns the lead. Register before you pitch — the registration email with your code is the timestamp that settles it. For businesses already in the tracker (the 54 proposals), work through the call list and log outcomes so the trail stays clear for everyone.": "اولین ثبت مالک لید است. پیش از ارائه ثبت کنید — ایمیل ثبت با کد شما همان مهر زمانی است که موضوع را حل می‌کند. برای کسب‌وکارهایی که از قبل در ترکر هستند (۵۴ پروپوزال)، از لیست تماس کار کنید و نتیجه‌ها را ثبت کنید تا ردّ کار برای همه روشن بماند.",
   "Can I use my own AVA account setup fee-free?": "آیا می‌توانم حساب AVA خودم را بدون هزینهٔ راه‌اندازی داشته باشم؟",
@@ -5248,7 +5345,7 @@ Object.assign(window.FA, {
   Array.prototype.forEach.call(document.querySelectorAll("[data-copy]"), function(btn){
     btn.addEventListener("click", function(){
       var el = document.getElementById(btn.getAttribute("data-copy"));
-      if (el) copyText(el.textContent, btn, tt("Copied ✓", "کپی شد ✓"));
+      if (el) copyText((el.tagName === "TEXTAREA" || el.tagName === "INPUT") ? el.value : el.textContent, btn, tt("Copied ✓", "کپی شد ✓"));
     });
   });
 
@@ -7173,6 +7270,112 @@ Object.assign(window.FA, {
     }
     if (langSel && window.LANG === "fa") langSel.value = "fa-IR";
   });
+})();
+</script>
+<script>
+/* ================= close the deal — FA strings + payment-link / terms / intake logic ================= */
+Object.assign(window.FA, {
+  "Close the deal": "بستن معامله",
+  "Start the trial — payment link, terms & intake form": "شروع دورهٔ آزمایشی — لینک پرداخت، شرایط و فرم اطلاعات",
+  "When a business says yes, everything for the close is here: pick the plan and the free-trial length, confirm the payment terms, then send the client the payment link and the intake form below. The client enters their own name, phone and card on the secure Stripe page. Nothing is charged today — the first charge lands on the day the free trial ends.": "وقتی یک کسب‌وکار بله می‌گوید، همهٔ چیزهای لازم برای بستن معامله اینجاست: طرح و مدت دورهٔ آزمایشی رایگان را انتخاب کنید، شرایط پرداخت را تأیید کنید، بعد لینک پرداخت و فرم اطلاعات زیر را برای مشتری بفرستید. مشتری نام، تلفن و کارت خودش را در صفحهٔ امن Stripe وارد می‌کند. امروز هیچ مبلغی برداشت نمی‌شود — اولین برداشت در روزی است که دورهٔ آزمایشی رایگان تمام می‌شود.",
+  "Free trial length": "مدت دورهٔ آزمایشی رایگان",
+  "Payment term": "مدت پرداخت",
+  "Special discount % — only with written NexAIS approval": "درصد تخفیف ویژه — فقط با تأیید کتبی نکس‌ای‌آی",
+  "Referral code": "کد معرف",
+  "Include the one-time setup fee (waived for Black Friday)": "هزینهٔ راه‌اندازی یک‌باره لحاظ شود (در بلک فرایدی بخشوده شده است)",
+  "7 days free": "۷ روز رایگان",
+  "14 days free": "۱۴ روز رایگان",
+  "30 days free": "۳۰ روز رایگان",
+  "Monthly — no discount": "ماهانه — بدون تخفیف",
+  "3 months — 1% off": "۳ ماهه — ۱٪ تخفیف",
+  "6 months — 3% off": "۶ ماهه — ۳٪ تخفیف",
+  "12 months — 5% off": "۱۲ ماهه — ۵٪ تخفیف",
+  "e.g. 10": "مثلاً ۱۰",
+  "e.g. POORYA-01": "مثلاً POORYA-01",
+  "Plan": "طرح",
+  "Term discount": "تخفیف مدت پرداخت",
+  "Special discount": "تخفیف ویژه",
+  "Monthly after discounts": "مبلغ ماهانه پس از تخفیف‌ها",
+  "Setup fee": "هزینهٔ راه‌اندازی",
+  "Due today": "قابل پرداخت امروز",
+  "Waived — Black Friday": "بخشوده شده — بلک فرایدی",
+  "Open the client's payment link": "باز کردن لینک پرداخت مشتری",
+  "Copy payment link": "کپی لینک پرداخت",
+  "No charge today — the first charge lands on the day the free trial ends. The client enters their own name, phone and card on the Stripe page.": "امروز هیچ برداشتی نیست — اولین برداشت در روزی است که دورهٔ آزمایشی رایگان تمام می‌شود. مشتری نام، تلفن و کارت خودش را در صفحهٔ Stripe وارد می‌کند.",
+  "Client intake form — send it with the payment link": "فرم اطلاعات مشتری — همراه لینک پرداخت بفرستید",
+  "Copy this form and send it to the client together with the payment link. They fill in each blank and send it back — it is everything NexAIS needs to build their AVA and prepare the agreement.": "این فرم را کپی کنید و همراه لینک پرداخت برای مشتری بفرستید. مشتری هر جای خالی را پر می‌کند و برمی‌گرداند — این همهٔ اطلاعاتی است که نکس‌ای‌آی برای ساخت AVA و آماده‌کردن قرارداد لازم دارد.",
+  "Copy intake form": "کپی فرم اطلاعات",
+  "You can edit the text in the box first — Copy takes the version you see.": "می‌توانید اول متن داخل کادر را ویرایش کنید — دکمهٔ کپی همان نسخه‌ای را می‌گیرد که می‌بینید.",
+  "Prices are official — discounts are policy, not negotiation": "قیمت‌ها رسمی‌اند — تخفیف‌ها سیاست‌اند، نه چانه‌زنی",
+  "Starter $197 · Professional $399 · Grow $599 per month. The list prices never change, and they are never negotiated one-to-one or replaced with an invented package. The only discounts are the official ones, applied in the Close the Deal section: paying by term — 3 months saves 1%, 6 months saves 3%, 12 months saves 5%; monthly billing has no discount — plus a special discount only when NexAIS has approved it in writing for that client. Anything beyond that is not a discount we offer.": "Starter ‎$197 · Professional ‎$399 · Grow ‎$599 در ماه. قیمت‌های فهرست هیچ‌وقت تغییر نمی‌کنند و نه تک‌به‌تک چانه‌زنی می‌شوند و نه با طرحی ساختگی جایگزین. تنها تخفیف‌ها، تخفیف‌های رسمی‌اند که در بخش «بستن معامله» اعمال می‌شوند: پرداخت مدت‌دار — ۳ ماهه ۱٪، ۶ ماهه ۳٪ و ۱۲ ماهه ۵٪ صرفه‌جویی دارد؛ پرداخت ماهانه تخفیف ندارد — به‌علاوهٔ تخفیف ویژه، فقط وقتی نکس‌ای‌آی برای همان مشتری به‌صورت کتبی تأییدش کرده باشد. فراتر از این‌ها تخفیفی نیست که ما بدهیم.",
+  '"Our prices are the same for every client — and the official term savings apply automatically when you pay by term: 3 months saves 1%, 6 months 3%, 12 months 5%. What I can do right now is start your free trial." Discounts are policy, not negotiation: never offer anything beyond the official term discounts and a special discount NexAIS has approved in writing for that client.': "«قیمت‌های ما برای همهٔ مشتری‌ها یکی است — و پس‌انداز رسمی مدت پرداخت، وقتی مدت‌دار پرداخت کنید، خودکار اعمال می‌شود: ۳ ماهه ۱٪، ۶ ماهه ۳٪، ۱۲ ماهه ۵٪ صرفه‌جویی دارد. کاری که همین حالا می‌توانم بکنم این است که دورهٔ آزمایشی رایگانتان را شروع کنم.» تخفیف‌ها سیاست‌اند، نه چانه‌زنی: هیچ‌وقت فراتر از تخفیف‌های رسمی مدت پرداخت و تخفیف ویژه‌ای که نکس‌ای‌آی برای همان مشتری به‌صورت کتبی تأیید کرده، چیزی پیشنهاد ندهید."
+});
+(function(){
+  "use strict";
+  var PRICES = { starter: 197, professional: 399, grow: 599 };
+  var NAMES = { starter: "Starter", professional: "Professional", grow: "Grow" };
+  var TERM_PCT = { "1": 0, "3": 1, "6": 3, "12": 5 };
+  var LINKS = {
+    starter:      { "7": "https://buy.stripe.com/eVq7sL41W4x3a6W2uq8ww0p",  "14": "https://buy.stripe.com/6oUcN5cysaVr3Iy5GC8ww0q",  "30": "https://buy.stripe.com/8x2aEX2XS4x35QG7OK8ww0r" },
+    professional: { "7": "https://buy.stripe.com/bJebJ16a4e7Dencglg8ww0j", "14": "https://buy.stripe.com/4gM6oHbuo4x33Iy3yu8ww0k", "30": "https://buy.stripe.com/8x214nbuo2oV1Aq2uq8ww0l" },
+    grow:         { "7": "https://buy.stripe.com/dRm6oHcys6Fbcf48SO8ww0m", "14": "https://buy.stripe.com/5kQaEXfKE8Njfrg0mi8ww0n", "30": "https://buy.stripe.com/14A9AT8ic9Rn0wm9WS8ww0o" }
+  };
+  function $(id){ return document.getElementById(id); }
+  var planSel = $("cl-plan"), trialSel = $("cl-trial"), termSel = $("cl-term"),
+      discIn = $("cl-disc"), refIn = $("cl-ref"), setupIn = $("cl-setup");
+  if (!planSel || !trialSel || !termSel) return;
+  function money(n){ return "$" + n.toFixed(2); }
+  function specPct(){
+    var v = parseFloat(String(discIn.value).replace(/[^0-9.]/g, ""));
+    if (isNaN(v) || v < 0) return 0;
+    return v > 100 ? 100 : v;
+  }
+  function render(){
+    var plan = planSel.value, days = trialSel.value, term = termSel.value;
+    var price = PRICES[plan], termPct = TERM_PCT[term], spec = specPct();
+    var monthly = price * (1 - termPct / 100) * (1 - spec / 100);
+    var planStr = NAMES[plan] + " — $" + price + "/mo";
+    $("cl-v-plan").textContent = (window.LANG === "fa" && window.FA[planStr]) ? window.FA[planStr] : planStr;
+    $("cl-v-term").textContent = termPct ? tt(termPct + "% off", termPct + "٪ تخفیف") : tt("None — monthly", "ندارد — ماهانه");
+    $("cl-v-spec").textContent = spec ? spec + "%" : "—";
+    $("cl-v-monthly").textContent = money(monthly);
+    $("cl-v-setup").textContent = setupIn.checked
+      ? tt("Quoted by NexAIS in writing", "به‌صورت کتبی از سوی نکس‌ای‌آی اعلام می‌شود")
+      : tt("Waived — Black Friday", "بخشوده شده — بلک فرایدی");
+    $("cl-open").href = LINKS[plan][days];
+    var when = new Date(Date.now() + Number(days) * 864e5);
+    var dateStr = when.toLocaleDateString(window.LANG === "fa" ? "fa-IR" : "en-CA", { year: "numeric", month: "long", day: "numeric" });
+    var note = tt("No charge today — the first charge of {amt} lands on {date}, the day the {days}-day free trial ends.",
+                  "امروز هیچ برداشتی نیست — اولین برداشت به مبلغ {amt} در تاریخ {date} است؛ همان روزی که دورهٔ آزمایشی رایگان {days} روزه تمام می‌شود.")
+      .replace("{amt}", money(monthly)).replace("{date}", dateStr).replace("{days}", days);
+    if (spec) note += tt(" A special discount of {spec}% is included in the monthly price.", " تخفیف ویژهٔ {spec}٪ در قیمت ماهانه لحاظ شده است.").replace("{spec}", spec);
+    var ref = refIn.value.trim();
+    if (ref) note += tt(" Referral code: {ref}.", " کد معرف: {ref}.").replace("{ref}", ref);
+    $("cl-note").textContent = note;
+  }
+  [planSel, trialSel, termSel].forEach(function(el){ el.addEventListener("change", render); });
+  [discIn, refIn].forEach(function(el){ el.addEventListener("input", render); });
+  setupIn.addEventListener("change", render);
+  $("cl-copy").addEventListener("click", function(){
+    var btn = this, url = LINKS[planSel.value][trialSel.value];
+    function done(){ var old = btn.textContent; btn.textContent = tt("Copied ✓", "کپی شد ✓"); setTimeout(function(){ btn.textContent = old; }, 1800); }
+    function fallback(){
+      var ta = document.createElement("textarea"); ta.value = url; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch(e){}
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(done, fallback); } else { fallback(); }
+  });
+  window.addEventListener("load", function(){
+    var orig = window.NEXAIS_setLang;
+    if (orig && !window.__nexaisClosePatched){
+      window.__nexaisClosePatched = true;
+      window.NEXAIS_setLang = function(l){ orig(l); render(); };
+    }
+    render();
+  });
+  render();
 })();
 </script>
 </body>
