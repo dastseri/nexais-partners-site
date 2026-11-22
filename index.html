@@ -814,6 +814,13 @@
   .bubble.in{align-self:flex-start;background:var(--bg-soft);color:var(--ink);border:1px solid var(--panel-line)}
   .pick-layout{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start}
   .pick{border:1px solid var(--panel-line);border-radius:12px;background:#fff;padding:10px;position:sticky;top:110px}
+  .pick-new{display:block;width:100%;border:1px dashed var(--ink-3);background:#fff;border-radius:8px;padding:8px;font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;margin:0 0 8px}
+  .pick-new:hover{border-color:var(--ink);background:var(--bg-soft)}
+  .qa-form{display:flex;flex-direction:column;gap:6px;margin:0 0 10px;padding:10px;border:1px solid var(--panel-line);border-radius:10px;background:var(--bg-soft)}
+  .qa-form input,.qa-form select{border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:13.5px;background:#fff}
+  .qa-row{display:flex;gap:6px} .qa-row .btn{flex:1;padding:8px 10px;font-size:13px}
+  .qa-msg{font-size:12px;color:#b42318;margin:0}
+  .pick-new[hidden],.qa-form[hidden]{display:none!important}
   .pick-q{width:100%;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:13.5px}
   .pick-f{display:flex;gap:4px;margin:8px 0}
   .pick-f button{flex:1;border:1px solid var(--panel-line);background:#fff;border-radius:16px;padding:4px 6px;font:inherit;font-size:12px;color:var(--ink-2);cursor:pointer;white-space:nowrap}
@@ -8851,6 +8858,37 @@ Object.assign(window.FA, {
       "<button type=\"button\" class=\"btn primary\" data-nav=\"next\"" + (callI < callQ.length - 1 ? "" : " disabled") + ">" + esc(tt("Next →", "بعدی ←")) + "</button></div></div></div></div></div>";
     taskSec.innerHTML = html; renderQuickComm();
   }
+  /* quick add: a place that is not on the list yet */
+  taskSec.addEventListener("click", function(e){
+    var t = e.target.closest("[data-qa]"); if (!t) return;
+    var f = t.closest(".pick").querySelector(".qa-form");
+    if (t.getAttribute("data-qa") === "open") { f.hidden = false; t.hidden = true; f.querySelector("[name=name]").focus(); }
+    else { f.hidden = true; t.closest(".pick").querySelector(".pick-new").hidden = false; }
+  });
+  taskSec.addEventListener("submit", function(e){
+    var f = e.target.closest(".qa-form"); if (!f) return;
+    e.preventDefault();
+    var kind = f.getAttribute("data-kind"), name = f.name.value.trim(), phone = f.phone.value.trim(), ind = f.ind.value, msg = f.querySelector(".qa-msg");
+    if (!name || !phone) return;
+    if (!/\d{3}\D*\d{3}\D*\d{4}/.test(phone)) { msg.textContent = tt("Enter a full phone number.", "شمارهٔ کامل را وارد کنید."); return; }
+    var existing = window.NEXAIS_newBiz.exists(name) ? bySlug(name.toLowerCase()) : null;
+    function open(){
+      loadBiz(); var b = bySlug(name.toLowerCase());
+      if (!b) { msg.textContent = tt("Could not add it — try again.", "اضافه نشد — دوباره امتحان کنید."); return; }
+      if (kind === "sms") { pickFilter.sms = "all"; smsBiz = b.slug; nav("sms/" + b.slug); }
+      else { nav("call/b/" + b.slug); }
+    }
+    if (existing) { open(); return; }
+    var rec = { name: name, ind: ind, indLabel: indLabel(ind), city: "", phone: phone, web: "", contact: "", note: tt("Added from ", "اضافه‌شده از ") + (kind === "sms" ? "SMS" : "Calls"), added: new Date().toISOString(), research: "" };
+    var btn = f.querySelector("[type=submit]"); btn.disabled = true; msg.textContent = tt("Adding…", "در حال افزودن…");
+    var save = LINE_MODE
+      ? api("POST", "/api/hub/business", { name: name, industry: ind, phone: phone, note: rec.note, at: rec.added })
+          .catch(function(err){ if (!/already/i.test(err.message)) throw err; })
+      : Promise.resolve();
+    save.then(function(){ window.NEXAIS_newBiz.add(rec); open(); })
+      .catch(function(err){ btn.disabled = false; msg.textContent = err.message; });
+  });
+
   /* ---------- calls & sms ---------- */
   var LINE_MODE = !!window.NEXAIS_SESSION, AVA_LINE = "437-529-0400";
   var myPhone = null, activeCall = null, callTimer = null;
@@ -8940,7 +8978,15 @@ Object.assign(window.FA, {
   function pickHtml(kind, selected){
     var L = pickList(kind);
     var chips = [["follow", tt("Follow-ups", "پیگیری‌ها"), followList().filter(inInd).length], ["new", tt("Not called", "تماس نگرفته"), buildCallQ("new").filter(inInd).length], ["all", tt("All", "همه"), BIZ.filter(inInd).length]];
-    return "<div class=\"pick\"><input type=\"search\" class=\"pick-q\" data-kind=\"" + kind + "\" placeholder=\"" + esc(tt("Search a business…", "جستجوی کسب‌وکار…")) + "\" value=\"" + esc(pickSearch[kind]) + "\">" +
+    var opts = ALL_INDS.map(function(x){ return "<option value=\"" + x.k + "\">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("");
+    var add = "<button type=\"button\" class=\"pick-new\" data-qa=\"open\" data-kind=\"" + kind + "\">+ " + esc(kind === "sms" ? tt("Text a new number", "پیامک به شمارهٔ جدید") : tt("Call a new number", "تماس با شمارهٔ جدید")) + "</button>" +
+      "<form class=\"qa-form\" data-kind=\"" + kind + "\" hidden>" +
+      "<input name=\"name\" required placeholder=\"" + esc(tt("Business or person name *", "نام کسب‌وکار یا شخص *")) + "\">" +
+      "<input name=\"phone\" type=\"tel\" required placeholder=\"" + esc(tt("Phone number *", "شمارهٔ تلفن *")) + "\">" +
+      "<select name=\"ind\">" + opts + "</select>" +
+      "<div class=\"qa-row\"><button type=\"submit\" class=\"btn primary\">" + esc(kind === "sms" ? tt("Add & write SMS", "افزودن و نوشتن پیامک") : tt("Add & call", "افزودن و تماس")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" data-qa=\"close\">" + esc(tt("Cancel", "انصراف")) + "</button></div><p class=\"qa-msg\"></p></form>";
+    return "<div class=\"pick\">" + add + "<input type=\"search\" class=\"pick-q\" data-kind=\"" + kind + "\" placeholder=\"" + esc(tt("Search a business…", "جستجوی کسب‌وکار…")) + "\" value=\"" + esc(pickSearch[kind]) + "\">" +
       "<div class=\"pick-f\">" + chips.map(function(c){ return "<button type=\"button\" data-pf=\"" + c[0] + "\" data-kind=\"" + kind + "\"" + (pickFilter[kind] === c[0] ? " class=\"on\"" : "") + ">" + esc(c[1]) + " <i>" + c[2] + "</i></button>"; }).join("") + "</div>" +
       "<ul class=\"pick-l\">" + (L.length ? L.map(function(b){
         var ph = phoneOf(b);
