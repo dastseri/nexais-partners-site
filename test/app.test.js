@@ -25,6 +25,7 @@ const USERS = {
 };
 const PASSWORDS = { 'p@x.ca': ['pw-partner', 'tok-partner'], 'o@x.ca': ['pw-out', 'tok-outsider'] };
 
+const UNSUB_OK = '11111111-2222-3333-4444-555555555555';
 function makeFake(state) {
   return function makeClient(token) {
     const user = token ? USERS[token] : null;
@@ -68,7 +69,9 @@ function makeFake(state) {
         },
         async resetPasswordForEmail(email) { state.resets.push(email); return { data: {}, error: null }; },
       },
-      async rpc(name) {
+      async rpc(name, args) {
+        state.calls.push({ rpc: name, args, user: user?.id });
+        if (name === 'partner_email_unsubscribe') return { data: args.p_token === UNSUB_OK ? 'owner@bistro.ca' : null, error: null };
         if (name === 'nexais_rls_is_platform_admin') return { data: user?.kind === 'admin', error: null };
         if (name === 'nexais_partner_is_manager_of') return { data: user?.kind === 'team' || user?.kind === 'admin', error: null };
         return { data: null, error: null };
@@ -296,4 +299,30 @@ test('AVA calls: only the owner may flip the switch; origin enforced', () => wit
   assert.equal(cross.status, 403);
   const bad = await fetch(`${base}/api/ava/takeover/nope`, { method: 'POST', headers: { ...h, cookie: 'nx_at=tok-team' }, body: '{}' });
   assert.equal(bad.status, 400);
+}));
+
+test('email: owner-only switch, origin enforced, partner send reaches the DB check', () => withServer(async (base, state) => {
+  const h = { origin: ORIGIN, 'content-type': 'application/json' };
+  assert.equal((await fetch(`${base}/api/email/switch`, { method: 'PUT', headers: { ...h, cookie: 'nx_at=tok-team' }, body: '{"enabled":true}' })).status, 403);
+  assert.equal((await fetch(`${base}/api/email/switch`, { method: 'PUT', headers: { ...h, cookie: 'nx_at=tok-partner' }, body: '{"enabled":true}' })).status, 403);
+  const cross = await fetch(`${base}/api/email/send`, { method: 'POST', headers: { ...h, origin: 'https://evil.example', cookie: 'nx_at=tok-team' }, body: '{}' });
+  assert.equal(cross.status, 403);
+  assert.equal((await fetch(`${base}/api/email/send`, { method: 'POST', headers: h, body: '{}' })).status, 401);
+  state.missions = [{ id: 'm-1' }];
+  const ok = await fetch(`${base}/api/email/send`, { method: 'POST', headers: { ...h, cookie: 'nx_at=tok-partner' },
+    body: JSON.stringify({ business: 'Bistro', to: 'owner@bistro.ca', subject: 'Hi', body: 'Hello', basis: 'published' }) });
+  assert.equal(ok.status, 201);
+  const call = state.calls.find((c) => c.rpc === 'partner_send_email');
+  assert.deepEqual(call.args, { p_mission: 'm-1', p_to: 'owner@bistro.ca', p_subject: 'Hi', p_body: 'Hello', p_basis: 'published' });
+}));
+
+test('unsubscribe page is public, confirms on GET and unsubscribes only on POST', () => withServer(async (base, state) => {
+  const bad = await fetch(`${base}/unsubscribe?u=not-a-token`);
+  assert.equal(bad.status, 400);
+  const page = await fetch(`${base}/unsubscribe?u=${UNSUB_OK}`);
+  assert.equal(page.status, 200); assert.match(await page.text(), /owner@bistro\.ca/);
+  assert.equal(state.calls.find((c) => c.rpc === 'partner_email_unsubscribe').args.p_confirm, false);
+  const post = await fetch(`${base}/unsubscribe?u=${UNSUB_OK}`, { method: 'POST' });
+  assert.equal(post.status, 200); assert.match(await post.text(), /unsubscribed/i);
+  assert.equal(state.calls.filter((c) => c.rpc === 'partner_email_unsubscribe').pop().args.p_confirm, true);
 }));

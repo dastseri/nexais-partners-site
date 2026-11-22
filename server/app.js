@@ -555,6 +555,44 @@ export function createApp(options) {
   });
 
   // ---- AVA follow-up calls (consent required; the owner's on/off switch lives in the CRM) ----
+  // ---- email from the NexAIS address (owner's switch; per-person can_email) ----
+  app.get('/api/email/switch', requireMember, async (req, res, next) => {
+    try {
+      const { data, error } = await req.session.db.rpc('partner_email_enabled');
+      if (error) return dbError(res, error);
+      return res.set('Cache-Control', 'no-store').json({ enabled: data === true, can_toggle: req.member.role === 'admin' });
+    } catch (err) { return next(err); }
+  });
+  app.put('/api/email/switch', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      if (req.member.role !== 'admin') return res.status(403).json({ error: 'Only the owner can turn email on or off' });
+      const { data, error } = await req.session.db.rpc('partner_set_email_enabled', { p_on: req.body?.enabled === true });
+      if (error) return dbError(res, error);
+      return res.json({ enabled: data === true });
+    } catch (err) { return next(err); }
+  });
+  app.post('/api/email/send', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      const b = req.body || {};
+      const m = await missionFor(req, b.business);
+      if (m.error) return res.status(m.status).json({ error: m.error });
+      const { data, error } = await req.session.db.rpc('partner_send_email', {
+        p_mission: m.id, p_to: String(b.to || ''), p_subject: String(b.subject || ''), p_body: String(b.body || ''), p_basis: String(b.basis || ''),
+      });
+      if (error) return dbError(res, error);
+      return res.status(201).json({ email: data });
+    } catch (err) { return next(err); }
+  });
+  app.get('/api/email/list', requireMember, async (req, res, next) => {
+    try {
+      const m = await missionFor(req, req.query.business);
+      if (m.error) return res.status(m.status).json({ error: m.error });
+      const { data, error } = await req.session.db.rpc('partner_email_list', { p_mission: m.id });
+      if (error) return dbError(res, error);
+      return res.set('Cache-Control', 'no-store').json({ emails: data || [] });
+    } catch (err) { return next(err); }
+  });
+
   app.get('/api/ava/switch', requireMember, async (req, res, next) => {
     try {
       const { data, error } = await req.session.db.rpc('partner_ava_enabled');
@@ -629,6 +667,30 @@ export function createApp(options) {
   });
 
   // The standalone pricing calculator stays public, as on the static site.
+  // Public unsubscribe page linked from every email (CASL). GET shows a confirm button; POST unsubscribes
+  // (also the RFC 8058 one-click POST from mail apps).
+  const UNSUB_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const unsubPage = (title, inner) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title>
+<style>body{font-family:Inter,system-ui,sans-serif;background:#fff;color:#18181b;display:flex;min-height:90vh;align-items:center;justify-content:center;margin:0}
+main{max-width:440px;padding:32px;border:1px solid #e4e4e7;border-radius:12px}h1{font-size:18px;margin:0 0 8px}p{color:#52525b;line-height:1.5;margin:0 0 14px}
+button{background:#18181b;color:#fff;border:0;border-radius:8px;padding:10px 16px;font:inherit;cursor:pointer}</style></head><body><main>${inner}</main></body></html>`;
+  const escHtml = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  async function unsubscribe(req, res, confirm) {
+    const token = String(req.query.u || '');
+    const bad = () => res.status(400).type('html').send(unsubPage('Unsubscribe', '<h1>Link not valid</h1><p>Email info@nexais.ca and we will remove you.</p>'));
+    if (!UNSUB_RE.test(token)) return bad();
+    const { data, error } = await makeClient().rpc('partner_email_unsubscribe', { p_token: token, p_confirm: confirm });
+    if (error || !data) return bad();
+    res.set('Cache-Control', 'no-store');
+    if (!confirm) {
+      return res.type('html').send(unsubPage('Unsubscribe', `<h1>Unsubscribe ${escHtml(data)}?</h1><p>NexAIS will not email this address again.</p>
+<form method="post" action="/unsubscribe?u=${token}"><button type="submit">Unsubscribe</button></form>`));
+    }
+    return res.type('html').send(unsubPage('Unsubscribed', `<h1>You are unsubscribed</h1><p>${escHtml(data)} will not receive emails from NexAIS again.</p>`));
+  }
+  app.get('/unsubscribe', (req, res, next) => unsubscribe(req, res, false).catch(next));
+  app.post('/unsubscribe', (req, res, next) => unsubscribe(req, res, true).catch(next));
+
   app.get('/calculator.html', (req, res) => res.type('html').sendFile(path.join(here, '..', 'calculator.html')));
 
   // ---- the hub itself (members only) ------------------------------------------------

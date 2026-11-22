@@ -832,6 +832,14 @@
   .script-head select{border:1px solid var(--panel-line);border-radius:8px;padding:7px 10px;font:inherit;font-size:13.5px;background:#fff}
   .bz-script{width:100%;font-size:14px;line-height:1.6;direction:ltr;text-align:left}
   .prop-box{border:1px solid var(--panel-line);border-radius:12px;padding:16px;background:#fff;margin:0 0 12px}
+  .em-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+  .em-grid label,.em-body label{font-size:12px;color:var(--ink-3);font-weight:500}
+  .em-grid input,.em-grid select{display:block;width:100%;margin-top:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 9px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink)}
+  .em-body textarea{display:block;width:100%;margin-top:4px;direction:ltr;text-align:left;font-size:14px;line-height:1.55}
+  .em-list{list-style:none;margin:12px 0 0;padding:0;font-size:13px}
+  .em-list li{display:flex;gap:10px;justify-content:space-between;border-top:1px solid var(--panel-line);padding:7px 0;color:var(--ink-2)}
+  .em-list .st{font-weight:600}.em-list .st.sent{color:var(--accent)}.em-list .st.failed,.em-list .st.blocked{color:#b42318}
+  @media (max-width:860px){ .em-grid{grid-template-columns:1fr} }
   .pick-layout{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start}
   .pick{border:1px solid var(--panel-line);border-radius:12px;background:#fff;padding:10px;position:sticky;top:110px}
   .pick-new{display:block;width:100%;border:1px dashed var(--ink-3);background:#fff;border-radius:8px;padding:8px;font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;margin:0 0 8px}
@@ -9269,7 +9277,8 @@ Object.assign(window.FA, {
     var ta = $("cf-agree-text");
     if (!ta) {
       box.innerHTML = "<p class=\"cf-p\"></p><textarea id=\"cf-agree-text\" class=\"tpl\" rows=\"18\"></textarea>" +
-        "<div class=\"biz-actions\" style=\"margin-top:10px\"><a class=\"btn primary\" id=\"cf-mail\" href=\"#\"></a>" +
+        "<div class=\"biz-actions\" style=\"margin-top:10px\">" + (LINE_MODE ? "<button type=\"button\" class=\"btn primary\" id=\"cf-send\"></button>" : "") +
+        "<a class=\"btn " + (LINE_MODE ? "ghost" : "primary") + "\" id=\"cf-mail\" href=\"#\"></a>" +
         "<button type=\"button\" class=\"btn ghost\" id=\"cf-copy\"></button><button type=\"button\" class=\"btn ghost\" id=\"cf-sent\"></button></div>";
       ta = $("cf-agree-text");
     }
@@ -9279,6 +9288,7 @@ Object.assign(window.FA, {
     var mail = $("cf-mail");
     mail.textContent = tt("Open in email", "باز کردن در ایمیل");
     mail.href = "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(ta.value);
+    if ($("cf-send") && !$("cf-send").dataset.busy) $("cf-send").textContent = tt("Send from NexAIS email", "ارسال از ایمیل NexAIS");
     $("cf-copy").textContent = tt("Copy text", "کپی متن");
     $("cf-sent").textContent = (closeDone[closeBiz] || {})[2] ? tt("Agreement sent ✓", "قرارداد ارسال شد ✓") : tt("Mark as sent", "ثبت: ارسال شد");
   }
@@ -9293,6 +9303,17 @@ Object.assign(window.FA, {
     if (t.id === "cf-agree-text") return;
     if (t.id === "cf-copy") { var ta = $("cf-agree-text"); try { navigator.clipboard.writeText(ta.value); } catch(x){ ta.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); return; }
     if (t.id === "cf-sent") { markStep(2, "agreement", textOf("cl-v-plan")); return; }
+    if (t.id === "cf-send") {
+      if (!closeBiz) { alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); return; }
+      var to = ($("cf-email") || {}).value || "";
+      if (!to.trim()) { alert(tt("Enter the client's email first.", "اول ایمیل مشتری را وارد کنید.")); return; }
+      if (!confirm(tt("Send the plan and agreement to " + to + " from info@nexais.ca?", "خلاصهٔ پلن و قرارداد از info@nexais.ca به " + to + " ارسال شود؟"))) return;
+      t.disabled = true; t.dataset.busy = "1"; t.textContent = tt("Sending…", "در حال ارسال…");
+      api("POST", "/api/email/send", { business: closeName(), to: to.trim(), subject: "Your AVA plan and agreement — " + closeName(), body: $("cf-agree-text").value, basis: "express" })
+        .then(function(){ delete t.dataset.busy; t.disabled = false; markStep(2, "agreement", textOf("cl-v-plan")); var n = $("cf-send"); if (n) n.textContent = tt("Sent ✓", "ارسال شد ✓"); })
+        .catch(function(err){ delete t.dataset.busy; t.disabled = false; t.textContent = tt("Send from NexAIS email", "ارسال از ایمیل NexAIS"); alert(err.message); });
+      return;
+    }
     if (t.id === "cf-mail") { if (!closeBiz) { e.preventDefault(); alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); } return; }
     if (t.id === "cl-open" || t.id === "cl-copy") { if (closeBiz) { closeDone[closeBiz] = closeDone[closeBiz] || {}; closeDone[closeBiz][3] = true; logSync("paylink-sent", closeName(), textOf("cl-v-plan")); setTimeout(renderClose, 50); } }
   }
@@ -9495,7 +9516,8 @@ Object.assign(window.FA, {
       html += "<div class=\"prop-box\"><p class=\"h3s\">" + esc(tt("The proposal we prepared", "پروپوزالی که تهیه کرده‌ایم")) + "</p>" +
         (pr.when ? "<p class=\"hint\" style=\"margin:0 0 12px\">" + esc(tt("Sent: ", "ارسال: ")) + esc(pr.when) + "</p>" : "") +
         "<div class=\"biz-actions\"><a class=\"btn primary\" href=\"" + esc(pr.url) + "\" target=\"_blank\" rel=\"noopener\">" + esc(tt("Open / download", "باز کردن / دانلود")) + " ↗</a>" +
-        ((window.NEXAIS_SESSION || {}).role === "partner" ? "" : "<a class=\"btn ghost\" href=\"" + esc(mailtoProposal(b, pr.url)) + "\" data-bz=\"mail-prop\">✉ " + esc(tt("Send by email", "ارسال با ایمیل")) + "</a>") +
+        (LINE_MODE ? "<button type=\"button\" class=\"btn ghost\" data-bz=\"email-open\">✉ " + esc(tt("Send by email", "ارسال با ایمیل")) + "</button>" :
+          (window.NEXAIS_SESSION || {}).role === "partner" ? "" : "<a class=\"btn ghost\" href=\"" + esc(mailtoProposal(b, pr.url)) + "\" data-bz=\"mail-prop\">✉ " + esc(tt("Send by email", "ارسال با ایمیل")) + "</a>") +
         "<button type=\"button\" class=\"btn ghost\" data-bz=\"sms-prop\">" + esc(tt("Send link by SMS", "ارسال لینک با پیامک")) + "</button>" +
         "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-prop\">" + esc(tt("Copy link", "کپی لینک")) + "</button></div></div>";
     } else {
@@ -9504,9 +9526,74 @@ Object.assign(window.FA, {
     html += "<div class=\"prop-box\"><p class=\"h3s\">" + esc(pr.url ? tt("Prepare a new version", "تهیهٔ نسخهٔ جدید") : tt("Prepare a proposal", "تهیهٔ پروپوزال")) + "</p>" +
       "<p class=\"hint\" style=\"margin:0 0 10px\">" + esc(tt("Opens the proposal generator with this business filled in. Finish the steps there and download the PDF to send it.",
         "سازندهٔ پروپوزال را با اطلاعات همین کسب‌وکار باز می‌کند. مراحل را آنجا تمام کنید و PDF را برای ارسال دانلود کنید.")) + "</p>" +
-      "<button type=\"button\" class=\"btn " + (pr.url ? "ghost" : "primary") + "\" data-bz=\"make-prop\">" + esc(tt("Open the proposal generator", "باز کردن سازندهٔ پروپوزال")) + "</button></div></div>";
-    return html;
+      "<button type=\"button\" class=\"btn " + (pr.url ? "ghost" : "primary") + "\" data-bz=\"make-prop\">" + esc(tt("Open the proposal generator", "باز کردن سازندهٔ پروپوزال")) + "</button></div>";
+    if (LINE_MODE) { html += "<div class=\"prop-box\" id=\"em-box\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>"; setTimeout(function(){ loadEmail(b); }, 0); }
+    return html + "</div>";
   }
+  /* ---------- email from the NexAIS address (owner's switch; per-person access) ---------- */
+  var EM_ST = { queued: ["Sending…", "در حال ارسال…"], sent: ["Sent", "ارسال شد"], failed: ["Failed", "ناموفق"], blocked: ["Blocked", "مسدود"] };
+  var emSwitch = null, emFor = null, emMsg = "", emTimer = null;
+  function emailDraft(b){
+    var pr = proposalOf(b), ask = askFor(b), first = (ask.match(/^([A-Z][a-zA-Z'-]+)\s+[A-Z]/) || [])[1] || "";
+    var hi = first ? "Hi " + first + "," : "Hi,";
+    if (pr.url) return { subject: "Your AVA proposal — " + b.name, body: hi + "\n\nHere is the proposal we prepared for " + b.name + ", showing how AVA can answer every call and booking 24/7:\n" + pr.url +
+      "\n\nYou can also test AVA yourself any time — call or text +1 (437) 529-0400.\n\nHappy to answer any questions.\n\n" + (fullName() || "") + "\nNexAIS" };
+    return { subject: "Never miss a call at " + b.name, body: hi + "\n\nThank you for your time today. As promised, here is how AVA works: it answers every call to " + b.name +
+      " 24/7, takes bookings and messages, and texts you a summary.\n\nHear it yourself any time — call or text +1 (437) 529-0400.\n\nWould a short demo this week suit you?\n\n" + (fullName() || "") + "\nNexAIS" };
+  }
+  function loadEmail(b){
+    clearTimeout(emTimer);
+    if (emFor !== b) { emFor = b; emMsg = ""; }
+    var box = $("em-box"); if (!box || cur.biz !== b || bizTab !== "proposal") return;
+    Promise.all([api("GET", "/api/email/switch"), api("GET", "/api/email/list?business=" + encodeURIComponent(b.name)).catch(function(e){ return { error: e.message }; })])
+      .then(function(r){ emSwitch = r[0]; renderEmail(b, r[1]); }).catch(function(e){ box.innerHTML = "<p class=\"hint\">" + esc(e.message) + "</p>"; });
+  }
+  function renderEmail(b, d){
+    var box = $("em-box"); if (!box) return;
+    var on = emSwitch && emSwitch.enabled, keep = {};
+    ["em-to", "em-subj", "em-body", "em-basis"].forEach(function(id){ var el = $(id); if (el && el.dataset.edited) keep[id] = el.value; });
+    var dr = emailDraft(b), html = "<p class=\"h3s\">" + esc(tt("Email this business", "ایمیل به این کسب‌وکار")) + "</p>";
+    html += "<div class=\"ava-switch" + (on ? " on" : "") + "\"><span class=\"dot\"></span><b>" + esc(on ? tt("Email is ON — sent from info@nexais.ca", "ایمیل روشن است — از info@nexais.ca ارسال می‌شود") : tt("Email is OFF", "ایمیل خاموش است")) + "</b>" +
+      (emSwitch && emSwitch.can_toggle ? "<button type=\"button\" class=\"btn ghost\" data-em=\"toggle\">" + esc(on ? tt("Turn off", "خاموش کن") : tt("Turn on", "روشن کن")) + "</button>" :
+        (on ? "" : "<small>" + esc(tt("The NexAIS owner turns this on", "مدیر NexAIS آن را روشن می‌کند")) + "</small>")) + "</div>";
+    if (d && d.error) html += "<p class=\"hint\">" + esc(d.error) + "</p>";
+    else {
+      html += "<div class=\"em-grid\"><label>" + esc(tt("To", "به")) + "<input id=\"em-to\" type=\"email\" value=\"" + esc(keep["em-to"] != null ? keep["em-to"] : emailOf(b)) + "\" placeholder=\"name@business.com\"></label>" +
+        "<label>" + esc(tt("Subject", "موضوع")) + "<input id=\"em-subj\" value=\"" + esc(keep["em-subj"] != null ? keep["em-subj"] : dr.subject) + "\"></label></div>" +
+        "<div class=\"em-body\"><label>" + esc(tt("Message (English)", "متن (انگلیسی)")) + "<textarea id=\"em-body\" class=\"tpl\" rows=\"11\">" + esc(keep["em-body"] != null ? keep["em-body"] : dr.body) + "</textarea></label></div>" +
+        "<div class=\"em-grid\"><label>" + esc(tt("Why we may email them (CASL)", "چرا اجازهٔ ایمیل داریم (CASL)")) + "<select id=\"em-basis\">" +
+          "<option value=\"\">" + esc(tt("— choose —", "— انتخاب کنید —")) + "</option>" +
+          "<option value=\"published\">" + esc(tt("Address is published for business enquiries (website, directory)", "آدرس برای تماس کاری منتشر شده (سایت، دایرکتوری)")) + "</option>" +
+          "<option value=\"express\">" + esc(tt("They asked us / agreed to receive email", "خودشان خواستند / موافقت کردند")) + "</option></select></label>" +
+        "<div style=\"align-self:end\"><button type=\"button\" class=\"btn primary\" data-em=\"send\"" + (on ? "" : " disabled") + ">" + esc(tt("Send from NexAIS", "ارسال از NexAIS")) + "</button></div></div>" +
+        "<p class=\"hint\" style=\"margin:6px 0 0\">" + esc(tt("Replies go to info@nexais.ca. Every email carries the NexAIS address and an unsubscribe link; unsubscribed addresses are blocked automatically.",
+          "پاسخ‌ها به info@nexais.ca می‌رود. هر ایمیل آدرس NexAIS و لینک لغو اشتراک دارد؛ آدرس‌هایی که لغو کنند خودکار مسدود می‌شوند.")) + "</p>";
+      if (emMsg) html += "<p class=\"hint\" style=\"color:var(--ink);font-weight:600\">" + esc(emMsg) + "</p>";
+      var list = (d && d.emails) || [];
+      if (list.length) html += "<ul class=\"em-list\">" + list.map(function(m){ var st = EM_ST[m.status] || [m.status, m.status];
+        return "<li><span>" + esc(new Date(m.created_at).toLocaleString("en-CA", { dateStyle: "medium", timeStyle: "short" })) + " · " + esc(m.to_email) + " · " + esc(m.subject) + (m.sender_name ? " · " + esc(m.sender_name) : "") +
+          (m.error ? " — " + esc(m.error) : "") + "</span><span class=\"st " + esc(m.status) + "\">" + esc(tt(st[0], st[1])) + "</span></li>"; }).join("") + "</ul>";
+      if (list.some(function(m){ return m.status === "queued"; })) emTimer = setTimeout(function(){ loadEmail(b); }, 4000);
+    }
+    box.innerHTML = html;
+    if (keep["em-basis"]) $("em-basis").value = keep["em-basis"];
+    Object.keys(keep).forEach(function(id){ if ($(id)) $(id).dataset.edited = "1"; });
+  }
+  bizHead.addEventListener("input", function(e){ if (e.target && /^em-/.test(e.target.id || "")) e.target.dataset.edited = "1"; });
+  bizHead.addEventListener("change", function(e){ if (e.target && e.target.id === "em-basis") e.target.dataset.edited = "1"; });
+  bizHead.addEventListener("click", function(e){
+    var t = e.target.closest("[data-em]"); if (!t || !cur.biz) return;
+    var b = cur.biz, k = t.getAttribute("data-em");
+    if (k === "toggle") { t.disabled = true; api("PUT", "/api/email/switch", { enabled: !(emSwitch && emSwitch.enabled) }).then(function(){ loadEmail(b); }).catch(function(err){ t.disabled = false; emMsg = err.message; loadEmail(b); }); return; }
+    if (k === "send") {
+      var to = $("em-to").value.trim(), basis = $("em-basis").value;
+      if (!basis) { emMsg = tt("Choose why we may email this address.", "انتخاب کنید چرا اجازهٔ ایمیل به این آدرس را داریم."); loadEmail(b); return; }
+      t.disabled = true;
+      api("POST", "/api/email/send", { business: b.name, to: to, subject: $("em-subj").value, body: $("em-body").value, basis: basis })
+        .then(function(){ emMsg = tt("Sent ✓ to ", "ارسال شد ✓ به ") + to; ["em-to", "em-subj", "em-body"].forEach(function(id){ if ($(id)) delete $(id).dataset.edited; }); loadEmail(b); })
+        .catch(function(err){ t.disabled = false; emMsg = err.message; loadEmail(b); });
+    }
+  });
   function mailtoProposal(b, url){
     var ask = askFor(b), first = (ask.match(/^([A-Z][a-zA-Z'-]+)\s+[A-Z]/) || [])[1] || "";
     var body = (first ? "Hi " + first + ",\n\n" : "Hi,\n\n") + "Here is the proposal we prepared for " + b.name + ", showing how AVA can answer every call and booking 24/7:\n" + url +
@@ -9616,6 +9703,7 @@ Object.assign(window.FA, {
     else if (k === "copy-script") { var ta = $("bz-script"); try { navigator.clipboard.writeText(ta.value); } catch(x){ ta.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); }
     else if (k === "copy-prop") { try { navigator.clipboard.writeText(proposalOf(b).url); } catch(x){} t.textContent = tt("Copied ✓", "کپی شد ✓"); }
     else if (k === "mail-prop") { logSync("proposal-sent", b.name, "email"); }
+    else if (k === "email-open") { var eb = $("em-box"); if (eb) { eb.scrollIntoView({ behavior: "smooth", block: "start" }); var et = $("em-to"); if (et) setTimeout(function(){ et.focus(); }, 300); } }
     else if (k === "sms-prop") { smsT = "proplink"; smsBiz = b.slug; pickFilter.sms = "all"; nav("sms/" + b.slug); }
     else if (k === "make-prop") {
       var pick = $("g-pick"), done = false;
