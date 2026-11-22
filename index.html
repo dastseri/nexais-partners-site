@@ -739,6 +739,58 @@
   .ind-table tbody tr{cursor:pointer}
   .ind-table tbody tr:hover td{background:var(--bg-soft)}
 
+  /* minimal collapsible menu + quick tasks */
+  .rail-ind{width:100%;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink);margin:0 0 14px}
+  .side-link.home{font-weight:600;color:var(--ink);margin-bottom:12px}
+  .side-q-h{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 10px 6px}
+  [dir="rtl"] .side-q-h{letter-spacing:0}
+  .side-quick{margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--panel-line)}
+  .side-link.q{justify-content:flex-start;gap:10px;color:var(--ink)}
+  .side-link.q .ql{flex:1}
+  .qi{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;border:1px solid var(--panel-line);font-size:11px;color:var(--ink-3);flex:none}
+  .side-link.q.on .qi{background:var(--ink);border-color:var(--ink);color:#fff}
+  details.side-group{margin:0 0 4px}
+  details.side-group>summary{list-style:none;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink-2);padding:8px 10px;border-radius:7px;display:flex;justify-content:space-between;align-items:center}
+  details.side-group>summary::-webkit-details-marker{display:none}
+  details.side-group>summary::after{content:"";width:6px;height:6px;border-right:1.5px solid var(--ink-3);border-bottom:1.5px solid var(--ink-3);transform:rotate(-45deg);transition:transform .15s}
+  [dir="rtl"] details.side-group>summary::after{transform:rotate(135deg)}
+  details.side-group[open]>summary::after{transform:rotate(45deg)}
+  details.side-group>summary:hover{background:var(--blue-soft)}
+  details.side-group .side-link{padding-inline-start:18px}
+  details.side-group .side-link.sub{padding-inline-start:30px}
+  .quick-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 26px}
+  .quick-row a{display:flex;align-items:center;gap:8px;border:1px solid var(--panel-line);border-radius:10px;padding:12px;color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:500;background:#fff}
+  .quick-row a:hover{border-color:var(--ink-3)}
+  .t-h{font-size:24px;margin:0 0 6px}
+  .empty-box{border:1px dashed var(--panel-line);border-radius:10px;padding:24px;text-align:center;color:var(--ink-3)}
+  .empty-box p{margin:0 0 12px}
+  .fl-r{display:flex;align-items:center;gap:10px;flex:none}
+  .tel{font-size:13.5px;color:var(--ink);font-weight:500;text-decoration:none;border-bottom:1px solid var(--panel-line);white-space:nowrap}
+  .call-card{border:1px solid var(--panel-line);border-radius:12px;padding:24px;background:#fff;margin-top:6px}
+  .cc-pos{font-size:12px;color:var(--ink-3);margin:0 0 6px}
+  .call-card h3{font-size:22px;margin:0 0 4px}
+  .cc-loc{color:var(--ink-3);margin:0 0 14px;font-size:14px}
+  .cc-tel,.tel{direction:ltr;unicode-bidi:isolate}
+  .cc-tel{display:inline-block;font-size:26px;font-weight:600;color:var(--ink);text-decoration:none;margin:0 0 14px;letter-spacing:-.01em}
+  .cc-hook{font-size:14px;color:var(--ink-2);background:var(--bg-soft);border-radius:8px;padding:10px 12px;margin:0 0 12px}
+  .cc-open{margin:0 0 16px;font-size:14px}
+  .cc-open summary{cursor:pointer;color:var(--ink-2);font-weight:500}
+  .cc-open p{margin:8px 0 0;color:var(--ink);line-height:1.6}
+  .cc-l{display:block;font-size:12.5px;color:var(--ink-3);font-weight:500;margin:6px 0 6px}
+  .cc-l input{display:block;width:100%;margin-top:6px;border:1px solid var(--panel-line);border-radius:8px;padding:10px;font:inherit;font-size:14px;color:var(--ink)}
+  .cc-out{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .cc-out button{border:1px solid var(--panel-line);background:#fff;border-radius:20px;padding:7px 12px;font:inherit;font-size:13px;color:var(--ink-2);cursor:pointer}
+  .cc-out button:hover{border-color:var(--ink-3)}
+  .cc-out button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .cc-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}
+  .cc-nav .linkish{margin:0}
+  .dl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .dl-item{border:1px solid var(--panel-line);border-radius:10px;padding:16px;background:#fff;display:flex;flex-direction:column;gap:8px}
+  .dl-item b{font-weight:600;font-size:15px}
+  .dl-item span{font-size:13px;color:var(--ink-3);flex:1}
+  .dl-item select{border:1px solid var(--panel-line);border-radius:8px;padding:8px;font:inherit;font-size:13.5px;background:#fff}
+  @media (max-width:860px){ .quick-row{grid-template-columns:repeat(2,minmax(0,1fr))} .dl-grid{grid-template-columns:1fr} .cc-tel{font-size:22px} }
+
   /* add a business + research */
   #new-biz h2{font-size:24px;margin:0 0 6px}
   .sub-p{color:var(--ink-3);margin:0 0 20px;max-width:640px}
@@ -8152,21 +8204,26 @@ Object.assign(window.FA, {
   if (!topbar || !$("cards")) return;
 
   /* ---------- menu ---------- */
+  var QUICK = [
+    { v: "follow",    en: "My follow-ups",  fa: "پیگیری‌های من" },
+    { v: "call",      en: "Make calls",     fa: "تماس بگیرم" },
+    { v: "downloads", en: "Downloads",      fa: "دانلودها" },
+    { v: "new",       en: "Add a business",          fa: "افزودن کسب‌وکار" }
+  ];
   var MENU = [
-    { g: ["Work", "کار"], items: [
-      { v: "today", en: "Today", fa: "امروز" },
-      { v: "biz", en: "Businesses", fa: "کسب‌وکارها", count: true },
-      { v: "my-activity", en: "My activity", fa: "فعالیت من" }
+    { id: "biz", g: ["Businesses", "کسب‌وکارها"], items: [
+      { v: "biz", en: "All businesses", fa: "همهٔ کسب‌وکارها", count: true }
     ]},
-    { g: ["Tools", "ابزارها"], items: [
+    { id: "tools", g: ["Tools", "ابزارها"], items: [
       { v: "script-builder", en: "Call script builder", fa: "ساخت اسکریپت تماس" },
       { v: "close", en: "Close the deal", fa: "بستن معامله" },
       { v: "generator", en: "Proposal generator", fa: "ساخت پروپوزال" },
-      { v: "research", en: "Research", fa: "تحقیق" },
+      { v: "research", en: "Research queue", fa: "صف تحقیق" },
       { v: "ai-requests", en: "AI requests", fa: "درخواست از AI" },
-      { v: "talk", en: "Talk to AVA", fa: "صحبت با AVA" }
+      { v: "talk", en: "Talk to AVA", fa: "صحبت با AVA" },
+      { v: "my-activity", en: "My activity", fa: "فعالیت من" }
     ]},
-    { g: ["Learn", "راهنما"], items: [
+    { id: "learn", g: ["Guides", "راهنما"], items: [
       { v: "offer", en: "The offer", fa: "پیشنهاد" },
       { v: "earn", en: "Commissions", fa: "کمیسیون" },
       { v: "start", en: "Getting started", fa: "شروع کار" },
@@ -8179,6 +8236,8 @@ Object.assign(window.FA, {
     ]}
   ];
   function labelOf(v){
+    if (v === "today") return tt("Today", "امروز");
+    for (var q = 0; q < QUICK.length; q++) if (QUICK[q].v === v) return tt(QUICK[q].en, QUICK[q].fa);
     for (var i = 0; i < MENU.length; i++) for (var j = 0; j < MENU[i].items.length; j++)
       if (MENU[i].items[j].v === v) return tt(MENU[i].items[j].en, MENU[i].items[j].fa);
     if (v === "new") return tt("Add a business", "افزودن کسب‌وکار");
@@ -8276,6 +8335,8 @@ Object.assign(window.FA, {
   var cl = $("call-list");
   cl.parentNode.insertBefore(today, cl);
   cl.parentNode.insertBefore(bizHead, cl);
+  var taskSec = document.createElement("section"); taskSec.id = "task-view";
+  cl.parentNode.insertBefore(taskSec, cl);
   var newSec = document.createElement("section"); newSec.id = "new-biz";
   cl.parentNode.insertBefore(newSec, cl);
   var indHead = document.createElement("section"); indHead.id = "ind-head";
@@ -8299,7 +8360,7 @@ Object.assign(window.FA, {
   function go(v, slug, anchor){
     cur.v = v; cur.biz = v === "b" && slug ? bySlug(slug) : null;
     if (v === "ind") cur.ind = slug || null;
-    if (v === "new") cur.ind = null;
+    if (v === "new" || v === "follow" || v === "call" || v === "downloads") cur.ind = null;
     if (v === "biz") cur.ind = null;
     if (cur.biz) cur.ind = cur.biz.ind;
     body.classList.toggle("biz-mode", v === "b" && !!cur.biz);
@@ -8310,6 +8371,9 @@ Object.assign(window.FA, {
     else if (v === "biz") show(["ind-head", "call-list"]);
     else if (v === "ind") show(["ind-head", "call-list"]);
     else if (v === "new") { show(["new-biz"]); renderNewForm(slug); }
+    else if (v === "follow") { show(["task-view"]); renderFollow(); }
+    else if (v === "call") { show(["task-view"]); callStart(slug); }
+    else if (v === "downloads") { show(["task-view"]); renderDownloads(); }
     else if (v === "b" && cur.biz) {
       show(["biz-head", "call-list"]);
       var more = cur.biz.el.querySelector("details.card-more"); if (more) more.open = true;
@@ -8325,6 +8389,8 @@ Object.assign(window.FA, {
     if (!h || h === "top" || h === "today") return go("today");
     if (h === "biz") return go("biz");
     if (h === "new" || h.indexOf("new/") === 0) return go("new", h.slice(4) || null);
+    if (h === "follow" || h === "downloads") return go(h);
+    if (h === "call" || h.indexOf("call/") === 0) return go("call", h.slice(5) || null);
     if (h.indexOf("ind/") === 0) return go("ind", h.slice(4));
     if (h.indexOf("b/") === 0 && bySlug(h.slice(2))) return go("b", h.slice(2));
     var el = document.getElementById(h);
@@ -8338,27 +8404,48 @@ Object.assign(window.FA, {
   window.addEventListener("hashchange", route);
 
   /* ---------- render: side menu ---------- */
+  var OPEN_KEY = "nexais-shell-open-v1";
+  function openGroups(){ try { return JSON.parse(localStorage.getItem(OPEN_KEY) || "{}"); } catch(e){ return {}; } }
+  function groupOf(v){
+    if (v === "b" || v === "ind" || v === "biz") return "biz";
+    for (var i = 0; i < MENU.length; i++) for (var j = 0; j < MENU[i].items.length; j++) if (MENU[i].items[j].v === v) return MENU[i].id;
+    return "";
+  }
   function renderSide(){
+    var og = openGroups(), curG = groupOf(cur.v);
     var html = "<div class=\"side-brand\">Nex<b>AIS</b><span>" + esc(tt("Sales Partners", "همکاران فروش")) + "</span></div>";
+    html += "<a class=\"side-link home" + (cur.v === "today" ? " on" : "") + "\" href=\"#today\">" + esc(tt("Today", "امروز")) + "</a>";
+    html += "<p class=\"side-q-h\">" + esc(tt("What do you want to do?", "چه کاری می‌خواهید انجام دهید؟")) + "</p><div class=\"side-quick\">";
+    QUICK.forEach(function(it, i){
+      var n = it.v === "follow" ? followList().length : 0;
+      html += "<a class=\"side-link q" + (cur.v === it.v ? " on" : "") + "\" href=\"#" + it.v + "\"><span class=\"qi\">" + (i + 1) + "</span><span class=\"ql\">" +
+        esc(tt(it.en, it.fa)) + "</span>" + (n ? "<span class=\"n\">" + n + "</span>" : "") + "</a>";
+    });
+    html += "</div>";
     MENU.forEach(function(g){
-      html += "<div class=\"side-group\"><p>" + esc(tt(g.g[0], g.g[1])) + "</p>";
+      var open = g.id === curG || og[g.id];
+      html += "<details class=\"side-group\" data-g=\"" + g.id + "\"" + (open ? " open" : "") + "><summary>" + esc(tt(g.g[0], g.g[1])) + "</summary>";
       g.items.forEach(function(it){
-        var on = cur.v === it.v || (it.v === "biz" && cur.v === "b");
-        html += "<a class=\"side-link" + (on && !(it.v === "biz" && cur.ind) ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) +
+        var on = cur.v === it.v && !(it.v === "biz" && cur.ind);
+        html += "<a class=\"side-link" + (on ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) +
           (it.count ? "<span class=\"n\">" + BIZ.length + "</span>" : "") + "</a>";
         if (it.v === "biz") {
-          html += "<a class=\"side-link sub add" + (cur.v === "new" ? " on" : "") + "\" href=\"#new\">+ " + esc(tt("Add a business", "افزودن کسب‌وکار")) + "</a>";
-          html += "<div class=\"side-sub\">" + INDS.map(function(x){
+          html += INDS.map(function(x){
             var n = BIZ.filter(function(b){ return b.ind === x.k; }).length;
             var o = cur.ind === x.k && (cur.v === "ind" || cur.v === "b");
             return "<a class=\"side-link sub" + (o ? " on" : "") + "\" href=\"#ind/" + x.k + "\">" + esc(tt(x.en, x.fa)) + "<span class=\"n\">" + n + "</span></a>";
-          }).join("") + "</div>";
+          }).join("");
         }
       });
-      html += "</div>";
+      html += "</details>";
     });
     side.innerHTML = html;
   }
+  side.addEventListener("toggle", function(ev){
+    var d = ev.target; if (!d || !d.getAttribute || !d.getAttribute("data-g")) return;
+    var og = openGroups(); og[d.getAttribute("data-g")] = d.open;
+    try { localStorage.setItem(OPEN_KEY, JSON.stringify(og)); } catch(e){}
+  }, true);
 
   /* ---------- render: timeline rail ---------- */
   function ago(iso){
@@ -8403,8 +8490,8 @@ Object.assign(window.FA, {
         : esc(tt("Nothing logged yet on this device.", "هنوز چیزی در این دستگاه ثبت نشده."))) + "</p></div>";
 
     html += "<p class=\"rail-h\">" + esc(tt("Timeline", "تایم‌لاین")) + (cur.ind ? " · " + esc(indLabel(cur.ind)) : "") + "</p>";
-    html += "<div class=\"chips\"><button type=\"button\" data-ind=\"\"" + (!cur.ind ? " class=\"on\"" : "") + ">" + esc(tt("All", "همه")) + "</button>" +
-      INDS.map(function(x){ return "<button type=\"button\" data-ind=\"" + x.k + "\"" + (cur.ind === x.k ? " class=\"on\"" : "") + ">" + esc(tt(x.en, x.fa)) + "</button>"; }).join("") + "</div>";
+    html += "<select class=\"rail-ind\" id=\"rail-ind\" aria-label=\"Industry\"><option value=\"\">" + esc(tt("All industries", "همهٔ حوزه‌ها")) + "</option>" +
+      INDS.map(function(x){ return "<option value=\"" + x.k + "\"" + (cur.ind === x.k ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("") + "</select>";
     html += "<ol class=\"stages\">";
     var selStage = cur.biz ? stageOf(cur.biz) : null;
     STAGES.forEach(function(s){
@@ -8432,6 +8519,10 @@ Object.assign(window.FA, {
     html += "</div>";
     rail.innerHTML = html;
   }
+  rail.addEventListener("change", function(ev){
+    if (ev.target.id !== "rail-ind") return;
+    var ik = ev.target.value; nav(ik ? "ind/" + ik : "biz");
+  });
   rail.addEventListener("click", function(ev){
     var t = ev.target.closest("[data-biz],[data-stage],[data-ind]"); if (!t) return;
     if (t.hasAttribute("data-biz")) return nav("b/" + t.getAttribute("data-biz"));
@@ -8460,7 +8551,9 @@ Object.assign(window.FA, {
       kpi(cnt.contacted + cnt.followup, tt("In progress", "در جریان"), "followup") +
       kpi(cnt.demo, tt("Demos booked", "دموی رزروشده"), "demo") +
       kpi(todayN, tt("Actions logged today", "اقدامات امروز"), "") +
-      "</div><p class=\"h3s\">" + esc(tt("Who to call next", "تماس بعدی با چه کسی")) + "</p>";
+      "</div><div class=\"quick-row\">" + QUICK.map(function(q, i){
+        return "<a href=\"#" + q.v + "\"><span class=\"qi\">" + (i + 1) + "</span>" + esc(tt(q.en, q.fa)) + "</a>";
+      }).join("") + "</div><p class=\"h3s\">" + esc(tt("Who to call next", "تماس بعدی با چه کسی")) + "</p>";
     var nx = nextCalls();
     html += nx.length ? "<ul class=\"next-list\">" + nx.map(function(b){
       return "<li data-biz=\"" + esc(b.slug) + "\"><div><div class=\"nm\">" + esc(b.name) + "</div><div class=\"meta\">" + esc(b.loc) + "</div></div>" +
@@ -8526,6 +8619,128 @@ Object.assign(window.FA, {
     if (a === "script") { var i = $("cs-biz"); if (i && b) { i.value = b.name; i.dispatchEvent(new Event("input", { bubbles: true })); } nav("script-builder"); }
     else if (a === "talk") { var m = $("m-biz"); if (m && b) { m.value = b.name; m.dispatchEvent(new Event("input", { bubbles: true })); } nav("talk"); }
     else nav("close");
+  });
+
+  /* ---------- task views: follow-ups, call mode, downloads ---------- */
+  var FOLLOW_ORDER = { "Callback scheduled": 0, "Reached decision-maker": 1, "Gatekeeper": 2, "Voicemail left": 3 };
+  function followList(){
+    return BIZ.filter(function(b){ return FOLLOW_ORDER.hasOwnProperty(statusOf(b)); })
+      .sort(function(a, b){ return FOLLOW_ORDER[statusOf(a)] - FOLLOW_ORDER[statusOf(b)]; });
+  }
+  var ST_FA = { "Not called": "تماس گرفته نشده", "Reached decision-maker": "با تصمیم‌گیرنده صحبت شد", "Gatekeeper": "منشی / واسطه",
+    "Voicemail left": "پیام صوتی گذاشته شد", "Not interested": "علاقه ندارد", "Callback scheduled": "تماس مجدد", "Demo booked": "دمو رزرو شد" };
+  function stLabel(st){ return window.LANG === "fa" ? (ST_FA[st] || st) : st; }
+  function phoneOf(b){ var a = b.el.querySelector(".facts dd.phone a"); var d = b.el.querySelector(".facts dd.phone");
+    return { href: a ? a.getAttribute("href") : "", text: d ? d.textContent.trim() : "" }; }
+  function askFor(b){ var dd = b.el.querySelector(".card-top + .facts dd, .facts dd"); return dd && !dd.classList.contains("phone") ? dd.textContent.trim() : ""; }
+  function noteOf(b){ var n = b.el.querySelector(".notes"); return n ? n.value : ""; }
+  function taskHead(title, sub){ return "<div class=\"wrap\"><h2 class=\"t-h\">" + esc(title) + "</h2><p class=\"sub-p\">" + esc(sub) + "</p>"; }
+
+  function renderFollow(){
+    var L = followList();
+    var html = taskHead(tt("My follow-ups", "پیگیری‌های من"),
+      tt("Everyone you have already reached, in order: callbacks first, then decision-makers, then the ones to try again.",
+         "همهٔ کسانی که قبلاً با آن‌ها تماس گرفته‌اید، به ترتیب: اول تماس‌های مجدد، بعد تصمیم‌گیرنده‌ها، بعد کسانی که باید دوباره تماس بگیرید."));
+    if (!L.length) {
+      html += "<div class=\"empty-box\"><p>" + esc(tt("No follow-ups yet — nobody has been reached.", "هنوز پیگیری‌ای نیست — با کسی تماس گرفته نشده.")) + "</p>" +
+        "<a class=\"btn primary\" href=\"#call\">" + esc(tt("Start making calls", "شروع تماس‌ها")) + "</a></div></div>";
+      taskSec.innerHTML = html; return;
+    }
+    html += "<div class=\"biz-actions\" style=\"margin-bottom:16px\"><a class=\"btn primary\" href=\"#call/follow\">" + esc(tt("Call them one by one", "یکی‌یکی تماس بگیرم")) + "</a></div>";
+    html += "<ul class=\"next-list fl\">" + L.map(function(b){
+      var ph = phoneOf(b), note = noteOf(b);
+      return "<li data-biz=\"" + esc(b.slug) + "\"><div><div class=\"nm\">" + esc(b.name) + "</div><div class=\"meta\">" + esc(indLabel(b.ind)) +
+        (note ? " · " + esc(note) : "") + "</div></div><div class=\"fl-r\">" +
+        (ph.href ? "<a class=\"tel\" href=\"" + esc(ph.href) + "\">" + esc(ph.text) + "</a>" : "") +
+        "<span class=\"tag\">" + esc(stLabel(statusOf(b))) + "</span></div></li>";
+    }).join("") + "</ul></div>";
+    taskSec.innerHTML = html;
+  }
+
+  var callQ = [], callI = 0, callMode = "follow";
+  function buildCallQ(mode){
+    var f = followList();
+    var fresh = BIZ.filter(function(b){ return statusOf(b) === "Not called" && !b.isNew; })
+      .sort(function(a, b){ return (a.group > b.group) - (a.group < b.group); });
+    return mode === "follow" ? f : fresh;
+  }
+  function callStart(mode){
+    callMode = mode === "new" ? "new" : (mode === "follow" ? "follow" : (followList().length ? "follow" : "new"));
+    callQ = buildCallQ(callMode); callI = 0; renderCall();
+  }
+  function renderCall(){
+    var html = taskHead(tt("Make calls", "تماس بگیرم"),
+      tt("One business at a time: dial, pick the result, add a short note, next.", "هر بار یک کسب‌وکار: شماره بگیرید، نتیجه را بزنید، یک یادداشت کوتاه، بعدی."));
+    html += "<div class=\"chips big\"><a href=\"#call/follow\"" + (callMode === "follow" ? " class=\"on\"" : "") + ">" + esc(tt("Follow-ups", "پیگیری‌ها")) + " <span>" + followList().length + "</span></a>" +
+      "<a href=\"#call/new\"" + (callMode === "new" ? " class=\"on\"" : "") + ">" + esc(tt("Not called yet", "هنوز تماس نگرفته")) + " <span>" + buildCallQ("new").length + "</span></a></div>";
+    var b = callQ[callI];
+    if (!b) {
+      html += "<div class=\"empty-box\"><p>" + esc(callQ.length ? tt("Done — that was the last one in this list.", "تمام شد — این آخرین مورد این لیست بود.")
+        : tt("Nothing to call in this list.", "در این لیست موردی برای تماس نیست.")) + "</p></div></div>";
+      taskSec.innerHTML = html; return;
+    }
+    var ph = phoneOf(b), ask = askFor(b), open = b.el.querySelector("details.opening blockquote"), hook = b.el.querySelector(".hook");
+    var cur0 = statusOf(b);
+    var OUT = ["Reached decision-maker", "Gatekeeper", "Voicemail left", "Callback scheduled", "Demo booked", "Not interested"];
+    html += "<div class=\"call-card\"><p class=\"cc-pos\">" + (callI + 1) + " / " + callQ.length + " · " + esc(indLabel(b.ind)) + "</p>" +
+      "<h3>" + esc(b.name) + "</h3><p class=\"cc-loc\">" + esc(b.loc) + (ask ? " · " + esc(tt("Ask for: ", "بخواهید: ")) + esc(ask) : "") + "</p>" +
+      (ph.href ? "<a class=\"cc-tel\" href=\"" + esc(ph.href) + "\">" + esc(ph.text) + "</a>" : "<p class=\"cc-loc\">" + esc(tt("No phone on file", "تلفن ثبت نشده")) + "</p>") +
+      (hook ? "<p class=\"cc-hook\">" + esc(hook.textContent.trim()) + "</p>" : "") +
+      (open ? "<details class=\"cc-open\"><summary>" + esc(tt("Opening line", "جملهٔ شروع")) + "</summary><p>" + esc(open.textContent.trim()) + "</p></details>" : "") +
+      "<p class=\"cc-l\">" + esc(tt("Result", "نتیجه")) + "</p><div class=\"cc-out\">" + OUT.map(function(o){
+        return "<button type=\"button\" data-out=\"" + esc(o) + "\"" + (cur0 === o ? " class=\"on\"" : "") + ">" + esc(stLabel(o)) + "</button>";
+      }).join("") + "</div>" +
+      "<label class=\"cc-l\">" + esc(tt("Note — name, direct email, callback time", "یادداشت — نام، ایمیل مستقیم، زمان تماس مجدد")) +
+      "<input type=\"text\" id=\"cc-note\" value=\"" + esc(noteOf(b)) + "\"></label>" +
+      "<div class=\"cc-nav\"><button type=\"button\" class=\"btn ghost\" data-nav=\"prev\"" + (callI ? "" : " disabled") + ">" + esc(tt("← Previous", "→ قبلی")) + "</button>" +
+      "<a class=\"linkish\" href=\"#b/" + esc(b.slug) + "\">" + esc(tt("Open full page", "صفحهٔ کامل")) + "</a>" +
+      "<button type=\"button\" class=\"btn primary\" data-nav=\"next\">" + esc(tt("Next →", "بعدی ←")) + "</button></div></div></div>";
+    taskSec.innerHTML = html;
+  }
+  function saveNote(){
+    var b = callQ[callI], inp = $("cc-note"); if (!b || !inp) return;
+    var n = b.el.querySelector(".notes"); if (!n || n.value === inp.value) return;
+    n.value = inp.value;
+    n.dispatchEvent(new Event("input", { bubbles: true })); n.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  function renderDownloads(){
+    var opts = BIZ.map(function(b){ return "<option value=\"" + esc(b.slug) + "\">" + esc(b.name) + "</option>"; }).join("");
+    var html = taskHead(tt("Downloads", "دانلودها"),
+      tt("Each button opens the print window — choose “Save as PDF” to download.", "هر دکمه پنجرهٔ چاپ را باز می‌کند — برای دانلود «Save as PDF» را انتخاب کنید."));
+    html += "<div class=\"dl-grid\">" +
+      dl("all-scripts", tt("All call scripts", "همهٔ اسکریپت‌های تماس"), tt("The master script, word for word.", "اسکریپت اصلی، کلمه به کلمه.")) +
+      dl("phone-list", tt("Phone list", "لیست تلفن‌ها"), tt("Every business with phone and contact, a column for results.", "همهٔ کسب‌وکارها با تلفن و مخاطب، با ستون نتیجه.")) +
+      "<div class=\"dl-item\"><b>" + esc(tt("Script for one business", "اسکریپت یک کسب‌وکار")) + "</b><span>" + esc(tt("Its opening line, findings and proposal.", "جملهٔ شروع، یافته‌ها و پروپوزالش.")) + "</span>" +
+      "<select id=\"dl-biz\">" + opts + "</select><button type=\"button\" class=\"btn ghost\" data-dl=\"one\">" + esc(tt("Download", "دانلود")) + "</button></div>" +
+      "</div></div>";
+    taskSec.innerHTML = html;
+  }
+  function dl(k, t, d){
+    return "<div class=\"dl-item\"><b>" + esc(t) + "</b><span>" + esc(d) + "</span><button type=\"button\" class=\"btn ghost\" data-dl=\"" + k + "\">" + esc(tt("Download", "دانلود")) + "</button></div>";
+  }
+
+  taskSec.addEventListener("click", function(ev){
+    var t = ev.target.closest("[data-biz],[data-out],[data-nav],[data-dl]"); if (!t) return;
+    if (ev.target.closest("a.tel")) return;
+    if (t.hasAttribute("data-biz")) return nav("b/" + t.getAttribute("data-biz"));
+    if (t.hasAttribute("data-out")) {
+      var b = callQ[callI]; if (!b) return;
+      saveNote();
+      var sel = b.el.querySelector(".status");
+      sel.value = t.getAttribute("data-out"); sel.dispatchEvent(new Event("change", { bubbles: true }));
+      Array.prototype.forEach.call(taskSec.querySelectorAll("[data-out]"), function(x){ x.classList.toggle("on", x === t); });
+      return;
+    }
+    if (t.hasAttribute("data-nav")) {
+      saveNote();
+      callI = Math.max(0, callI + (t.getAttribute("data-nav") === "next" ? 1 : -1));
+      renderCall(); renderRail(); window.scrollTo(0, 0); return;
+    }
+    var k = t.getAttribute("data-dl");
+    if (k === "all-scripts") { var ps = $("print-scripts"); if (ps) ps.click(); }
+    else if (k === "phone-list") { var pl = $("print-list"); if (pl) pl.click(); }
+    else if (k === "one") { var bb = bySlug($("dl-biz").value); var pb = bb && bb.el.querySelector(".print-card-btn"); if (pb) pb.click(); }
   });
 
   /* ---------- add a business ---------- */
@@ -8635,7 +8850,8 @@ Object.assign(window.FA, {
       : esc(labelOf(cur.v));
   }
 
-  function renderAll(){ renderSide(); renderTitle(); renderRail(); renderToday(); renderBizHead(); renderIndHead(); }
+  function renderAll(){ renderSide(); renderTitle(); renderRail(); renderToday(); renderBizHead(); renderIndHead();
+    if (cur.v === "follow") renderFollow(); else if (cur.v === "downloads") renderDownloads(); }
 
   /* keep everything live: outcomes, notes, actions, language */
   var tmr;
