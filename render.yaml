@@ -1,0 +1,23 @@
+# Render Blueprint for partner.nexais.ca as a Node Web Service (replaces the Static Site on cutover day).
+# Secrets are set in the Render dashboard, never committed.
+services:
+  - type: web
+    name: nexais-partners
+    runtime: node
+    plan: starter
+    branch: main
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY   # publishable/anon key only; the server refuses a service-role key
+        sync: false
+      - key: PARTNER_COMPANY_ID  # NexAIS company id in the CRM
+        sync: false
+      - key: PUBLIC_ORIGIN
+        value: https://partner.nexais.ca

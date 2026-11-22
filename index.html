@@ -739,6 +739,264 @@
   .ind-table tbody tr{cursor:pointer}
   .ind-table tbody tr:hover td{background:var(--bg-soft)}
 
+  /* compact type: content sections scaled down a notch */
+  body.shell > section, body.shell .reference-group > section, body.shell > footer{zoom:.86}
+  body.shell{font-size:14px}
+  .side-link{font-size:13px;padding:6px 10px}
+  .side-brand{font-size:16px}
+  .area-h b{font-size:13px} .area-h small{font-size:11px}
+  .area-sub .side-link{font-size:12.5px} .area-sub .side-link.sub{font-size:12px}
+  details.side-group>summary{font-size:12.5px}
+  .view-title{font-size:14px}
+  body.shell .topbar .wrap{min-height:48px}
+  /* timeline in one row */
+  body.shell{padding-right:0!important}
+  [dir="rtl"] body.shell{padding-left:0!important}
+  .app-rail{position:sticky!important;top:48px;left:auto;right:auto;bottom:auto;width:auto!important;z-index:45;display:flex;align-items:center;gap:14px;
+    padding:7px 20px!important;border:0!important;border-bottom:1px solid var(--panel-line)!important;background:rgba(255,255,255,.96);overflow:visible;max-height:none}
+  .rl-now{display:flex;align-items:baseline;gap:8px;min-width:0;max-width:36%;flex:0 1 auto;white-space:nowrap;overflow:hidden}
+  .rl-now b{font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+  .rl-now small{min-width:0;flex:0 1 auto}
+  body.shell .wrap{max-width:1100px}
+  body.shell .topbar .wrap{max-width:946px}
+  .rl-now small{font-size:11.5px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis}
+  .rl-now .pulse{flex:none;align-self:center}
+  .rl-stages{display:flex;list-style:none;margin:0 0 0 auto;padding:0;gap:2px;flex:none}
+  [dir="rtl"] .rl-stages{margin:0 auto 0 0}
+  .rl-stages li{display:flex;align-items:center}
+  .rl-stages li+li::before{content:"›";color:var(--ink-3);margin:0 3px;font-size:13px}
+  [dir="rtl"] .rl-stages li+li::before{content:"‹"}
+  .rl-stages button{border:1px solid transparent;background:transparent;font:inherit;font-size:12px;color:var(--ink-3);padding:4px 8px;border-radius:14px;cursor:pointer;white-space:nowrap}
+  .rl-stages li.has button{color:var(--ink-2)}
+  .rl-stages button i{font-style:normal;font-weight:600;color:var(--ink);margin-inline-start:2px}
+  .rl-stages button:hover{background:var(--blue-soft)}
+  .rl-stages li.open button{border-color:var(--panel-line);background:#fff}
+  .rl-stages li.cur button{background:var(--accent);color:#fff}
+  .rl-stages li.cur button i{color:#fff}
+  .rail-ind{width:auto!important;flex:none;margin:0!important;padding:4px 8px!important;font-size:12px!important}
+  .rl-pop{position:absolute;top:100%;inset-inline-end:20px;margin-top:4px;background:#fff;border:1px solid var(--panel-line);border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);padding:8px;min-width:240px;max-height:360px;overflow:auto;z-index:60}
+  .rl-pop p{font-size:11.5px;color:var(--ink-3);margin:2px 6px 6px}
+  .rl-pop button{display:block;width:100%;text-align:start;border:0;background:transparent;font:inherit;font-size:13px;color:var(--ink-2);padding:6px;border-radius:6px;cursor:pointer}
+  .rl-pop button:hover,.rl-pop button.sel{background:var(--blue-soft);color:var(--ink)}
+  .rl-pop span{font-size:12.5px;color:var(--ink-3);padding:6px;display:block}
+  @media (max-width:1180px){ .rl-now small{display:none} }
+  @media (max-width:860px){ .app-rail{flex-wrap:wrap;gap:6px 10px;top:48px} .rl-stages{order:3;width:100%;overflow-x:auto;margin:0} }
+
+  /* calls & sms */
+  .quick-comm{display:flex;gap:6px;margin-inline-start:14px}
+  .quick-comm a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--panel-line);border-radius:18px;padding:5px 12px;font-size:12.5px;font-weight:600;
+    color:var(--ink);text-decoration:none;background:#fff;white-space:nowrap;max-width:240px;overflow:hidden;text-overflow:ellipsis}
+  .quick-comm a:hover{border-color:var(--ink-3)}
+  .quick-comm a.on,.quick-comm a:first-child{background:var(--ink);border-color:var(--ink);color:#fff}
+  .quick-comm a span{font-size:13px}
+  @media (max-width:860px){
+    .quick-comm{position:fixed;bottom:12px;left:12px;right:12px;z-index:70;margin:0;justify-content:center;gap:8px}
+    .quick-comm a{flex:1;justify-content:center;padding:11px 12px;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);max-width:none}
+    body.shell{padding-bottom:70px}
+    body.shell .topbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
+  }
+  .line-box{margin:0 0 14px}
+  .line-box .cc-tel{display:block;margin:0 0 10px}
+  .call-btn{font-size:15px;padding:12px 20px}
+  .line-note{font-size:12.5px;color:var(--ink-3);margin:8px 0 0}
+  .line-note a{color:var(--ink-2)}
+  .call-status{font-size:14px;font-weight:600;color:var(--ink);margin:10px 0 0;min-height:20px}
+  .call-status span{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ink-3);margin-inline-end:8px;vertical-align:middle}
+  .call-status .dot-connected{background:var(--accent)} .call-status .dot-ringing_you,.call-status .dot-connecting{background:#c27c0e;animation:pl 1.4s infinite}
+  .my-phone{border:1px dashed var(--panel-line);border-radius:10px;padding:12px;margin-top:6px}
+  .my-phone p{font-size:13px;color:var(--ink-2);margin:0 0 8px}
+  .my-phone input{border:1px solid var(--panel-line);border-radius:8px;padding:9px 10px;font:inherit;font-size:14px;margin-inline-end:8px;width:200px}
+  .sms-thread{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto;border:1px solid var(--panel-line);border-radius:12px;padding:12px;background:#fff}
+  .bubble{max-width:78%;padding:9px 12px;border-radius:12px;font-size:13.5px;line-height:1.45;direction:ltr;text-align:left}
+  .bubble p{margin:0} .bubble small{display:block;font-size:11px;opacity:.7;margin-top:4px}
+  .bubble.out{align-self:flex-end;background:var(--ink);color:#fff}
+  .bubble.in{align-self:flex-start;background:var(--bg-soft);color:var(--ink);border:1px solid var(--panel-line)}
+  .ava-switch{display:flex;align-items:center;gap:10px;border:1px solid var(--panel-line);border-radius:10px;padding:10px 14px;margin:0 0 12px;background:#fff}
+  .ava-switch .dot{width:9px;height:9px;border-radius:50%;background:#b42318}
+  .ava-switch.on .dot{background:var(--accent)}
+  .ava-switch b{font-size:14px;font-weight:600}
+  .ava-switch small{color:var(--ink-3);font-size:12px;margin-inline-start:auto}
+  .ava-switch .btn{margin-inline-start:auto;padding:6px 12px;font-size:12.5px}
+  .ava-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:8px 0}
+  .ava-grid label{font-size:12px;color:var(--ink-3);font-weight:500}
+  .ava-grid input,.ava-grid select,.cc-l input{display:block;width:100%;margin-top:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 9px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink)}
+  .ava-more summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink-2);margin:6px 0}
+  @media (max-width:860px){ .ava-grid{grid-template-columns:1fr 1fr} }
+  .biz-tabs{margin:18px 0 0}
+  body.biz-tab-other #call-list{display:none!important}
+  .tab-panel{padding:16px 0 8px}
+  .open-q{margin:0 0 12px;padding:14px 16px;background:var(--bg-soft);border-radius:10px;font-size:14.5px;line-height:1.6;direction:ltr;text-align:left}
+  .script-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 8px}
+  .script-head .h3s{margin:0}
+  .script-head select{border:1px solid var(--panel-line);border-radius:8px;padding:7px 10px;font:inherit;font-size:13.5px;background:#fff}
+  .bz-script{width:100%;font-size:14px;line-height:1.6;direction:ltr;text-align:left}
+  .prop-box{border:1px solid var(--panel-line);border-radius:12px;padding:16px;background:#fff;margin:0 0 12px}
+  details.fold{border:1px solid var(--panel-line);border-radius:12px;background:#fff;margin:12px 0}
+  details.fold>summary{cursor:pointer;list-style:none;padding:12px 16px;font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:10px}
+  details.fold>summary::-webkit-details-marker{display:none}
+  details.fold>summary::after{content:"";margin-inline-start:auto;width:8px;height:8px;border-right:1.5px solid var(--ink-3);border-bottom:1.5px solid var(--ink-3);transform:rotate(45deg);transition:transform .15s}
+  details.fold[open]>summary::after{transform:rotate(-135deg)}
+  details.fold>.fold-in{padding:0 16px 14px}
+  .call-card details.fold{margin:10px 0}
+  .hook-box:not(details){border:1px solid var(--panel-line);border-radius:12px;padding:14px 16px;margin:16px 0 12px;background:#fff}
+  .hook-box .h3s{margin:0 0 6px}
+  .hook-text{font-size:15px;line-height:1.55;margin:0 0 8px;color:var(--ink)}
+  .hook-ev{margin:0 0 8px;padding-inline-start:18px;font-size:13px;color:var(--ink-2);line-height:1.5}
+  .hook-ev b{font-weight:600;color:var(--ink)}
+  .hook-box .btn{margin-top:4px}
+  .hook-score{float:inline-end;margin:0;font-size:12px;color:var(--ink-3)}.hook-score b{font-size:18px;color:#b42318;font-weight:700}
+  .hist-now{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:center;border:1px solid var(--panel-line);border-radius:12px;padding:14px 16px;margin:0 0 12px;background:#fff}
+  .hist-now span{display:block;font-size:12px;color:var(--ink-3)}.hist-now b{font-size:15px;font-weight:600}
+  .hist-notes{white-space:pre-wrap;margin:0;font-size:14px;line-height:1.55}
+  .hist-list{list-style:none;margin:8px 0 0;padding:0;border-inline-start:2px solid var(--panel-line)}
+  .hist-list li{position:relative;padding:8px 0 10px 16px;margin-inline-start:-1px}
+  [dir=rtl] .hist-list li{padding:8px 16px 10px 0}
+  .hist-list li::before{content:"";position:absolute;inset-inline-start:-5px;top:14px;width:8px;height:8px;border-radius:50%;background:var(--ink)}
+  .hist-list .h-top{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+  .hist-list .h-top b{font-size:14px}.hist-list .h-out{font-size:13px;color:var(--accent);font-weight:600}
+  .hist-list .h-when{font-size:12px;color:var(--ink-3);margin-inline-start:auto}
+  .hist-list p{margin:4px 0 0;font-size:13.5px;color:var(--ink-2);white-space:pre-wrap}
+  @media (max-width:860px){ .hist-now{grid-template-columns:1fr 1fr} }
+  .em-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+  .em-grid label,.em-body label{font-size:12px;color:var(--ink-3);font-weight:500}
+  .em-grid input,.em-grid select{display:block;width:100%;margin-top:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 9px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink)}
+  .em-body textarea{display:block;width:100%;margin-top:4px;direction:ltr;text-align:left;font-size:14px;line-height:1.55}
+  .em-list{list-style:none;margin:12px 0 0;padding:0;font-size:13px}
+  .em-list li{display:flex;gap:10px;justify-content:space-between;border-top:1px solid var(--panel-line);padding:7px 0;color:var(--ink-2)}
+  .em-list .st{font-weight:600}.em-list .st.sent{color:var(--accent)}.em-list .st.failed,.em-list .st.blocked{color:#b42318}
+  @media (max-width:860px){ .em-grid{grid-template-columns:1fr} }
+  .pick-layout{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start}
+  .pick{border:1px solid var(--panel-line);border-radius:12px;background:#fff;padding:10px;position:sticky;top:110px}
+  .pick-new{display:block;width:100%;border:1px dashed var(--ink-3);background:#fff;border-radius:8px;padding:8px;font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;margin:0 0 8px}
+  .pick-new:hover{border-color:var(--ink);background:var(--bg-soft)}
+  .qa-form{display:flex;flex-direction:column;gap:6px;margin:0 0 10px;padding:10px;border:1px solid var(--panel-line);border-radius:10px;background:var(--bg-soft)}
+  .qa-form input,.qa-form select{border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:13.5px;background:#fff}
+  .qa-row{display:flex;gap:6px} .qa-row .btn{flex:1;padding:8px 10px;font-size:13px}
+  .qa-msg{font-size:12px;color:#b42318;margin:0}
+  .pick-new[hidden],.qa-form[hidden]{display:none!important}
+  .pick-q{width:100%;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:13.5px}
+  .pick-f{display:flex;gap:4px;margin:8px 0}
+  .pick-f button{flex:1;border:1px solid var(--panel-line);background:#fff;border-radius:16px;padding:4px 6px;font:inherit;font-size:12px;color:var(--ink-2);cursor:pointer;white-space:nowrap}
+  .pick-f button i{font-style:normal;color:var(--ink-3)}
+  .pick-f button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .pick-f button.on i{color:#d4d4d8}
+  .pick-l{list-style:none;margin:0;padding:0;max-height:560px;overflow:auto}
+  .pick-l button{display:block;width:100%;text-align:start;border:0;background:transparent;font:inherit;padding:8px;border-radius:8px;cursor:pointer}
+  .pick-l button b{display:block;font-size:13.5px;font-weight:600;color:var(--ink)}
+  .pick-l button small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:1px}
+  .pick-l button:hover{background:var(--bg-soft)}
+  .pick-l button.on{background:var(--blue-soft);box-shadow:inset 3px 0 0 var(--accent)}
+  [dir="rtl"] .pick-l button.on{box-shadow:inset -3px 0 0 var(--accent)}
+  .pick-none{font-size:13px;color:var(--ink-3);padding:10px}
+  .pick-main .call-card{margin-top:0}
+  @media (max-width:980px){ .pick-layout{grid-template-columns:1fr} .pick{position:static} .pick-l{max-height:260px} }
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--panel-line);margin:0 0 16px}
+  .tabs a{padding:8px 14px;font-size:14px;color:var(--ink-3);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tabs a.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+  .sms-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:10px}
+  .sms-grid select,.sms-grid input{display:block;width:100%;margin-top:6px;border:1px solid var(--panel-line);border-radius:8px;padding:9px 10px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}
+  .sms-body{width:100%;border:1px solid var(--panel-line);border-radius:8px;padding:12px;font:inherit;font-size:14.5px;line-height:1.55;margin-top:10px;direction:ltr;text-align:left}
+  .sms-count{font-size:12px;color:var(--ink-3);margin:4px 0 10px}
+  .sms-hint{display:block;font-size:11px;color:var(--ink-3);margin-top:4px;font-weight:400}
+  .sms-consent{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-2)}
+  @media (max-width:860px){ .sms-grid{grid-template-columns:1fr} }
+
+  /* three areas */
+  .area{margin:0 0 8px;border-radius:10px}
+  .area-h{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:8px;text-decoration:none;color:var(--ink)}
+  .area-h:hover{background:var(--blue-soft)}
+  .area-h b{display:block;font-size:14px;font-weight:600}
+  .area-h small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:1px}
+  .area.on>.area-h .qi{background:var(--ink);border-color:var(--ink);color:#fff}
+  .area-sub{margin:2px 0 6px}
+  .area-sub .side-link{padding-inline-start:40px;font-size:13.5px}
+  .area-sub .side-link.sub{padding-inline-start:52px;font-size:12.5px}
+  .quick-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .quick-row a{align-items:flex-start!important}
+  .quick-row b{display:block;font-weight:600;font-size:14.5px}
+  .quick-row small{display:block;font-size:12px;color:var(--ink-3);margin-top:2px;font-weight:400}
+  #close-flow .cf-who{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;margin:0 0 22px}
+  #close-flow .cf-who label{font-size:12.5px;color:var(--ink-3);font-weight:500}
+  #close-flow .cf-who select,#close-flow .cf-who input{display:block;width:100%;margin-top:5px;border:1px solid var(--panel-line);border-radius:8px;padding:9px 10px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}
+  .cf-step{position:relative;padding-inline-start:38px;padding-bottom:22px}
+  .cf-step::before{content:"";position:absolute;inset-inline-start:10px;top:26px;bottom:0;width:1px;background:var(--panel-line)}
+  .cf-step:last-child::before{display:none}
+  .cf-h{display:flex;align-items:center;gap:10px;margin:0 0 10px;margin-inline-start:-38px}
+  .cf-h b{font-size:16px;font-weight:600}
+  .cf-step.done .cf-h .qi{background:var(--accent);border-color:var(--accent);color:#fff}
+  .cf-p{font-size:13.5px;color:var(--ink-2);margin:0 0 10px}
+  .cf-body>.box{margin-top:0!important;margin-bottom:10px}
+  .cf-list{list-style:none;margin:0;padding:0}.cf-list li{padding:5px 0;font-size:14px}.cf-list input{margin-inline-end:8px;accent-color:var(--accent)}
+  .cf-inv{margin-top:8px!important}
+  .inv-grid{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:10px;margin:8px 0}
+  .inv-grid label{font-size:12.5px;color:var(--ink-3);font-weight:500}
+  .inv-grid select,.inv-grid input,.inv-t input{display:block;width:100%;margin-top:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 9px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink)}
+  .inv-t{width:100%;border-collapse:collapse;margin:8px 0}.inv-t th{font-size:12px;color:var(--ink-3);text-align:start;font-weight:500;padding:4px}.inv-t td{padding:4px}
+  .inv-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px}
+  @media (max-width:860px){ .inv-grid{grid-template-columns:1fr} }
+  #mp-wrap .mp-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;border:1px solid var(--panel-line);border-radius:12px;padding:12px 14px;margin:0 0 12px;background:#fff;position:sticky;top:96px;z-index:5}
+  #mp-wrap .mp-bar label{font-size:12.5px;color:var(--ink-3);font-weight:500;min-width:260px}
+  #mp-wrap .mp-bar select{display:block;width:100%;margin-top:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:14px;background:#fff}
+  #mp-wrap .mp-log{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:var(--ink-3)}
+  #mp-wrap .mp-log .btn{padding:6px 10px;font-size:12.5px}#mp-wrap .mp-log .btn.done{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #mp-frame{display:block;width:100%;min-height:600px;border:1px solid var(--panel-line);border-radius:12px;background:#fff}
+  body.shell #close .sec-head{display:none}
+  body.shell #close details.sec-panel>summary{display:none}
+  @media (max-width:860px){ #close-flow .cf-who{grid-template-columns:1fr} .quick-row{grid-template-columns:1fr!important} }
+
+  /* minimal collapsible menu + quick tasks */
+  .rail-ind{width:100%;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink);margin:0 0 14px}
+  .side-link.home{font-weight:600;color:var(--ink);margin-bottom:12px}
+  .side-q-h{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 10px 6px}
+  [dir="rtl"] .side-q-h{letter-spacing:0}
+  .side-quick{margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--panel-line)}
+  .side-link.q{justify-content:flex-start;gap:10px;color:var(--ink)}
+  .side-link.q .ql{flex:1}
+  .qi{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;border:1px solid var(--panel-line);font-size:11px;color:var(--ink-3);flex:none}
+  .side-link.q.on .qi{background:var(--ink);border-color:var(--ink);color:#fff}
+  details.side-group{margin:0 0 4px}
+  details.side-group>summary{list-style:none;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink-2);padding:8px 10px;border-radius:7px;display:flex;justify-content:space-between;align-items:center}
+  details.side-group>summary::-webkit-details-marker{display:none}
+  details.side-group>summary::after{content:"";width:6px;height:6px;border-right:1.5px solid var(--ink-3);border-bottom:1.5px solid var(--ink-3);transform:rotate(-45deg);transition:transform .15s}
+  [dir="rtl"] details.side-group>summary::after{transform:rotate(135deg)}
+  details.side-group[open]>summary::after{transform:rotate(45deg)}
+  details.side-group>summary:hover{background:var(--blue-soft)}
+  details.side-group .side-link{padding-inline-start:18px}
+  details.side-group .side-link.sub{padding-inline-start:30px}
+  .quick-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 26px}
+  .quick-row a{display:flex;align-items:center;gap:8px;border:1px solid var(--panel-line);border-radius:10px;padding:12px;color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:500;background:#fff}
+  .quick-row a:hover{border-color:var(--ink-3)}
+  .t-h{font-size:24px;margin:0 0 6px}
+  .empty-box{border:1px dashed var(--panel-line);border-radius:10px;padding:24px;text-align:center;color:var(--ink-3)}
+  .empty-box p{margin:0 0 12px}
+  .fl-r{display:flex;align-items:center;gap:10px;flex:none}
+  .tel{font-size:13.5px;color:var(--ink);font-weight:500;text-decoration:none;border-bottom:1px solid var(--panel-line);white-space:nowrap}
+  .call-card{border:1px solid var(--panel-line);border-radius:12px;padding:24px;background:#fff;margin-top:6px}
+  .cc-pos{font-size:12px;color:var(--ink-3);margin:0 0 6px}
+  .call-card h3{font-size:22px;margin:0 0 4px}
+  .cc-loc{color:var(--ink-3);margin:0 0 14px;font-size:14px}
+  .cc-tel,.tel{direction:ltr;unicode-bidi:isolate}
+  .cc-tel{display:inline-block;font-size:26px;font-weight:600;color:var(--ink);text-decoration:none;margin:0 0 14px;letter-spacing:-.01em}
+  .cc-hook{font-size:14px;color:var(--ink-2);background:var(--bg-soft);border-radius:8px;padding:10px 12px;margin:0 0 12px}
+  .cc-open{margin:0 0 16px;font-size:14px}
+  .cc-open summary{cursor:pointer;color:var(--ink-2);font-weight:500}
+  .cc-open p{margin:8px 0 0;color:var(--ink);line-height:1.6}
+  .cc-l{display:block;font-size:12.5px;color:var(--ink-3);font-weight:500;margin:6px 0 6px}
+  .cc-l input{display:block;width:100%;margin-top:6px;border:1px solid var(--panel-line);border-radius:8px;padding:10px;font:inherit;font-size:14px;color:var(--ink)}
+  .cc-out{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .cc-out button{border:1px solid var(--panel-line);background:#fff;border-radius:20px;padding:7px 12px;font:inherit;font-size:13px;color:var(--ink-2);cursor:pointer}
+  .cc-out button:hover{border-color:var(--ink-3)}
+  .cc-out button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+  .cc-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}
+  .cc-nav .linkish{margin:0}
+  .dl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .dl-item{border:1px solid var(--panel-line);border-radius:10px;padding:16px;background:#fff;display:flex;flex-direction:column;gap:8px}
+  .dl-item b{font-weight:600;font-size:15px}
+  .dl-item span{font-size:13px;color:var(--ink-3);flex:1}
+  .dl-item select{border:1px solid var(--panel-line);border-radius:8px;padding:8px;font:inherit;font-size:13.5px;background:#fff}
+  @media (max-width:860px){ .quick-row{grid-template-columns:repeat(2,minmax(0,1fr))} .dl-grid{grid-template-columns:1fr} .cc-tel{font-size:22px} }
+
   /* add a business + research */
   #new-biz h2{font-size:24px;margin:0 0 6px}
   .sub-p{color:var(--ink-3);margin:0 0 20px;max-width:640px}
@@ -4268,6 +4526,7 @@
     if (b.contact) facts += "<div><dt>Ask for</dt><dd>" + esc(b.contact) + "</dd></div>";
     facts += "<div><dt>Phone</dt><dd class=\"phone\">" + (b.phone ? "<a href=\"tel:" + esc(b.phone.replace(/[^\d+]/g, "")) + "\">" + esc(b.phone) + "</a>" : "—") + "</dd></div>";
     if (b.web) facts += "<div><dt>Website</dt><dd>" + esc(b.web) + "</dd></div>";
+    if (b.proposalSent) facts += "<div><dt>Proposal sent</dt><dd>" + esc(b.proposalSent) + "</dd></div>";
     var c = document.createElement("article");
     c.className = "card"; c.setAttribute("data-group", "new"); c.setAttribute("data-new", "1");
     c.setAttribute("data-name", b.name.toLowerCase()); c.setAttribute("data-ind", b.ind || "other");
@@ -4277,6 +4536,7 @@
       "<dl class=\"facts\">" + facts + "</dl>" +
       "<details class=\"card-more\"><summary>Details &amp; script</summary>" +
       (b.note ? "<p class=\"hook\"><span>Signal:</span> " + esc(b.note) + "</p>" : "") +
+      (b.proposalLink ? "<p class=\"prop-link\"><a href=\"" + esc(b.proposalLink) + "\" target=\"_blank\" rel=\"noopener\">Proposal</a></p>" : "") +
       "<div class=\"act-hist\"><p class=\"act-hist-t\">Action history</p><ul class=\"act-list\"></ul><p class=\"act-none\">No actions logged yet.</p></div>" +
       "</details>" +
       "<div class=\"tracker\"><label>Outcome <select class=\"status\" aria-label=\"Call outcome for " + n + "\">" +
@@ -4294,9 +4554,22 @@
     return c;
   }
   get(KEY, []).slice().reverse().forEach(build);
+  var fromCRM = {};
   window.NEXAIS_newBiz = {
     list: function(){ return get(KEY, []); },
-    find: function(name){ name = (name || "").toLowerCase(); return get(KEY, []).filter(function(b){ return b.name.toLowerCase() === name; })[0] || null; },
+    find: function(name){ name = (name || "").toLowerCase(); return get(KEY, []).filter(function(b){ return b.name.toLowerCase() === name; })[0] || fromCRM[name] || null; },
+    /* a business another team member added — shown from the CRM, not stored on this device */
+    importCRM: function(b){
+      var k = (b.name || "").toLowerCase();
+      if (!k || this.exists(b.name)) return null;
+      fromCRM[k] = b;
+      var c = build(b); c.setAttribute("data-crm", "1");
+      return c;
+    },
+    forget: function(name){
+      var k = (name || "").toLowerCase();
+      put(KEY, get(KEY, []).filter(function(b){ return b.name.toLowerCase() !== k; }));
+    },
     exists: function(name){
       name = (name || "").trim().toLowerCase();
       return Array.prototype.some.call(box.querySelectorAll(".card"), function(c){ return c.getAttribute("data-name") === name; });
@@ -4315,11 +4588,13 @@
     },
     update: function(name, patch){
       var all = get(KEY, []), k = (name || "").toLowerCase();
+      if (fromCRM[k]) for (var q in patch) fromCRM[k][q] = patch[q];
       all.forEach(function(b){ if (b.name.toLowerCase() === k) for (var p in patch) b[p] = patch[p]; });
       put(KEY, all);
     },
     remove: function(name){
       var k = (name || "").toLowerCase();
+      delete fromCRM[k];
       put(KEY, get(KEY, []).filter(function(b){ return b.name.toLowerCase() !== k; }));
       var c = box.querySelector('.card[data-new="1"][data-name="' + k.replace(/"/g, '\\"') + '"]');
       if (c) c.parentNode.removeChild(c);
@@ -4350,6 +4625,7 @@
             <option value="auto">Auto service</option>
             <option value="law">Law office</option>
             <option value="realestate">Real estate</option>
+            <option value="transport">Transport / courier / moving</option>
             <option value="trades">Other trades / services</option>
           </select>
         </label>
@@ -4426,12 +4702,14 @@
             <input type="text" id="cl-ref" placeholder="e.g. POORYA-01" />
           </label>
           <label class="close-check"><input type="checkbox" id="cl-setup" /><span>Include the one-time setup fee (waived for Black Friday)</span></label>
+          <label class="close-check"><input type="checkbox" id="cl-hst" /><span>Show HST</span> <input type="text" id="cl-hst-rate" inputmode="decimal" value="13" style="width:52px;margin:0 4px;padding:4px 6px" aria-label="HST rate" />%</label>
         </div>
         <div class="calc-out">
           <div class="row"><span>Plan</span><b id="cl-v-plan">Professional — $399/mo</b></div>
           <div class="row"><span>Term discount</span><b id="cl-v-term">—</b></div>
           <div class="row"><span>Special discount</span><b id="cl-v-spec">—</b></div>
           <div class="row"><span>Monthly after discounts</span><b id="cl-v-monthly">$399.00</b></div>
+          <div class="row" id="cl-r-hst" hidden><span>Monthly with HST</span><b id="cl-v-hst"></b></div>
           <div class="row"><span>Setup fee</span><b id="cl-v-setup">Waived — Black Friday</b></div>
           <div class="row big"><span>Due today</span><b id="cl-v-due">$0</b></div>
         </div>
@@ -7116,6 +7394,7 @@ Object.assign(window.FA, {
     if (!a) return;
     var id = a.getAttribute("href").slice(1);
     if (!id || !panelFor(id)) return;
+    if (document.body.classList.contains("shell")) return;   /* the app shell routes #links itself */
     var sec = document.getElementById(id);
     e.preventDefault();
     window.NEXAIS_openSection(id);
@@ -7883,6 +8162,9 @@ Object.assign(window.FA, {
   "Setup fee": "هزینهٔ راه‌اندازی",
   "Due today": "قابل پرداخت امروز",
   "Waived — Black Friday": "بخشوده شده — بلک فرایدی",
+  "Show HST": "نمایش مالیات HST",
+  "Transport / courier / moving": "حمل‌ونقل / پیک / اسباب‌کشی",
+  "Monthly with HST": "ماهانه با HST",
   "Open the client's payment link": "باز کردن لینک پرداخت مشتری",
   "Copy payment link": "کپی لینک پرداخت",
   "No charge today — the first charge lands on the day the free trial ends. The client enters their own name, phone and card on the Stripe page.": "امروز هیچ برداشتی نیست — اولین برداشت در روزی است که دورهٔ آزمایشی رایگان تمام می‌شود. مشتری نام، تلفن و کارت خودش را در صفحهٔ Stripe وارد می‌کند.",
@@ -7923,6 +8205,8 @@ Object.assign(window.FA, {
     $("cl-v-term").textContent = termPct ? tt(termPct + "% off", termPct + "٪ تخفیف") : tt("None — monthly", "ندارد — ماهانه");
     $("cl-v-spec").textContent = spec ? spec + "%" : "—";
     $("cl-v-monthly").textContent = money(monthly);
+    var hstOn = $("cl-hst") && $("cl-hst").checked, hstRate = parseFloat(String(($("cl-hst-rate") || {}).value || "13").replace(/[^0-9.]/g, "")) || 0;
+    if ($("cl-r-hst")) { $("cl-r-hst").hidden = !hstOn; $("cl-v-hst").textContent = money(monthly * (1 + hstRate / 100)) + " (" + hstRate + "% HST)"; }
     $("cl-v-setup").textContent = setupIn.checked
       ? tt("Quoted by NexAIS in writing", "به‌صورت کتبی از سوی نکس‌ای‌آی اعلام می‌شود")
       : tt("Waived — Black Friday", "بخشوده شده — بلک فرایدی");
@@ -7940,6 +8224,7 @@ Object.assign(window.FA, {
   [planSel, trialSel, termSel].forEach(function(el){ el.addEventListener("change", render); });
   [discIn, refIn].forEach(function(el){ el.addEventListener("input", render); });
   setupIn.addEventListener("change", render);
+  if ($("cl-hst")) { $("cl-hst").addEventListener("change", render); $("cl-hst-rate").addEventListener("input", render); }
   $("cl-copy").addEventListener("click", function(){
     var btn = this, url = LINKS[planSel.value][trialSel.value];
     function done(){ var old = btn.textContent; btn.textContent = tt("Copied ✓", "کپی شد ✓"); setTimeout(function(){ btn.textContent = old; }, 1800); }
@@ -8043,6 +8328,11 @@ Object.assign(window.FA, {
       jobs: "answers listing enquiries, captures buyer and seller leads with their details, and books showings and callbacks for you",
       jobsShort: "captures the lead's details and books the showing or callback",
       busy: "you're out at showings" },
+    transport: { label: "Transport / courier / moving", plural: "taxi, courier and moving companies",
+      miss: "When dispatch is swamped, a customer trying to book a pickup or chase a delivery sits on hold — and calls the next company instead.",
+      jobs: "answers every booking and status call 24/7, takes the pickup, delivery or move details in full, and texts you and the customer a summary so no callback is ever missed",
+      jobsShort: "answers every booking and status call, takes the details in full, and texts a summary so no callback is missed",
+      busy: "dispatch is swamped and every line is ringing" },
     trades: { label: "Other trades / services", plural: "trades and service businesses",
       miss: "When you're on site with your hands full, calls go unanswered — and most callers simply dial the next name on the list.",
       jobs: "answers every call, captures the caller's name, address and what they need, and books estimates and jobs for you",
@@ -8137,23 +8427,29 @@ Object.assign(window.FA, {
   if (!topbar || !$("cards")) return;
 
   /* ---------- menu ---------- */
+  var QUICK = [
+    { v: "follow",    en: "My follow-ups",  fa: "پیگیری‌های من" },
+    { v: "biz",       en: "All businesses", fa: "همهٔ کسب‌وکارها", count: true },
+    { v: "new",       en: "Add a business", fa: "افزودن کسب‌وکار" },
+    { v: "downloads", en: "Downloads",      fa: "دانلودها" }
+  ];
+  var AREAS = [
+    { v: "follow",   en: "Work with businesses", fa: "کار با کسب‌وکارها", d: ["Follow-ups, calls, research", "پیگیری، تماس، تحقیق"] },
+    { v: "call",     en: "Calls",                fa: "تماس‌ها",           d: ["Pick from the list and call", "از لیست انتخاب کنید و تماس بگیرید"] },
+    { v: "sms",      en: "SMS",                  fa: "پیامک‌ها",          d: ["Pick from the list and text", "از لیست انتخاب کنید و پیامک بزنید"] },
+    { v: "closing",  en: "Close a deal",         fa: "بستن قرارداد",      d: ["Plan → agreement → payment link", "پلن ← قرارداد ← لینک پرداخت"] },
+    { v: "earnings", en: "My earnings",          fa: "وضعیت مالی من",     d: ["Commissions earned and paid", "کمیسیون‌های کسب‌شده و پرداخت‌شده"] }
+  ];
   var MENU = [
-    { g: ["Work", "کار"], items: [
-      { v: "today", en: "Today", fa: "امروز" },
-      { v: "biz", en: "Businesses", fa: "کسب‌وکارها", count: true },
-      { v: "my-activity", en: "My activity", fa: "فعالیت من" }
-    ]},
-    { g: ["Tools", "ابزارها"], items: [
+    { id: "more", g: ["Tools & guides", "ابزار و راهنما"], items: [
       { v: "script-builder", en: "Call script builder", fa: "ساخت اسکریپت تماس" },
-      { v: "close", en: "Close the deal", fa: "بستن معامله" },
       { v: "generator", en: "Proposal generator", fa: "ساخت پروپوزال" },
-      { v: "research", en: "Research", fa: "تحقیق" },
+      { v: "research", en: "Research queue", fa: "صف تحقیق" },
       { v: "ai-requests", en: "AI requests", fa: "درخواست از AI" },
-      { v: "talk", en: "Talk to AVA", fa: "صحبت با AVA" }
-    ]},
-    { g: ["Learn", "راهنما"], items: [
+      { v: "talk", en: "Talk to AVA", fa: "صحبت با AVA" },
+      { v: "my-activity", en: "My activity", fa: "فعالیت من" },
       { v: "offer", en: "The offer", fa: "پیشنهاد" },
-      { v: "earn", en: "Commissions", fa: "کمیسیون" },
+      { v: "earn", en: "Commission rules", fa: "قوانین کمیسیون" },
       { v: "start", en: "Getting started", fa: "شروع کار" },
       { v: "plan", en: "30-day plan", fa: "برنامهٔ ۳۰ روزه" },
       { v: "scripts", en: "Call scripts", fa: "اسکریپت‌های تماس" },
@@ -8164,6 +8460,13 @@ Object.assign(window.FA, {
     ]}
   ];
   function labelOf(v){
+    if (v === "today") return tt("Today", "امروز");
+    if (v === "closing") return tt("Close a deal", "بستن قرارداد");
+    if (v === "call") return tt("Calls", "تماس‌ها");
+    if (v === "sms") return tt("SMS", "پیامک‌ها");
+    if (v === "earnings") return tt("My earnings", "وضعیت مالی من");
+    if (v === "close") return tt("Close a deal", "بستن قرارداد");
+    for (var q = 0; q < QUICK.length; q++) if (QUICK[q].v === v) return tt(QUICK[q].en, QUICK[q].fa);
     for (var i = 0; i < MENU.length; i++) for (var j = 0; j < MENU[i].items.length; j++)
       if (MENU[i].items[j].v === v) return tt(MENU[i].items[j].en, MENU[i].items[j].fa);
     if (v === "new") return tt("Add a business", "افزودن کسب‌وکار");
@@ -8235,7 +8538,7 @@ Object.assign(window.FA, {
   function statusOf(b){ var s = b.el.querySelector(".status"); return s ? s.value : "Not called"; }
   function stageOf(b){
     var st = STATUS_STAGE[statusOf(b)] || "sent";
-    return st === "sent" && b.isNew ? "research" : st;
+    return st === "sent" && b.isNew && !(b.el.querySelector(".prop-link a[href]") && /proposal sent/i.test(b.el.querySelector(".facts") ? b.el.querySelector(".facts").textContent : "")) ? "research" : st;
   }
   function bySlug(s){ for (var i = 0; i < BIZ.length; i++) if (BIZ[i].slug === s) return BIZ[i]; return null; }
   function byName(n){ n = (n || "").toLowerCase(); for (var i = 0; i < BIZ.length; i++) if (BIZ[i].name.toLowerCase() === n) return BIZ[i]; return null; }
@@ -8255,12 +8558,17 @@ Object.assign(window.FA, {
   menuBtn.addEventListener("click", function(){ body.classList.toggle("side-open"); });
   var vt = document.createElement("p"); vt.className = "view-title"; vt.id = "view-title";
   tw.insertBefore(vt, tw.firstChild); tw.insertBefore(menuBtn, vt);
+  var qc = document.createElement("div"); qc.className = "quick-comm";
+  qc.innerHTML = "<a id=\"qc-call\" href=\"#call\"></a><a id=\"qc-sms\" href=\"#sms\"></a>";
+  vt.parentNode.insertBefore(qc, vt.nextSibling);
 
   var today = document.createElement("section"); today.id = "today";
   var bizHead = document.createElement("section"); bizHead.id = "biz-head";
   var cl = $("call-list");
   cl.parentNode.insertBefore(today, cl);
   cl.parentNode.insertBefore(bizHead, cl);
+  var taskSec = document.createElement("section"); taskSec.id = "task-view";
+  cl.parentNode.insertBefore(taskSec, cl);
   var newSec = document.createElement("section"); newSec.id = "new-biz";
   cl.parentNode.insertBefore(newSec, cl);
   var indHead = document.createElement("section"); indHead.id = "ind-head";
@@ -8284,7 +8592,7 @@ Object.assign(window.FA, {
   function go(v, slug, anchor){
     cur.v = v; cur.biz = v === "b" && slug ? bySlug(slug) : null;
     if (v === "ind") cur.ind = slug || null;
-    if (v === "new") cur.ind = null;
+    if (v === "new" || v === "follow" || v === "call" || v === "sms" || v === "downloads" || v === "earnings" || v === "closing") cur.ind = null;
     if (v === "biz") cur.ind = null;
     if (cur.biz) cur.ind = cur.biz.ind;
     body.classList.toggle("biz-mode", v === "b" && !!cur.biz);
@@ -8295,6 +8603,12 @@ Object.assign(window.FA, {
     else if (v === "biz") show(["ind-head", "call-list"]);
     else if (v === "ind") show(["ind-head", "call-list"]);
     else if (v === "new") { show(["new-biz"]); renderNewForm(slug); }
+    else if (v === "follow") { show(["task-view"]); renderFollow(); }
+    else if (v === "call") { show(["task-view"]); callStart(slug); }
+    else if (v === "sms") { show(["task-view"]); smsStart(slug); }
+    else if (v === "downloads") { show(["task-view"]); renderDownloads(); }
+    else if (v === "earnings") { show(["task-view"]); renderEarnings(); }
+    else if (v === "closing" || v === "close") { show(["close"]); closeSetup(slug); }
     else if (v === "b" && cur.biz) {
       show(["biz-head", "call-list"]);
       var more = cur.biz.el.querySelector("details.card-more"); if (more) more.open = true;
@@ -8310,7 +8624,12 @@ Object.assign(window.FA, {
     if (!h || h === "top" || h === "today") return go("today");
     if (h === "biz") return go("biz");
     if (h === "new" || h.indexOf("new/") === 0) return go("new", h.slice(4) || null);
+    if (h === "follow" || h === "downloads" || h === "earnings") return go(h);
+    if (h === "closing" || h.indexOf("closing/") === 0) return go("closing", h.slice(8) || null);
+    if (h === "call" || h.indexOf("call/") === 0) return go("call", h.slice(5) || null);
+    if (h === "sms" || h.indexOf("sms/") === 0) return go("sms", h.slice(4) || null);
     if (h.indexOf("ind/") === 0) return go("ind", h.slice(4));
+    if (h === "close") return go("closing");
     if (h.indexOf("b/") === 0 && bySlug(h.slice(2))) return go("b", h.slice(2));
     var el = document.getElementById(h);
     if (!el) return go("today");
@@ -8323,27 +8642,53 @@ Object.assign(window.FA, {
   window.addEventListener("hashchange", route);
 
   /* ---------- render: side menu ---------- */
+  var OPEN_KEY = "nexais-shell-open-v1";
+  function openGroups(){ try { return JSON.parse(localStorage.getItem(OPEN_KEY) || "{}"); } catch(e){ return {}; } }
+  function groupOf(v){
+    if (v === "b" || v === "ind" || v === "biz") return "biz";
+    for (var i = 0; i < MENU.length; i++) for (var j = 0; j < MENU[i].items.length; j++) if (MENU[i].items[j].v === v) return MENU[i].id;
+    return "";
+  }
   function renderSide(){
+    var og = openGroups(), curG = groupOf(cur.v);
+    var workOn = ["follow", "biz", "ind", "b", "new", "downloads"].indexOf(cur.v) >= 0;
     var html = "<div class=\"side-brand\">Nex<b>AIS</b><span>" + esc(tt("Sales Partners", "همکاران فروش")) + "</span></div>";
-    MENU.forEach(function(g){
-      html += "<div class=\"side-group\"><p>" + esc(tt(g.g[0], g.g[1])) + "</p>";
-      g.items.forEach(function(it){
-        var on = cur.v === it.v || (it.v === "biz" && cur.v === "b");
-        html += "<a class=\"side-link" + (on && !(it.v === "biz" && cur.ind) ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) +
-          (it.count ? "<span class=\"n\">" + BIZ.length + "</span>" : "") + "</a>";
-        if (it.v === "biz") {
-          html += "<a class=\"side-link sub add" + (cur.v === "new" ? " on" : "") + "\" href=\"#new\">+ " + esc(tt("Add a business", "افزودن کسب‌وکار")) + "</a>";
-          html += "<div class=\"side-sub\">" + INDS.map(function(x){
-            var n = BIZ.filter(function(b){ return b.ind === x.k; }).length;
-            var o = cur.ind === x.k && (cur.v === "ind" || cur.v === "b");
-            return "<a class=\"side-link sub" + (o ? " on" : "") + "\" href=\"#ind/" + x.k + "\">" + esc(tt(x.en, x.fa)) + "<span class=\"n\">" + n + "</span></a>";
-          }).join("") + "</div>";
-        }
-      });
+    html += "<a class=\"side-link home" + (cur.v === "today" ? " on" : "") + "\" href=\"#today\">" + esc(tt("Today", "امروز")) + "</a>";
+    AREAS.forEach(function(a, i){
+      var on = i === 0 ? workOn : (cur.v === a.v || (a.v === "closing" && cur.v === "close"));
+      html += "<div class=\"area" + (on ? " on" : "") + "\"><a class=\"area-h\" href=\"#" + a.v + "\"><span class=\"qi\">" + (i + 1) + "</span><span><b>" +
+        esc(tt(a.en, a.fa)) + "</b><small>" + esc(tt(a.d[0], a.d[1])) + "</small></span></a>";
+      if (i === 0) {
+        html += "<div class=\"area-sub\">" + QUICK.map(function(it){
+          var n = it.v === "follow" ? followList().length : (it.count ? BIZ.length : 0);
+          var o = cur.v === it.v && !(it.v === "biz" && cur.ind);
+          var h = "<a class=\"side-link" + (o ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) + (n ? "<span class=\"n\">" + n + "</span>" : "") + "</a>";
+          if (it.v === "biz" && (cur.v === "biz" || cur.v === "ind" || cur.v === "b")) {
+            h += INDS.map(function(x){
+              var c = BIZ.filter(function(b){ return b.ind === x.k; }).length;
+              return "<a class=\"side-link sub" + (cur.ind === x.k ? " on" : "") + "\" href=\"#ind/" + x.k + "\">" + esc(tt(x.en, x.fa)) + "<span class=\"n\">" + c + "</span></a>";
+            }).join("");
+          }
+          return h;
+        }).join("") + "</div>";
+      }
       html += "</div>";
+    });
+    MENU.forEach(function(g){
+      var open = g.id === curG || og[g.id];
+      html += "<details class=\"side-group\" data-g=\"" + g.id + "\"" + (open ? " open" : "") + "><summary>" + esc(tt(g.g[0], g.g[1])) + "</summary>";
+      g.items.forEach(function(it){
+        html += "<a class=\"side-link" + (cur.v === it.v ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) + "</a>";
+      });
+      html += "</details>";
     });
     side.innerHTML = html;
   }
+  side.addEventListener("toggle", function(ev){
+    var d = ev.target; if (!d || !d.getAttribute || !d.getAttribute("data-g")) return;
+    var og = openGroups(); og[d.getAttribute("data-g")] = d.open;
+    try { localStorage.setItem(OPEN_KEY, JSON.stringify(og)); } catch(e){}
+  }, true);
 
   /* ---------- render: timeline rail ---------- */
   function ago(iso){
@@ -8363,7 +8708,8 @@ Object.assign(window.FA, {
       "paylink-open": tt("Payment link opened", "لینک پرداخت باز شد"), "paylink-copy": tt("Payment link copied", "لینک پرداخت کپی شد"),
       copy: tt("Text copied", "متن کپی شد"),
       "biz-added": tt("Business added", "کسب‌وکار اضافه شد"), research: tt("Research started", "تحقیق شروع شد"),
-      "research-note": tt("Research note saved", "یادداشت تحقیق ذخیره شد")
+      "research-note": tt("Research note saved", "یادداشت تحقیق ذخیره شد"),
+      agreement: tt("Agreement sent", "قرارداد ارسال شد"), "proposal-sent": tt("Proposal sent", "پروپوزال ارسال شد"), "script-print": tt("Call script printed", "اسکریپت تماس پرینت شد"), "paylink-sent": tt("Payment link sent", "لینک پرداخت ارسال شد")
     }[e.what] || e.what || "";
     var FA_ST = { "Not called": "تماس گرفته نشده", "Reached decision-maker": "با تصمیم‌گیرنده صحبت شد", "Gatekeeper": "منشی / واسطه",
       "Voicemail left": "پیام صوتی گذاشته شد", "Not interested": "علاقه ندارد", "Callback scheduled": "تماس مجدد تنظیم شد", "Demo booked": "دمو رزرو شد",
@@ -8374,52 +8720,39 @@ Object.assign(window.FA, {
   }
   function renderRail(){
     var log = get(LOG, []), last = log[log.length - 1];
-    var where = cur.v === "b" && cur.biz ? tt("Businesses", "کسب‌وکارها") + " · " + indLabel(cur.biz.ind)
-      : cur.v === "ind" && cur.ind ? tt("Businesses", "کسب‌وکارها") + " · " + indLabel(cur.ind) : labelOf(cur.v);
     var what;
     if (cur.v === "b" && cur.biz) what = esc(cur.biz.name) + " · " + esc(stageLabel(stageOf(cur.biz)));
-    else if (cur.v === "today") { var nx = nextCalls()[0]; what = nx ? tt("Next: ", "بعدی: ") + esc(nx.name) : tt("All caught up", "همه‌چیز انجام شده"); }
-    else if (cur.v === "ind" && cur.ind) what = esc(indLabel(cur.ind)) + " · " + BIZ.filter(inInd).length;
-    else what = esc(where);
-    var html = "<p class=\"rail-h\">" + esc(tt("Where we are", "کجا هستیم")) + "</p>" +
-      "<div class=\"now\"><p class=\"where\">" + esc(where) + "</p><p class=\"what\"><span class=\"pulse\"></span>" + what + "</p>" +
-      "<p class=\"last\">" + (last ? "<b>" + esc(last.by || "") + "</b> — " + esc(describe(last)) + (last.business ? " · " + esc(last.business) : "") +
-        "<br><span style=\"color:var(--ink-3);font-size:12px\">" + esc(ago(last.at)) + "</span>"
-        : esc(tt("Nothing logged yet on this device.", "هنوز چیزی در این دستگاه ثبت نشده."))) + "</p></div>";
-
-    html += "<p class=\"rail-h\">" + esc(tt("Timeline", "تایم‌لاین")) + (cur.ind ? " · " + esc(indLabel(cur.ind)) : "") + "</p>";
-    html += "<div class=\"chips\"><button type=\"button\" data-ind=\"\"" + (!cur.ind ? " class=\"on\"" : "") + ">" + esc(tt("All", "همه")) + "</button>" +
-      INDS.map(function(x){ return "<button type=\"button\" data-ind=\"" + x.k + "\"" + (cur.ind === x.k ? " class=\"on\"" : "") + ">" + esc(tt(x.en, x.fa)) + "</button>"; }).join("") + "</div>";
-    html += "<ol class=\"stages\">";
+    else if (cur.v === "ind" && cur.ind) what = esc(indLabel(cur.ind));
+    else if (cur.v === "today") { var nx = nextCalls()[0]; what = nx ? tt("Next: ", "بعدی: ") + esc(nx.name) : esc(tt("All caught up", "همه‌چیز انجام شده")); }
+    else what = esc(labelOf(cur.v));
+    var html = "<div class=\"rl-now\" title=\"" + esc(tt("Where we are", "کجا هستیم")) + "\"><span class=\"pulse\"></span><b>" + what + "</b>" +
+      (last ? "<small>" + esc(describe(last)) + (last.business ? " · " + esc(last.business) : "") + " · " + esc(ago(last.at)) + "</small>" : "") + "</div>";
     var selStage = cur.biz ? stageOf(cur.biz) : null;
-    STAGES.forEach(function(s){
-      var list = BIZ.filter(function(b){ return stageOf(b) === s.k && inInd(b); });
-      var isCur = selStage === s.k;
-      var open = isCur || (cur.openStage === s.k);
-      html += "<li class=\"stage" + (list.length ? " has" : "") + (isCur ? " cur" : "") + "\"><span class=\"dot\"></span>" +
-        "<button type=\"button\" data-stage=\"" + s.k + "\"><span>" + esc(tt(s.en, s.fa)) + "</span><span class=\"c\">" + list.length + "</span></button>";
-      if (open && list.length) {
-        html += "<ul>" + list.map(function(b){
-          return "<li><button type=\"button\" data-biz=\"" + esc(b.slug) + "\"" + (cur.biz === b ? " class=\"sel\"" : "") + ">" + esc(b.name) + "</button></li>";
-        }).join("") + "</ul>";
-      }
-      html += "</li>";
-    });
-    html += "</ol>";
-
-    html += "<div class=\"recent-wrap\"><p class=\"rail-h\">" + esc(tt("Latest activity", "آخرین فعالیت‌ها")) + "</p>";
-    var rec = log.slice(-8).reverse();
-    html += rec.length ? "<ul class=\"recent\">" + rec.map(function(e){
-      var b = byName(e.business);
-      return "<li" + (b ? " data-biz=\"" + esc(b.slug) + "\"" : "") + "><time>" + esc(ago(e.at)) + " · " + esc(e.by || "") + "</time>" +
-        esc(describe(e)) + (e.business ? " — " + esc(e.business) : "") + "</li>";
-    }).join("") + "</ul>" : "<p class=\"rail-empty\">" + esc(tt("No activity yet.", "هنوز فعالیتی نیست.")) + "</p>";
-    html += "</div>";
+    html += "<ol class=\"rl-stages\">" + STAGES.map(function(st){
+      var n = BIZ.filter(function(b){ return stageOf(b) === st.k && inInd(b); }).length;
+      var cls = (selStage === st.k ? " cur" : "") + (cur.openStage === st.k ? " open" : "") + (n ? " has" : "");
+      return "<li class=\"" + cls + "\"><button type=\"button\" data-stage=\"" + st.k + "\">" + esc(tt(st.en, st.fa)) + " <i>" + n + "</i></button></li>";
+    }).join("") + "</ol>";
+    html += "<select class=\"rail-ind\" id=\"rail-ind\" aria-label=\"Industry\"><option value=\"\">" + esc(tt("All industries", "همهٔ حوزه‌ها")) + "</option>" +
+      INDS.map(function(x){ return "<option value=\"" + x.k + "\"" + (cur.ind === x.k ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("") + "</select>";
+    if (cur.openStage) {
+      var list = BIZ.filter(function(b){ return stageOf(b) === cur.openStage && inInd(b); });
+      html += "<div class=\"rl-pop\"><p>" + esc(stageLabel(cur.openStage)) + " · " + list.length + "</p>" + (list.length ? list.map(function(b){
+        return "<button type=\"button\" data-biz=\"" + esc(b.slug) + "\"" + (cur.biz === b ? " class=\"sel\"" : "") + ">" + esc(b.name) + "</button>";
+      }).join("") : "<span>" + esc(tt("Nobody at this stage.", "کسی در این مرحله نیست.")) + "</span>") + "</div>";
+    }
     rail.innerHTML = html;
   }
+  document.addEventListener("click", function(ev){
+    if (cur.openStage && document.contains(ev.target) && !rail.contains(ev.target)) { cur.openStage = null; renderRail(); }
+  });
+  rail.addEventListener("change", function(ev){
+    if (ev.target.id !== "rail-ind") return;
+    var ik = ev.target.value; nav(ik ? "ind/" + ik : "biz");
+  });
   rail.addEventListener("click", function(ev){
     var t = ev.target.closest("[data-biz],[data-stage],[data-ind]"); if (!t) return;
-    if (t.hasAttribute("data-biz")) return nav("b/" + t.getAttribute("data-biz"));
+    if (t.hasAttribute("data-biz")) { cur.openStage = null; return nav("b/" + t.getAttribute("data-biz")); }
     if (t.hasAttribute("data-ind")) { var ik = t.getAttribute("data-ind"); return nav(ik ? "ind/" + ik : "biz"); }
     var k = t.getAttribute("data-stage");
     cur.openStage = cur.openStage === k ? null : k;
@@ -8445,7 +8778,9 @@ Object.assign(window.FA, {
       kpi(cnt.contacted + cnt.followup, tt("In progress", "در جریان"), "followup") +
       kpi(cnt.demo, tt("Demos booked", "دموی رزروشده"), "demo") +
       kpi(todayN, tt("Actions logged today", "اقدامات امروز"), "") +
-      "</div><p class=\"h3s\">" + esc(tt("Who to call next", "تماس بعدی با چه کسی")) + "</p>";
+      "</div><div class=\"quick-row\">" + AREAS.map(function(a, i){
+        return "<a href=\"#" + a.v + "\"><span class=\"qi\">" + (i + 1) + "</span><span><b>" + esc(tt(a.en, a.fa)) + "</b><small>" + esc(tt(a.d[0], a.d[1])) + "</small></span></a>";
+      }).join("") + "</div><p class=\"h3s\">" + esc(tt("Who to call next", "تماس بعدی با چه کسی")) + "</p>";
     var nx = nextCalls();
     html += nx.length ? "<ul class=\"next-list\">" + nx.map(function(b){
       return "<li data-biz=\"" + esc(b.slug) + "\"><div><div class=\"nm\">" + esc(b.name) + "</div><div class=\"meta\">" + esc(b.loc) + "</div></div>" +
@@ -8459,6 +8794,11 @@ Object.assign(window.FA, {
         L.forEach(function(b){ c[stageOf(b)]++; });
         return "<tr data-indrow=\"" + x.k + "\"><td>" + esc(tt(x.en, x.fa)) + "</td><td>" + (c.sent + c.research) + "</td><td>" + (c.contacted + c.followup) + "</td><td>" + c.demo + "</td><td>" + L.length + "</td></tr>";
       }).join("") + "</tbody></table>";
+    var rec = log.slice(-6).reverse();
+    if (rec.length) html += "<p class=\"h3s\">" + esc(tt("Latest activity", "آخرین فعالیت‌ها")) + "</p><ul class=\"recent\">" + rec.map(function(e){
+      var bb = byName(e.business);
+      return "<li" + (bb ? " data-biz=\"" + esc(bb.slug) + "\"" : "") + "><time>" + esc(ago(e.at)) + " · " + esc(e.by || "") + "</time>" + esc(describe(e)) + (e.business ? " — " + esc(e.business) : "") + "</li>";
+    }).join("") + "</ul>";
     html += "<p class=\"hint\">" + esc(tt("Best time to call: Tuesday to Thursday, 2:00–4:00 PM.", "بهترین زمان تماس: سه‌شنبه تا پنجشنبه، ساعت ۲ تا ۴ بعدازظهر.")) + "</p></div>";
     today.innerHTML = html;
   }
@@ -8486,10 +8826,12 @@ Object.assign(window.FA, {
     bizHead.innerHTML = "<div class=\"wrap\"><button type=\"button\" class=\"biz-back\" data-go=\"ind/" + b.ind + "\">← " + esc(indLabel(b.ind)) + "</button>" +
       "<h2>" + esc(b.name) + "</h2><p class=\"loc\">" + esc(b.loc) + "</p><ol class=\"steps\">" + steps + "</ol>" +
       "<div class=\"biz-actions\">" +
-      "<button type=\"button\" class=\"btn ghost\" data-act=\"script\">" + esc(tt("Build call script", "ساخت اسکریپت تماس")) + "</button>" +
+      "<a class=\"btn ghost\" href=\"#call/b/" + esc(b.slug) + "\">☎ " + esc(tt("Call", "تماس")) + "</a>" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"close\">" + esc(tt("Close the deal", "بستن معامله")) + "</button>" +
+      "<a class=\"btn ghost\" href=\"#sms/" + esc(b.slug) + "\">" + esc(tt("Send SMS", "ارسال پیامک")) + "</a>" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"talk\">" + esc(tt("Ask AVA about it", "پرسیدن از AVA")) + "</button>" +
-      "</div>" + (b.isNew ? researchPanel(b) : "") + "</div>";
+      "</div>" + bizTabs(b) + (bizTab === "overview" ? hookBox(b) : "") + (bizTab === "overview" && b.isNew ? researchPanel(b) : "") + "</div>";
+    body.classList.toggle("biz-tab-other", bizTab !== "overview");
   }
   bizHead.addEventListener("click", function(ev){
     var t = ev.target.closest("[data-go],[data-act]"); if (!t) return;
@@ -8505,13 +8847,745 @@ Object.assign(window.FA, {
       return;
     }
     if (a === "remove") {
-      if (!window.confirm(tt("Remove " + b.name + " from the list on this device? Its log entries stay in the Sheet.", b.name + " از لیست این دستگاه حذف شود؟ سوابقش در شیت می‌ماند."))) return;
+      if (!window.confirm(tt("Remove " + b.name + " from the list? Its history is kept.", b.name + " از لیست حذف شود؟ سوابقش نگه داشته می‌شود."))) return;
       var ind = b.ind; window.NEXAIS_newBiz.remove(b.name); loadBiz(); return nav("ind/" + ind);
     }
     if (a === "script") { var i = $("cs-biz"); if (i && b) { i.value = b.name; i.dispatchEvent(new Event("input", { bubbles: true })); } nav("script-builder"); }
     else if (a === "talk") { var m = $("m-biz"); if (m && b) { m.value = b.name; m.dispatchEvent(new Event("input", { bubbles: true })); } nav("talk"); }
-    else nav("close");
+    else nav("closing/" + (b ? b.slug : ""));
   });
+
+  /* ---------- task views: follow-ups, call mode, downloads ---------- */
+  var FOLLOW_ORDER = { "Callback scheduled": 0, "Reached decision-maker": 1, "Gatekeeper": 2, "Voicemail left": 3 };
+  function followList(){
+    return BIZ.filter(function(b){ return FOLLOW_ORDER.hasOwnProperty(statusOf(b)); })
+      .sort(function(a, b){ return FOLLOW_ORDER[statusOf(a)] - FOLLOW_ORDER[statusOf(b)]; });
+  }
+  var ST_FA = { "Not called": "تماس گرفته نشده", "Reached decision-maker": "با تصمیم‌گیرنده صحبت شد", "Gatekeeper": "منشی / واسطه",
+    "Voicemail left": "پیام صوتی گذاشته شد", "Not interested": "علاقه ندارد", "Callback scheduled": "تماس مجدد", "Demo booked": "دمو رزرو شد" };
+  function stLabel(st){ return window.LANG === "fa" ? (ST_FA[st] || st) : st; }
+  function phoneOf(b){ var a = b.el.querySelector(".facts dd.phone a"); var d = b.el.querySelector(".facts dd.phone");
+    return { href: a ? a.getAttribute("href") : "", text: d ? d.textContent.trim() : "" }; }
+  function askFor(b){
+    var rows = b.el.querySelectorAll(".card-top ~ .facts > div");
+    for (var i = 0; i < rows.length; i++) {
+      var dt = rows[i].querySelector("dt"), dd = rows[i].querySelector("dd");
+      if (dt && dd && /ask for|بخواهید/i.test(dt.textContent)) return dd.textContent.trim();
+    }
+    return "";
+  }
+  function noteOf(b){ var n = b.el.querySelector(".notes"); return n ? n.value : ""; }
+  function taskHead(title, sub){ return "<div class=\"wrap\"><h2 class=\"t-h\">" + esc(title) + "</h2><p class=\"sub-p\">" + esc(sub) + "</p>"; }
+
+  function renderFollow(){
+    var L = followList();
+    var html = taskHead(tt("My follow-ups", "پیگیری‌های من"),
+      tt("Everyone you have already reached, in order: callbacks first, then decision-makers, then the ones to try again.",
+         "همهٔ کسانی که قبلاً با آن‌ها تماس گرفته‌اید، به ترتیب: اول تماس‌های مجدد، بعد تصمیم‌گیرنده‌ها، بعد کسانی که باید دوباره تماس بگیرید."));
+    if (!L.length) {
+      html += "<div class=\"empty-box\"><p>" + esc(tt("No follow-ups yet — nobody has been reached.", "هنوز پیگیری‌ای نیست — با کسی تماس گرفته نشده.")) + "</p>" +
+        "<a class=\"btn primary\" href=\"#call\">" + esc(tt("Start making calls", "شروع تماس‌ها")) + "</a></div></div>";
+      taskSec.innerHTML = html; return;
+    }
+    html += "<div class=\"biz-actions\" style=\"margin-bottom:16px\"><a class=\"btn primary\" href=\"#call/follow\">" + esc(tt("Call them one by one", "یکی‌یکی تماس بگیرم")) + "</a></div>";
+    html += "<ul class=\"next-list fl\">" + L.map(function(b){
+      var ph = phoneOf(b), note = noteOf(b);
+      return "<li data-biz=\"" + esc(b.slug) + "\"><div><div class=\"nm\">" + esc(b.name) + "</div><div class=\"meta\">" + esc(indLabel(b.ind)) +
+        (note ? " · " + esc(note) : "") + "</div></div><div class=\"fl-r\">" +
+        (ph.href ? "<a class=\"tel\" href=\"" + esc(ph.href) + "\">" + esc(ph.text) + "</a>" : "") +
+        "<span class=\"tag\">" + esc(stLabel(statusOf(b))) + "</span></div></li>";
+    }).join("") + "</ul></div>";
+    taskSec.innerHTML = html;
+  }
+
+  var callQ = [], callI = 0, callMode = "follow";
+  function buildCallQ(mode){
+    var f = followList();
+    var fresh = BIZ.filter(function(b){ return statusOf(b) === "Not called" && !b.isNew; })
+      .sort(function(a, b){ return (a.group > b.group) - (a.group < b.group); });
+    return mode === "follow" ? f : fresh;
+  }
+  var callPin = null, callSel = null;
+  function callStart(mode){
+    callSel = null;
+    if (mode && mode.indexOf("b/") === 0 && bySlug(mode.slice(2))) { callPin = bySlug(mode.slice(2)); pickFilter.call = "all"; }
+    else if (mode === "new" || mode === "follow" || mode === "all") pickFilter.call = mode;
+    else pickFilter.call = followList().length ? "follow" : "new";
+    callI = 0; renderCall();
+  }
+  function renderCall(){
+    var html = phoneHead("call");
+    if (!PERM.can_call) { taskSec.innerHTML = html + permNote(tt("Calling", "تماس")) + "</div>"; return; }
+    callQ = pickList("call"); if (callI >= callQ.length) callI = Math.max(0, callQ.length - 1);
+    if (callPin) { callSel = callPin; callPin = null; }
+    if (callSel) { var pi = callQ.indexOf(callSel); if (pi < 0) { callQ.unshift(callSel); pi = 0; } callI = pi; }
+    callSel = callQ[callI] || null;
+    html += "<div class=\"pick-layout\">" + pickHtml("call", callQ[callI]) + "<div class=\"pick-main\">";
+    var b = callQ[callI];
+    if (!b) {
+      html += "<div class=\"empty-box\"><p>" + esc(tt("Pick a business from the list.", "یک کسب‌وکار از لیست انتخاب کنید.")) + "</p></div></div></div></div>";
+      taskSec.innerHTML = html; return;
+    }
+    if (ccScenFor !== b) { ccScenFor = b; ccScen = ""; }
+    var ph = phoneOf(b), ask = askFor(b), open = b.el.querySelector("details.opening blockquote"), hook = b.el.querySelector(".hook");
+    var cur0 = statusOf(b);
+    var OUT = ["Reached decision-maker", "Gatekeeper", "Voicemail left", "Callback scheduled", "Demo booked", "Not interested"];
+    html += "<div class=\"call-card\"><p class=\"cc-pos\">" + (callI + 1) + " / " + callQ.length + " · " + esc(indLabel(b.ind)) + "</p>" +
+      "<h3>" + esc(b.name) + "</h3><p class=\"cc-loc\">" + esc(b.loc) + (ask ? " · " + esc(tt("Ask for: ", "بخواهید: ")) + esc(ask) : "") + "</p>" +
+      (ph.href ? (LINE_MODE ? lineCallBox(b, ph) : "<a class=\"cc-tel\" href=\"" + esc(ph.href) + "\">" + esc(ph.text) + "</a>") : "<p class=\"cc-loc\">" + esc(tt("No phone on file", "تلفن ثبت نشده")) + "</p>") +
+      hookBox(b).replace("data-fold=\"hook\"", "data-fold=\"call-hook\"") +
+      fold("call-script", tt("Call script", "اسکریپت تماس"),
+        (open && (ccScen || defaultScenario(b)) === "first" ? "<blockquote class=\"open-q\" id=\"cc-open\">" + esc(open.textContent.trim().replace(/\[Caller\]/g, fullName() || "[Caller]")) + "</blockquote>" : "") +
+        "<div class=\"script-head\"><span></span><select id=\"cc-scen\">" + [["first", tt("First call", "تماس اول")], ["next", tt("Next call — after the last result", "تماس بعدی — بر اساس نتیجهٔ قبلی")], ["followup", tt("Follow-up on the proposal", "پیگیری پروپوزال")], ["demo", tt("Demo invitation", "دعوت به دمو")], ["close", tt("Trial-offer close", "بستن با دورهٔ رایگان")]]
+          .map(function(x){ var sc = ccScen || defaultScenario(b); return "<option value=\"" + x[0] + "\"" + (x[0] === sc ? " selected" : "") + ">" + esc(x[1]) + "</option>"; }).join("") + "</select></div>" +
+        "<textarea id=\"cc-script\" class=\"tpl bz-script\" rows=\"14\">" + esc(buildScriptFor(b, ccScen || defaultScenario(b))) + "</textarea>" +
+        "<div class=\"biz-actions\" style=\"margin-top:8px\"><button type=\"button\" class=\"btn ghost\" data-cc=\"print\">" + esc(tt("Print / save as PDF", "پرینت / ذخیره PDF")) + "</button>" +
+        "<button type=\"button\" class=\"btn ghost\" data-cc=\"copy\">" + esc(tt("Copy", "کپی")) + "</button></div>", true) +
+      fold("call-history", tt("History with this business", "سوابق این کسب‌وکار"), "<div id=\"cc-hist\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>", false) +
+      "<p class=\"cc-l\">" + esc(tt("Result", "نتیجه")) + "</p><div class=\"cc-out\">" + OUT.map(function(o){
+        return "<button type=\"button\" data-out=\"" + esc(o) + "\"" + (cur0 === o ? " class=\"on\"" : "") + ">" + esc(stLabel(o)) + "</button>";
+      }).join("") + "</div>" +
+      "<label class=\"cc-l\">" + esc(tt("Note — name, direct email, callback time", "یادداشت — نام، ایمیل مستقیم، زمان تماس مجدد")) +
+      "<input type=\"text\" id=\"cc-note\" value=\"" + esc(noteOf(b)) + "\"></label>" +
+      "<div class=\"cc-nav\"><button type=\"button\" class=\"btn ghost\" data-nav=\"prev\"" + (callI ? "" : " disabled") + ">" + esc(tt("← Previous", "→ قبلی")) + "</button>" +
+      "<a class=\"linkish\" href=\"#b/" + esc(b.slug) + "\">" + esc(tt("Open full page", "صفحهٔ کامل")) + "</a>" +
+      "<button type=\"button\" class=\"btn primary\" data-nav=\"next\"" + (callI < callQ.length - 1 ? "" : " disabled") + ">" + esc(tt("Next →", "بعدی ←")) + "</button></div></div></div></div></div>";
+    taskSec.innerHTML = html; renderQuickComm();
+    var hd = taskSec.querySelector("[data-fold=call-history]"); if (hd && hd.open) loadCallHistory();
+  }
+  var ccScen = "", ccScenFor = null;
+  function loadCallHistory(){
+    var b = callQ[callI], box = $("cc-hist"); if (!b || !box) return;
+    if (!LINE_MODE) { box.innerHTML = localHistoryHtml(b); return; }
+    api("GET", "/api/hub/history?business=" + encodeURIComponent(b.name)).then(function(d){
+      var x = $("cc-hist"); if (!x || callQ[callI] !== b) return;
+      var items = (d.items || []).slice(0, 8);
+      x.innerHTML = items.length ? "<ul class=\"hist-list\">" + items.map(histLine).join("") + "</ul>" + ((d.items || []).length > 8 ? "<a class=\"linkish\" href=\"#b/" + esc(b.slug) + "\">" + esc(tt("See all", "همه")) + "</a>" : "")
+        : "<p class=\"hint\">" + esc(tt("Nothing recorded yet — this is the first contact.", "هنوز چیزی ثبت نشده — این اولین تماس است.")) + "</p>";
+    }).catch(function(e){ var x = $("cc-hist"); if (x) x.innerHTML = "<p class=\"hint\">" + esc(e.message) + "</p>"; });
+  }
+  taskSec.addEventListener("change", function(e){
+    if (e.target.id === "cc-scen") { var b = callQ[callI]; ccScen = e.target.value; if (b && $("cc-script")) $("cc-script").value = buildScriptFor(b, ccScen); if ($("cc-open")) $("cc-open").hidden = ccScen !== "first"; }
+  });
+  taskSec.addEventListener("click", function(e){
+    var t = e.target.closest("[data-cc]"); if (!t) return;
+    var b = callQ[callI], ta = $("cc-script"); if (!b || !ta) return;
+    if (t.getAttribute("data-cc") === "print") { printText(tt("Call script — ", "اسکریپت تماس — ") + b.name, ta.value); logSync("script-print", b.name, ""); }
+    else { try { navigator.clipboard.writeText(ta.value); } catch(x){ ta.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); }
+  });
+  /* quick add: a place that is not on the list yet */
+  taskSec.addEventListener("click", function(e){
+    var t = e.target.closest("[data-qa]"); if (!t) return;
+    var f = t.closest(".pick").querySelector(".qa-form");
+    if (t.getAttribute("data-qa") === "open") { f.hidden = false; t.hidden = true; f.querySelector("[name=name]").focus(); }
+    else { f.hidden = true; t.closest(".pick").querySelector(".pick-new").hidden = false; }
+  });
+  taskSec.addEventListener("submit", function(e){
+    var f = e.target.closest(".qa-form"); if (!f) return;
+    e.preventDefault();
+    var kind = f.getAttribute("data-kind"), name = f.name.value.trim(), phone = f.phone.value.trim(), ind = f.ind.value, msg = f.querySelector(".qa-msg");
+    if (!name || !phone) return;
+    if (!/\d{3}\D*\d{3}\D*\d{4}/.test(phone)) { msg.textContent = tt("Enter a full phone number.", "شمارهٔ کامل را وارد کنید."); return; }
+    var existing = window.NEXAIS_newBiz.exists(name) ? bySlug(name.toLowerCase()) : null;
+    function open(){
+      loadBiz(); var b = bySlug(name.toLowerCase());
+      if (!b) { msg.textContent = tt("Could not add it — try again.", "اضافه نشد — دوباره امتحان کنید."); return; }
+      if (kind === "sms") { pickFilter.sms = "all"; smsBiz = b.slug; nav("sms/" + b.slug); }
+      else { nav("call/b/" + b.slug); }
+    }
+    if (existing) { open(); return; }
+    var rec = { name: name, ind: ind, indLabel: indLabel(ind), city: "", phone: phone, web: "", contact: "", note: tt("Added from ", "اضافه‌شده از ") + (kind === "sms" ? "SMS" : "Calls"), added: new Date().toISOString(), research: "" };
+    var btn = f.querySelector("[type=submit]"); btn.disabled = true; msg.textContent = tt("Adding…", "در حال افزودن…");
+    var save = LINE_MODE
+      ? api("POST", "/api/hub/business", { name: name, industry: ind, phone: phone, note: rec.note, at: rec.added })
+          .catch(function(err){ if (!/already/i.test(err.message)) throw err; })
+      : Promise.resolve();
+    save.then(function(){ window.NEXAIS_newBiz.add(rec); open(); })
+      .catch(function(err){ btn.disabled = false; msg.textContent = err.message; });
+  });
+
+  /* ---------- calls & sms ---------- */
+  var LINE_MODE = !!window.NEXAIS_SESSION, AVA_LINE = "437-529-0400";
+  var myPhone = null, activeCall = null, callTimer = null;
+  if (LINE_MODE) fetch("/api/me/phone", { credentials: "same-origin", cache: "no-store" }).then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){ myPhone = d && d.phone || ""; if (cur.v === "call") renderCall(); }).catch(function(){ myPhone = ""; });
+  function api(method, url, body){
+    return fetch(url, { method: method, credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if (!r.ok) throw new Error(j.error || ("Error " + r.status)); return j; }); });
+  }
+  function cleanNumber(t){ var m = String(t || "").match(/\+?\(?\d[\d\s().-]{8,}\d/); return m ? m[0].trim() : ""; }
+  function extOf(t){ var m = String(t || "").match(/ext\.?\s*(\d+)/i); return m ? m[1] : ""; }
+  var CALL_ST = {
+    queued: ["Starting…", "در حال شروع…"], ringing_you: ["Ringing your phone — answer it", "گوشی شما زنگ می‌خورد — جواب بدهید"],
+    connecting: ["Connecting you to the business…", "در حال وصل کردن شما به کسب‌وکار…"], connected: ["Connected", "وصل شد"],
+    ended: ["Call ended", "تماس تمام شد"], you_missed: ["You didn't answer your phone", "شما گوشی را جواب ندادید"],
+    no_answer: ["The business didn't answer", "کسب‌وکار جواب نداد"], failed: ["Call failed", "تماس ناموفق بود"], blocked: ["Call blocked", "تماس مسدود شد"]
+  };
+  function lineCallBox(b, ph){
+    var num = cleanNumber(ph.text), ext = extOf(ph.text);
+    var html = "<div class=\"line-box\"><div class=\"cc-tel\">" + esc(num) + "</div>";
+    if (myPhone === null) return html + "<p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>";
+    if (!myPhone) return html + "<div class=\"my-phone\"><p>" + esc(tt("First, your own mobile number — we ring you, then connect you. The business sees AVA's number (" + AVA_LINE + ").",
+      "اول شمارهٔ موبایل خودتان — اول به شما زنگ می‌زنیم، بعد وصلتان می‌کنیم. کسب‌وکار شمارهٔ اوا (" + AVA_LINE + ") را می‌بیند.")) + "</p>" +
+      "<input id=\"my-phone\" type=\"tel\" placeholder=\"647 555 0123\"><button type=\"button\" class=\"btn primary\" data-line=\"save-phone\">" + esc(tt("Save", "ذخیره")) + "</button><p class=\"hint\" id=\"my-phone-msg\"></p></div></div>";
+    var busy = activeCall && ["queued", "ringing_you", "connecting", "connected"].indexOf(activeCall.status) >= 0;
+    html += "<button type=\"button\" class=\"btn primary call-btn\" data-line=\"call\" data-num=\"" + esc(num) + "\"" + (busy ? " disabled" : "") + ">☎ " +
+      esc(tt("Call from AVA's number", "تماس با شمارهٔ اوا")) + "</button>" +
+      "<p class=\"line-note\">" + esc(tt("We ring you on " + myPhone + ", then connect you. The business sees " + AVA_LINE + ".", "اول به " + myPhone + " زنگ می‌زنیم، بعد وصل می‌شوید. کسب‌وکار " + AVA_LINE + " را می‌بیند.")) +
+      " <a href=\"#\" data-line=\"change-phone\">" + esc(tt("Change my number", "تغییر شمارهٔ من")) + "</a></p>" +
+      (ext ? "<p class=\"line-note\">" + esc(tt("This number has extension " + ext + " — ask for it once you are connected.", "این شماره داخلی " + ext + " دارد — بعد از وصل شدن آن را بخواهید.")) + "</p>" : "") +
+      "<p class=\"call-status\" id=\"call-status\">" + callStatusText() + "</p></div>";
+    return html;
+  }
+  function callStatusText(){
+    if (!activeCall) return "";
+    if (activeCall.msg) return esc(activeCall.msg);
+    var t = CALL_ST[activeCall.status] || [activeCall.status, activeCall.status];
+    var extra = activeCall.status === "ended" && activeCall.duration_sec ? " · " + Math.floor(activeCall.duration_sec / 60) + ":" + ("0" + activeCall.duration_sec % 60).slice(-2) : "";
+    if (activeCall.status === "failed" && activeCall.error) extra = " · " + activeCall.error;
+    return "<span class=\"dot-" + activeCall.status + "\"></span>" + esc(tt(t[0], t[1]) + extra);
+  }
+  function paintCallStatus(){ var el = $("call-status"); if (el) el.innerHTML = callStatusText(); var btn = document.querySelector("[data-line=call]");
+    if (btn) btn.disabled = !!(activeCall && !activeCall.msg && ["queued", "ringing_you", "connecting", "connected"].indexOf(activeCall.status) >= 0); }
+  function pollCall(id){
+    clearTimeout(callTimer);
+    api("GET", "/api/calls/" + id).then(function(d){
+      activeCall = d.call; paintCallStatus();
+      if (["queued", "ringing_you", "connecting", "connected"].indexOf(d.call.status) >= 0) callTimer = setTimeout(function(){ pollCall(id); }, 2000);
+    }).catch(function(){ callTimer = setTimeout(function(){ pollCall(id); }, 4000); });
+  }
+  document.addEventListener("click", function(e){
+    var t = e.target.closest && e.target.closest("[data-line]"); if (!t) return;
+    var k = t.getAttribute("data-line"); e.preventDefault();
+    if (k === "change-phone") { myPhone = ""; renderCall(); return; }
+    if (k === "save-phone") {
+      var v = ($("my-phone") || {}).value || "", msg = $("my-phone-msg");
+      api("PUT", "/api/me/phone", { phone: v }).then(function(d){ myPhone = d.phone; renderCall(); }).catch(function(err){ if (msg) msg.textContent = err.message; });
+      return;
+    }
+    if (k === "call") {
+      var b = callQ[callI]; if (!b) return;
+      activeCall = { status: "queued" }; paintCallStatus();
+      api("POST", "/api/calls/start", { business: b.name, to: t.getAttribute("data-num") }).then(function(d){
+        activeCall = { status: d.call.status, id: d.call.id }; paintCallStatus(); pollCall(d.call.id);
+      }).catch(function(err){ activeCall = { status: "failed", msg: err.message }; paintCallStatus(); });
+    }
+  });
+  var PERM = { can_call: true, can_sms: true, loaded: !window.NEXAIS_SESSION };
+  if (window.NEXAIS_SESSION) fetch("/api/permissions/me", { credentials: "same-origin", cache: "no-store" }).then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(p){ if (p) { PERM.can_call = !!p.can_call; PERM.can_sms = !!p.can_sms; } PERM.loaded = true; if (cur.v === "call") renderCall(); if (cur.v === "sms") renderSms(); }).catch(function(){});
+  function phoneHead(tab){
+    return tab === "sms"
+      ? taskHead(tt("SMS", "پیامک‌ها"), tt("Pick a business from the list, choose a message and send. Every text is saved on the business for the whole team.",
+          "یک کسب‌وکار را از لیست انتخاب کنید، پیام را انتخاب کنید و بفرستید. هر پیامک روی همان کسب‌وکار برای کل تیم ذخیره می‌شود."))
+      : taskHead(tt("Calls", "تماس‌ها"), tt("Pick a business from the list and call. Log the result — it is saved on the business for the whole team.",
+          "یک کسب‌وکار را از لیست انتخاب کنید و تماس بگیرید. نتیجه را ثبت کنید — روی همان کسب‌وکار برای کل تیم ذخیره می‌شود."));
+  }
+  /* list picker shared by Calls and SMS */
+  var pickFilter = { call: "follow", sms: "all" }, pickSearch = { call: "", sms: "" };
+  function pickList(kind){
+    var f = pickFilter[kind], q = (pickSearch[kind] || "").toLowerCase();
+    var L = f === "follow" ? followList() : f === "new" ? buildCallQ("new") : BIZ.slice();
+    L = L.filter(inInd);
+    if (q) L = L.filter(function(b){ return (b.name + " " + b.loc).toLowerCase().indexOf(q) >= 0; });
+    return L;
+  }
+  function pickHtml(kind, selected){
+    var L = pickList(kind);
+    var chips = [["follow", tt("Follow-ups", "پیگیری‌ها"), followList().filter(inInd).length], ["new", tt("Not called", "تماس نگرفته"), buildCallQ("new").filter(inInd).length], ["all", tt("All", "همه"), BIZ.filter(inInd).length]];
+    var opts = ALL_INDS.map(function(x){ return "<option value=\"" + x.k + "\">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("");
+    var add = "<button type=\"button\" class=\"pick-new\" data-qa=\"open\" data-kind=\"" + kind + "\">+ " + esc(kind === "sms" ? tt("Text a new number", "پیامک به شمارهٔ جدید") : tt("Call a new number", "تماس با شمارهٔ جدید")) + "</button>" +
+      "<form class=\"qa-form\" data-kind=\"" + kind + "\" hidden>" +
+      "<input name=\"name\" required placeholder=\"" + esc(tt("Business or person name *", "نام کسب‌وکار یا شخص *")) + "\">" +
+      "<input name=\"phone\" type=\"tel\" required placeholder=\"" + esc(tt("Phone number *", "شمارهٔ تلفن *")) + "\">" +
+      "<select name=\"ind\">" + opts + "</select>" +
+      "<div class=\"qa-row\"><button type=\"submit\" class=\"btn primary\">" + esc(kind === "sms" ? tt("Add & write SMS", "افزودن و نوشتن پیامک") : tt("Add & call", "افزودن و تماس")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" data-qa=\"close\">" + esc(tt("Cancel", "انصراف")) + "</button></div><p class=\"qa-msg\"></p></form>";
+    return "<div class=\"pick\">" + add + "<input type=\"search\" class=\"pick-q\" data-kind=\"" + kind + "\" placeholder=\"" + esc(tt("Search a business…", "جستجوی کسب‌وکار…")) + "\" value=\"" + esc(pickSearch[kind]) + "\">" +
+      "<div class=\"pick-f\">" + chips.map(function(c){ return "<button type=\"button\" data-pf=\"" + c[0] + "\" data-kind=\"" + kind + "\"" + (pickFilter[kind] === c[0] ? " class=\"on\"" : "") + ">" + esc(c[1]) + " <i>" + c[2] + "</i></button>"; }).join("") + "</div>" +
+      "<ul class=\"pick-l\">" + (L.length ? L.map(function(b){
+        var ph = phoneOf(b);
+        return "<li><button type=\"button\" data-pick=\"" + esc(b.slug) + "\" data-kind=\"" + kind + "\"" + (selected === b ? " class=\"on\"" : "") + "><b>" + esc(b.name) + "</b><small>" +
+          esc(stLabel(statusOf(b))) + (ph.text ? " · " + esc(ph.text.split("/")[0].trim()) : "") + "</small></button></li>";
+      }).join("") : "<li class=\"pick-none\">" + esc(tt("Nothing in this list.", "در این لیست چیزی نیست.")) + "</li>") + "</ul></div>";
+  }
+  function permNote(what){
+    return "<div class=\"empty-box\"><p>" + esc(tt(what + " is not turned on for your account yet. Ask the NexAIS admin to enable it.",
+      what + " هنوز برای حساب شما فعال نشده. از ادمین NexAIS بخواهید فعالش کند.")) + "</p></div>";
+  }
+  function logAction(b, type){
+    var tr = b.el.querySelector(".act-type"), btn = b.el.querySelector(".act-btn");
+    if (!tr || !btn) return;
+    tr.value = type; tr.dispatchEvent(new Event("change", { bubbles: true })); btn.click();
+  }
+  function actionsOf(b, type){ return (b.el.__actions || []).filter(function(a){ return !type || a.t === type; }); }
+  function firstName(b){ var a = askFor(b); if (/not yet known|unknown|owner|manager|reception/i.test(a.split(/[—-]/)[0])) return ""; var m = a.match(/^([A-Z][a-zA-Z'-]+)\s+[A-Z]/); return m ? m[1] : ""; }
+  function myName(){ var s0 = window.NEXAIS_SESSION; if (s0 && s0.name) return s0.name.split(" ")[0]; try { return (JSON.parse(localStorage.getItem("nexais-hub-user-v1") || '""') || "").split(" ")[0]; } catch(e){ return ""; } }
+  var SMS_T = [
+    { k: "after", en: "After a call", fa: "بعد از تماس", t: "Hi {name}, this is {me} from NexAIS — thanks for your time today. You can test AVA, our AI receptionist, yourself any time: call or text +1 (437) 529-0400. Happy to start your free 7-day trial whenever you're ready." },
+    { k: "proposal", en: "Ask where to send the proposal", fa: "پرسیدن ایمیل برای پروپوزال", t: "Hi {name}, {me} from NexAIS here. We prepared a short proposal for {biz} showing how AVA answers every call and booking 24/7. What's the best email to send it to?" },
+    { k: "callback", en: "Callback reminder", fa: "یادآوری تماس مجدد", t: "Hi {name}, {me} from NexAIS — a quick reminder that I'll call you back as we agreed. Talk soon!" },
+    { k: "proplink", en: "Send the proposal link", fa: "ارسال لینک پروپوزال", t: "Hi {name}, {me} from NexAIS — here is the proposal we prepared for {biz}: {proposal} — happy to answer any questions." },
+    { k: "pay", en: "Payment link (start the trial)", fa: "لینک پرداخت (شروع دورهٔ رایگان)", t: "Hi {name}, here is the secure link to start the free AVA trial for {biz}: {link} — no charge today. Any questions, just reply. {me}, NexAIS" },
+    { k: "custom", en: "Write my own", fa: "متن خودم", t: "" }
+  ];
+  var smsBiz = "", smsT = "after";
+  function smsStart(slug){ if (slug && bySlug(slug)) smsBiz = slug; else if (!smsBiz && cur.biz) smsBiz = cur.biz.slug; renderSms(); }
+  function smsText(b){
+    var t = SMS_T.filter(function(x){ return x.k === smsT; })[0];
+    var link = ($("cl-open") || {}).href || "";
+    return (t ? t.t : "").replace(/\{name\}/g, (b && firstName(b)) || "there").replace(/\{me\}/g, myName() || "the NexAIS team")
+      .replace(/\{biz\}/g, b ? b.name : "your business").replace(/\{link\}/g, link).replace(/\{proposal\}/g, b ? proposalOf(b).url || "(link)" : "(link)").replace(/^Hi there, /, "Hi, ");
+  }
+  function renderSms(){
+    var html = phoneHead("sms");
+    if (!PERM.can_sms) { taskSec.innerHTML = html + permNote(tt("SMS", "پیامک")) + "</div>"; return; }
+    var b = bySlug(smsBiz), ph = b ? phoneOf(b) : { text: "" };
+    html += "<div class=\"pick-layout\">" + pickHtml("sms", b) + "<div class=\"pick-main\">";
+    if (!b) { taskSec.innerHTML = html + "<div class=\"empty-box\"><p>" + esc(tt("Pick a business from the list.", "یک کسب‌وکار از لیست انتخاب کنید.")) + "</p></div></div></div></div>"; renderQuickComm(); return; }
+    var opts = "<option value=\"\">" + esc(tt("— choose the business —", "— کسب‌وکار را انتخاب کنید —")) + "</option>" + BIZ.map(function(x){
+      return "<option value=\"" + esc(x.slug) + "\"" + (x.slug === smsBiz ? " selected" : "") + ">" + esc(x.name) + "</option>"; }).join("");
+    var tOpts = SMS_T.map(function(x){ return "<option value=\"" + x.k + "\"" + (x.k === smsT ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("");
+    var nm = (ph.text || "").match(/\+?\(?\d[\d\s().-]{8,}\d/); var num = nm ? nm[0].trim() : "";
+    html += "<div class=\"call-card sms-card\"><h3>" + esc(b.name) + "</h3><p class=\"cc-loc\">" + esc(b.loc) + " · " + esc(indLabel(b.ind)) + "</p><div class=\"sms-grid\">" +
+      "<label class=\"cc-l\">" + esc(tt("Mobile number", "شمارهٔ موبایل")) + "<input id=\"sms-to\" type=\"tel\" value=\"" + esc(num) + "\"><small class=\"sms-hint\">" +
+      esc(tt("Business landlines usually can't get texts — use the person's mobile.", "خط ثابت کسب‌وکار معمولاً پیامک نمی‌گیرد — موبایل خود شخص را وارد کنید.")) + "</small></label>" +
+      "<label class=\"cc-l\">" + esc(tt("Message", "پیام")) + "<select id=\"sms-t\">" + tOpts + "</select></label></div>" +
+      "<textarea id=\"sms-body\" rows=\"5\" class=\"sms-body\">" + esc(smsText(b)) + "</textarea><p class=\"sms-count\" id=\"sms-count\"></p>" +
+      "<label class=\"sms-consent\"><input type=\"checkbox\" id=\"sms-ok\"> " + esc(tt("This person agreed to receive texts from us (required by law — CASL).", "این شخص قبول کرده از ما پیامک بگیرد (طبق قانون CASL الزامی است).")) + "</label>" +
+      (LINE_MODE
+        ? "<div class=\"cc-nav\"><button type=\"button\" class=\"btn ghost\" data-sms=\"copy\">" + esc(tt("Copy text", "کپی متن")) + "</button>" +
+          "<button type=\"button\" class=\"btn primary\" data-sms=\"line-send\">✉ " + esc(tt("Send from AVA's number (" + AVA_LINE + ")", "ارسال با شمارهٔ اوا (" + AVA_LINE + ")")) + "</button></div>"
+        : "<div class=\"cc-nav\"><button type=\"button\" class=\"btn ghost\" data-sms=\"copy\">" + esc(tt("Copy text", "کپی متن")) + "</button>" +
+          "<a class=\"btn primary\" id=\"sms-send\" href=\"#\" data-sms=\"send\">" + esc(tt("Open in my phone's Messages", "باز کردن در پیامک گوشی")) + "</a>" +
+          "<button type=\"button\" class=\"btn ghost\" data-sms=\"log\">" + esc(tt("Log: SMS sent", "ثبت: پیامک ارسال شد")) + "</button></div>") +
+      "<p class=\"hint\" id=\"sms-msg\" style=\"margin:10px 0 0\"></p></div>";
+    if (b && LINE_MODE) {
+      html += "<p class=\"h3s\" style=\"margin-top:20px\">" + esc(tt("Conversation on AVA's number", "گفتگو با شمارهٔ اوا")) + "</p><div id=\"sms-thread\" class=\"sms-thread\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>";
+    } else if (b) {
+      var hist = actionsOf(b, "SMS");
+      html += "<p class=\"h3s\" style=\"margin-top:20px\">" + esc(tt("Texts logged for ", "پیامک‌های ثبت‌شده برای ")) + esc(b.name) + " · " + hist.length + "</p>" +
+        (hist.length ? "<ul class=\"recent\">" + hist.slice().reverse().map(function(a){ return "<li><time>" + esc(a.d || "") + "</time>SMS</li>"; }).join("") + "</ul>" : "");
+    }
+    html += "</div></div></div>";
+    taskSec.innerHTML = html; smsCount(); renderQuickComm();
+    if (LINE_MODE) loadThread();
+  }
+  var threadTimer = null;
+  function loadThread(){
+    clearTimeout(threadTimer);
+    var b = bySlug(smsBiz), box = $("sms-thread"), to = ($("sms-to") || {}).value || "";
+    if (!b || !box || cur.v !== "sms") return;
+    if (!to) { box.innerHTML = "<p class=\"hint\">" + esc(tt("Enter the mobile number to see the conversation.", "شمارهٔ موبایل را وارد کنید تا گفتگو نمایش داده شود.")) + "</p>"; return; }
+    api("GET", "/api/sms/thread?business=" + encodeURIComponent(b.name) + "&to=" + encodeURIComponent(to)).then(function(d){
+      var L = d.messages || [];
+      box.innerHTML = L.length ? L.slice().reverse().map(function(m){
+        var out = m.direction !== "inbound";
+        return "<div class=\"bubble " + (out ? "out" : "in") + "\"><p>" + esc(m.body) + "</p><small>" + esc(new Date(m.created_at).toLocaleString()) +
+          (out ? " · " + esc(m.status === "failed" ? tt("Not delivered", "ارسال نشد") + (m.error ? " — " + m.error : "") : m.status) : " · " + esc(tt("Reply", "پاسخ"))) + "</small></div>";
+      }).join("") : "<p class=\"hint\">" + esc(tt("No messages with this number yet.", "هنوز پیامی با این شماره نیست.")) + "</p>";
+      threadTimer = setTimeout(loadThread, 15000);
+    }).catch(function(err){ box.innerHTML = "<p class=\"hint\">" + esc(err.message) + "</p>"; });
+  }
+  function smsCount(){
+    var t = $("sms-body"), c = $("sms-count"); if (!t || !c) return;
+    var n = t.value.length; c.textContent = n + " " + tt("characters", "کاراکتر") + " · " + Math.max(1, Math.ceil(n / 160)) + " SMS";
+    var to = ($("sms-to") || {}).value || "";
+    var a = $("sms-send"); if (a) a.href = "sms:" + to.replace(/[^\d+]/g, "") + "?&body=" + encodeURIComponent(t.value);
+  }
+  taskSec.addEventListener("input", function(e){
+    if (e.target.id === "sms-body" || e.target.id === "sms-to") smsCount();
+    if (e.target.classList.contains("pick-q")) {
+      var kind = e.target.getAttribute("data-kind"); pickSearch[kind] = e.target.value;
+      var cur0 = kind === "call" ? callQ[callI] : bySlug(smsBiz);
+      var box = e.target.closest(".pick"), tmp = document.createElement("div"); tmp.innerHTML = pickHtml(kind, cur0);
+      box.querySelector(".pick-l").replaceWith(tmp.querySelector(".pick-l"));
+      box.querySelector(".pick-f").replaceWith(tmp.querySelector(".pick-f"));
+      if (kind === "call") callQ = pickList("call");
+    }
+  });
+  taskSec.addEventListener("click", function(e){
+    var pf = e.target.closest("[data-pf]"), pk = e.target.closest("[data-pick]");
+    if (pf) { var k1 = pf.getAttribute("data-kind"); pickFilter[k1] = pf.getAttribute("data-pf"); if (k1 === "call") { saveNote(); callI = 0; callSel = null; renderCall(); } else renderSms(); return; }
+    if (pk) {
+      var k2 = pk.getAttribute("data-kind"), bz = bySlug(pk.getAttribute("data-pick"));
+      if (k2 === "call") { saveNote(); callPin = bz; activeCall = null; renderCall(); } else { smsBiz = bz.slug; renderSms(); }
+    }
+  }, true);
+  taskSec.addEventListener("change", function(e){
+    if (e.target.id === "sms-biz") { smsBiz = e.target.value; renderSms(); }
+    else if (e.target.id === "sms-t") { smsT = e.target.value; var b = bySlug(smsBiz); $("sms-body").value = smsText(b); smsCount(); }
+  });
+  taskSec.addEventListener("click", function(e){
+    var t = e.target.closest("[data-sms],a.cc-tel"); if (!t) return;
+    if (t.classList.contains("cc-tel")) { var cb = callQ[callI]; if (cb) logAction(cb, "Call"); return; }
+    var k = t.getAttribute("data-sms"), msg = $("sms-msg"), b = bySlug(smsBiz), body = $("sms-body");
+    if (k === "copy") { try { navigator.clipboard.writeText(body.value); } catch(x){ body.select(); document.execCommand("copy"); } msg.textContent = tt("Copied ✓", "کپی شد ✓"); return; }
+    if (!b) { e.preventDefault(); msg.textContent = tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید."); return; }
+    if (!$("sms-ok").checked) { e.preventDefault(); msg.textContent = tt("Tick the consent box first — we only text people who agreed.", "اول تیک رضایت را بزنید — فقط به کسانی پیامک می‌دهیم که قبول کرده‌اند."); return; }
+    if (k === "send") { msg.textContent = tt("Your Messages app opens with the text. After you send it, press “Log: SMS sent”.", "برنامهٔ پیامک گوشی با متن باز می‌شود. بعد از ارسال، «ثبت: پیامک ارسال شد» را بزنید."); return; }
+    if (k === "line-send") {
+      t.disabled = true; msg.textContent = tt("Sending…", "در حال ارسال…");
+      api("POST", "/api/sms/send", { business: b.name, to: $("sms-to").value, body: body.value, consent: true }).then(function(){
+        msg.textContent = tt("Sent from " + AVA_LINE + " ✓", "از " + AVA_LINE + " ارسال شد ✓"); t.disabled = false;
+        var a = b.el.__actions = b.el.__actions || []; a.push({ t: "SMS", d: new Date().toISOString().slice(0, 10) });
+        setTimeout(loadThread, 1500);
+      }).catch(function(err){ msg.textContent = err.message; t.disabled = false; });
+      return;
+    }
+    if (k === "log") { logAction(b, "SMS"); setTimeout(function(){ renderSms(); var m2 = $("sms-msg"); if (m2) m2.textContent = tt("Logged ✓", "ثبت شد ✓"); }, 120); }
+  });
+
+  function saveNote(){
+    var b = callQ[callI], inp = $("cc-note"); if (!b || !inp) return;
+    var n = b.el.querySelector(".notes"); if (!n || n.value === inp.value) return;
+    n.value = inp.value;
+    n.dispatchEvent(new Event("input", { bubbles: true })); n.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  function renderDownloads(){
+    var opts = BIZ.map(function(b){ return "<option value=\"" + esc(b.slug) + "\">" + esc(b.name) + "</option>"; }).join("");
+    var html = taskHead(tt("Downloads", "دانلودها"),
+      tt("Each button opens the print window — choose “Save as PDF” to download.", "هر دکمه پنجرهٔ چاپ را باز می‌کند — برای دانلود «Save as PDF» را انتخاب کنید."));
+    html += "<div class=\"dl-grid\">" +
+      dl("all-scripts", tt("All call scripts", "همهٔ اسکریپت‌های تماس"), tt("The master script, word for word.", "اسکریپت اصلی، کلمه به کلمه.")) +
+      dl("phone-list", tt("Phone list", "لیست تلفن‌ها"), tt("Every business with phone and contact, a column for results.", "همهٔ کسب‌وکارها با تلفن و مخاطب، با ستون نتیجه.")) +
+      "<div class=\"dl-item\"><b>" + esc(tt("Script for one business", "اسکریپت یک کسب‌وکار")) + "</b><span>" + esc(tt("Its opening line, findings and proposal.", "جملهٔ شروع، یافته‌ها و پروپوزالش.")) + "</span>" +
+      "<select id=\"dl-biz\">" + opts + "</select><button type=\"button\" class=\"btn ghost\" data-dl=\"one\">" + esc(tt("Download", "دانلود")) + "</button></div>" +
+      "</div></div>";
+    taskSec.innerHTML = html;
+  }
+  function dl(k, t, d){
+    return "<div class=\"dl-item\"><b>" + esc(t) + "</b><span>" + esc(d) + "</span><button type=\"button\" class=\"btn ghost\" data-dl=\"" + k + "\">" + esc(tt("Download", "دانلود")) + "</button></div>";
+  }
+
+  taskSec.addEventListener("click", function(ev){
+    var t = ev.target.closest("[data-biz],[data-out],[data-nav],[data-dl]"); if (!t) return;
+    if (ev.target.closest("a.tel")) return;
+    if (t.hasAttribute("data-biz")) return nav("b/" + t.getAttribute("data-biz"));
+    if (t.hasAttribute("data-out")) {
+      var b = callQ[callI]; if (!b) return;
+      saveNote();
+      var sel = b.el.querySelector(".status");
+      sel.value = t.getAttribute("data-out"); sel.dispatchEvent(new Event("change", { bubbles: true }));
+      Array.prototype.forEach.call(taskSec.querySelectorAll("[data-out]"), function(x){ x.classList.toggle("on", x === t); });
+      return;
+    }
+    if (t.hasAttribute("data-nav")) {
+      saveNote();
+      callI = Math.max(0, callI + (t.getAttribute("data-nav") === "next" ? 1 : -1)); callSel = callQ[callI] || null; activeCall = null;
+      renderCall(); renderRail(); window.scrollTo(0, 0); return;
+    }
+    var k = t.getAttribute("data-dl");
+    if (k === "all-scripts") { var ps = $("print-scripts"); if (ps) ps.click(); }
+    else if (k === "phone-list") { var pl = $("print-list"); if (pl) pl.click(); }
+    else if (k === "one") { var bb = bySlug($("dl-biz").value); var pb = bb && bb.el.querySelector(".print-card-btn"); if (pb) pb.click(); }
+  });
+
+  /* ---------- close a deal: business → plan → agreement → payment link ---------- */
+  var closeBuilt = false, closeBiz = "", closeDone = {};
+  var LEGAL = "https://crm.nexais.ca";
+  /* signed in: the "Close a deal" page IS Muse's Poorya Close Panel (served verbatim at /close-panel) —
+     the two must stay identical (Jarvis J-187/J-188). The hub only prefills the client and logs to the CRM. */
+  var mpBuilt = false;
+  function musePanelSetup(slug){
+    var sec = $("close"); if (!sec) return;
+    if (slug && bySlug(slug)) closeBiz = slug;
+    if (!mpBuilt) {
+      mpBuilt = true;
+      var panel = sec.querySelector("details.sec-panel");
+      Array.prototype.forEach.call(panel.children, function(c){ if (c.tagName !== "SUMMARY") c.hidden = true; });
+      var wrapper = document.createElement("div"); wrapper.id = "mp-wrap";
+      wrapper.innerHTML = "<div class=\"mp-bar\"></div><iframe id=\"mp-frame\" src=\"/close-panel\" title=\"Close panel\" loading=\"eager\"></iframe>";
+      panel.appendChild(wrapper);
+      var fr = $("mp-frame");
+      fr.addEventListener("load", function(){ mpPrefill(); mpFit(); try { new ResizeObserver(mpFit).observe(fr.contentDocument.body); } catch(e){ setInterval(mpFit, 1500); } });
+      sec.addEventListener("change", function(e){ if (e.target.id === "mp-biz") { closeBiz = e.target.value; mpPrefill(); renderMpBar(); } });
+      sec.addEventListener("click", function(e){
+        var t = e.target.closest("[data-mp]"); if (!t) return;
+        if (!closeBiz) { alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); return; }
+        var k = t.getAttribute("data-mp"), plan = mpVal("cPlan") || "";
+        var map = { agree: ["agreement", plan], pay: ["paylink-sent", plan], signed: ["notes", "Signed — free trial active" + (plan ? " (" + plan + ")" : "")], intake: ["notes", "Intake form received"] };
+        logSync(map[k][0], closeName(), map[k][1]);
+        closeDone[closeBiz] = closeDone[closeBiz] || {}; closeDone[closeBiz][k] = true; renderMpBar();
+      });
+    }
+    renderMpBar(); mpPrefill();
+  }
+  function mpDoc(){ var fr = $("mp-frame"); try { return fr && fr.contentDocument && fr.contentDocument.getElementById("cbiz") ? fr.contentDocument : null; } catch(e){ return null; } }
+  function mpVal(id){ var d = mpDoc(), el = d && d.getElementById(id); return el ? (el.value !== undefined && el.tagName !== "SPAN" && el.tagName !== "DIV" && el.tagName !== "B" ? el.value : el.textContent).trim() : ""; }
+  function mpFit(){ var fr = $("mp-frame"), d = mpDoc(); if (fr && d) fr.style.height = Math.max(600, d.documentElement.scrollHeight + 8) + "px"; }
+  function mpPrefill(){
+    var d = mpDoc(), b = bySlug(closeBiz); if (!d || !b) return;
+    var ask = askFor(b), contact = ask ? ask.split(/\s+[—-]\s+/)[0].trim() : "", ph = phoneOf(b), m = (ph.text || "").match(/\+?\(?\d[\d\s().-]{8,}\d/);
+    var set = function(id, v, force){ var el = d.getElementById(id); if (!el || (!force && el.value && el.dataset.hub !== "1")) return; el.value = v || ""; el.dataset.hub = "1"; el.dispatchEvent(new Event("input", { bubbles: true })); };
+    set("cbiz", b.name, true);
+    if (contact && !/not yet known/i.test(contact)) set("cname", contact, true);
+    if (m) set("cphone", m[0].trim(), true);
+    var em = emailOf(b); if (em) set("cemail", em, true);
+  }
+  function renderMpBar(){
+    var bar = document.querySelector("#mp-wrap .mp-bar"); if (!bar) return;
+    var opts = "<option value=\"\">" + esc(tt("— choose the business —", "— کسب‌وکار را انتخاب کنید —")) + "</option>" +
+      BIZ.map(function(b){ return "<option value=\"" + esc(b.slug) + "\"" + (b.slug === closeBiz ? " selected" : "") + ">" + esc(b.name) + "</option>"; }).join("");
+    var d = closeDone[closeBiz] || {}, btn = function(k, en, fa){ return "<button type=\"button\" class=\"btn " + (d[k] ? "done" : "ghost") + "\" data-mp=\"" + k + "\">" + (d[k] ? "✓ " : "") + esc(tt(en, fa)) + "</button>"; };
+    bar.innerHTML = "<label>" + esc(tt("Business (fills the panel's client form)", "کسب‌وکار (فرم مشتری پنل را پر می‌کند)")) + "<select id=\"mp-biz\">" + opts + "</select></label>" +
+      "<div class=\"mp-log\"><span>" + esc(tt("Log in the CRM:", "ثبت در CRM:")) + "</span>" + btn("agree", "Agreement sent", "قرارداد ارسال شد") + btn("pay", "Payment link sent", "لینک پرداخت ارسال شد") +
+      btn("signed", "Signed — trial active", "امضا شد — دورهٔ رایگان فعال") + btn("intake", "Intake received", "فرم اطلاعات رسید") + "</div>";
+  }
+  function closeSetup(slug){
+    if (LINE_MODE) return musePanelSetup(slug);
+    var sec = $("close"); if (!sec) return;
+    if (slug && bySlug(slug)) closeBiz = slug;
+    if (!closeBuilt) {
+      closeBuilt = true;
+      var wrapEl = sec.querySelector(".wrap"), panel = sec.querySelector("details.sec-panel");
+      var boxes = panel.querySelectorAll(":scope > .box");
+      var calcBox = boxes[0], intakeBox = boxes[1];
+      var btnRow = $("cl-open").parentNode, note = $("cl-note");
+      var flow = document.createElement("div"); flow.id = "close-flow";
+      flow.innerHTML = "<div class=\"cf-top\"></div>" +
+        "<div class=\"cf-step\" data-step=\"1\"><div class=\"cf-h\"><span class=\"qi\">1</span><b class=\"cf-t1\"></b></div><div class=\"cf-body cf-b1\"></div></div>" +
+        "<div class=\"cf-step\" data-step=\"2\"><div class=\"cf-h\"><span class=\"qi\">2</span><b class=\"cf-t2\"></b></div><div class=\"cf-body cf-b2\"></div></div>" +
+        "<div class=\"cf-step\" data-step=\"3\"><div class=\"cf-h\"><span class=\"qi\">3</span><b class=\"cf-t3\"></b></div><div class=\"cf-body cf-b3\"></div></div>" +
+        "<div class=\"cf-step\" data-step=\"4\"><div class=\"cf-h\"><span class=\"qi\">4</span><b class=\"cf-t4\"></b></div><div class=\"cf-body cf-b4\"><div class=\"box cf-check\"></div></div></div>" +
+        "<div class=\"box cf-inv\" id=\"cf-inv\"></div>";
+      panel.insertBefore(flow, calcBox);
+      flow.querySelector(".cf-b1").appendChild(calcBox);
+      var ag = document.createElement("div"); ag.className = "box cf-agree"; flow.querySelector(".cf-b2").appendChild(ag);
+      if (intakeBox) flow.querySelector(".cf-b2").appendChild(intakeBox);
+      var pay = document.createElement("div"); pay.className = "box";
+      pay.appendChild(btnRow); if (note) pay.appendChild(note);
+      flow.querySelector(".cf-b3").appendChild(pay);
+      sec.addEventListener("change", function(e){ if (e.target.closest(".calc") || e.target.id === "cf-biz" || e.target.id === "cf-email") setTimeout(renderClose, 30); });
+      sec.addEventListener("input", function(e){ if (e.target.closest(".calc") || e.target.id === "cf-email" || e.target.id === "cf-contact") setTimeout(renderAgreement, 30); });
+      sec.addEventListener("click", closeClick, true);
+    }
+    renderClose();
+  }
+  function closeName(){ var b = bySlug(closeBiz); return b ? b.name : ""; }
+  function renderClose(){
+    var flow = $("close-flow"); if (!flow) return;
+    var sel = $("cf-biz"); if (sel) closeBiz = sel.value;
+    var opts = "<option value=\"\">" + esc(tt("— choose the business —", "— کسب‌وکار را انتخاب کنید —")) + "</option>" +
+      BIZ.map(function(b){ return "<option value=\"" + esc(b.slug) + "\"" + (b.slug === closeBiz ? " selected" : "") + ">" + esc(b.name) + "</option>"; }).join("");
+    var keepEmail = $("cf-email") ? $("cf-email").value : "", keepContact = $("cf-contact") ? $("cf-contact").value : "";
+    flow.querySelector(".cf-top").innerHTML = "<h2 class=\"t-h\">" + esc(tt("Close a deal", "بستن قرارداد")) + "</h2>" +
+      "<p class=\"sub-p\">" + esc(tt("Three steps, in order. Nothing is charged today; the first charge is on the day the free trial ends.",
+        "سه قدم، به ترتیب. امروز هیچ مبلغی کسر نمی‌شود؛ اولین برداشت روز پایان دورهٔ رایگان است.")) + "</p>" +
+      "<div class=\"cf-who\"><label>" + esc(tt("Business", "کسب‌وکار")) + "<select id=\"cf-biz\">" + opts + "</select></label>" +
+      "<label>" + esc(tt("Client's name", "نام مشتری")) + "<input id=\"cf-contact\" type=\"text\" value=\"" + esc(keepContact) + "\"></label>" +
+      "<label>" + esc(tt("Client's email", "ایمیل مشتری")) + "<input id=\"cf-email\" type=\"email\" value=\"" + esc(keepEmail) + "\"></label></div>";
+    flow.querySelector(".cf-t1").textContent = tt("Choose the plan", "انتخاب پلن");
+    flow.querySelector(".cf-t2").textContent = tt("Send the agreement", "ارسال قرارداد");
+    flow.querySelector(".cf-t3").textContent = tt("Send the payment link", "ارسال لینک پرداخت");
+    flow.querySelector(".cf-t4").textContent = tt("Closing checklist", "چک‌لیست بستن قرارداد");
+    var d = closeDone[closeBiz] || {};
+    Array.prototype.forEach.call(flow.querySelectorAll(".cf-step"), function(st){
+      var n = st.getAttribute("data-step");
+      st.classList.toggle("done", n === "1" ? !!closeBiz : !!d[n]);
+    });
+    renderAgreement(); renderChecklist(); renderInvoice();
+  }
+  /* closing checklist — the first three tick themselves from the steps above */
+  var CL_KEY = "nexais-hub-close-v1";
+  function clSaved(){ try { return JSON.parse(localStorage.getItem(CL_KEY) || "{}"); } catch(e){ return {}; } }
+  function clSave(all){ try { localStorage.setItem(CL_KEY, JSON.stringify(all)); } catch(e){} }
+  var CL_ITEMS = [["plan", "Plan and free-trial length chosen with the client", "پلن و طول دورهٔ رایگان با مشتری انتخاب شد"],
+    ["agree", "Agreement summary + intake form sent", "خلاصهٔ قرارداد + فرم اطلاعات ارسال شد"],
+    ["pay", "Payment link sent", "لینک پرداخت ارسال شد"],
+    ["card", "Client finished the Stripe checkout (card on file, $0 today)", "مشتری پرداخت Stripe را کامل کرد (کارت ثبت شد، امروز $0)"],
+    ["intake", "Intake form came back complete", "فرم اطلاعات کامل برگشت"],
+    ["handoff", "Handed to the NexAIS team to build the AVA", "به تیم NexAIS برای ساخت AVA تحویل شد"]];
+  function renderChecklist(){
+    var box = document.querySelector("#close-flow .cf-check"); if (!box) return;
+    if (!closeBiz) { box.innerHTML = "<p class=\"cf-p\">" + esc(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")) + "</p>"; return; }
+    var d = closeDone[closeBiz] || {}, man = clSaved()[closeBiz] || {};
+    var auto = { plan: !!closeBiz, agree: !!d[2], pay: !!d[3] };
+    box.innerHTML = "<ul class=\"cf-list\">" + CL_ITEMS.map(function(it){
+      var on = it[0] in auto ? auto[it[0]] : !!man[it[0]], isAuto = it[0] in auto;
+      return "<li><label><input type=\"checkbox\" data-cl=\"" + it[0] + "\"" + (on ? " checked" : "") + (isAuto ? " disabled" : "") + "> " + esc(tt(it[1], it[2])) + "</label></li>"; }).join("") + "</ul>";
+  }
+  /* one-off services invoice (website, page design, AVA setup …) — printed as PDF */
+  var INV_PRESETS = [["Website design", 1500, ""], ["Website maintenance", 99, "/month"], ["Social page design", "", ""], ["Social page management", "", "/month"], ["AVA setup", "", ""], ["AVA monthly plan", "plan", "/month"]];
+  var invLines = [], invIssuer = "NexAIS Inc.", invHst = true, invRate = 13, invNo = "";
+  function invNum(){ var d = new Date(); return "NX-" + d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0") + "-" + String(d.getHours()).padStart(2, "0") + String(d.getMinutes()).padStart(2, "0"); }
+  function invTotals(){
+    var sub = invLines.reduce(function(a, l){ return a + (Number(l.qty) || 0) * (Number(l.price) || 0); }, 0), tax = invHst ? sub * invRate / 100 : 0;
+    return { sub: sub, tax: tax, total: sub + tax };
+  }
+  function m2(n){ return "$" + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function renderInvoice(){
+    var box = $("cf-inv"); if (!box) return;
+    if (!invNo) invNo = invNum();
+    var t = invTotals();
+    box.innerHTML = "<p class=\"h3s\">" + esc(tt("One-off services — invoice", "خدمات یک‌باره — فاکتور")) + "</p>" +
+      "<p class=\"cf-p\">" + esc(tt("For work outside the AVA subscription: website, page design or management, AVA setup. Prints as a PDF the client can pay against.", "برای کارهای بیرون از اشتراک AVA: سایت، طراحی یا مدیریت پیج، راه‌اندازی AVA. به‌صورت PDF چاپ می‌شود.")) + "</p>" +
+      "<div class=\"inv-grid\"><label>" + esc(tt("Issued by", "صادرکننده")) + "<select id=\"inv-iss\"><option" + (invIssuer === "NexAIS Inc." ? " selected" : "") + ">NexAIS Inc.</option><option" + (invIssuer === "ZhioStudio by NexAIS" ? " selected" : "") + ">ZhioStudio by NexAIS</option></select></label>" +
+      "<label>" + esc(tt("Invoice no.", "شمارهٔ فاکتور")) + "<input id=\"inv-no\" value=\"" + esc(invNo) + "\"></label>" +
+      "<label>" + esc(tt("Add a service", "افزودن خدمت")) + "<select id=\"inv-add\"><option value=\"\">" + esc(tt("— choose —", "— انتخاب —")) + "</option>" +
+        INV_PRESETS.map(function(p, i){ return "<option value=\"" + i + "\">" + esc(p[0]) + (p[1] && p[1] !== "plan" ? " — $" + p[1] + p[2] : "") + "</option>"; }).join("") + "<option value=\"blank\">" + esc(tt("Other (type it)", "سایر (بنویسید)")) + "</option></select></label></div>" +
+      (invLines.length ? "<table class=\"inv-t\"><thead><tr><th>" + esc(tt("Service", "خدمت")) + "</th><th>" + esc(tt("Qty", "تعداد")) + "</th><th>" + esc(tt("Price", "قیمت")) + "</th><th></th></tr></thead><tbody>" +
+        invLines.map(function(l, i){ return "<tr><td><input data-inv=\"desc\" data-i=\"" + i + "\" value=\"" + esc(l.desc) + "\"></td><td><input data-inv=\"qty\" data-i=\"" + i + "\" inputmode=\"numeric\" value=\"" + esc(String(l.qty)) + "\" style=\"width:60px\"></td>" +
+          "<td><input data-inv=\"price\" data-i=\"" + i + "\" inputmode=\"decimal\" value=\"" + esc(String(l.price)) + "\" placeholder=\"0.00\" style=\"width:100px\"></td><td><button type=\"button\" class=\"linkish\" data-inv-del=\"" + i + "\">✕</button></td></tr>"; }).join("") + "</tbody></table>" : "") +
+      "<div class=\"inv-foot\"><label class=\"close-check\"><input type=\"checkbox\" id=\"inv-hst\"" + (invHst ? " checked" : "") + "> HST <input id=\"inv-rate\" value=\"" + invRate + "\" style=\"width:48px;padding:4px 6px\">%</label>" +
+      "<span id=\"inv-tot\">" + esc(tt("Subtotal ", "جمع ")) + m2(t.sub) + (invHst ? " · HST " + m2(t.tax) : "") + " · <b>" + esc(tt("Total ", "مبلغ کل ")) + m2(t.total) + "</b></span></div>" +
+      "<div class=\"biz-actions\" style=\"margin-top:10px\"><button type=\"button\" class=\"btn primary\" id=\"inv-print\"" + (invLines.length ? "" : " disabled") + ">" + esc(tt("Print / save as PDF", "پرینت / ذخیره PDF")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" id=\"inv-new\">" + esc(tt("New invoice", "فاکتور جدید")) + "</button></div>";
+  }
+  function invoiceHtml(){
+    var t = invTotals(), b = bySlug(closeBiz), who = ($("cf-contact") || {}).value || "", email = ($("cf-email") || {}).value || "";
+    var rows = invLines.map(function(l){ var amt = (Number(l.qty) || 0) * (Number(l.price) || 0);
+      return "<tr><td>" + esc(l.desc) + "</td><td class=n>" + esc(String(l.qty)) + "</td><td class=n>" + m2(Number(l.price) || 0) + "</td><td class=n>" + m2(amt) + "</td></tr>"; }).join("");
+    return "<!doctype html><html><head><meta charset=utf-8><title>Invoice " + esc(invNo) + "</title><style>body{font:11pt/1.5 Inter,Arial,sans-serif;color:#18181b;margin:1.8cm}" +
+      ".hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #18181b;padding-bottom:12px;margin-bottom:22px}.brand{font:700 20pt Arial,sans-serif;letter-spacing:-.5px}.brand span{color:#0e7a4f}" +
+      ".muted{color:#71717a;font-size:9.5pt}h1{font:600 14pt Arial,sans-serif;margin:0 0 4px;text-align:right}table{width:100%;border-collapse:collapse;margin:18px 0}th{text-align:left;font-size:9.5pt;color:#71717a;border-bottom:1px solid #e4e4e7;padding:6px 4px}" +
+      "td{padding:8px 4px;border-bottom:1px solid #f4f4f5}.n{text-align:right}.tot td{border:0;padding:3px 4px}.tot .big td{font-weight:700;font-size:12.5pt;border-top:2px solid #18181b;padding-top:8px}</style></head><body>" +
+      "<div class=hd><div><div class=brand>" + (invIssuer.indexOf("ZhioStudio") === 0 ? "ZhioStudio <span>by NexAIS</span>" : "Nex<span>AIS</span>") + "</div><div class=muted>" + esc(invIssuer === "NexAIS Inc." ? "NexAIS Inc." : "ZhioStudio by NexAIS · NexAIS Inc.") +
+      "<br>Richmond Hill, Ontario, Canada<br>info@nexais.ca · +1 (437) 529-0400</div></div><div><h1>INVOICE</h1><div class=muted style=text-align:right>No. " + esc(invNo) + "<br>Date: " + new Date().toLocaleDateString("en-CA") + "<br>Due: on receipt</div></div></div>" +
+      "<div class=muted>Bill to</div><div><b>" + esc(b ? b.name : "") + "</b>" + (who ? "<br>" + esc(who) : "") + (email ? "<br>" + esc(email) : "") + "</div>" +
+      "<table><thead><tr><th>Service</th><th class=n>Qty</th><th class=n>Price</th><th class=n>Amount</th></tr></thead><tbody>" + rows + "</tbody></table>" +
+      "<table class=tot style=width:45%;margin-left:55%><tr><td>Subtotal</td><td class=n>" + m2(t.sub) + "</td></tr>" + (invHst ? "<tr><td>HST (" + invRate + "%)</td><td class=n>" + m2(t.tax) + "</td></tr>" : "") +
+      "<tr class=big><td>Total (CAD)</td><td class=n>" + m2(t.total) + "</td></tr></table><p class=muted>Thank you for your business.</p></body></html>";
+  }
+  document.addEventListener("change", function(e){
+    var t = e.target; if (!t || !t.closest || !t.closest("#close-flow")) return;
+    if (t.hasAttribute("data-cl") && closeBiz) { var all = clSaved(); all[closeBiz] = all[closeBiz] || {}; all[closeBiz][t.getAttribute("data-cl")] = t.checked; clSave(all);
+      if (t.checked) logSync("notes", closeName(), "Close checklist: " + t.parentNode.textContent.trim()); return; }
+    if (t.id === "inv-iss") { invIssuer = t.value; return; }
+    if (t.id === "inv-hst") { invHst = t.checked; renderInvoice(); return; }
+    if (t.id === "inv-add" && t.value !== "") {
+      var p = t.value === "blank" ? ["", "", ""] : INV_PRESETS[Number(t.value)];
+      var price = p[1] === "plan" ? (parseFloat(String(textOf("cl-v-monthly")).replace(/[^0-9.]/g, "")) || "") : p[1];
+      invLines.push({ desc: p[0] ? p[0] + (p[2] ? " (" + p[2].replace("/", "per ") + ")" : "") : "", qty: 1, price: price }); renderInvoice(); return; }
+  });
+  document.addEventListener("input", function(e){
+    var t = e.target; if (!t || !t.closest || !t.closest("#cf-inv")) return;
+    if (t.hasAttribute("data-inv")) { invLines[Number(t.getAttribute("data-i"))][t.getAttribute("data-inv")] = t.value; var x = invTotals(), el = $("inv-tot");
+      if (el) el.innerHTML = esc(tt("Subtotal ", "جمع ")) + m2(x.sub) + (invHst ? " · HST " + m2(x.tax) : "") + " · <b>" + esc(tt("Total ", "مبلغ کل ")) + m2(x.total) + "</b>"; var pb = $("inv-print"); if (pb) pb.disabled = !invLines.length; }
+    if (t.id === "inv-no") invNo = t.value;
+    if (t.id === "inv-rate") { invRate = parseFloat(t.value) || 0; var y = invTotals(), el2 = $("inv-tot"); if (el2) el2.innerHTML = esc(tt("Subtotal ", "جمع ")) + m2(y.sub) + (invHst ? " · HST " + m2(y.tax) : "") + " · <b>" + esc(tt("Total ", "مبلغ کل ")) + m2(y.total) + "</b>"; }
+  });
+  document.addEventListener("click", function(e){
+    var t = e.target; if (!t || !t.closest || !t.closest("#cf-inv")) return;
+    if (t.hasAttribute("data-inv-del")) { invLines.splice(Number(t.getAttribute("data-inv-del")), 1); renderInvoice(); return; }
+    if (t.id === "inv-new") { invLines = []; invNo = invNum(); renderInvoice(); return; }
+    if (t.id === "inv-print") {
+      if (!closeBiz) { alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); return; }
+      var fr = document.createElement("iframe"); fr.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0"; document.body.appendChild(fr);
+      var d = fr.contentWindow.document; d.open(); d.write(invoiceHtml()); d.close();
+      setTimeout(function(){ fr.contentWindow.focus(); fr.contentWindow.print(); setTimeout(function(){ fr.remove(); }, 1000); }, 200);
+      logSync("notes", closeName(), "Invoice " + invNo + " — " + m2(invTotals().total) + " (" + invIssuer + ")");
+    }
+  });
+  function textOf(id){ var el = $(id); return el ? el.textContent.trim() : ""; }
+  function selText(id){ var el = $(id); return el && el.selectedIndex >= 0 ? el.options[el.selectedIndex].text : ""; }
+  function agreementText(){
+    var name = closeName() || "[Business]", who = ($("cf-contact") && $("cf-contact").value.trim()) || "";
+    return (who ? "Hi " + who + ",\n\n" : "Hi,\n\n") +
+      "Thank you for choosing AVA for " + name + ". Here is a summary of your plan and the agreement that applies to it.\n\n" +
+      "Plan: " + textOf("cl-v-plan") + "\n" +
+      "Free trial: " + selText("cl-trial") + "\n" +
+      "Billing: " + selText("cl-term") + "\n" +
+      "Monthly after discounts: " + textOf("cl-v-monthly") + " (+ HST)\n" +
+      "Setup fee: " + textOf("cl-v-setup") + "\n" +
+      "Due today: " + textOf("cl-v-due") + "\n\n" +
+      "Your subscription is governed by the NexAIS agreement — please read it before you start:\n" +
+      "• Terms of Service: " + LEGAL + "/terms\n" +
+      "• Subscription Agreement: " + LEGAL + "/subscription-agreement\n" +
+      "• Refund Policy: " + LEGAL + "/refund-policy\n" +
+      "• Privacy Policy: " + LEGAL + "/privacy\n\n" +
+      "By completing checkout on the payment link I send next, you accept these terms on behalf of " + name + ".\n" +
+      "Please also fill in the short intake form below and send it back, so we can build your AVA.\n\n" +
+      "Thank you,\nNexAIS · info@nexais.ca · +1 (437) 529-0400";
+  }
+  function renderAgreement(){
+    var box = document.querySelector("#close-flow .cf-agree"); if (!box) return;
+    var txt = agreementText(), email = $("cf-email") ? $("cf-email").value.trim() : "";
+    var subj = "Your AVA plan and agreement — " + (closeName() || "NexAIS");
+    var ta = $("cf-agree-text");
+    if (!ta) {
+      box.innerHTML = "<p class=\"cf-p\"></p><textarea id=\"cf-agree-text\" class=\"tpl\" rows=\"18\"></textarea>" +
+        "<div class=\"biz-actions\" style=\"margin-top:10px\">" + (LINE_MODE ? "<button type=\"button\" class=\"btn primary\" id=\"cf-send\"></button>" : "") +
+        "<a class=\"btn " + (LINE_MODE ? "ghost" : "primary") + "\" id=\"cf-mail\" href=\"#\"></a>" +
+        "<button type=\"button\" class=\"btn ghost\" id=\"cf-copy\"></button><button type=\"button\" class=\"btn ghost\" id=\"cf-sent\"></button></div>";
+      ta = $("cf-agree-text");
+    }
+    if (!ta.dataset.edited) ta.value = txt;
+    box.querySelector(".cf-p").textContent = tt("The plan summary and the NexAIS agreement links, ready to send. Send the intake form with it.",
+      "خلاصهٔ پلن و لینک‌های قرارداد NexAIS، آمادهٔ ارسال. فرم اطلاعات را هم همراهش بفرستید.");
+    var mail = $("cf-mail");
+    mail.textContent = tt("Open in email", "باز کردن در ایمیل");
+    mail.href = "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(ta.value);
+    if ($("cf-send") && !$("cf-send").dataset.busy) $("cf-send").textContent = tt("Send from NexAIS email", "ارسال از ایمیل NexAIS");
+    $("cf-copy").textContent = tt("Copy text", "کپی متن");
+    $("cf-sent").textContent = (closeDone[closeBiz] || {})[2] ? tt("Agreement sent ✓", "قرارداد ارسال شد ✓") : tt("Mark as sent", "ثبت: ارسال شد");
+  }
+  function markStep(n, what, to){
+    if (!closeBiz) { alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); return false; }
+    closeDone[closeBiz] = closeDone[closeBiz] || {}; closeDone[closeBiz][n] = true;
+    logSync(what, closeName(), to || "");
+    renderClose(); return true;
+  }
+  function closeClick(e){
+    var t = e.target;
+    if (t.id === "cf-agree-text") return;
+    if (t.id === "cf-copy") { var ta = $("cf-agree-text"); try { navigator.clipboard.writeText(ta.value); } catch(x){ ta.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); return; }
+    if (t.id === "cf-sent") { markStep(2, "agreement", textOf("cl-v-plan")); return; }
+    if (t.id === "cf-send") {
+      if (!closeBiz) { alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); return; }
+      var to = ($("cf-email") || {}).value || "";
+      if (!to.trim()) { alert(tt("Enter the client's email first.", "اول ایمیل مشتری را وارد کنید.")); return; }
+      if (!confirm(tt("Send the plan and agreement to " + to + " from info@nexais.ca?", "خلاصهٔ پلن و قرارداد از info@nexais.ca به " + to + " ارسال شود؟"))) return;
+      t.disabled = true; t.dataset.busy = "1"; t.textContent = tt("Sending…", "در حال ارسال…");
+      api("POST", "/api/email/send", { business: closeName(), to: to.trim(), subject: "Your AVA plan and agreement — " + closeName(), body: $("cf-agree-text").value, basis: "express" })
+        .then(function(){ delete t.dataset.busy; t.disabled = false; markStep(2, "agreement", textOf("cl-v-plan")); var n = $("cf-send"); if (n) n.textContent = tt("Sent ✓", "ارسال شد ✓"); })
+        .catch(function(err){ delete t.dataset.busy; t.disabled = false; t.textContent = tt("Send from NexAIS email", "ارسال از ایمیل NexAIS"); alert(err.message); });
+      return;
+    }
+    if (t.id === "cf-mail") { if (!closeBiz) { e.preventDefault(); alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); } return; }
+    if (t.id === "cl-open" || t.id === "cl-copy") { if (closeBiz) { closeDone[closeBiz] = closeDone[closeBiz] || {}; closeDone[closeBiz][3] = true; logSync("paylink-sent", closeName(), textOf("cl-v-plan")); setTimeout(renderClose, 50); } }
+  }
+  document.addEventListener("input", function(e){ if (e.target && e.target.id === "cf-agree-text") { e.target.dataset.edited = "1"; var m = $("cf-mail"); if (m) m.href = "mailto:" + encodeURIComponent(($("cf-email") || {}).value || "") + "?subject=" + encodeURIComponent("Your AVA plan and agreement — " + (closeName() || "NexAIS")) + "&body=" + encodeURIComponent(e.target.value); } });
+
+  /* ---------- my earnings ---------- */
+  function money(n){ return "$" + (Number(n) || 0).toLocaleString("en-CA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function nextPayout(){ var d = new Date(); var p = new Date(d.getFullYear(), d.getMonth() + (d.getDate() > 15 ? 1 : 0), 15); return p.toLocaleDateString(window.LANG === "fa" ? "fa-IR" : "en-CA", { month: "long", day: "numeric" }); }
+  function renderEarnings(){
+    var head = taskHead(tt("My earnings", "وضعیت مالی من"),
+      tt("Commissions are paid by the 15th of each month, on client payments actually received and past the 14-day refund window.",
+         "کمیسیون‌ها تا ۱۵ هر ماه پرداخت می‌شوند — فقط برای پرداخت‌هایی که واقعاً وصول شده و از ۱۴ روز بازپرداخت گذشته‌اند."));
+    if (!window.NEXAIS_SESSION) {
+      taskSec.innerHTML = head + "<div class=\"empty-box\"><p>" + esc(tt("Your earnings appear here once you sign in with your NexAIS account.",
+        "وقتی با حساب NexAIS وارد شوید، درآمدتان اینجا نمایش داده می‌شود.")) + "</p><a class=\"btn ghost\" href=\"#earn\">" +
+        esc(tt("How commissions work", "کمیسیون چطور حساب می‌شود")) + "</a></div></div>";
+      return;
+    }
+    taskSec.innerHTML = head + "<p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>";
+    fetch("/api/me/earnings", { credentials: "same-origin", cache: "no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(data){
+      if (cur.v !== "earnings") return;
+      if (!data) { taskSec.innerHTML = head + "<div class=\"empty-box\"><p>" + esc(tt("Couldn't load your earnings right now — try again in a minute.", "الان نتوانستم درآمد شما را بخوانم — یک دقیقهٔ دیگر دوباره امتحان کنید.")) + "</p></div></div>"; return; }
+      var rows = data.rows || [], earned = 0, paid = 0, pending = 0;
+      rows.forEach(function(r){ earned += r.amount; if (r.status === "paid" || r.paid_at) paid += r.amount; else if (r.status !== "cancelled" && r.status !== "void") pending += r.amount; });
+      var html = head + (data.scope === "all" ? "<p class=\"hint\">" + esc(tt("You are viewing all partners' commissions (team view).", "شما کمیسیون همهٔ پارتنرها را می‌بینید (نمای تیم).")) + "</p>" : "") +
+        "<div class=\"kpis\">" +
+        "<div class=\"kpi\"><b>" + money(earned) + "</b><span>" + esc(tt("Total earned", "کل کسب‌شده")) + "</span></div>" +
+        "<div class=\"kpi\"><b>" + money(paid) + "</b><span>" + esc(tt("Paid to you", "پرداخت‌شده")) + "</span></div>" +
+        "<div class=\"kpi\"><b>" + money(pending) + "</b><span>" + esc(tt("Waiting to be paid", "در انتظار پرداخت")) + "</span></div>" +
+        "<div class=\"kpi\"><b>" + esc(nextPayout()) + "</b><span>" + esc(tt("Next payout date", "تاریخ پرداخت بعدی")) + "</span></div></div>";
+      if (!rows.length) html += "<div class=\"empty-box\"><p>" + esc(tt("No commissions yet — your first one appears here after your first client pays.", "هنوز کمیسیونی نیست — اولین کمیسیون بعد از پرداخت اولین مشتری‌تان اینجا می‌آید.")) + "</p><a class=\"btn primary\" href=\"#closing\">" + esc(tt("Close a deal", "بستن قرارداد")) + "</a></div>";
+      else html += "<table class=\"ind-table\"><thead><tr><th>" + esc(tt("Date", "تاریخ")) + "</th><th>" + esc(tt("Type", "نوع")) + "</th><th>" + esc(tt("Client payment", "پرداخت مشتری")) +
+        "</th><th>%</th><th>" + esc(tt("Your commission", "کمیسیون شما")) + "</th><th>" + esc(tt("Status", "وضعیت")) + "</th></tr></thead><tbody>" + rows.map(function(r){
+          var st = r.status === "paid" || r.paid_at ? tt("Paid", "پرداخت شد") : r.status === "pending" ? tt("Pending", "در انتظار") : (r.status || "");
+          var dt = r.earned_at ? new Date(r.earned_at).toLocaleDateString(window.LANG === "fa" ? "fa-IR" : "en-CA") : "";
+          var ty = r.month > 1 ? tt("Recurring · month " + r.month, "ماهانه · ماه " + r.month) : tt("First month", "ماه اول");
+          return "<tr><td>" + esc(dt) + "</td><td>" + esc(ty) + "</td><td>" + (r.sale == null ? "—" : money(r.sale)) + "</td><td>" + (r.percent == null ? "—" : r.percent + "%") +
+            "</td><td><b>" + money(r.amount) + "</b></td><td>" + esc(st) + "</td></tr>";
+        }).join("") + "</tbody></table>";
+      html += "<p class=\"hint\"><a href=\"#earn\">" + esc(tt("How commissions are calculated", "کمیسیون چطور حساب می‌شود")) + "</a></p></div>";
+      taskSec.innerHTML = html;
+    }).catch(function(){});
+  }
 
   /* ---------- add a business ---------- */
   function renderNewForm(preInd){
@@ -8569,7 +9643,7 @@ Object.assign(window.FA, {
       "<textarea id=\"rs-notes\" rows=\"4\">" + esc(rec.research || "") + "</textarea></label>" +
       "<div class=\"rs-foot\"><button type=\"button\" class=\"btn ghost\" data-act=\"rs-save\">" + esc(tt("Save notes", "ذخیرهٔ یادداشت")) + "</button>" +
       "<span id=\"rs-saved\" class=\"rs-saved\"></span>" +
-      "<button type=\"button\" class=\"linkish\" data-act=\"remove\">" + esc(tt("Remove this business", "حذف این کسب‌وکار")) + "</button></div></div>";
+      ((window.NEXAIS_SESSION || {}).role === "partner" ? "" : "<button type=\"button\" class=\"linkish\" data-act=\"remove\">" + esc(tt("Remove this business", "حذف این کسب‌وکار")) + "</button>") + "</div></div>";
   }
   function openDossier(b){
     var rec = window.NEXAIS_newBiz.find(b.name) || {};
@@ -8612,15 +9686,436 @@ Object.assign(window.FA, {
       esc(tt("Add a business", "افزودن کسب‌وکار")) + "</a></div><p class=\"ind-sum\">" + sum + "</p></div>";
   }
 
+  /* ---------- business page tabs: overview · call script · proposal ---------- */
+  var bizTab = "overview", bizTabFor = null, scriptScenario = null;
+  function bizTabs(b){
+    if (bizTabFor !== b) { bizTab = "overview"; bizTabFor = b; scriptScenario = null; }
+    var T = [["overview", tt("Overview", "خلاصه")], ["script", tt("Scripts — call & SMS", "اسکریپت تماس و پیامک")], ["history", tt("History", "سوابق")], ["proposal", tt("Proposal", "پروپوزال")], ["ava", tt("AVA call", "تماس اوا")]];
+    var html = "<div class=\"tabs biz-tabs\">" + T.map(function(t){ return "<a href=\"#\" data-btab=\"" + t[0] + "\"" + (bizTab === t[0] ? " class=\"on\"" : "") + ">" + esc(t[1]) + "</a>"; }).join("") + "</div>";
+    if (bizTab === "script") html += scriptPanel(b);
+    if (bizTab === "proposal") html += proposalPanel(b);
+    if (bizTab === "history") { html += "<div class=\"tab-panel\" id=\"hist-panel\">" + localHistoryHtml(b) + "<div id=\"hist-crm\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div></div>"; setTimeout(function(){ loadHistory(b); }, 0); }
+    if (bizTab === "ava") { html += "<div class=\"tab-panel\" id=\"ava-panel\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>"; setTimeout(function(){ loadAva(b); }, 0); }
+    return html;
+  }
+  function csType(b){
+    var t = { restaurant: "restaurant", venue: "restaurant", golf: "restaurant", winery: "restaurant", clinic: "clinic", beauty: "salon", auto: "auto", realestate: "realestate", transport: "transport" }[b.ind];
+    if (t) return t;
+    var txt = (b.name + " " + ((b.el.querySelector(".hook") || {}).textContent || "")).toLowerCase();
+    return /hvac|heating|furnace|air condition/.test(txt) ? "hvac" : /plumb|drain/.test(txt) ? "plumbing" : /law|legal/.test(txt) ? "law" : "trades";
+  }
+  function defaultScenario(b){
+    var st = stageOf(b);
+    if (st === "demo") return "close";
+    if (statusOf(b) !== "Not called") return "next";
+    return st === "research" ? "first" : b.isNew && st === "sent" ? "first" : "followup";
+  }
+  /* what happened last time — drives the "next call" script */
+  function lastContactOf(b){
+    var calls = (b.el.__actions || []).filter(function(a){ return a.t === "Call"; });
+    var notes = ((b.el.querySelector(".notes") || {}).value || "").trim().split(/\n+/).filter(Boolean);
+    return { status: statusOf(b), when: calls.length ? calls[calls.length - 1].d : "", count: calls.length, note: notes.length ? notes[notes.length - 1] : "" };
+  }
+  function nextCallOpening(b, me, contact){
+    var lc = lastContactOf(b), on = lc.when ? " on " + lc.when : "", gap = "the calls " + b.name + " misses when the line is busy or after hours";
+    var first = contact ? contact.split(/\s+/)[0] : "";
+    switch (lc.status) {
+      case "Gatekeeper": return "Hi, this is " + me + " from NexAIS, here in Richmond Hill. I spoke with your front desk" + on + " and was told " + (contact ? contact + " is" : "the owner or manager is") + " the right person for this. Is " + (contact || "he or she") + " available for two minutes?\n(If not available again: ask for the best time to call and the best email — then end politely. Don't pitch the gatekeeper.)";
+      case "Voicemail left": return "Hi" + (first ? " " + first : "") + ", this is " + me + " from NexAIS in Richmond Hill. I left you a voicemail" + on + " about " + gap + " — did you get a chance to hear it? I'll be quick: I have one idea that takes two minutes.";
+      case "Callback scheduled": return "Hi" + (first ? " " + first : "") + ", this is " + me + " from NexAIS — you asked me to call you back" + (on ? " when we spoke" + on : "") + " about AVA, our AI receptionist. Is now still a good time for two minutes?";
+      case "Reached decision-maker": return "Hi" + (first ? " " + first : "") + ", it's " + me + " from NexAIS again — thanks for your time when we spoke" + on + ". I wanted to follow up with the simplest next step: hear AVA live for two minutes, or start the free trial so you can see it on your own calls.\n(Bring in what they told you last time — see LAST TIME above — in your own words.)";
+      case "Not interested": return "(Marked not interested" + on + ". Only call again if something changed — e.g. they reached out, or it's been 3+ months. Open with: \"Hi" + (first ? " " + first : "") + ", " + me + " from NexAIS — we spoke a while ago; I'm checking in once, briefly, because something changed on our side…\")";
+      default: return "";
+    }
+  }
+  function fullName(){ var s0 = window.NEXAIS_SESSION; if (s0 && s0.name) return s0.name; try { return JSON.parse(localStorage.getItem("nexais-hub-user-v1") || '""') || ""; } catch(e){ return ""; } }
+  /* collapsible sections — open/closed is remembered per section */
+  var FOLD_KEY = "nexais-hub-fold-v1";
+  function foldState(){ try { return JSON.parse(localStorage.getItem(FOLD_KEY) || "{}"); } catch(e){ return {}; } }
+  function fold(key, title, inner, openByDefault, extraCls){
+    var st = foldState(), open = key in st ? st[key] : !!openByDefault;
+    return "<details class=\"fold" + (extraCls ? " " + extraCls : "") + "\" data-fold=\"" + key + "\"" + (open ? " open" : "") + "><summary>" + esc(title) + "</summary><div class=\"fold-in\">" + inner + "</div></details>";
+  }
+  document.addEventListener("toggle", function(e){
+    var d = e.target; if (!d || !d.getAttribute || !d.getAttribute("data-fold")) return;
+    var st = foldState(); st[d.getAttribute("data-fold")] = d.open; try { localStorage.setItem(FOLD_KEY, JSON.stringify(st)); } catch(x){}
+    if (d.open && d.getAttribute("data-fold") === "call-history") loadCallHistory();
+  }, true);
+  function buildScriptFor(b, scen){
+    var f = $("cs-form"); if (!f) return "";
+    var set = function(id, v){ var el = $(id); if (el) el.value = v; };
+    var ask = askFor(b), contact = ask ? ask.split(/\s+[—-]\s+/)[0].trim() : "";
+    set("cs-biz", b.name); set("cs-type", csType(b)); set("cs-contact", /not yet known|team|manager|owner|desk|reception|front|general|\/|^\W*$/i.test(contact) ? "" : contact);
+    set("cs-scenario", scen === "next" ? "followup" : scen); set("cs-partner", fullName() || "NexAIS");
+    var keep = window.NEXAIS_logActivity; window.NEXAIS_logActivity = function(){};   /* building to show is not "building a script" */
+    try { if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event("submit", { cancelable: true })); } finally { window.NEXAIS_logActivity = keep; }
+    var out = ($("cs-out") || {}).value || "";
+    var pr = proposalOf(b);
+    if (scen === "next") {
+      var lc = lastContactOf(b), op = nextCallOpening(b, fullName() || "[Caller]", $("cs-contact") ? $("cs-contact").value : "");
+      out = out.replace(/· Follow-up call/, "· Next call — after: " + lc.status);
+      if (op) out = out.replace(/1 — OPENING\n[^\n]*(\n|$)/, "1 — OPENING\n" + op + "\n");
+      var last = "LAST TIME\n• Result: " + lc.status + (lc.when ? " (" + lc.when + ")" : "") + (lc.count ? " · calls so far: " + lc.count : "") + (lc.note ? "\n• Note: " + lc.note : "") + "\n\n";
+      var i1 = out.indexOf("1 — OPENING"); if (i1 > 0) out = out.slice(0, i1) + last + out.slice(i1);
+    }
+    if ((scen === "followup" || scen === "next") && !pr.url) out = out.replace(/I'm following up on the proposal we emailed [^—]+ about AVA, our AI receptionist — I just want to make sure it reached the right person, and to offer you/,
+      "I'm following up on our last conversation about AVA, our AI receptionist — I'd like to answer any questions and offer you");
+    var sentOn = (pr.when.match(/[A-Z][a-z]+ \d{1,2}, \d{4}|\d{4}-\d{2}-\d{2}/) || [])[0];
+    if ((scen === "followup" || scen === "next") && pr.url && sentOn) out = out.replace("I'm following up on the proposal we emailed", "I'm following up on the proposal we sent on " + sentOn + " to");
+    var card = b.el.querySelector(".hook"), fh = foundHook(b), rec = window.NEXAIS_newBiz.find(b.name) || {};
+    var hk = fh && fh.hook ? fh.hook : card ? card.textContent.trim().replace(/^Signal:\s*/, "") : "";
+    if (hk) {
+      var ev = fh && fh.evidence && fh.evidence.length ? fh.evidence[0].detail : rec.evidence || "";
+      var block = "WHAT WE FOUND — use it in your own words (do not read reviews aloud word-for-word)\n• " + hk + (ev ? "\n• Evidence: " + ev : "") +
+        "\nHow to use it: \"When we looked at " + b.name + ", we noticed some of your customers mention [say the point above in one short sentence]. That's exactly the gap AVA closes.\"\n\n";
+      var i2 = out.search(/\n2 — /);
+      out = i2 > 0 ? out.slice(0, i2 + 1) + block + out.slice(i2 + 1) : out + "\n\n" + block;
+    }
+    return out;
+  }
+  /* ---------- weak spot / hook: from the research, or found now (CRM notes → Google Maps → AVA) ---------- */
+  var HOOKS_KEY = "nexais-hub-hooks-v1", hookBusy = {}, hookErr = {};
+  function hooksAll(){ try { return JSON.parse(localStorage.getItem(HOOKS_KEY) || "{}"); } catch(e){ return {}; } }
+  function foundHook(b){ return hooksAll()[b.name] || null; }
+  function saveHook(b, r){ var all = hooksAll(); all[b.name] = r; try { localStorage.setItem(HOOKS_KEY, JSON.stringify(all)); } catch(e){} }
+  function hookBox(b){
+    var card = b.el.querySelector(".hook"), fh = foundHook(b), html = "";
+    var cardTxt = card ? card.textContent.trim().replace(/^Signal:\s*/, "") : "", rec = window.NEXAIS_newBiz.find(b.name) || {};
+    if (cardTxt && rec.score) html += "<p class=\"hook-score\"><b>" + esc(rec.score) + "</b> " + esc(tt("pain score", "امتیاز درد")) + "</p>";
+    if (cardTxt && !(fh && fh.hook)) {
+      html += "<p class=\"hook-text\">" + esc(cardTxt) + "</p>";
+      if (rec.evidence) html += "<ul class=\"hook-ev\"><li>" + esc(rec.evidence) + (rec.source && /^https?:\/\//.test(rec.source) ? " · <a href=\"" + esc(rec.source) + "\" target=\"_blank\" rel=\"noopener\">" + esc(tt("source", "منبع")) + " ↗</a>" : "") + "</li></ul>";
+      if (rec.studied || rec.proposalStatus) html += "<p class=\"hint\">" + esc([rec.studied, rec.proposalStatus ? tt("Proposal: ", "پروپوزال: ") + rec.proposalStatus : ""].filter(Boolean).join(" · ")) + "</p>";
+    }
+    else if (fh && fh.hook) {
+      if (cardTxt) html += "<p class=\"hint\" style=\"margin:0 0 6px\">" + esc(tt("From our research: ", "از تحقیق ما: ") + cardTxt) + "</p>";
+      html += "<p class=\"hook-text\">" + esc(fh.hook) + "</p>";
+      if (fh.evidence && fh.evidence.length) html += "<ul class=\"hook-ev\">" + fh.evidence.map(function(e){ return "<li><b>" + esc(e.source) + "</b> " + esc(e.detail) + "</li>"; }).join("") + "</ul>";
+      html += "<p class=\"hint\">" + esc((fh.by === "ava" ? tt("Found by AVA", "پیدا شده توسط اوا") : tt("Found from public data", "پیدا شده از داده‌های عمومی")) + " · " + (fh.at ? new Date(fh.at).toLocaleDateString("en-CA") : "")) +
+        (fh.place && fh.place.maps_url ? " · <a href=\"" + esc(fh.place.maps_url) + "\" target=\"_blank\" rel=\"noopener\">Google Maps ↗</a>" : "") + "</p>";
+    } else if (fh && !fh.hook && !cardTxt) html += "<p class=\"hint\">" + esc(fh.missing === "google_key" ? tt("Google Maps search is not connected yet — ask the NexAIS admin.", "جستجوی گوگل‌مپ هنوز وصل نشده — به مدیر NexAIS بگویید.")
+        : fh.missing === "not_found" ? tt("Not found on Google Maps. Add research notes, then try again.", "در گوگل‌مپ پیدا نشد. یادداشت تحقیق اضافه کنید و دوباره امتحان کنید.")
+        : tt("No clear weak spot in the public data. Use the research notes or the standard script.", "در داده‌های عمومی نقطه‌ضعف روشنی پیدا نشد. از یادداشت تحقیق یا اسکریپت استاندارد استفاده کنید.")) + "</p>";
+    else if (!cardTxt) html += "<p class=\"hint\">" + esc(tt("No weak spot recorded for this business yet.", "هنوز نقطه‌ضعفی برای این کسب‌وکار ثبت نشده.")) + "</p>";
+    if (hookErr[b.name]) html += "<p class=\"hint\" style=\"color:#b42318\">" + esc(hookErr[b.name]) + "</p>";
+    if (LINE_MODE) html += "<button type=\"button\" class=\"btn " + (card || (fh && fh.hook) ? "ghost" : "primary") + "\" data-hook=\"find\"" + (hookBusy[b.name] ? " disabled" : "") + ">" +
+      esc(hookBusy[b.name] ? tt("Searching Google Maps…", "در حال جستجو در گوگل‌مپ…") : (card || (fh && fh.hook)) ? tt("Check again (Google Maps + AVA)", "بررسی دوباره (گوگل‌مپ + اوا)") : tt("Find it now (Google Maps + AVA)", "الان پیدا کن (گوگل‌مپ + اوا)")) + "</button>";
+    return fold("hook", tt("What we found — weak spot / hook", "آنچه پیدا کردیم — نقطه‌ضعف / هوک"), html, true, "hook-box");
+  }
+  bizHead.addEventListener("click", function(e){
+    var t = e.target.closest("[data-hook]"); if (!t || !cur.biz) return;
+    var b = cur.biz, rec = window.NEXAIS_newBiz.find(b.name) || {};
+    hookBusy[b.name] = true; hookErr[b.name] = ""; renderBizHead();
+    api("POST", "/api/hub/hook", { business: b.name, city: rec.city || (b.loc || "").split("·")[0].trim(), notes: [rec.note, rec.research].filter(Boolean).join("\n"), refresh: !!foundHook(b) })
+      .then(function(r){ r.at = new Date().toISOString(); saveHook(b, r); })
+      .catch(function(err){ hookErr[b.name] = err.message; })
+      .then(function(){ hookBusy[b.name] = false; if (cur.biz === b) renderBizHead(); });
+  });
+  function scriptPanel(b){
+    var scen = scriptScenario || defaultScenario(b);
+    var S = [["first", tt("First call", "تماس اول")], ["next", tt("Next call — after the last result", "تماس بعدی — بر اساس نتیجهٔ قبلی")], ["followup", tt("Follow-up on the proposal", "پیگیری پروپوزال")], ["demo", tt("Demo invitation", "دعوت به دمو")], ["close", tt("Trial-offer close", "بستن با دورهٔ رایگان")]];
+    var opens = Array.prototype.map.call(b.el.querySelectorAll("details.opening blockquote"), function(q){ return q.textContent.trim(); });
+    var hook = b.el.querySelector(".hook");
+    var html = "<div class=\"tab-panel\">";
+    html += hookBox(b);
+    var me = fullName() || "[Caller]", fh = foundHook(b);
+    if (!opens.length && fh && fh.opening) opens = [fh.opening];
+    if (opens.length && (scriptScenario || defaultScenario(b)) !== "first") opens = [];
+    if (opens.length) html += "<p class=\"h3s\">" + esc(tt("Opening line — word for word", "جملهٔ شروع — کلمه به کلمه")) + "</p>" + opens.map(function(o){ return "<blockquote class=\"open-q\">" + esc(o.replace(/\[Caller\]/g, me)) + "</blockquote>"; }).join("");
+    var callPart = "<div class=\"script-head\"><span></span>" +
+      "<select id=\"bz-scen\">" + S.map(function(x){ return "<option value=\"" + x[0] + "\"" + (x[0] === scen ? " selected" : "") + ">" + esc(x[1]) + "</option>"; }).join("") + "</select></div>" +
+      "<textarea id=\"bz-script\" class=\"tpl bz-script\" rows=\"22\">" + esc(buildScriptFor(b, scen)) + "</textarea>" +
+      "<div class=\"biz-actions\" style=\"margin-top:10px\"><button type=\"button\" class=\"btn primary\" data-bz=\"print-script\">" + esc(tt("Print / save as PDF", "پرینت / ذخیره PDF")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-script\">" + esc(tt("Copy", "کپی")) + "</button>" +
+      "<a class=\"btn ghost\" href=\"#call/b/" + esc(b.slug) + "\">☎ " + esc(tt("Call now", "تماس الان")) + "</a></div>" +
+      "<p class=\"hint\">" + esc(tt("The script is in English — the language of the call. You can edit it before printing.", "اسکریپت به انگلیسی است — زبان تماس. قبل از پرینت می‌توانید ویرایشش کنید.")) + "</p>";
+    html += fold("biz-script", tt("Call script — ", "اسکریپت تماس — ") + b.name, callPart, true);
+    var sk = bzSmsT || (stageOf(b) === "sent" ? "proplink" : "after");
+    var smsPart = "<div class=\"script-head\"><span></span>" +
+      "<select id=\"bz-smst\">" + SMS_T.filter(function(x){ return x.k !== "custom"; }).map(function(x){ return "<option value=\"" + x.k + "\"" + (x.k === sk ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("") + "</select></div>" +
+      "<textarea id=\"bz-sms\" class=\"tpl bz-script\" rows=\"4\">" + esc(smsFor(b, sk)) + "</textarea>" +
+      "<div class=\"biz-actions\" style=\"margin-top:10px\"><a class=\"btn primary\" href=\"#sms/" + esc(b.slug) + "\" data-bz=\"sms-script\">" + esc(tt("Send this SMS", "ارسال همین پیامک")) + "</a>" +
+      "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-sms\">" + esc(tt("Copy", "کپی")) + "</button></div>";
+    html += fold("biz-sms", tt("SMS script — ", "اسکریپت پیامک — ") + b.name, smsPart, false);
+    return html + "</div>";
+  }
+  var bzSmsT = "";
+  function smsFor(b, k){ var keep = smsT; smsT = k; try { return smsText(b); } finally { smsT = keep; } }
+  /* ---------- one business's history ---------- */
+  var KIND = { call: ["Call", "تماس"], line_call: ["Call from AVA's number", "تماس از شمارهٔ اوا"], sms: ["SMS", "پیامک"], email: ["Email", "ایمیل"], note: ["Note", "یادداشت"],
+    status_change: ["Status changed", "تغییر وضعیت"], request: ["Business added", "ثبت کسب‌وکار"], approval: ["Approved", "تأیید"], assignment: ["Assigned", "واگذاری"],
+    research_attached: ["Research", "تحقیق"], proposal_attached: ["Proposal", "پروپوزال"], visit: ["Visit", "مراجعه"], permission_change: ["Permission", "دسترسی"] };
+  var OUTC = { not_called: ["Not called", "تماس گرفته نشد"], reached_decision_maker: ["Reached the decision-maker", "با تصمیم‌گیرنده صحبت شد"], gatekeeper: ["Gatekeeper", "منشی / واسطه"],
+    voicemail_left: ["Voicemail left", "پیام صوتی گذاشته شد"], not_interested: ["Not interested", "علاقه ندارد"], callback_scheduled: ["Callback scheduled", "تماس مجدد قرار شد"], demo_booked: ["Demo booked", "دمو رزرو شد"] };
+  var LINE_ST = { ended: ["finished", "انجام شد"], no_answer: ["no answer", "جواب نداد"], you_missed: ["you missed it", "جواب ندادید"], failed: ["failed", "ناموفق"], blocked: ["blocked", "مسدود"], connected: ["in progress", "در جریان"] };
+  function fmtWhen(iso){ try { return new Date(iso).toLocaleString(LANG_FA() ? "fa-IR" : "en-CA", { dateStyle: "medium", timeStyle: "short" }); } catch(e){ return iso; } }
+  function LANG_FA(){ return window.LANG === "fa"; }
+  function localHistoryHtml(b){
+    var st = b.el.querySelector(".status"), nt = b.el.querySelector(".notes"), acts = (b.el.__actions || []).slice().reverse();
+    var html = "<div class=\"hist-now\"><div><span>" + esc(tt("Last call result", "نتیجهٔ آخرین تماس")) + "</span><b>" + esc(st && st.value ? tt(st.value, (window.FA || {})[st.value] || st.value) : tt("Not called yet", "هنوز تماس گرفته نشده")) + "</b></div>" +
+      "<div><span>" + esc(tt("Stage", "مرحله")) + "</span><b>" + esc(stageLabel(stageOf(b))) + "</b></div>" +
+      "<div><a class=\"btn primary\" href=\"#call/b/" + esc(b.slug) + "\">☎ " + esc(tt("Call now", "تماس الان")) + "</a></div></div>";
+    if (nt && nt.value.trim()) html += "<div class=\"prop-box\"><p class=\"h3s\">" + esc(tt("Call notes", "یادداشت تماس‌ها")) + "</p><p class=\"hist-notes\">" + esc(nt.value.trim()) + "</p></div>";
+    if (acts.length) html += "<p class=\"hint\">" + esc(tt("Logged on this device: ", "ثبت‌شده روی همین دستگاه: ")) + acts.map(function(a){ return (LANG_FA() ? (ACT_FA_LABEL_ALL[a.t] || a.t) : a.t) + " " + a.d; }).join(" · ") + "</p>";
+    return html;
+  }
+  var ACT_FA_LABEL_ALL = { Call: "تماس", SMS: "پیامک", Email: "ایمیل", DM: "دایرکت", Visit: "مراجعه" };
+  function histLine(it){
+    var k = KIND[it.kind] || [it.kind, it.kind], parts = [];
+    if (it.outcome && OUTC[it.outcome]) parts.push(tt(OUTC[it.outcome][0], OUTC[it.outcome][1]));
+    if (it.kind === "line_call") { var ls = LINE_ST[it.status] || [it.status, it.status]; parts.push(tt(ls[0], ls[1])); if (it.duration) parts.push(Math.round(it.duration / 60 * 10) / 10 + tt(" min", " دقیقه")); }
+    if (it.kind === "status_change" && it.to) parts.push((it.from ? it.from + " → " : "") + it.to);
+    var by = it.by === "me" ? tt("you", "شما") : it.by === "team" ? tt("team", "تیم") : it.by === "system" ? "AVA" : it.by;
+    return "<li><div class=\"h-top\"><b>" + esc(tt(k[0], k[1])) + "</b>" + (parts.length ? "<span class=\"h-out\">" + esc(parts.join(" · ")) + "</span>" : "") +
+      "<span class=\"h-when\">" + esc(fmtWhen(it.at)) + " · " + esc(by) + "</span></div>" + (it.notes ? "<p>" + esc(it.notes) + "</p>" : "") + "</li>";
+  }
+  function loadHistory(b){
+    var box = $("hist-crm"); if (!box || cur.biz !== b || bizTab !== "history") return;
+    if (!LINE_MODE) { box.innerHTML = "<p class=\"hint\">" + esc(tt("The full team history shows after signing in with your NexAIS account.", "سوابق کامل تیم بعد از ورود با حساب NexAIS نمایش داده می‌شود.")) + "</p>"; return; }
+    api("GET", "/api/hub/history?business=" + encodeURIComponent(b.name)).then(function(d){
+      if (cur.biz !== b || !$("hist-crm")) return;
+      var items = d.items || [];
+      var lastOut = items.filter(function(x){ return x.outcome && OUTC[x.outcome]; })[0], nb = document.querySelector("#hist-panel .hist-now b");
+      if (lastOut && nb) nb.textContent = tt(OUTC[lastOut.outcome][0], OUTC[lastOut.outcome][1]) + " · " + fmtWhen(lastOut.at);
+      $("hist-crm").innerHTML = "<p class=\"h3s\">" + esc(tt("Everything done with this business", "همهٔ کارهایی که با این کسب‌وکار انجام شده")) + "</p>" +
+        (items.length ? "<ul class=\"hist-list\">" + items.map(histLine).join("") + "</ul>" : "<div class=\"empty-box\"><p>" + esc(tt("Nothing recorded yet. Calls, SMS, emails and AVA calls appear here automatically.", "هنوز چیزی ثبت نشده. تماس‌ها، پیامک‌ها، ایمیل‌ها و تماس‌های اوا خودکار اینجا می‌آیند.")) + "</p></div>");
+    }).catch(function(e){ var x = $("hist-crm"); if (x) x.innerHTML = "<p class=\"hint\">" + esc(e.message) + "</p>"; });
+  }
+  function proposalOf(b){
+    var a = b.el.querySelector(".prop-link a[href]"), when = "";
+    Array.prototype.forEach.call(b.el.querySelectorAll(".facts > div"), function(d){ var dt = d.querySelector("dt"), dd = d.querySelector("dd"); if (dt && dd && /proposal sent/i.test(dt.textContent)) when = dd.textContent.trim(); });
+    return { url: a ? a.getAttribute("href") : "", when: when };
+  }
+  function emailOf(b){ var m = b.el.textContent.match(/[\w.+-]+@[\w-]+\.[\w.]+/); return m ? m[0] : ""; }
+  function proposalPanel(b){
+    var pr = proposalOf(b), html = "<div class=\"tab-panel\">";
+    if (pr.url) {
+      html += "<div class=\"prop-box\"><p class=\"h3s\">" + esc(tt("The proposal we prepared", "پروپوزالی که تهیه کرده‌ایم")) + "</p>" +
+        (pr.when ? "<p class=\"hint\" style=\"margin:0 0 12px\">" + esc(tt("Sent: ", "ارسال: ")) + esc(pr.when) + "</p>" : "") +
+        "<div class=\"biz-actions\"><a class=\"btn primary\" href=\"" + esc(pr.url) + "\" target=\"_blank\" rel=\"noopener\">" + esc(tt("Open / download", "باز کردن / دانلود")) + " ↗</a>" +
+        (LINE_MODE ? "<button type=\"button\" class=\"btn ghost\" data-bz=\"email-open\">✉ " + esc(tt("Send by email", "ارسال با ایمیل")) + "</button>" :
+          (window.NEXAIS_SESSION || {}).role === "partner" ? "" : "<a class=\"btn ghost\" href=\"" + esc(mailtoProposal(b, pr.url)) + "\" data-bz=\"mail-prop\">✉ " + esc(tt("Send by email", "ارسال با ایمیل")) + "</a>") +
+        "<button type=\"button\" class=\"btn ghost\" data-bz=\"sms-prop\">" + esc(tt("Send link by SMS", "ارسال لینک با پیامک")) + "</button>" +
+        "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-prop\">" + esc(tt("Copy link", "کپی لینک")) + "</button></div></div>";
+    } else {
+      html += "<div class=\"empty-box\"><p>" + esc(tt("No proposal has been prepared for this business yet.", "هنوز برای این کسب‌وکار پروپوزالی تهیه نشده.")) + "</p></div>";
+    }
+    html += "<div class=\"prop-box\"><p class=\"h3s\">" + esc(pr.url ? tt("Prepare a new version", "تهیهٔ نسخهٔ جدید") : tt("Prepare a proposal", "تهیهٔ پروپوزال")) + "</p>" +
+      "<p class=\"hint\" style=\"margin:0 0 10px\">" + esc(tt("Opens the proposal generator with this business filled in. Finish the steps there and download the PDF to send it.",
+        "سازندهٔ پروپوزال را با اطلاعات همین کسب‌وکار باز می‌کند. مراحل را آنجا تمام کنید و PDF را برای ارسال دانلود کنید.")) + "</p>" +
+      "<button type=\"button\" class=\"btn " + (pr.url ? "ghost" : "primary") + "\" data-bz=\"make-prop\">" + esc(tt("Open the proposal generator", "باز کردن سازندهٔ پروپوزال")) + "</button></div>";
+    if (LINE_MODE) { html += fold("biz-email", tt("Email this business", "ایمیل به این کسب‌وکار"), "<div id=\"em-box\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>", false); setTimeout(function(){ loadEmail(b); }, 0); }
+    return html + "</div>";
+  }
+  /* ---------- email from the NexAIS address (owner's switch; per-person access) ---------- */
+  var EM_ST = { queued: ["Sending…", "در حال ارسال…"], sent: ["Sent", "ارسال شد"], failed: ["Failed", "ناموفق"], blocked: ["Blocked", "مسدود"] };
+  var emSwitch = null, emFor = null, emMsg = "", emTimer = null;
+  function emailDraft(b){
+    var pr = proposalOf(b), ask = askFor(b), first = (ask.match(/^([A-Z][a-zA-Z'-]+)\s+[A-Z]/) || [])[1] || "";
+    var hi = first ? "Hi " + first + "," : "Hi,";
+    if (pr.url) return { subject: "Your AVA proposal — " + b.name, body: hi + "\n\nHere is the proposal we prepared for " + b.name + ", showing how AVA can answer every call and booking 24/7:\n" + pr.url +
+      "\n\nYou can also test AVA yourself any time — call or text +1 (437) 529-0400.\n\nHappy to answer any questions.\n\n" + (fullName() || "") + "\nNexAIS" };
+    return { subject: "Never miss a call at " + b.name, body: hi + "\n\nThank you for your time today. As promised, here is how AVA works: it answers every call to " + b.name +
+      " 24/7, takes bookings and messages, and texts you a summary.\n\nHear it yourself any time — call or text +1 (437) 529-0400.\n\nWould a short demo this week suit you?\n\n" + (fullName() || "") + "\nNexAIS" };
+  }
+  function loadEmail(b){
+    clearTimeout(emTimer);
+    if (emFor !== b) { emFor = b; emMsg = ""; }
+    var box = $("em-box"); if (!box || cur.biz !== b || bizTab !== "proposal") return;
+    Promise.all([api("GET", "/api/email/switch"), api("GET", "/api/email/list?business=" + encodeURIComponent(b.name)).catch(function(e){ return { error: e.message }; })])
+      .then(function(r){ emSwitch = r[0]; renderEmail(b, r[1]); }).catch(function(e){ box.innerHTML = "<p class=\"hint\">" + esc(e.message) + "</p>"; });
+  }
+  function renderEmail(b, d){
+    var box = $("em-box"); if (!box) return;
+    var on = emSwitch && emSwitch.enabled, keep = {};
+    ["em-to", "em-subj", "em-body", "em-basis"].forEach(function(id){ var el = $(id); if (el && el.dataset.edited) keep[id] = el.value; });
+    var dr = emailDraft(b), html = "";
+    html += "<div class=\"ava-switch" + (on ? " on" : "") + "\"><span class=\"dot\"></span><b>" + esc(on ? tt("Email is ON — sent from info@nexais.ca", "ایمیل روشن است — از info@nexais.ca ارسال می‌شود") : tt("Email is OFF", "ایمیل خاموش است")) + "</b>" +
+      (emSwitch && emSwitch.can_toggle ? "<button type=\"button\" class=\"btn ghost\" data-em=\"toggle\">" + esc(on ? tt("Turn off", "خاموش کن") : tt("Turn on", "روشن کن")) + "</button>" :
+        (on ? "" : "<small>" + esc(tt("The NexAIS owner turns this on", "مدیر NexAIS آن را روشن می‌کند")) + "</small>")) + "</div>";
+    if (d && d.error) html += "<p class=\"hint\">" + esc(d.error) + "</p>";
+    else {
+      html += "<div class=\"em-grid\"><label>" + esc(tt("To", "به")) + "<input id=\"em-to\" type=\"email\" value=\"" + esc(keep["em-to"] != null ? keep["em-to"] : emailOf(b)) + "\" placeholder=\"name@business.com\"></label>" +
+        "<label>" + esc(tt("Subject", "موضوع")) + "<input id=\"em-subj\" value=\"" + esc(keep["em-subj"] != null ? keep["em-subj"] : dr.subject) + "\"></label></div>" +
+        "<div class=\"em-body\"><label>" + esc(tt("Message (English)", "متن (انگلیسی)")) + "<textarea id=\"em-body\" class=\"tpl\" rows=\"11\">" + esc(keep["em-body"] != null ? keep["em-body"] : dr.body) + "</textarea></label></div>" +
+        "<div class=\"em-grid\"><label>" + esc(tt("Why we may email them (CASL)", "چرا اجازهٔ ایمیل داریم (CASL)")) + "<select id=\"em-basis\">" +
+          "<option value=\"\">" + esc(tt("— choose —", "— انتخاب کنید —")) + "</option>" +
+          "<option value=\"published\">" + esc(tt("Address is published for business enquiries (website, directory)", "آدرس برای تماس کاری منتشر شده (سایت، دایرکتوری)")) + "</option>" +
+          "<option value=\"express\">" + esc(tt("They asked us / agreed to receive email", "خودشان خواستند / موافقت کردند")) + "</option></select></label>" +
+        "<div style=\"align-self:end\"><button type=\"button\" class=\"btn primary\" data-em=\"send\"" + (on ? "" : " disabled") + ">" + esc(tt("Send from NexAIS", "ارسال از NexAIS")) + "</button></div></div>" +
+        "<p class=\"hint\" style=\"margin:6px 0 0\">" + esc(tt("Replies go to info@nexais.ca. Every email carries the NexAIS address and an unsubscribe link; unsubscribed addresses are blocked automatically.",
+          "پاسخ‌ها به info@nexais.ca می‌رود. هر ایمیل آدرس NexAIS و لینک لغو اشتراک دارد؛ آدرس‌هایی که لغو کنند خودکار مسدود می‌شوند.")) + "</p>";
+      if (emMsg) html += "<p class=\"hint\" style=\"color:var(--ink);font-weight:600\">" + esc(emMsg) + "</p>";
+      var list = (d && d.emails) || [];
+      if (list.length) html += "<ul class=\"em-list\">" + list.map(function(m){ var st = EM_ST[m.status] || [m.status, m.status];
+        return "<li><span>" + esc(new Date(m.created_at).toLocaleString("en-CA", { dateStyle: "medium", timeStyle: "short" })) + " · " + esc(m.to_email) + " · " + esc(m.subject) + (m.sender_name ? " · " + esc(m.sender_name) : "") +
+          (m.error ? " — " + esc(m.error) : "") + "</span><span class=\"st " + esc(m.status) + "\">" + esc(tt(st[0], st[1])) + "</span></li>"; }).join("") + "</ul>";
+      if (list.some(function(m){ return m.status === "queued"; })) emTimer = setTimeout(function(){ loadEmail(b); }, 4000);
+    }
+    box.innerHTML = html;
+    if (keep["em-basis"]) $("em-basis").value = keep["em-basis"];
+    Object.keys(keep).forEach(function(id){ if ($(id)) $(id).dataset.edited = "1"; });
+  }
+  bizHead.addEventListener("input", function(e){ if (e.target && /^em-/.test(e.target.id || "")) e.target.dataset.edited = "1"; });
+  bizHead.addEventListener("change", function(e){ if (e.target && e.target.id === "em-basis") e.target.dataset.edited = "1"; });
+  bizHead.addEventListener("click", function(e){
+    var t = e.target.closest("[data-em]"); if (!t || !cur.biz) return;
+    var b = cur.biz, k = t.getAttribute("data-em");
+    if (k === "toggle") { t.disabled = true; api("PUT", "/api/email/switch", { enabled: !(emSwitch && emSwitch.enabled) }).then(function(){ loadEmail(b); }).catch(function(err){ t.disabled = false; emMsg = err.message; loadEmail(b); }); return; }
+    if (k === "send") {
+      var to = $("em-to").value.trim(), basis = $("em-basis").value;
+      if (!basis) { emMsg = tt("Choose why we may email this address.", "انتخاب کنید چرا اجازهٔ ایمیل به این آدرس را داریم."); loadEmail(b); return; }
+      t.disabled = true;
+      api("POST", "/api/email/send", { business: b.name, to: to, subject: $("em-subj").value, body: $("em-body").value, basis: basis })
+        .then(function(){ emMsg = tt("Sent ✓ to ", "ارسال شد ✓ به ") + to; ["em-to", "em-subj", "em-body"].forEach(function(id){ if ($(id)) delete $(id).dataset.edited; }); loadEmail(b); })
+        .catch(function(err){ t.disabled = false; emMsg = err.message; loadEmail(b); });
+    }
+  });
+  function mailtoProposal(b, url){
+    var ask = askFor(b), first = (ask.match(/^([A-Z][a-zA-Z'-]+)\s+[A-Z]/) || [])[1] || "";
+    var body = (first ? "Hi " + first + ",\n\n" : "Hi,\n\n") + "Here is the proposal we prepared for " + b.name + ", showing how AVA can answer every call and booking 24/7:\n" + url +
+      "\n\nYou can also test AVA yourself any time — call or text +1 (437) 529-0400.\n\nHappy to answer any questions.\n\n" + (fullName() || "") + "\nNexAIS · info@nexais.ca";
+    return "mailto:" + encodeURIComponent(emailOf(b)) + "?subject=" + encodeURIComponent("Your AVA proposal — " + b.name) + "&body=" + encodeURIComponent(body);
+  }
+  /* ---------- AVA follow-up call (consent first; the owner's switch) ---------- */
+  var AVA_PURPOSE = [["follow_up_proposal", "Follow up on the proposal", "پیگیری پروپوزال"], ["book_demo", "Book a demo time", "هماهنگی زمان دمو"],
+    ["trial_reminder", "Free-trial reminder", "یادآوری دورهٔ رایگان"], ["requested_callback", "They asked us to call back", "خودشان خواستند تماس بگیریم"]];
+  var AVA_ST = { scheduled: ["Planned", "برنامه‌ریزی شد"], calling: ["AVA is on the call now", "اوا الان در تماس است"], done: ["Finished", "تمام شد"],
+    failed: ["Failed", "ناموفق"], blocked: ["Blocked", "مسدود"], cancelled: ["Cancelled", "لغو شد"] };
+  var AVA_OUT = { interested: ["Interested", "علاقه‌مند"], confirmed: ["Confirmed", "تأیید کرد"], rescheduled: ["Wants another time", "زمان دیگری می‌خواهد"],
+    callback_requested: ["Asked for a call back", "تماس مجدد خواست"], not_interested: ["Not interested", "علاقه ندارد"], no_answer: ["No answer", "جواب نداد"],
+    voicemail: ["Left a voicemail", "پیام صوتی گذاشت"], other: ["Other", "سایر"] };
+  var avaTimer = null, avaSwitch = null, avaMsg = "", avaFor = null;
+  function loadAva(b){
+    clearTimeout(avaTimer);
+    if (avaFor !== b) { avaFor = b; avaMsg = ""; }
+    var box = $("ava-panel"); if (!box || cur.biz !== b || bizTab !== "ava") return;
+    if (!LINE_MODE) { box.innerHTML = "<div class=\"empty-box\"><p>" + esc(tt("AVA calls work after signing in with your NexAIS account.", "تماس اوا بعد از ورود با حساب NexAIS کار می‌کند.")) + "</p></div>"; return; }
+    Promise.all([api("GET", "/api/ava/switch"), api("GET", "/api/ava/overview?business=" + encodeURIComponent(b.name)).catch(function(e){ return { error: e.message }; })])
+      .then(function(r){ avaSwitch = r[0]; renderAva(b, r[1]); }).catch(function(e){ box.innerHTML = "<p class=\"hint\">" + esc(e.message) + "</p>"; });
+  }
+  function renderAva(b, d){
+    var box = $("ava-panel"); if (!box) return;
+    var on = avaSwitch && avaSwitch.enabled, html = "";
+    html += "<div class=\"ava-switch" + (on ? " on" : "") + "\"><span class=\"dot\"></span><b>" + esc(on ? tt("AVA calls are ON", "تماس اوا روشن است") : tt("AVA calls are OFF", "تماس اوا خاموش است")) + "</b>" +
+      (avaSwitch && avaSwitch.can_toggle ? "<button type=\"button\" class=\"btn ghost\" data-ava=\"toggle\">" + esc(on ? tt("Turn off", "خاموش کن") : tt("Turn on", "روشن کن")) + "</button>" :
+        "<small>" + esc(tt("Only the owner can turn this on or off.", "فقط مدیر می‌تواند روشن یا خاموشش کند.")) + "</small>") + "</div>";
+    if (d && d.error) { box.innerHTML = html + "<p class=\"hint\">" + esc(d.error) + "</p>"; return; }
+    var consents = d.consents || [], calls = d.calls || [];
+    html += "<p class=\"cf-p\">" + esc(tt("AVA only calls people who agreed to it (Canadian law — CRTC). Record their consent first, then plan the call. AVA says she is an AI assistant and that the call is recorded; you can take the call over at any moment.",
+      "اوا فقط با کسانی تماس می‌گیرد که قبول کرده‌اند (قانون کانادا — CRTC). اول رضایتشان را ثبت کنید، بعد تماس را برنامه‌ریزی کنید. اوا می‌گوید دستیار هوش مصنوعی است و تماس ضبط می‌شود؛ هر لحظه می‌توانید تماس را خودتان بگیرید.")) + "</p>";
+    // consent
+    var ph = cleanNumber(phoneOf(b).text), ask = askFor(b), person = ask ? ask.split(/\s+[—-]\s+/)[0] : "";
+    html += "<div class=\"prop-box\"><p class=\"h3s\">1 · " + esc(tt("Their consent", "رضایت آن‌ها")) + "</p>";
+    if (consents.length) html += "<ul class=\"recent\">" + consents.map(function(c){ return "<li><time>" + esc(new Date(c.given_at).toLocaleString()) + " · " + esc(c.method.replace("_", " ")) + "</time>" + esc(c.person) + " — " + esc(c.phone) + " ✓</li>"; }).join("") + "</ul>";
+    html += "<details" + (consents.length ? "" : " open") + " class=\"ava-more\"><summary>" + esc(consents.length ? tt("Add another consent", "ثبت رضایت دیگر") : tt("Record consent", "ثبت رضایت")) + "</summary>" +
+      "<div class=\"ava-grid\"><label>" + esc(tt("Who agreed", "چه کسی قبول کرد")) + "<input id=\"av-person\" value=\"" + esc(/not yet/i.test(person) ? "" : person) + "\"></label>" +
+      "<label>" + esc(tt("Number AVA may call", "شماره‌ای که اوا می‌تواند تماس بگیرد")) + "<input id=\"av-phone\" type=\"tel\" value=\"" + esc(ph) + "\"></label>" +
+      "<label>" + esc(tt("How they agreed", "چطور قبول کردند")) + "<select id=\"av-method\"><option value=\"phone_call\">" + esc(tt("On a phone call", "در تماس تلفنی")) + "</option><option value=\"sms\">SMS</option><option value=\"email\">Email</option><option value=\"in_person\">" + esc(tt("In person", "حضوری")) + "</option><option value=\"web_form\">" + esc(tt("Web form", "فرم وب")) + "</option></select></label>" +
+      "<label>" + esc(tt("When", "کی")) + "<input id=\"av-when\" type=\"datetime-local\" value=\"" + esc(localNow()) + "\"></label></div>" +
+      "<label class=\"sms-consent\"><input type=\"checkbox\" id=\"av-ok\"> " + esc(tt("They clearly agreed that AVA, an AI assistant, may call this number.", "صریحاً قبول کردند که اوا، دستیار هوش مصنوعی، با این شماره تماس بگیرد.")) + "</label>" +
+      "<button type=\"button\" class=\"btn ghost\" data-ava=\"consent\" style=\"margin-top:8px\">" + esc(tt("Save consent", "ثبت رضایت")) + "</button></details></div>";
+    // plan
+    html += "<div class=\"prop-box\"><p class=\"h3s\">2 · " + esc(tt("Plan AVA's call", "برنامه‌ریزی تماس اوا")) + "</p>";
+    if (!on) html += "<p class=\"hint\">" + esc(tt("AVA calls are off right now.", "تماس اوا الان خاموش است.")) + "</p>";
+    else if (!consents.length) html += "<p class=\"hint\">" + esc(tt("Record their consent first.", "اول رضایت را ثبت کنید.")) + "</p>";
+    else html += "<div class=\"ava-grid\"><label>" + esc(tt("Number", "شماره")) + "<select id=\"ac-phone\">" + consents.map(function(c){ return "<option>" + esc(c.phone) + "</option>"; }).join("") + "</select></label>" +
+      "<label>" + esc(tt("Purpose", "هدف")) + "<select id=\"ac-purpose\">" + AVA_PURPOSE.map(function(x){ return "<option value=\"" + x[0] + "\">" + esc(tt(x[1], x[2])) + "</option>"; }).join("") + "</select></label>" +
+      "<label>" + esc(tt("When", "کی")) + "<input id=\"ac-when\" type=\"datetime-local\" value=\"" + esc(localNow()) + "\"></label>" +
+      "<label>" + esc(tt("Language", "زبان")) + "<select id=\"ac-lang\"><option value=\"en\">English</option><option value=\"fa\">فارسی</option></select></label></div>" +
+      "<label class=\"cc-l\">" + esc(tt("Anything AVA should know (optional)", "چیزی که اوا باید بداند (اختیاری)")) + "<input id=\"ac-note\" type=\"text\"></label>" +
+      "<button type=\"button\" class=\"btn primary\" data-ava=\"call\" style=\"margin-top:8px\">🤖 " + esc(tt("Schedule AVA's call", "برنامه‌ریزی تماس اوا")) + "</button>" +
+      "<p class=\"hint\">" + esc(tt("AVA calls only 9:00–20:30 Toronto time; outside those hours she waits.", "اوا فقط ۹ صبح تا ۸:۳۰ شب به وقت تورنتو تماس می‌گیرد؛ خارج از این ساعت صبر می‌کند.")) + "</p>";
+    html += "<p class=\"hint\" id=\"ava-msg\">" + esc(avaMsg) + "</p></div>";
+    // calls
+    if (calls.length) {
+      html += "<p class=\"h3s\">" + esc(tt("AVA's calls with this business", "تماس‌های اوا با این کسب‌وکار")) + "</p><ul class=\"next-list\">" + calls.map(function(c){
+        var st = AVA_ST[c.status] || [c.status, c.status], out = c.outcome && AVA_OUT[c.outcome];
+        var p = AVA_PURPOSE.filter(function(x){ return x[0] === c.purpose; })[0];
+        return "<li style=\"cursor:default;align-items:flex-start\"><div><div class=\"nm\">" + esc(p ? tt(p[1], p[2]) : c.purpose) + " · " + esc(c.phone) + "</div><div class=\"meta\">" +
+          esc(new Date(c.scheduled_for).toLocaleString()) + (c.summary ? " — " + esc(c.summary) : "") + (c.error && c.status !== "done" ? " — " + esc(c.error) : "") + "</div></div>" +
+          "<div class=\"fl-r\"><span class=\"tag\">" + esc(tt(st[0], st[1]) + (out ? " · " + tt(out[0], out[1]) : "")) + "</span>" +
+          (c.status === "calling" && !c.takeover ? "<button type=\"button\" class=\"btn primary\" data-ava=\"takeover\" data-id=\"" + esc(c.id) + "\">" + esc(tt("Take over (ring me)", "تماس را بگیرم")) + "</button>" : "") +
+          (c.takeover ? "<span class=\"tag\">" + esc(tt("Take-over: ", "گرفتن تماس: ") + c.takeover) + "</span>" : "") + "</div></li>";
+      }).join("") + "</ul>";
+      if (calls.some(function(c){ return c.status === "scheduled" || c.status === "calling"; })) avaTimer = setTimeout(function(){ loadAva(b); }, 5000);
+    }
+    box.innerHTML = html;
+  }
+  function localNow(){ var d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000); return d.toISOString().slice(0, 16); }
+  bizHead.addEventListener("click", function(e){
+    var t = e.target.closest("[data-ava]"); if (!t || !cur.biz) return;
+    var b = cur.biz, k = t.getAttribute("data-ava"), msg = $("ava-msg");
+    var say = function(m){ avaMsg = m; if (msg) msg.textContent = m; else alert(m); };
+    if (k === "toggle") { api("PUT", "/api/ava/switch", { enabled: !(avaSwitch && avaSwitch.enabled) }).then(function(){ loadAva(b); }).catch(function(err){ say(err.message); }); return; }
+    if (k === "consent") {
+      if (!$("av-ok").checked) { say(tt("Tick the box to confirm they clearly agreed.", "تیک را بزنید که صریحاً قبول کرده‌اند.")); return; }
+      var when = $("av-when").value ? new Date($("av-when").value).toISOString() : null;
+      api("POST", "/api/ava/consent", { business: b.name, person: $("av-person").value, phone: $("av-phone").value, method: $("av-method").value, given_at: when })
+        .then(function(){ loadAva(b); }).catch(function(err){ say(err.message); });
+      return;
+    }
+    if (k === "call") {
+      t.disabled = true; say(tt("Planning…", "در حال برنامه‌ریزی…"));
+      var w = $("ac-when").value ? new Date($("ac-when").value).toISOString() : null;
+      api("POST", "/api/ava/call", { business: b.name, phone: $("ac-phone").value, purpose: $("ac-purpose").value, when: w, language: $("ac-lang").value, note: $("ac-note").value })
+        .then(function(){ avaMsg = tt("Planned ✓ — AVA calls at the chosen time.", "برنامه‌ریزی شد ✓ — اوا در زمان انتخاب‌شده تماس می‌گیرد."); loadAva(b); }).catch(function(err){ t.disabled = false; say(err.message); });
+      return;
+    }
+    if (k === "takeover") { t.disabled = true; api("POST", "/api/ava/takeover/" + t.getAttribute("data-id"), {}).then(function(d){ say(tt("AVA is handing the call to ", "اوا تماس را به ") + (d.to || "") + tt("", " وصل می‌کند")); loadAva(b); }).catch(function(err){ t.disabled = false; say(err.message); }); }
+  });
+  function printText(title, text){
+    var fr = document.createElement("iframe"); fr.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0"; document.body.appendChild(fr);
+    var d = fr.contentWindow.document;
+    d.open(); d.write("<!doctype html><html><head><title>" + esc(title) + "</title><style>body{font:13pt/1.55 Georgia,serif;margin:2cm;color:#111}h1{font:600 16pt Arial,sans-serif;margin:0 0 4px}p.m{font:10pt Arial,sans-serif;color:#666;margin:0 0 18px}pre{white-space:pre-wrap;font:inherit}</style></head><body><h1>" +
+      esc(title) + "</h1><p class=\"m\">NexAIS · " + esc(new Date().toLocaleDateString("en-CA")) + "</p><pre>" + esc(text) + "</pre></body></html>"); d.close();
+    setTimeout(function(){ fr.contentWindow.focus(); fr.contentWindow.print(); setTimeout(function(){ fr.remove(); }, 1000); }, 150);
+  }
+  bizHead.addEventListener("click", function(e){
+    var t = e.target.closest("[data-btab],[data-bz]"); if (!t) return;
+    var b = cur.biz; if (!b) return;
+    if (t.hasAttribute("data-btab")) { e.preventDefault(); bizTab = t.getAttribute("data-btab"); renderBizHead(); return; }
+    var k = t.getAttribute("data-bz");
+    if (k === "print-script") { printText(tt("Call script — ", "اسکریپت تماس — ") + b.name, $("bz-script").value); logSync("script-print", b.name, ""); }
+    else if (k === "copy-script") { var ta = $("bz-script"); try { navigator.clipboard.writeText(ta.value); } catch(x){ ta.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); }
+    else if (k === "copy-sms") { var sa = $("bz-sms"); try { navigator.clipboard.writeText(sa.value); } catch(x){ sa.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); }
+    else if (k === "sms-script") { smsT = $("bz-smst").value; smsBiz = b.slug; pickFilter.sms = "all"; }
+    else if (k === "copy-prop") { try { navigator.clipboard.writeText(proposalOf(b).url); } catch(x){} t.textContent = tt("Copied ✓", "کپی شد ✓"); }
+    else if (k === "mail-prop") { logSync("proposal-sent", b.name, "email"); }
+    else if (k === "email-open") { var eb = $("em-box"); if (eb && eb.closest("details")) eb.closest("details").open = true; if (eb) { eb.scrollIntoView({ behavior: "smooth", block: "start" }); var et = $("em-to"); if (et) setTimeout(function(){ et.focus(); }, 300); } }
+    else if (k === "sms-prop") { smsT = "proplink"; smsBiz = b.slug; pickFilter.sms = "all"; nav("sms/" + b.slug); }
+    else if (k === "make-prop") {
+      var pick = $("g-pick"), done = false;
+      if (pick && !b.isNew) Array.prototype.forEach.call(pick.options, function(o){ if (!done && o.textContent.indexOf(b.name) === 0) { pick.value = o.value; done = true; } });
+      if (done) { pick.dispatchEvent(new Event("change")); nav("generator"); }
+      else if (window.NEXAIS_newBiz.find(b.name)) openDossier(b);
+      else { if (pick) { pick.value = "new"; pick.dispatchEvent(new Event("change")); } var gb = $("g-biz"); if (gb) gb.value = b.name; nav("generator"); }
+    }
+  });
+  bizHead.addEventListener("change", function(e){
+    if (e.target.id === "bz-scen" && cur.biz) { scriptScenario = e.target.value; $("bz-script").value = buildScriptFor(cur.biz, scriptScenario); }
+    if (e.target.id === "bz-smst" && cur.biz) { bzSmsT = e.target.value; $("bz-sms").value = smsFor(cur.biz, bzSmsT); }
+  });
+
   /* ---------- top bar title ---------- */
+  function renderQuickComm(){
+    var b = cur.v === "b" ? cur.biz : (cur.v === "call" ? callQ[callI] : (cur.v === "sms" ? bySlug(smsBiz) : null));
+    var c = $("qc-call"), m = $("qc-sms"); if (!c) return;
+    c.href = b ? "#call/b/" + b.slug : "#call"; m.href = b ? "#sms/" + b.slug : "#sms";
+    c.innerHTML = "<span aria-hidden=\"true\">☎</span> " + esc(b ? tt("Call", "تماس") + " · " + b.name : tt("Call", "تماس"));
+    m.innerHTML = "<span aria-hidden=\"true\">✉</span> " + esc(tt("SMS", "پیامک"));
+    c.classList.toggle("on", cur.v === "call"); m.classList.toggle("on", cur.v === "sms");
+  }
   function renderTitle(){
+    renderQuickComm();
     vt.innerHTML = cur.v === "b" && cur.biz
       ? esc(tt("Businesses", "کسب‌وکارها")) + " <small>/ " + esc(indLabel(cur.biz.ind)) + " / " + esc(cur.biz.name) + "</small>"
       : cur.v === "ind" && cur.ind ? esc(tt("Businesses", "کسب‌وکارها")) + " <small>/ " + esc(indLabel(cur.ind)) + "</small>"
       : esc(labelOf(cur.v));
   }
 
-  function renderAll(){ renderSide(); renderTitle(); renderRail(); renderToday(); renderBizHead(); renderIndHead(); }
+  function renderAll(){ renderSide(); renderTitle(); renderRail(); renderToday(); renderBizHead(); renderIndHead();
+    if (cur.v === "follow") renderFollow(); else if (cur.v === "downloads") renderDownloads(); }
 
   /* keep everything live: outcomes, notes, actions, language */
   var tmr;
@@ -8639,6 +10134,7 @@ Object.assign(window.FA, {
     "Added by the team. Research comes first: nothing is claimed until the research is done.": "اضافه‌شده توسط تیم. اول تحقیق: تا تحقیق کامل نشده، چیزی ادعا نمی‌شود.",
     "New": "جدید", "Signal:": "نشانه:", "Website": "وب‌سایت"
   });
+  window.NEXAIS_shellReload = function(){ loadBiz(); renderAll(); if (cur.v === "b" && !cur.biz) route(); };
   body.classList.add("shell");
   route();
 })();
