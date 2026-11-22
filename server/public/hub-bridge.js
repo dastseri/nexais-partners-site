@@ -169,7 +169,8 @@
           window.NEXAIS_newBiz.importCRM({ name: name, ind: indOf(m.vertical), city: m.city || '', phone: m.public_phone || '', web: m.website || '',
             contact: summaryField(m.partner_summary, 'Contact'), note: summaryField(m.partner_summary, 'Signal'), mission: m.mission_code, research: '',
             evidence: summaryField(m.partner_summary, 'Evidence'), source: summaryField(m.partner_summary, 'Source'), score: summaryField(m.partner_summary, 'Pain score'),
-            studied: summaryField(m.partner_summary, 'Research'), proposalStatus: summaryField(m.partner_summary, 'Proposal') });
+            studied: summaryField(m.partner_summary, 'Research'), proposalStatus: summaryField(m.partner_summary, 'Proposal'),
+            proposalLink: /^https?:\/\//.test(m.proposal_link || '') ? m.proposal_link : '', proposalSent: summaryField(m.partner_summary, 'Proposal sent') });
           changed = true;
         }
         var label = OUTCOME_LABEL[m.last_outcome];

@@ -429,7 +429,7 @@ export function createApp(options) {
     try {
       const db = req.session.db;
       const { data: missions, error } = await db.from('partner_missions')
-        .select('id, mission_code, origin, status, business_name, city, vertical, website, public_phone, partner_summary, created_at')
+        .select('id, mission_code, origin, status, business_name, city, vertical, website, public_phone, partner_summary, proposal_link, created_at')
         .eq('company_id', companyId).not('status', 'in', HUB_OPEN).order('created_at', { ascending: true }).limit(1000);
       if (error) return res.status(400).json({ error: error.message });
       const { data: acts, error: actErr } = await db.from('partner_activity_log')

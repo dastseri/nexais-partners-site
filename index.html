@@ -4520,6 +4520,7 @@
     if (b.contact) facts += "<div><dt>Ask for</dt><dd>" + esc(b.contact) + "</dd></div>";
     facts += "<div><dt>Phone</dt><dd class=\"phone\">" + (b.phone ? "<a href=\"tel:" + esc(b.phone.replace(/[^\d+]/g, "")) + "\">" + esc(b.phone) + "</a>" : "—") + "</dd></div>";
     if (b.web) facts += "<div><dt>Website</dt><dd>" + esc(b.web) + "</dd></div>";
+    if (b.proposalSent) facts += "<div><dt>Proposal sent</dt><dd>" + esc(b.proposalSent) + "</dd></div>";
     var c = document.createElement("article");
     c.className = "card"; c.setAttribute("data-group", "new"); c.setAttribute("data-new", "1");
     c.setAttribute("data-name", b.name.toLowerCase()); c.setAttribute("data-ind", b.ind || "other");
@@ -4529,6 +4530,7 @@
       "<dl class=\"facts\">" + facts + "</dl>" +
       "<details class=\"card-more\"><summary>Details &amp; script</summary>" +
       (b.note ? "<p class=\"hook\"><span>Signal:</span> " + esc(b.note) + "</p>" : "") +
+      (b.proposalLink ? "<p class=\"prop-link\"><a href=\"" + esc(b.proposalLink) + "\" target=\"_blank\" rel=\"noopener\">Proposal</a></p>" : "") +
       "<div class=\"act-hist\"><p class=\"act-hist-t\">Action history</p><ul class=\"act-list\"></ul><p class=\"act-none\">No actions logged yet.</p></div>" +
       "</details>" +
       "<div class=\"tracker\"><label>Outcome <select class=\"status\" aria-label=\"Call outcome for " + n + "\">" +
@@ -8523,7 +8525,7 @@ Object.assign(window.FA, {
   function statusOf(b){ var s = b.el.querySelector(".status"); return s ? s.value : "Not called"; }
   function stageOf(b){
     var st = STATUS_STAGE[statusOf(b)] || "sent";
-    return st === "sent" && b.isNew ? "research" : st;
+    return st === "sent" && b.isNew && !(b.el.querySelector(".prop-link a[href]") && /proposal sent/i.test(b.el.querySelector(".facts") ? b.el.querySelector(".facts").textContent : "")) ? "research" : st;
   }
   function bySlug(s){ for (var i = 0; i < BIZ.length; i++) if (BIZ[i].slug === s) return BIZ[i]; return null; }
   function byName(n){ n = (n || "").toLowerCase(); for (var i = 0; i < BIZ.length; i++) if (BIZ[i].name.toLowerCase() === n) return BIZ[i]; return null; }
