@@ -783,6 +783,30 @@
   @media (max-width:1180px){ .rl-now small{display:none} }
   @media (max-width:860px){ .app-rail{flex-wrap:wrap;gap:6px 10px;top:48px} .rl-stages{order:3;width:100%;overflow-x:auto;margin:0} }
 
+  /* calls & sms */
+  .quick-comm{display:flex;gap:6px;margin-inline-start:14px}
+  .quick-comm a{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--panel-line);border-radius:18px;padding:5px 12px;font-size:12.5px;font-weight:600;
+    color:var(--ink);text-decoration:none;background:#fff;white-space:nowrap;max-width:240px;overflow:hidden;text-overflow:ellipsis}
+  .quick-comm a:hover{border-color:var(--ink-3)}
+  .quick-comm a.on,.quick-comm a:first-child{background:var(--ink);border-color:var(--ink);color:#fff}
+  .quick-comm a span{font-size:13px}
+  @media (max-width:860px){
+    .quick-comm{position:fixed;bottom:12px;left:12px;right:12px;z-index:70;margin:0;justify-content:center;gap:8px}
+    .quick-comm a{flex:1;justify-content:center;padding:11px 12px;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.12);max-width:none}
+    body.shell{padding-bottom:70px}
+    body.shell .topbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
+  }
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--panel-line);margin:0 0 16px}
+  .tabs a{padding:8px 14px;font-size:14px;color:var(--ink-3);text-decoration:none;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tabs a.on{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+  .sms-grid{display:grid;grid-template-columns:1.4fr 1fr 1.2fr;gap:10px}
+  .sms-grid select,.sms-grid input{display:block;width:100%;margin-top:6px;border:1px solid var(--panel-line);border-radius:8px;padding:9px 10px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}
+  .sms-body{width:100%;border:1px solid var(--panel-line);border-radius:8px;padding:12px;font:inherit;font-size:14.5px;line-height:1.55;margin-top:10px;direction:ltr;text-align:left}
+  .sms-count{font-size:12px;color:var(--ink-3);margin:4px 0 10px}
+  .sms-hint{display:block;font-size:11px;color:var(--ink-3);margin-top:4px;font-weight:400}
+  .sms-consent{display:flex;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-2)}
+  @media (max-width:860px){ .sms-grid{grid-template-columns:1fr} }
+
   /* three areas */
   .area{margin:0 0 8px;border-radius:10px}
   .area-h{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:8px;text-decoration:none;color:var(--ink)}
@@ -8279,13 +8303,13 @@ Object.assign(window.FA, {
   /* ---------- menu ---------- */
   var QUICK = [
     { v: "follow",    en: "My follow-ups",  fa: "پیگیری‌های من" },
-    { v: "call",      en: "Make calls",     fa: "تماس بگیرم" },
     { v: "biz",       en: "All businesses", fa: "همهٔ کسب‌وکارها", count: true },
     { v: "new",       en: "Add a business", fa: "افزودن کسب‌وکار" },
     { v: "downloads", en: "Downloads",      fa: "دانلودها" }
   ];
   var AREAS = [
     { v: "follow",   en: "Work with businesses", fa: "کار با کسب‌وکارها", d: ["Follow-ups, calls, research", "پیگیری، تماس، تحقیق"] },
+    { v: "call",     en: "Calls & SMS",          fa: "تماس و پیامک",      d: ["Dial, text and log each one", "تماس، پیامک و ثبت هر کدام"] },
     { v: "closing",  en: "Close a deal",         fa: "بستن قرارداد",      d: ["Plan → agreement → payment link", "پلن ← قرارداد ← لینک پرداخت"] },
     { v: "earnings", en: "My earnings",          fa: "وضعیت مالی من",     d: ["Commissions earned and paid", "کمیسیون‌های کسب‌شده و پرداخت‌شده"] }
   ];
@@ -8311,6 +8335,7 @@ Object.assign(window.FA, {
   function labelOf(v){
     if (v === "today") return tt("Today", "امروز");
     if (v === "closing") return tt("Close a deal", "بستن قرارداد");
+    if (v === "call" || v === "sms") return tt("Calls & SMS", "تماس و پیامک");
     if (v === "earnings") return tt("My earnings", "وضعیت مالی من");
     if (v === "close") return tt("Close a deal", "بستن قرارداد");
     for (var q = 0; q < QUICK.length; q++) if (QUICK[q].v === v) return tt(QUICK[q].en, QUICK[q].fa);
@@ -8405,6 +8430,9 @@ Object.assign(window.FA, {
   menuBtn.addEventListener("click", function(){ body.classList.toggle("side-open"); });
   var vt = document.createElement("p"); vt.className = "view-title"; vt.id = "view-title";
   tw.insertBefore(vt, tw.firstChild); tw.insertBefore(menuBtn, vt);
+  var qc = document.createElement("div"); qc.className = "quick-comm";
+  qc.innerHTML = "<a id=\"qc-call\" href=\"#call\"></a><a id=\"qc-sms\" href=\"#sms\"></a>";
+  vt.parentNode.insertBefore(qc, vt.nextSibling);
 
   var today = document.createElement("section"); today.id = "today";
   var bizHead = document.createElement("section"); bizHead.id = "biz-head";
@@ -8436,7 +8464,7 @@ Object.assign(window.FA, {
   function go(v, slug, anchor){
     cur.v = v; cur.biz = v === "b" && slug ? bySlug(slug) : null;
     if (v === "ind") cur.ind = slug || null;
-    if (v === "new" || v === "follow" || v === "call" || v === "downloads" || v === "earnings" || v === "closing") cur.ind = null;
+    if (v === "new" || v === "follow" || v === "call" || v === "sms" || v === "downloads" || v === "earnings" || v === "closing") cur.ind = null;
     if (v === "biz") cur.ind = null;
     if (cur.biz) cur.ind = cur.biz.ind;
     body.classList.toggle("biz-mode", v === "b" && !!cur.biz);
@@ -8449,6 +8477,7 @@ Object.assign(window.FA, {
     else if (v === "new") { show(["new-biz"]); renderNewForm(slug); }
     else if (v === "follow") { show(["task-view"]); renderFollow(); }
     else if (v === "call") { show(["task-view"]); callStart(slug); }
+    else if (v === "sms") { show(["task-view"]); smsStart(slug); }
     else if (v === "downloads") { show(["task-view"]); renderDownloads(); }
     else if (v === "earnings") { show(["task-view"]); renderEarnings(); }
     else if (v === "closing" || v === "close") { show(["close"]); closeSetup(slug); }
@@ -8470,6 +8499,7 @@ Object.assign(window.FA, {
     if (h === "follow" || h === "downloads" || h === "earnings") return go(h);
     if (h === "closing" || h.indexOf("closing/") === 0) return go("closing", h.slice(8) || null);
     if (h === "call" || h.indexOf("call/") === 0) return go("call", h.slice(5) || null);
+    if (h === "sms" || h.indexOf("sms/") === 0) return go("sms", h.slice(4) || null);
     if (h.indexOf("ind/") === 0) return go("ind", h.slice(4));
     if (h === "close") return go("closing");
     if (h.indexOf("b/") === 0 && bySlug(h.slice(2))) return go("b", h.slice(2));
@@ -8493,11 +8523,11 @@ Object.assign(window.FA, {
   }
   function renderSide(){
     var og = openGroups(), curG = groupOf(cur.v);
-    var workOn = ["follow", "call", "biz", "ind", "b", "new", "downloads"].indexOf(cur.v) >= 0;
+    var workOn = ["follow", "biz", "ind", "b", "new", "downloads"].indexOf(cur.v) >= 0;
     var html = "<div class=\"side-brand\">Nex<b>AIS</b><span>" + esc(tt("Sales Partners", "همکاران فروش")) + "</span></div>";
     html += "<a class=\"side-link home" + (cur.v === "today" ? " on" : "") + "\" href=\"#today\">" + esc(tt("Today", "امروز")) + "</a>";
     AREAS.forEach(function(a, i){
-      var on = i === 0 ? workOn : (cur.v === a.v || (a.v === "closing" && cur.v === "close"));
+      var on = i === 0 ? workOn : (cur.v === a.v || (a.v === "closing" && cur.v === "close") || (a.v === "call" && cur.v === "sms"));
       html += "<div class=\"area" + (on ? " on" : "") + "\"><a class=\"area-h\" href=\"#" + a.v + "\"><span class=\"qi\">" + (i + 1) + "</span><span><b>" +
         esc(tt(a.en, a.fa)) + "</b><small>" + esc(tt(a.d[0], a.d[1])) + "</small></span></a>";
       if (i === 0) {
@@ -8670,6 +8700,7 @@ Object.assign(window.FA, {
       "<div class=\"biz-actions\">" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"script\">" + esc(tt("Build call script", "ساخت اسکریپت تماس")) + "</button>" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"close\">" + esc(tt("Close the deal", "بستن معامله")) + "</button>" +
+      "<a class=\"btn ghost\" href=\"#sms/" + esc(b.slug) + "\">" + esc(tt("Send SMS", "ارسال پیامک")) + "</a>" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"talk\">" + esc(tt("Ask AVA about it", "پرسیدن از AVA")) + "</button>" +
       "</div>" + (b.isNew ? researchPanel(b) : "") + "</div>";
   }
@@ -8706,7 +8737,14 @@ Object.assign(window.FA, {
   function stLabel(st){ return window.LANG === "fa" ? (ST_FA[st] || st) : st; }
   function phoneOf(b){ var a = b.el.querySelector(".facts dd.phone a"); var d = b.el.querySelector(".facts dd.phone");
     return { href: a ? a.getAttribute("href") : "", text: d ? d.textContent.trim() : "" }; }
-  function askFor(b){ var dd = b.el.querySelector(".card-top + .facts dd, .facts dd"); return dd && !dd.classList.contains("phone") ? dd.textContent.trim() : ""; }
+  function askFor(b){
+    var rows = b.el.querySelectorAll(".card-top ~ .facts > div");
+    for (var i = 0; i < rows.length; i++) {
+      var dt = rows[i].querySelector("dt"), dd = rows[i].querySelector("dd");
+      if (dt && dd && /ask for|بخواهید/i.test(dt.textContent)) return dd.textContent.trim();
+    }
+    return "";
+  }
   function noteOf(b){ var n = b.el.querySelector(".notes"); return n ? n.value : ""; }
   function taskHead(title, sub){ return "<div class=\"wrap\"><h2 class=\"t-h\">" + esc(title) + "</h2><p class=\"sub-p\">" + esc(sub) + "</p>"; }
 
@@ -8739,12 +8777,17 @@ Object.assign(window.FA, {
     return mode === "follow" ? f : fresh;
   }
   function callStart(mode){
+    if (mode && mode.indexOf("b/") === 0 && bySlug(mode.slice(2))) {
+      var one = bySlug(mode.slice(2));
+      callMode = followList().indexOf(one) >= 0 ? "follow" : "new";
+      callQ = [one].concat(buildCallQ(callMode).filter(function(x){ return x !== one; })); callI = 0; renderCall(); return;
+    }
     callMode = mode === "new" ? "new" : (mode === "follow" ? "follow" : (followList().length ? "follow" : "new"));
     callQ = buildCallQ(callMode); callI = 0; renderCall();
   }
   function renderCall(){
-    var html = taskHead(tt("Make calls", "تماس بگیرم"),
-      tt("One business at a time: dial, pick the result, add a short note, next.", "هر بار یک کسب‌وکار: شماره بگیرید، نتیجه را بزنید، یک یادداشت کوتاه، بعدی."));
+    var html = phoneHead("call");
+    if (!PERM.can_call) { taskSec.innerHTML = html + permNote(tt("Calling", "تماس")) + "</div>"; return; }
     html += "<div class=\"chips big\"><a href=\"#call/follow\"" + (callMode === "follow" ? " class=\"on\"" : "") + ">" + esc(tt("Follow-ups", "پیگیری‌ها")) + " <span>" + followList().length + "</span></a>" +
       "<a href=\"#call/new\"" + (callMode === "new" ? " class=\"on\"" : "") + ">" + esc(tt("Not called yet", "هنوز تماس نگرفته")) + " <span>" + buildCallQ("new").length + "</span></a></div>";
     var b = callQ[callI];
@@ -8769,8 +8812,95 @@ Object.assign(window.FA, {
       "<div class=\"cc-nav\"><button type=\"button\" class=\"btn ghost\" data-nav=\"prev\"" + (callI ? "" : " disabled") + ">" + esc(tt("← Previous", "→ قبلی")) + "</button>" +
       "<a class=\"linkish\" href=\"#b/" + esc(b.slug) + "\">" + esc(tt("Open full page", "صفحهٔ کامل")) + "</a>" +
       "<button type=\"button\" class=\"btn primary\" data-nav=\"next\">" + esc(tt("Next →", "بعدی ←")) + "</button></div></div></div>";
-    taskSec.innerHTML = html;
+    taskSec.innerHTML = html; renderQuickComm();
   }
+  /* ---------- calls & SMS ---------- */
+  var PERM = { can_call: true, can_sms: true, loaded: !window.NEXAIS_SESSION };
+  if (window.NEXAIS_SESSION) fetch("/api/permissions/me", { credentials: "same-origin", cache: "no-store" }).then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(p){ if (p) { PERM.can_call = !!p.can_call; PERM.can_sms = !!p.can_sms; } PERM.loaded = true; if (cur.v === "call") renderCall(); if (cur.v === "sms") renderSms(); }).catch(function(){});
+  function phoneHead(tab){
+    return taskHead(tt("Calls & SMS", "تماس و پیامک"),
+      tt("Call or text one business at a time, then log the result — it is saved on the business for the whole team.",
+         "هر بار با یک کسب‌وکار تماس بگیرید یا پیامک بزنید و نتیجه را ثبت کنید — روی همان کسب‌وکار برای کل تیم ذخیره می‌شود.")) +
+      "<div class=\"tabs\"><a href=\"#call\"" + (tab === "call" ? " class=\"on\"" : "") + ">" + esc(tt("Calls", "تماس")) + "</a>" +
+      "<a href=\"#sms\"" + (tab === "sms" ? " class=\"on\"" : "") + ">" + esc(tt("SMS", "پیامک")) + "</a></div>";
+  }
+  function permNote(what){
+    return "<div class=\"empty-box\"><p>" + esc(tt(what + " is not turned on for your account yet. Ask the NexAIS admin to enable it.",
+      what + " هنوز برای حساب شما فعال نشده. از ادمین NexAIS بخواهید فعالش کند.")) + "</p></div>";
+  }
+  function logAction(b, type){
+    var tr = b.el.querySelector(".act-type"), btn = b.el.querySelector(".act-btn");
+    if (!tr || !btn) return;
+    tr.value = type; tr.dispatchEvent(new Event("change", { bubbles: true })); btn.click();
+  }
+  function actionsOf(b, type){ return (b.el.__actions || []).filter(function(a){ return !type || a.t === type; }); }
+  function firstName(b){ var a = askFor(b); if (/not yet known|unknown|owner|manager|reception/i.test(a.split(/[—-]/)[0])) return ""; var m = a.match(/^([A-Z][a-zA-Z'-]+)\s+[A-Z]/); return m ? m[1] : ""; }
+  function myName(){ var s0 = window.NEXAIS_SESSION; if (s0 && s0.name) return s0.name.split(" ")[0]; try { return (JSON.parse(localStorage.getItem("nexais-hub-user-v1") || '""') || "").split(" ")[0]; } catch(e){ return ""; } }
+  var SMS_T = [
+    { k: "after", en: "After a call", fa: "بعد از تماس", t: "Hi {name}, this is {me} from NexAIS — thanks for your time today. You can test AVA, our AI receptionist, yourself any time: call or text +1 (437) 529-0400. Happy to start your free 7-day trial whenever you're ready." },
+    { k: "proposal", en: "Ask where to send the proposal", fa: "پرسیدن ایمیل برای پروپوزال", t: "Hi {name}, {me} from NexAIS here. We prepared a short proposal for {biz} showing how AVA answers every call and booking 24/7. What's the best email to send it to?" },
+    { k: "callback", en: "Callback reminder", fa: "یادآوری تماس مجدد", t: "Hi {name}, {me} from NexAIS — a quick reminder that I'll call you back as we agreed. Talk soon!" },
+    { k: "pay", en: "Payment link (start the trial)", fa: "لینک پرداخت (شروع دورهٔ رایگان)", t: "Hi {name}, here is the secure link to start the free AVA trial for {biz}: {link} — no charge today. Any questions, just reply. {me}, NexAIS" },
+    { k: "custom", en: "Write my own", fa: "متن خودم", t: "" }
+  ];
+  var smsBiz = "", smsT = "after";
+  function smsStart(slug){ if (slug && bySlug(slug)) smsBiz = slug; else if (!smsBiz && cur.biz) smsBiz = cur.biz.slug; renderSms(); }
+  function smsText(b){
+    var t = SMS_T.filter(function(x){ return x.k === smsT; })[0];
+    var link = ($("cl-open") || {}).href || "";
+    return (t ? t.t : "").replace(/\{name\}/g, (b && firstName(b)) || "there").replace(/\{me\}/g, myName() || "the NexAIS team")
+      .replace(/\{biz\}/g, b ? b.name : "your business").replace(/\{link\}/g, link).replace(/^Hi there, /, "Hi, ");
+  }
+  function renderSms(){
+    var html = phoneHead("sms");
+    if (!PERM.can_sms) { taskSec.innerHTML = html + permNote(tt("SMS", "پیامک")) + "</div>"; return; }
+    var b = bySlug(smsBiz), ph = b ? phoneOf(b) : { text: "" };
+    var opts = "<option value=\"\">" + esc(tt("— choose the business —", "— کسب‌وکار را انتخاب کنید —")) + "</option>" + BIZ.map(function(x){
+      return "<option value=\"" + esc(x.slug) + "\"" + (x.slug === smsBiz ? " selected" : "") + ">" + esc(x.name) + "</option>"; }).join("");
+    var tOpts = SMS_T.map(function(x){ return "<option value=\"" + x.k + "\"" + (x.k === smsT ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("");
+    var nm = (ph.text || "").match(/\+?\(?\d[\d\s().-]{8,}\d/); var num = nm ? nm[0].trim() : "";
+    html += "<div class=\"call-card sms-card\"><div class=\"sms-grid\">" +
+      "<label class=\"cc-l\">" + esc(tt("Business", "کسب‌وکار")) + "<select id=\"sms-biz\">" + opts + "</select></label>" +
+      "<label class=\"cc-l\">" + esc(tt("Mobile number", "شمارهٔ موبایل")) + "<input id=\"sms-to\" type=\"tel\" value=\"" + esc(num) + "\"><small class=\"sms-hint\">" +
+      esc(tt("Business landlines usually can't get texts — use the person's mobile.", "خط ثابت کسب‌وکار معمولاً پیامک نمی‌گیرد — موبایل خود شخص را وارد کنید.")) + "</small></label>" +
+      "<label class=\"cc-l\">" + esc(tt("Message", "پیام")) + "<select id=\"sms-t\">" + tOpts + "</select></label></div>" +
+      "<textarea id=\"sms-body\" rows=\"5\" class=\"sms-body\">" + esc(smsText(b)) + "</textarea><p class=\"sms-count\" id=\"sms-count\"></p>" +
+      "<label class=\"sms-consent\"><input type=\"checkbox\" id=\"sms-ok\"> " + esc(tt("This person agreed to receive texts from us (required by law — CASL).", "این شخص قبول کرده از ما پیامک بگیرد (طبق قانون CASL الزامی است).")) + "</label>" +
+      "<div class=\"cc-nav\"><button type=\"button\" class=\"btn ghost\" data-sms=\"copy\">" + esc(tt("Copy text", "کپی متن")) + "</button>" +
+      "<a class=\"btn primary\" id=\"sms-send\" href=\"#\" data-sms=\"send\">" + esc(tt("Open in my phone's Messages", "باز کردن در پیامک گوشی")) + "</a>" +
+      "<button type=\"button\" class=\"btn ghost\" data-sms=\"log\">" + esc(tt("Log: SMS sent", "ثبت: پیامک ارسال شد")) + "</button></div>" +
+      "<p class=\"hint\" id=\"sms-msg\" style=\"margin:10px 0 0\"></p></div>";
+    if (b) {
+      var hist = actionsOf(b, "SMS");
+      html += "<p class=\"h3s\" style=\"margin-top:20px\">" + esc(tt("Texts logged for ", "پیامک‌های ثبت‌شده برای ")) + esc(b.name) + " · " + hist.length + "</p>" +
+        (hist.length ? "<ul class=\"recent\">" + hist.slice().reverse().map(function(a){ return "<li><time>" + esc(a.d || "") + "</time>SMS</li>"; }).join("") + "</ul>" : "");
+    }
+    html += "</div>";
+    taskSec.innerHTML = html; smsCount();
+  }
+  function smsCount(){
+    var t = $("sms-body"), c = $("sms-count"); if (!t || !c) return;
+    var n = t.value.length; c.textContent = n + " " + tt("characters", "کاراکتر") + " · " + Math.max(1, Math.ceil(n / 160)) + " SMS";
+    var to = ($("sms-to") || {}).value || "";
+    var a = $("sms-send"); if (a) a.href = "sms:" + to.replace(/[^\d+]/g, "") + "?&body=" + encodeURIComponent(t.value);
+  }
+  taskSec.addEventListener("input", function(e){ if (e.target.id === "sms-body" || e.target.id === "sms-to") smsCount(); });
+  taskSec.addEventListener("change", function(e){
+    if (e.target.id === "sms-biz") { smsBiz = e.target.value; renderSms(); }
+    else if (e.target.id === "sms-t") { smsT = e.target.value; var b = bySlug(smsBiz); $("sms-body").value = smsText(b); smsCount(); }
+  });
+  taskSec.addEventListener("click", function(e){
+    var t = e.target.closest("[data-sms],a.cc-tel"); if (!t) return;
+    if (t.classList.contains("cc-tel")) { var cb = callQ[callI]; if (cb) logAction(cb, "Call"); return; }
+    var k = t.getAttribute("data-sms"), msg = $("sms-msg"), b = bySlug(smsBiz), body = $("sms-body");
+    if (k === "copy") { try { navigator.clipboard.writeText(body.value); } catch(x){ body.select(); document.execCommand("copy"); } msg.textContent = tt("Copied ✓", "کپی شد ✓"); return; }
+    if (!b) { e.preventDefault(); msg.textContent = tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید."); return; }
+    if (!$("sms-ok").checked) { e.preventDefault(); msg.textContent = tt("Tick the consent box first — we only text people who agreed.", "اول تیک رضایت را بزنید — فقط به کسانی پیامک می‌دهیم که قبول کرده‌اند."); return; }
+    if (k === "send") { msg.textContent = tt("Your Messages app opens with the text. After you send it, press “Log: SMS sent”.", "برنامهٔ پیامک گوشی با متن باز می‌شود. بعد از ارسال، «ثبت: پیامک ارسال شد» را بزنید."); return; }
+    if (k === "log") { logAction(b, "SMS"); setTimeout(function(){ renderSms(); var m2 = $("sms-msg"); if (m2) m2.textContent = tt("Logged ✓", "ثبت شد ✓"); }, 120); }
+  });
+
   function saveNote(){
     var b = callQ[callI], inp = $("cc-note"); if (!b || !inp) return;
     var n = b.el.querySelector(".notes"); if (!n || n.value === inp.value) return;
@@ -9066,7 +9196,16 @@ Object.assign(window.FA, {
   }
 
   /* ---------- top bar title ---------- */
+  function renderQuickComm(){
+    var b = cur.v === "b" ? cur.biz : (cur.v === "call" ? callQ[callI] : (cur.v === "sms" ? bySlug(smsBiz) : null));
+    var c = $("qc-call"), m = $("qc-sms"); if (!c) return;
+    c.href = b ? "#call/b/" + b.slug : "#call"; m.href = b ? "#sms/" + b.slug : "#sms";
+    c.innerHTML = "<span aria-hidden=\"true\">☎</span> " + esc(b ? tt("Call", "تماس") + " · " + b.name : tt("Call", "تماس"));
+    m.innerHTML = "<span aria-hidden=\"true\">✉</span> " + esc(tt("SMS", "پیامک"));
+    c.classList.toggle("on", cur.v === "call"); m.classList.toggle("on", cur.v === "sms");
+  }
   function renderTitle(){
+    renderQuickComm();
     vt.innerHTML = cur.v === "b" && cur.biz
       ? esc(tt("Businesses", "کسب‌وکارها")) + " <small>/ " + esc(indLabel(cur.biz.ind)) + " / " + esc(cur.biz.name) + "</small>"
       : cur.v === "ind" && cur.ind ? esc(tt("Businesses", "کسب‌وکارها")) + " <small>/ " + esc(indLabel(cur.ind)) + "</small>"
