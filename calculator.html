@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AVA Pricing Calculator — NexAIS</title>
+<style>
+  :root{
+    --navy:#0B2A62; --ink:#12233f; --muted:#5a6b84; --line:#e3e9f2;
+    --blue:#1663d9; --blue-dark:#0f4fb0; --box:#eef3fb; --gold-bg:#fdf3d7; --gold:#8a6d1a;
+    --green:#0c7a3e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:#fff}
+  .wrap{max-width:760px;margin:0 auto;padding:20px 18px 28px}
+  h1{font-size:26px;color:var(--navy);margin:4px 0 4px}
+  .sub{color:var(--muted);font-size:15px;margin:0 0 18px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-bottom:6px}
+  @media (max-width:560px){.grid{grid-template-columns:1fr}}
+  label.flabel{display:block;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px}
+  select,input[type=number],input[type=text]{
+    width:100%;padding:11px 12px;font-size:16px;border:1px solid #c6d2e2;border-radius:10px;background:#fff;color:var(--ink);
+  }
+  .toggle-row{display:flex;align-items:center;gap:10px;padding-top:24px}
+  .toggle-row input{width:20px;height:20px;accent-color:var(--blue)}
+  .toggle-row span{font-size:14px;font-weight:600;color:var(--navy)}
+  .rows{margin-top:16px;border-top:1px solid var(--line)}
+  .row{display:flex;justify-content:space-between;gap:14px;padding:12px 2px;border-bottom:1px solid var(--line);font-size:16px}
+  .row .amt{font-weight:600;white-space:nowrap}
+  .row .neg{color:var(--green)}
+  .badge{display:inline-block;background:var(--gold-bg);color:var(--gold);border:1px solid #e7cf8a;
+    font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 8px;border-radius:999px;vertical-align:middle;margin:0 4px}
+  .strike{text-decoration:line-through;color:var(--muted);font-weight:400}
+  .summary{background:var(--box);border-radius:14px;padding:18px;margin-top:18px}
+  .summary .row{border-bottom:1px solid #d8e2f0}
+  .summary .row:last-child{border-bottom:none}
+  .summary .big{font-size:20px;font-weight:700;color:var(--navy)}
+  .trial{border:1px solid #c6d2e2;border-radius:14px;padding:18px;margin-top:18px;background:#fbfdff}
+  .trial h2{margin:0 0 8px;font-size:21px;color:var(--navy)}
+  .trial .green{color:var(--green);font-weight:600;font-size:16px;line-height:1.45;margin:0 0 14px}
+  .trial .note{color:var(--muted);font-size:14px;margin-top:10px}
+  .btn{display:block;width:100%;text-align:center;background:var(--blue);color:#fff;text-decoration:none;
+    font-size:17px;font-weight:600;padding:14px 16px;border-radius:12px;border:none;cursor:pointer;margin-top:10px}
+  .btn:hover{background:var(--blue-dark)}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  .actions .btn{width:auto;flex:1 1 200px;margin-top:0}
+  .refline{font-size:13px;color:var(--muted);margin-top:8px}
+  @media print{.trial,.actions{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AVA Pricing Calculator</h1>
+  <p class="sub">Instant, transparent pricing for AVA — the AI receptionist from NexAIS. Every plan starts with a free trial: no charge today.</p>
+
+  <div class="grid">
+    <div>
+      <label class="flabel" for="plan">Plan (per location, per month)</label>
+      <select id="plan">
+        <option value="starter">Starter — $197/mo</option>
+        <option value="professional" selected>Professional — $399/mo</option>
+        <option value="grow">Grow — $599/mo</option>
+      </select>
+    </div>
+    <div>
+      <label class="flabel" for="locations">Number of locations</label>
+      <input type="number" id="locations" min="1" max="500" value="1">
+    </div>
+    <div>
+      <label class="flabel" for="comp">Complimentary Richmond Hill locations</label>
+      <input type="number" id="comp" min="0" max="2" value="0">
+    </div>
+    <div>
+      <label class="flabel" for="term">Billing term</label>
+      <select id="term">
+        <option value="1" selected>Monthly — no term discount</option>
+        <option value="3">3 months — 1% off</option>
+        <option value="6">6 months — 3% off</option>
+        <option value="12">12 months — 5% off</option>
+      </select>
+    </div>
+    <div>
+      <label class="flabel" for="special">Special discount (%)</label>
+      <input type="number" id="special" min="0" max="90" value="0">
+    </div>
+    <div>
+      <label class="flabel" for="referral">Referral code (optional)</label>
+      <input type="text" id="referral" placeholder="e.g. PARTNER-01">
+    </div>
+    <div>
+      <label class="flabel" for="trial">Free trial length</label>
+      <select id="trial">
+        <option value="7" selected>7 days free</option>
+        <option value="14">14 days free</option>
+        <option value="30">30 days free</option>
+      </select>
+    </div>
+    <div class="toggle-row">
+      <input type="checkbox" id="chargeSetup">
+      <span>Charge the standard setup fee</span>
+    </div>
+  </div>
+
+  <div class="rows" id="breakdown"></div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="trial">
+    <h2>Start your free trial</h2>
+    <p class="green" id="trialText"></p>
+    <label class="flabel" for="checkoutPlan">Choose your plan for checkout</label>
+    <select id="checkoutPlan">
+      <option value="starter">Starter — $197/mo</option>
+      <option value="professional" selected>Professional — $399/mo</option>
+      <option value="grow">Grow — $599/mo</option>
+    </select>
+    <a class="btn" id="trialBtn" href="#" target="_blank" rel="noopener"></a>
+    <p class="note">For multiple locations, request a formal proposal and we will confirm your total before payment.</p>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="printBtn" type="button">Print / Save PDF</button>
+    <a class="btn" id="proposalBtn" href="#">Request a formal proposal</a>
+    <a class="btn" href="tel:+14375290400">Call AVA demo</a>
+  </div>
+  <p class="refline">Try AVA live, any time: +1 (437) 529-0400 · nexais.ca</p>
+</div>
+
+<script>
+(function(){
+  var PLANS = {
+    starter:      {name:"Starter",      price:197},
+    professional: {name:"Professional", price:399},
+    grow:         {name:"Grow",         price:599}
+  };
+  var TERM_DISCOUNT = {1:0, 3:1, 6:3, 12:5};
+  var SETUP_PER_LOCATION = 400;
+  var LINKS = {
+    starter:      {7:"https://buy.stripe.com/eVq7sL41W4x3a6W2uq8ww0p", 14:"https://buy.stripe.com/6oUcN5cysaVr3Iy5GC8ww0q", 30:"https://buy.stripe.com/8x2aEX2XS4x35QG7OK8ww0r"},
+    professional: {7:"https://buy.stripe.com/bJebJ16a4e7Dencglg8ww0j", 14:"https://buy.stripe.com/4gM6oHbuo4x33Iy3yu8ww0k", 30:"https://buy.stripe.com/8x214nbuo2oV1Aq2uq8ww0l"},
+    grow:         {7:"https://buy.stripe.com/dRm6oHcys6Fbcf48SO8ww0m", 14:"https://buy.stripe.com/5kQaEXfKE8Njfrg0mi8ww0n", 30:"https://buy.stripe.com/14A9AT8ic9Rn0wm9WS8ww0o"}
+  };
+  function $(id){ return document.getElementById(id); }
+  function num(id, fallback){ var v = parseFloat($(id).value); return isNaN(v) ? fallback : v; }
+  function money(n){ return "$" + Math.round(n).toLocaleString("en-CA"); }
+  function volumePct(loc){ if (loc >= 40) return 10; if (loc >= 20) return 5; return 0; }
+
+  function recalc(){
+    var planKey = $("plan").value;
+    var plan = PLANS[planKey];
+    var locations = Math.max(1, Math.floor(num("locations", 1)));
+    var comp = Math.min(2, Math.max(0, Math.floor(num("comp", 0))));
+    var termMonths = parseInt($("term").value, 10);
+    var termPct = TERM_DISCOUNT[termMonths];
+    var specialPct = Math.min(90, Math.max(0, num("special", 0)));
+    var trialDays = parseInt($("trial").value, 10);
+    var chargeSetup = $("chargeSetup").checked;
+
+    var baseMonthly = plan.price * locations;
+    var volPct = volumePct(locations);
+    var volAmt = baseMonthly * volPct / 100;
+    var afterVolume = baseMonthly - volAmt;
+    var specialAmt = afterVolume * specialPct / 100;
+    var monthly = afterVolume - specialAmt;
+
+    var setupStandard = SETUP_PER_LOCATION * locations;
+    var setupCharged = chargeSetup ? setupStandard : 0;
+
+    var termGross = monthly * termMonths;
+    var termDiscAmt = termGross * termPct / 100;
+    var termTotal = termGross - termDiscAmt + setupCharged;
+    var firstInvoice = monthly + setupCharged;
+
+    var firstDate = new Date();
+    firstDate.setDate(firstDate.getDate() + trialDays);
+    var dateStr = firstDate.toLocaleDateString("en-CA", {year:"numeric", month:"long", day:"numeric"});
+
+    var rows = "";
+    rows += '<div class="row"><span>Standard subscription (&times; ' + money(plan.price) + ')</span><span class="amt">' + money(baseMonthly) + ' /mo</span></div>';
+    rows += '<div class="row"><span>Volume discount (' + volPct + '%)</span><span class="amt neg">&minus;' + money(volAmt) + ' /mo</span></div>';
+    rows += '<div class="row"><span>Payment-term discount (' + termPct + '%)</span><span class="amt neg">&minus;' + money(termDiscAmt) + ' on the term total</span></div>';
+    rows += '<div class="row"><span>Special discount (' + specialPct + '%)</span><span class="amt neg">&minus;' + money(specialAmt) + ' /mo</span></div>';
+    if (chargeSetup) {
+      rows += '<div class="row"><span>Standard setup (&times; ' + money(SETUP_PER_LOCATION) + ')</span><span class="amt">' + money(setupStandard) + ' one-time</span></div>';
+    } else {
+      rows += '<div class="row"><span>Setup &mdash; Black Friday <span class="badge">BLACK FRIDAY</span> (standard ' + money(setupStandard) + ')</span><span class="amt"><span class="strike">' + money(setupStandard) + '</span> $0 &mdash; waived</span></div>';
+    }
+    if (comp > 0) {
+      rows += '<div class="row"><span>Complimentary Richmond Hill locations (subscription + setup waived)</span><span class="amt">' + comp + '</span></div>';
+    }
+    $("breakdown").innerHTML = rows;
+
+    var s = "";
+    s += '<div class="row"><span class="big">Monthly subscription</span><span class="amt big">' + money(monthly) + '</span></div>';
+    s += '<div class="row"><span class="big">First invoice (before taxes)</span><span class="amt big">' + money(firstInvoice) + '</span></div>';
+    s += '<div class="row"><span>Subsequent monthly invoices</span><span class="amt">' + money(monthly) + '</span></div>';
+    s += '<div class="row"><span>Total for the ' + termMonths + '-month term (before taxes)</span><span class="amt">' + money(termTotal) + '</span></div>';
+    s += '<div class="row"><span>First billing date (no charge today)</span><span class="amt">' + dateStr + '</span></div>';
+    $("summary").innerHTML = s;
+
+    $("trialText").textContent = "No charge today. Enter your name, phone and card details at checkout \u2014 your first charge is on " + dateStr + ", when your " + trialDays + "-day free trial ends. Setup is waived for Black Friday.";
+
+    var cp = $("checkoutPlan").value;
+    var cpPlan = PLANS[cp];
+    var btn = $("trialBtn");
+    btn.href = LINKS[cp][trialDays];
+    btn.textContent = "Start free trial \u2014 " + cpPlan.name + " " + money(cpPlan.price) + "/mo";
+
+    var ref = $("referral").value.trim();
+    var body = "Hello NexAIS team,\n\nPlease send me a formal proposal based on this calculator estimate:\n"
+      + "Plan: " + plan.name + " (" + money(plan.price) + "/location/mo)\n"
+      + "Locations: " + locations + (comp > 0 ? " (+ " + comp + " complimentary Richmond Hill)" : "") + "\n"
+      + "Billing term: " + termMonths + " month(s), term discount " + termPct + "%\n"
+      + "Monthly subscription: " + money(monthly) + "\n"
+      + "First invoice (before taxes): " + money(firstInvoice) + "\n"
+      + "Term total (before taxes): " + money(termTotal) + "\n"
+      + "Setup: " + (chargeSetup ? money(setupStandard) : "waived for Black Friday ($0)") + "\n"
+      + "Free trial: " + trialDays + " days; first billing date " + dateStr + "\n"
+      + (ref ? "Referral code: " + ref + "\n" : "")
+      + "\nThank you.";
+    $("proposalBtn").href = "mailto:info@nexais.ca?subject=" + encodeURIComponent("Formal proposal request \u2014 AVA " + plan.name) + "&body=" + encodeURIComponent(body);
+  }
+
+  ["plan","locations","comp","term","special","referral","trial","chargeSetup"].forEach(function(id){
+    $(id).addEventListener("input", recalc);
+    $(id).addEventListener("change", recalc);
+  });
+  $("checkoutPlan").addEventListener("change", recalc);
+  $("plan").addEventListener("change", function(){ $("checkoutPlan").value = $("plan").value; recalc(); });
+  $("printBtn").addEventListener("click", function(){ window.print(); });
+  recalc();
+})();
+</script>
+</body>
+</html>
