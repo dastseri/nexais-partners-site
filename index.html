@@ -8935,8 +8935,8 @@ Object.assign(window.FA, {
       (ph.href ? (LINE_MODE ? lineCallBox(b, ph) : "<a class=\"cc-tel\" href=\"" + esc(ph.href) + "\">" + esc(ph.text) + "</a>") : "<p class=\"cc-loc\">" + esc(tt("No phone on file", "تلفن ثبت نشده")) + "</p>") +
       hookBox(b).replace("data-fold=\"hook\"", "data-fold=\"call-hook\"") +
       fold("call-script", tt("Call script", "اسکریپت تماس"),
-        (open ? "<blockquote class=\"open-q\">" + esc(open.textContent.trim().replace(/\[Caller\]/g, fullName() || "[Caller]")) + "</blockquote>" : "") +
-        "<div class=\"script-head\"><span></span><select id=\"cc-scen\">" + [["first", tt("First call", "تماس اول")], ["followup", tt("Follow-up call", "تماس پیگیری")], ["demo", tt("Demo invitation", "دعوت به دمو")], ["close", tt("Trial-offer close", "بستن با دورهٔ رایگان")]]
+        (open && (ccScen || defaultScenario(b)) === "first" ? "<blockquote class=\"open-q\" id=\"cc-open\">" + esc(open.textContent.trim().replace(/\[Caller\]/g, fullName() || "[Caller]")) + "</blockquote>" : "") +
+        "<div class=\"script-head\"><span></span><select id=\"cc-scen\">" + [["first", tt("First call", "تماس اول")], ["next", tt("Next call — after the last result", "تماس بعدی — بر اساس نتیجهٔ قبلی")], ["followup", tt("Follow-up on the proposal", "پیگیری پروپوزال")], ["demo", tt("Demo invitation", "دعوت به دمو")], ["close", tt("Trial-offer close", "بستن با دورهٔ رایگان")]]
           .map(function(x){ var sc = ccScen || defaultScenario(b); return "<option value=\"" + x[0] + "\"" + (x[0] === sc ? " selected" : "") + ">" + esc(x[1]) + "</option>"; }).join("") + "</select></div>" +
         "<textarea id=\"cc-script\" class=\"tpl bz-script\" rows=\"14\">" + esc(buildScriptFor(b, ccScen || defaultScenario(b))) + "</textarea>" +
         "<div class=\"biz-actions\" style=\"margin-top:8px\"><button type=\"button\" class=\"btn ghost\" data-cc=\"print\">" + esc(tt("Print / save as PDF", "پرینت / ذخیره PDF")) + "</button>" +
@@ -8965,7 +8965,7 @@ Object.assign(window.FA, {
     }).catch(function(e){ var x = $("cc-hist"); if (x) x.innerHTML = "<p class=\"hint\">" + esc(e.message) + "</p>"; });
   }
   taskSec.addEventListener("change", function(e){
-    if (e.target.id === "cc-scen") { var b = callQ[callI]; ccScen = e.target.value; if (b && $("cc-script")) $("cc-script").value = buildScriptFor(b, ccScen); }
+    if (e.target.id === "cc-scen") { var b = callQ[callI]; ccScen = e.target.value; if (b && $("cc-script")) $("cc-script").value = buildScriptFor(b, ccScen); if ($("cc-open")) $("cc-open").hidden = ccScen !== "first"; }
   });
   taskSec.addEventListener("click", function(e){
     var t = e.target.closest("[data-cc]"); if (!t) return;
@@ -9706,7 +9706,27 @@ Object.assign(window.FA, {
   }
   function defaultScenario(b){
     var st = stageOf(b);
-    return st === "research" ? "first" : st === "demo" ? "close" : b.isNew && st === "sent" ? "first" : "followup";
+    if (st === "demo") return "close";
+    if (statusOf(b) !== "Not called") return "next";
+    return st === "research" ? "first" : b.isNew && st === "sent" ? "first" : "followup";
+  }
+  /* what happened last time — drives the "next call" script */
+  function lastContactOf(b){
+    var calls = (b.el.__actions || []).filter(function(a){ return a.t === "Call"; });
+    var notes = ((b.el.querySelector(".notes") || {}).value || "").trim().split(/\n+/).filter(Boolean);
+    return { status: statusOf(b), when: calls.length ? calls[calls.length - 1].d : "", count: calls.length, note: notes.length ? notes[notes.length - 1] : "" };
+  }
+  function nextCallOpening(b, me, contact){
+    var lc = lastContactOf(b), on = lc.when ? " on " + lc.when : "", gap = "the calls " + b.name + " misses when the line is busy or after hours";
+    var first = contact ? contact.split(/\s+/)[0] : "";
+    switch (lc.status) {
+      case "Gatekeeper": return "Hi, this is " + me + " from NexAIS, here in Richmond Hill. I spoke with your front desk" + on + " and was told " + (contact ? contact + " is" : "the owner or manager is") + " the right person for this. Is " + (contact || "he or she") + " available for two minutes?\n(If not available again: ask for the best time to call and the best email — then end politely. Don't pitch the gatekeeper.)";
+      case "Voicemail left": return "Hi" + (first ? " " + first : "") + ", this is " + me + " from NexAIS in Richmond Hill. I left you a voicemail" + on + " about " + gap + " — did you get a chance to hear it? I'll be quick: I have one idea that takes two minutes.";
+      case "Callback scheduled": return "Hi" + (first ? " " + first : "") + ", this is " + me + " from NexAIS — you asked me to call you back" + (on ? " when we spoke" + on : "") + " about AVA, our AI receptionist. Is now still a good time for two minutes?";
+      case "Reached decision-maker": return "Hi" + (first ? " " + first : "") + ", it's " + me + " from NexAIS again — thanks for your time when we spoke" + on + ". I wanted to follow up with the simplest next step: hear AVA live for two minutes, or start the free trial so you can see it on your own calls.\n(Bring in what they told you last time — see LAST TIME above — in your own words.)";
+      case "Not interested": return "(Marked not interested" + on + ". Only call again if something changed — e.g. they reached out, or it's been 3+ months. Open with: \"Hi" + (first ? " " + first : "") + ", " + me + " from NexAIS — we spoke a while ago; I'm checking in once, briefly, because something changed on our side…\")";
+      default: return "";
+    }
   }
   function fullName(){ var s0 = window.NEXAIS_SESSION; if (s0 && s0.name) return s0.name; try { return JSON.parse(localStorage.getItem("nexais-hub-user-v1") || '""') || ""; } catch(e){ return ""; } }
   /* collapsible sections — open/closed is remembered per section */
@@ -9726,15 +9746,22 @@ Object.assign(window.FA, {
     var set = function(id, v){ var el = $(id); if (el) el.value = v; };
     var ask = askFor(b), contact = ask ? ask.split(/\s+[—-]\s+/)[0].trim() : "";
     set("cs-biz", b.name); set("cs-type", csType(b)); set("cs-contact", /not yet known|team|manager|owner|desk|reception|front|general|\/|^\W*$/i.test(contact) ? "" : contact);
-    set("cs-scenario", scen); set("cs-partner", fullName() || "NexAIS");
+    set("cs-scenario", scen === "next" ? "followup" : scen); set("cs-partner", fullName() || "NexAIS");
     var keep = window.NEXAIS_logActivity; window.NEXAIS_logActivity = function(){};   /* building to show is not "building a script" */
     try { if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event("submit", { cancelable: true })); } finally { window.NEXAIS_logActivity = keep; }
     var out = ($("cs-out") || {}).value || "";
     var pr = proposalOf(b);
-    if (scen === "followup" && !pr.url) out = out.replace(/I'm following up on the proposal we emailed [^—]+ about AVA, our AI receptionist — I just want to make sure it reached the right person, and to offer you/,
+    if (scen === "next") {
+      var lc = lastContactOf(b), op = nextCallOpening(b, fullName() || "[Caller]", $("cs-contact") ? $("cs-contact").value : "");
+      out = out.replace(/· Follow-up call/, "· Next call — after: " + lc.status);
+      if (op) out = out.replace(/1 — OPENING\n[^\n]*(\n|$)/, "1 — OPENING\n" + op + "\n");
+      var last = "LAST TIME\n• Result: " + lc.status + (lc.when ? " (" + lc.when + ")" : "") + (lc.count ? " · calls so far: " + lc.count : "") + (lc.note ? "\n• Note: " + lc.note : "") + "\n\n";
+      var i1 = out.indexOf("1 — OPENING"); if (i1 > 0) out = out.slice(0, i1) + last + out.slice(i1);
+    }
+    if ((scen === "followup" || scen === "next") && !pr.url) out = out.replace(/I'm following up on the proposal we emailed [^—]+ about AVA, our AI receptionist — I just want to make sure it reached the right person, and to offer you/,
       "I'm following up on our last conversation about AVA, our AI receptionist — I'd like to answer any questions and offer you");
     var sentOn = (pr.when.match(/[A-Z][a-z]+ \d{1,2}, \d{4}|\d{4}-\d{2}-\d{2}/) || [])[0];
-    if (scen === "followup" && pr.url && sentOn) out = out.replace("I'm following up on the proposal we emailed", "I'm following up on the proposal we sent on " + sentOn + " to");
+    if ((scen === "followup" || scen === "next") && pr.url && sentOn) out = out.replace("I'm following up on the proposal we emailed", "I'm following up on the proposal we sent on " + sentOn + " to");
     var card = b.el.querySelector(".hook"), fh = foundHook(b), rec = window.NEXAIS_newBiz.find(b.name) || {};
     var hk = fh && fh.hook ? fh.hook : card ? card.textContent.trim().replace(/^Signal:\s*/, "") : "";
     if (hk) {
@@ -9786,13 +9813,14 @@ Object.assign(window.FA, {
   });
   function scriptPanel(b){
     var scen = scriptScenario || defaultScenario(b);
-    var S = [["first", tt("First call", "تماس اول")], ["followup", tt("Follow-up call", "تماس پیگیری")], ["demo", tt("Demo invitation", "دعوت به دمو")], ["close", tt("Trial-offer close", "بستن با دورهٔ رایگان")]];
+    var S = [["first", tt("First call", "تماس اول")], ["next", tt("Next call — after the last result", "تماس بعدی — بر اساس نتیجهٔ قبلی")], ["followup", tt("Follow-up on the proposal", "پیگیری پروپوزال")], ["demo", tt("Demo invitation", "دعوت به دمو")], ["close", tt("Trial-offer close", "بستن با دورهٔ رایگان")]];
     var opens = Array.prototype.map.call(b.el.querySelectorAll("details.opening blockquote"), function(q){ return q.textContent.trim(); });
     var hook = b.el.querySelector(".hook");
     var html = "<div class=\"tab-panel\">";
     html += hookBox(b);
     var me = fullName() || "[Caller]", fh = foundHook(b);
     if (!opens.length && fh && fh.opening) opens = [fh.opening];
+    if (opens.length && (scriptScenario || defaultScenario(b)) !== "first") opens = [];
     if (opens.length) html += "<p class=\"h3s\">" + esc(tt("Opening line — word for word", "جملهٔ شروع — کلمه به کلمه")) + "</p>" + opens.map(function(o){ return "<blockquote class=\"open-q\">" + esc(o.replace(/\[Caller\]/g, me)) + "</blockquote>"; }).join("");
     var callPart = "<div class=\"script-head\"><span></span>" +
       "<select id=\"bz-scen\">" + S.map(function(x){ return "<option value=\"" + x[0] + "\"" + (x[0] === scen ? " selected" : "") + ">" + esc(x[1]) + "</option>"; }).join("") + "</select></div>" +
