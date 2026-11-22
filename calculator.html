@@ -99,6 +99,14 @@
       <input type="checkbox" id="chargeSetup">
       <span>Charge the standard setup fee</span>
     </div>
+    <div class="toggle-row">
+      <input type="checkbox" id="applyTax">
+      <span>Add tax (HST)</span>
+    </div>
+    <div>
+      <label class="flabel" for="taxRate">Tax rate (%)</label>
+      <input type="number" id="taxRate" min="0" max="100" step="0.01" value="13" disabled>
+    </div>
   </div>
 
   <div class="rows" id="breakdown"></div>
@@ -143,6 +151,8 @@
   function $(id){ return document.getElementById(id); }
   function num(id, fallback){ var v = parseFloat($(id).value); return isNaN(v) ? fallback : v; }
   function money(n){ return "$" + Math.round(n).toLocaleString("en-CA"); }
+  function money2(n){ return "$" + n.toLocaleString("en-CA", {minimumFractionDigits:2, maximumFractionDigits:2}); }
+  function fmtPct(r){ return (Math.round(r * 100) / 100).toString(); }
   function volumePct(loc){ if (loc >= 40) return 10; if (loc >= 20) return 5; return 0; }
 
   function recalc(){
@@ -171,6 +181,17 @@
     var termTotal = termGross - termDiscAmt + setupCharged;
     var firstInvoice = monthly + setupCharged;
 
+    var applyTax = $("applyTax").checked;
+    var taxRatePct = num("taxRate", 0);
+    if (isNaN(taxRatePct) || taxRatePct < 0 || taxRatePct > 100) taxRatePct = 0;
+    $("taxRate").disabled = !applyTax;
+    function taxOn(amount){
+      var b = Math.round(amount);
+      var t = Math.round(b * taxRatePct) / 100;
+      return {base:b, tax:t, incl:b + t};
+    }
+    var monthlyT = taxOn(monthly), firstT = taxOn(firstInvoice), termT = taxOn(termTotal);
+
     var firstDate = new Date();
     firstDate.setDate(firstDate.getDate() + trialDays);
     var dateStr = firstDate.toLocaleDateString("en-CA", {year:"numeric", month:"long", day:"numeric"});
@@ -188,17 +209,37 @@
     if (comp > 0) {
       rows += '<div class="row"><span>Complimentary Richmond Hill locations (subscription + setup waived)</span><span class="amt">' + comp + '</span></div>';
     }
+    if (applyTax) {
+      rows += '<div class="row"><span>HST (' + fmtPct(taxRatePct) + '%) on the term total</span><span class="amt">' + money2(termT.tax) + '</span></div>';
+    }
     $("breakdown").innerHTML = rows;
 
     var s = "";
-    s += '<div class="row"><span class="big">Monthly subscription</span><span class="amt big">' + money(monthly) + '</span></div>';
-    s += '<div class="row"><span class="big">First invoice (before taxes)</span><span class="amt big">' + money(firstInvoice) + '</span></div>';
-    s += '<div class="row"><span>Subsequent monthly invoices</span><span class="amt">' + money(monthly) + '</span></div>';
-    s += '<div class="row"><span>Total for the ' + termMonths + '-month term (before taxes)</span><span class="amt">' + money(termTotal) + '</span></div>';
+    if (applyTax) {
+      s += '<div class="row"><span>Monthly subscription (before taxes)</span><span class="amt">' + money2(monthlyT.base) + '</span></div>';
+      s += '<div class="row"><span>HST (' + fmtPct(taxRatePct) + '%)</span><span class="amt">' + money2(monthlyT.tax) + '</span></div>';
+      s += '<div class="row"><span class="big">Monthly subscription including HST</span><span class="amt big">' + money2(monthlyT.incl) + '</span></div>';
+      s += '<div class="row"><span>First invoice (before taxes)</span><span class="amt">' + money2(firstT.base) + '</span></div>';
+      s += '<div class="row"><span>HST (' + fmtPct(taxRatePct) + '%) on first invoice</span><span class="amt">' + money2(firstT.tax) + '</span></div>';
+      s += '<div class="row"><span class="big">First invoice including HST</span><span class="amt big">' + money2(firstT.incl) + '</span></div>';
+      s += '<div class="row"><span>Subsequent monthly invoices (incl. HST)</span><span class="amt">' + money2(monthlyT.incl) + '</span></div>';
+      s += '<div class="row"><span>Total for the ' + termMonths + '-month term (before taxes)</span><span class="amt">' + money2(termT.base) + '</span></div>';
+      s += '<div class="row"><span>HST (' + fmtPct(taxRatePct) + '%) on the term total</span><span class="amt">' + money2(termT.tax) + '</span></div>';
+      s += '<div class="row"><span class="big">Total for the ' + termMonths + '-month term including HST</span><span class="amt big">' + money2(termT.incl) + '</span></div>';
+    } else {
+      s += '<div class="row"><span class="big">Monthly subscription</span><span class="amt big">' + money(monthly) + '</span></div>';
+      s += '<div class="row"><span class="big">First invoice (before taxes)</span><span class="amt big">' + money(firstInvoice) + '</span></div>';
+      s += '<div class="row"><span>Subsequent monthly invoices</span><span class="amt">' + money(monthly) + '</span></div>';
+      s += '<div class="row"><span>Total for the ' + termMonths + '-month term (before taxes)</span><span class="amt">' + money(termTotal) + '</span></div>';
+    }
     s += '<div class="row"><span>First billing date (no charge today)</span><span class="amt">' + dateStr + '</span></div>';
+    if (applyTax) {
+      s += '<p class="refline" style="margin:10px 0 0">Tax is shown as an estimate in this calculator only. Checkout does not add tax; applicable taxes are confirmed on your proposal and invoice.</p>';
+    }
     $("summary").innerHTML = s;
 
-    $("trialText").textContent = "No charge today. Enter your name, phone and card details at checkout \u2014 your first charge is on " + dateStr + ", when your " + trialDays + "-day free trial ends. Setup is waived for Black Friday.";
+    $("trialText").textContent = "No charge today. Enter your name, phone and card details at checkout \u2014 your first charge is on " + dateStr + ", when your " + trialDays + "-day free trial ends. Setup is waived for Black Friday."
+      + (applyTax ? " Estimated first invoice including HST (" + fmtPct(taxRatePct) + "%): " + money2(firstT.incl) + "." : "");
 
     var cp = $("checkoutPlan").value;
     var cpPlan = PLANS[cp];
@@ -214,6 +255,10 @@
       + "Monthly subscription: " + money(monthly) + "\n"
       + "First invoice (before taxes): " + money(firstInvoice) + "\n"
       + "Term total (before taxes): " + money(termTotal) + "\n"
+      + (applyTax ? "HST (" + fmtPct(taxRatePct) + "%): monthly " + money2(monthlyT.tax) + ", first invoice " + money2(firstT.tax) + ", term " + money2(termT.tax) + "\n"
+      + "Monthly subscription incl. HST: " + money2(monthlyT.incl) + "\n"
+      + "First invoice incl. HST: " + money2(firstT.incl) + "\n"
+      + "Term total incl. HST: " + money2(termT.incl) + "\n" : "")
       + "Setup: " + (chargeSetup ? money(setupStandard) : "waived for Black Friday ($0)") + "\n"
       + "Free trial: " + trialDays + " days; first billing date " + dateStr + "\n"
       + (ref ? "Referral code: " + ref + "\n" : "")
@@ -221,7 +266,7 @@
     $("proposalBtn").href = "mailto:info@nexais.ca?subject=" + encodeURIComponent("Formal proposal request \u2014 AVA " + plan.name) + "&body=" + encodeURIComponent(body);
   }
 
-  ["plan","locations","comp","term","special","referral","trial","chargeSetup"].forEach(function(id){
+  ["plan","locations","comp","term","special","referral","trial","chargeSetup","applyTax","taxRate"].forEach(function(id){
     $(id).addEventListener("input", recalc);
     $(id).addEventListener("change", recalc);
   });
