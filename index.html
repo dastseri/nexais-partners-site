@@ -739,6 +739,50 @@
   .ind-table tbody tr{cursor:pointer}
   .ind-table tbody tr:hover td{background:var(--bg-soft)}
 
+  /* compact type: content sections scaled down a notch */
+  body.shell > section, body.shell .reference-group > section, body.shell > footer{zoom:.86}
+  body.shell{font-size:14px}
+  .side-link{font-size:13px;padding:6px 10px}
+  .side-brand{font-size:16px}
+  .area-h b{font-size:13px} .area-h small{font-size:11px}
+  .area-sub .side-link{font-size:12.5px} .area-sub .side-link.sub{font-size:12px}
+  details.side-group>summary{font-size:12.5px}
+  .view-title{font-size:14px}
+  body.shell .topbar .wrap{min-height:48px}
+  /* timeline in one row */
+  body.shell{padding-right:0!important}
+  [dir="rtl"] body.shell{padding-left:0!important}
+  .app-rail{position:sticky!important;top:48px;left:auto;right:auto;bottom:auto;width:auto!important;z-index:45;display:flex;align-items:center;gap:14px;
+    padding:7px 20px!important;border:0!important;border-bottom:1px solid var(--panel-line)!important;background:rgba(255,255,255,.96);overflow:visible;max-height:none}
+  .rl-now{display:flex;align-items:baseline;gap:8px;min-width:0;max-width:36%;flex:0 1 auto;white-space:nowrap;overflow:hidden}
+  .rl-now b{font-size:13px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+  .rl-now small{min-width:0;flex:0 1 auto}
+  body.shell .wrap{max-width:1100px}
+  body.shell .topbar .wrap{max-width:946px}
+  .rl-now small{font-size:11.5px;color:var(--ink-3);overflow:hidden;text-overflow:ellipsis}
+  .rl-now .pulse{flex:none;align-self:center}
+  .rl-stages{display:flex;list-style:none;margin:0 0 0 auto;padding:0;gap:2px;flex:none}
+  [dir="rtl"] .rl-stages{margin:0 auto 0 0}
+  .rl-stages li{display:flex;align-items:center}
+  .rl-stages li+li::before{content:"›";color:var(--ink-3);margin:0 3px;font-size:13px}
+  [dir="rtl"] .rl-stages li+li::before{content:"‹"}
+  .rl-stages button{border:1px solid transparent;background:transparent;font:inherit;font-size:12px;color:var(--ink-3);padding:4px 8px;border-radius:14px;cursor:pointer;white-space:nowrap}
+  .rl-stages li.has button{color:var(--ink-2)}
+  .rl-stages button i{font-style:normal;font-weight:600;color:var(--ink);margin-inline-start:2px}
+  .rl-stages button:hover{background:var(--blue-soft)}
+  .rl-stages li.open button{border-color:var(--panel-line);background:#fff}
+  .rl-stages li.cur button{background:var(--accent);color:#fff}
+  .rl-stages li.cur button i{color:#fff}
+  .rail-ind{width:auto!important;flex:none;margin:0!important;padding:4px 8px!important;font-size:12px!important}
+  .rl-pop{position:absolute;top:100%;inset-inline-end:20px;margin-top:4px;background:#fff;border:1px solid var(--panel-line);border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);padding:8px;min-width:240px;max-height:360px;overflow:auto;z-index:60}
+  .rl-pop p{font-size:11.5px;color:var(--ink-3);margin:2px 6px 6px}
+  .rl-pop button{display:block;width:100%;text-align:start;border:0;background:transparent;font:inherit;font-size:13px;color:var(--ink-2);padding:6px;border-radius:6px;cursor:pointer}
+  .rl-pop button:hover,.rl-pop button.sel{background:var(--blue-soft);color:var(--ink)}
+  .rl-pop span{font-size:12.5px;color:var(--ink-3);padding:6px;display:block}
+  @media (max-width:1180px){ .rl-now small{display:none} }
+  @media (max-width:860px){ .app-rail{flex-wrap:wrap;gap:6px 10px;top:48px} .rl-stages{order:3;width:100%;overflow-x:auto;margin:0} }
+
   /* three areas */
   .area{margin:0 0 8px;border-radius:10px}
   .area-h{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:8px;text-decoration:none;color:var(--ink)}
@@ -8518,56 +8562,39 @@ Object.assign(window.FA, {
   }
   function renderRail(){
     var log = get(LOG, []), last = log[log.length - 1];
-    var where = cur.v === "b" && cur.biz ? tt("Businesses", "کسب‌وکارها") + " · " + indLabel(cur.biz.ind)
-      : cur.v === "ind" && cur.ind ? tt("Businesses", "کسب‌وکارها") + " · " + indLabel(cur.ind) : labelOf(cur.v);
     var what;
     if (cur.v === "b" && cur.biz) what = esc(cur.biz.name) + " · " + esc(stageLabel(stageOf(cur.biz)));
-    else if (cur.v === "today") { var nx = nextCalls()[0]; what = nx ? tt("Next: ", "بعدی: ") + esc(nx.name) : tt("All caught up", "همه‌چیز انجام شده"); }
-    else if (cur.v === "ind" && cur.ind) what = esc(indLabel(cur.ind)) + " · " + BIZ.filter(inInd).length;
-    else what = esc(where);
-    var html = "<p class=\"rail-h\">" + esc(tt("Where we are", "کجا هستیم")) + "</p>" +
-      "<div class=\"now\"><p class=\"where\">" + esc(where) + "</p><p class=\"what\"><span class=\"pulse\"></span>" + what + "</p>" +
-      "<p class=\"last\">" + (last ? "<b>" + esc(last.by || "") + "</b> — " + esc(describe(last)) + (last.business ? " · " + esc(last.business) : "") +
-        "<br><span style=\"color:var(--ink-3);font-size:12px\">" + esc(ago(last.at)) + "</span>"
-        : esc(tt("Nothing logged yet on this device.", "هنوز چیزی در این دستگاه ثبت نشده."))) + "</p></div>";
-
-    html += "<p class=\"rail-h\">" + esc(tt("Timeline", "تایم‌لاین")) + (cur.ind ? " · " + esc(indLabel(cur.ind)) : "") + "</p>";
+    else if (cur.v === "ind" && cur.ind) what = esc(indLabel(cur.ind));
+    else if (cur.v === "today") { var nx = nextCalls()[0]; what = nx ? tt("Next: ", "بعدی: ") + esc(nx.name) : esc(tt("All caught up", "همه‌چیز انجام شده")); }
+    else what = esc(labelOf(cur.v));
+    var html = "<div class=\"rl-now\" title=\"" + esc(tt("Where we are", "کجا هستیم")) + "\"><span class=\"pulse\"></span><b>" + what + "</b>" +
+      (last ? "<small>" + esc(describe(last)) + (last.business ? " · " + esc(last.business) : "") + " · " + esc(ago(last.at)) + "</small>" : "") + "</div>";
+    var selStage = cur.biz ? stageOf(cur.biz) : null;
+    html += "<ol class=\"rl-stages\">" + STAGES.map(function(st){
+      var n = BIZ.filter(function(b){ return stageOf(b) === st.k && inInd(b); }).length;
+      var cls = (selStage === st.k ? " cur" : "") + (cur.openStage === st.k ? " open" : "") + (n ? " has" : "");
+      return "<li class=\"" + cls + "\"><button type=\"button\" data-stage=\"" + st.k + "\">" + esc(tt(st.en, st.fa)) + " <i>" + n + "</i></button></li>";
+    }).join("") + "</ol>";
     html += "<select class=\"rail-ind\" id=\"rail-ind\" aria-label=\"Industry\"><option value=\"\">" + esc(tt("All industries", "همهٔ حوزه‌ها")) + "</option>" +
       INDS.map(function(x){ return "<option value=\"" + x.k + "\"" + (cur.ind === x.k ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("") + "</select>";
-    html += "<ol class=\"stages\">";
-    var selStage = cur.biz ? stageOf(cur.biz) : null;
-    STAGES.forEach(function(s){
-      var list = BIZ.filter(function(b){ return stageOf(b) === s.k && inInd(b); });
-      var isCur = selStage === s.k;
-      var open = isCur || (cur.openStage === s.k);
-      html += "<li class=\"stage" + (list.length ? " has" : "") + (isCur ? " cur" : "") + "\"><span class=\"dot\"></span>" +
-        "<button type=\"button\" data-stage=\"" + s.k + "\"><span>" + esc(tt(s.en, s.fa)) + "</span><span class=\"c\">" + list.length + "</span></button>";
-      if (open && list.length) {
-        html += "<ul>" + list.map(function(b){
-          return "<li><button type=\"button\" data-biz=\"" + esc(b.slug) + "\"" + (cur.biz === b ? " class=\"sel\"" : "") + ">" + esc(b.name) + "</button></li>";
-        }).join("") + "</ul>";
-      }
-      html += "</li>";
-    });
-    html += "</ol>";
-
-    html += "<div class=\"recent-wrap\"><p class=\"rail-h\">" + esc(tt("Latest activity", "آخرین فعالیت‌ها")) + "</p>";
-    var rec = log.slice(-8).reverse();
-    html += rec.length ? "<ul class=\"recent\">" + rec.map(function(e){
-      var b = byName(e.business);
-      return "<li" + (b ? " data-biz=\"" + esc(b.slug) + "\"" : "") + "><time>" + esc(ago(e.at)) + " · " + esc(e.by || "") + "</time>" +
-        esc(describe(e)) + (e.business ? " — " + esc(e.business) : "") + "</li>";
-    }).join("") + "</ul>" : "<p class=\"rail-empty\">" + esc(tt("No activity yet.", "هنوز فعالیتی نیست.")) + "</p>";
-    html += "</div>";
+    if (cur.openStage) {
+      var list = BIZ.filter(function(b){ return stageOf(b) === cur.openStage && inInd(b); });
+      html += "<div class=\"rl-pop\"><p>" + esc(stageLabel(cur.openStage)) + " · " + list.length + "</p>" + (list.length ? list.map(function(b){
+        return "<button type=\"button\" data-biz=\"" + esc(b.slug) + "\"" + (cur.biz === b ? " class=\"sel\"" : "") + ">" + esc(b.name) + "</button>";
+      }).join("") : "<span>" + esc(tt("Nobody at this stage.", "کسی در این مرحله نیست.")) + "</span>") + "</div>";
+    }
     rail.innerHTML = html;
   }
+  document.addEventListener("click", function(ev){
+    if (cur.openStage && document.contains(ev.target) && !rail.contains(ev.target)) { cur.openStage = null; renderRail(); }
+  });
   rail.addEventListener("change", function(ev){
     if (ev.target.id !== "rail-ind") return;
     var ik = ev.target.value; nav(ik ? "ind/" + ik : "biz");
   });
   rail.addEventListener("click", function(ev){
     var t = ev.target.closest("[data-biz],[data-stage],[data-ind]"); if (!t) return;
-    if (t.hasAttribute("data-biz")) return nav("b/" + t.getAttribute("data-biz"));
+    if (t.hasAttribute("data-biz")) { cur.openStage = null; return nav("b/" + t.getAttribute("data-biz")); }
     if (t.hasAttribute("data-ind")) { var ik = t.getAttribute("data-ind"); return nav(ik ? "ind/" + ik : "biz"); }
     var k = t.getAttribute("data-stage");
     cur.openStage = cur.openStage === k ? null : k;
@@ -8609,6 +8636,11 @@ Object.assign(window.FA, {
         L.forEach(function(b){ c[stageOf(b)]++; });
         return "<tr data-indrow=\"" + x.k + "\"><td>" + esc(tt(x.en, x.fa)) + "</td><td>" + (c.sent + c.research) + "</td><td>" + (c.contacted + c.followup) + "</td><td>" + c.demo + "</td><td>" + L.length + "</td></tr>";
       }).join("") + "</tbody></table>";
+    var rec = log.slice(-6).reverse();
+    if (rec.length) html += "<p class=\"h3s\">" + esc(tt("Latest activity", "آخرین فعالیت‌ها")) + "</p><ul class=\"recent\">" + rec.map(function(e){
+      var bb = byName(e.business);
+      return "<li" + (bb ? " data-biz=\"" + esc(bb.slug) + "\"" : "") + "><time>" + esc(ago(e.at)) + " · " + esc(e.by || "") + "</time>" + esc(describe(e)) + (e.business ? " — " + esc(e.business) : "") + "</li>";
+    }).join("") + "</ul>";
     html += "<p class=\"hint\">" + esc(tt("Best time to call: Tuesday to Thursday, 2:00–4:00 PM.", "بهترین زمان تماس: سه‌شنبه تا پنجشنبه، ساعت ۲ تا ۴ بعدازظهر.")) + "</p></div>";
     today.innerHTML = html;
   }
