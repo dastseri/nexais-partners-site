@@ -4625,6 +4625,7 @@
             <option value="auto">Auto service</option>
             <option value="law">Law office</option>
             <option value="realestate">Real estate</option>
+            <option value="transport">Transport / courier / moving</option>
             <option value="trades">Other trades / services</option>
           </select>
         </label>
@@ -8162,6 +8163,7 @@ Object.assign(window.FA, {
   "Due today": "قابل پرداخت امروز",
   "Waived — Black Friday": "بخشوده شده — بلک فرایدی",
   "Show HST": "نمایش مالیات HST",
+  "Transport / courier / moving": "حمل‌ونقل / پیک / اسباب‌کشی",
   "Monthly with HST": "ماهانه با HST",
   "Open the client's payment link": "باز کردن لینک پرداخت مشتری",
   "Copy payment link": "کپی لینک پرداخت",
@@ -8326,6 +8328,11 @@ Object.assign(window.FA, {
       jobs: "answers listing enquiries, captures buyer and seller leads with their details, and books showings and callbacks for you",
       jobsShort: "captures the lead's details and books the showing or callback",
       busy: "you're out at showings" },
+    transport: { label: "Transport / courier / moving", plural: "taxi, courier and moving companies",
+      miss: "When dispatch is swamped, a customer trying to book a pickup or chase a delivery sits on hold — and calls the next company instead.",
+      jobs: "answers every booking and status call 24/7, takes the pickup, delivery or move details in full, and texts you and the customer a summary so no callback is ever missed",
+      jobsShort: "answers every booking and status call, takes the details in full, and texts a summary so no callback is missed",
+      busy: "dispatch is swamped and every line is ringing" },
     trades: { label: "Other trades / services", plural: "trades and service businesses",
       miss: "When you're on site with your hands full, calls go unanswered — and most callers simply dial the next name on the list.",
       jobs: "answers every call, captures the caller's name, address and what they need, and books estimates and jobs for you",
@@ -9692,7 +9699,10 @@ Object.assign(window.FA, {
     return html;
   }
   function csType(b){
-    return { restaurant: "restaurant", venue: "restaurant", golf: "restaurant", winery: "restaurant", clinic: "clinic", beauty: "salon", auto: "auto", realestate: "realestate" }[b.ind] || "trades";
+    var t = { restaurant: "restaurant", venue: "restaurant", golf: "restaurant", winery: "restaurant", clinic: "clinic", beauty: "salon", auto: "auto", realestate: "realestate", transport: "transport" }[b.ind];
+    if (t) return t;
+    var txt = (b.name + " " + ((b.el.querySelector(".hook") || {}).textContent || "")).toLowerCase();
+    return /hvac|heating|furnace|air condition/.test(txt) ? "hvac" : /plumb|drain/.test(txt) ? "plumbing" : /law|legal/.test(txt) ? "law" : "trades";
   }
   function defaultScenario(b){
     var st = stageOf(b);
@@ -9715,11 +9725,26 @@ Object.assign(window.FA, {
     var f = $("cs-form"); if (!f) return "";
     var set = function(id, v){ var el = $(id); if (el) el.value = v; };
     var ask = askFor(b), contact = ask ? ask.split(/\s+[—-]\s+/)[0].trim() : "";
-    set("cs-biz", b.name); set("cs-type", csType(b)); set("cs-contact", /not yet known/i.test(contact) ? "" : contact);
+    set("cs-biz", b.name); set("cs-type", csType(b)); set("cs-contact", /not yet known|team|manager|owner|desk|reception|front|general|\/|^\W*$/i.test(contact) ? "" : contact);
     set("cs-scenario", scen); set("cs-partner", fullName() || "NexAIS");
     var keep = window.NEXAIS_logActivity; window.NEXAIS_logActivity = function(){};   /* building to show is not "building a script" */
     try { if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event("submit", { cancelable: true })); } finally { window.NEXAIS_logActivity = keep; }
-    return ($("cs-out") || {}).value || "";
+    var out = ($("cs-out") || {}).value || "";
+    var pr = proposalOf(b);
+    if (scen === "followup" && !pr.url) out = out.replace(/I'm following up on the proposal we emailed [^—]+ about AVA, our AI receptionist — I just want to make sure it reached the right person, and to offer you/,
+      "I'm following up on our last conversation about AVA, our AI receptionist — I'd like to answer any questions and offer you");
+    var sentOn = (pr.when.match(/[A-Z][a-z]+ \d{1,2}, \d{4}|\d{4}-\d{2}-\d{2}/) || [])[0];
+    if (scen === "followup" && pr.url && sentOn) out = out.replace("I'm following up on the proposal we emailed", "I'm following up on the proposal we sent on " + sentOn + " to");
+    var card = b.el.querySelector(".hook"), fh = foundHook(b), rec = window.NEXAIS_newBiz.find(b.name) || {};
+    var hk = fh && fh.hook ? fh.hook : card ? card.textContent.trim().replace(/^Signal:\s*/, "") : "";
+    if (hk) {
+      var ev = fh && fh.evidence && fh.evidence.length ? fh.evidence[0].detail : rec.evidence || "";
+      var block = "WHAT WE FOUND — use it in your own words (do not read reviews aloud word-for-word)\n• " + hk + (ev ? "\n• Evidence: " + ev : "") +
+        "\nHow to use it: \"When we looked at " + b.name + ", we noticed some of your customers mention [say the point above in one short sentence]. That's exactly the gap AVA closes.\"\n\n";
+      var i2 = out.search(/\n2 — /);
+      out = i2 > 0 ? out.slice(0, i2 + 1) + block + out.slice(i2 + 1) : out + "\n\n" + block;
+    }
+    return out;
   }
   /* ---------- weak spot / hook: from the research, or found now (CRM notes → Google Maps → AVA) ---------- */
   var HOOKS_KEY = "nexais-hub-hooks-v1", hookBusy = {}, hookErr = {};
