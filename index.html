@@ -832,7 +832,14 @@
   .script-head select{border:1px solid var(--panel-line);border-radius:8px;padding:7px 10px;font:inherit;font-size:13.5px;background:#fff}
   .bz-script{width:100%;font-size:14px;line-height:1.6;direction:ltr;text-align:left}
   .prop-box{border:1px solid var(--panel-line);border-radius:12px;padding:16px;background:#fff;margin:0 0 12px}
-  .hook-box{border:1px solid var(--panel-line);border-radius:12px;padding:14px 16px;margin:16px 0 12px;background:#fff}
+  details.fold{border:1px solid var(--panel-line);border-radius:12px;background:#fff;margin:12px 0}
+  details.fold>summary{cursor:pointer;list-style:none;padding:12px 16px;font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:10px}
+  details.fold>summary::-webkit-details-marker{display:none}
+  details.fold>summary::after{content:"";margin-inline-start:auto;width:8px;height:8px;border-right:1.5px solid var(--ink-3);border-bottom:1.5px solid var(--ink-3);transform:rotate(45deg);transition:transform .15s}
+  details.fold[open]>summary::after{transform:rotate(-135deg)}
+  details.fold>.fold-in{padding:0 16px 14px}
+  .call-card details.fold{margin:10px 0}
+  .hook-box:not(details){border:1px solid var(--panel-line);border-radius:12px;padding:14px 16px;margin:16px 0 12px;background:#fff}
   .hook-box .h3s{margin:0 0 6px}
   .hook-text{font-size:15px;line-height:1.55;margin:0 0 8px;color:var(--ink)}
   .hook-ev{margin:0 0 8px;padding-inline-start:18px;font-size:13px;color:var(--ink-2);line-height:1.5}
@@ -7378,6 +7385,7 @@ Object.assign(window.FA, {
     if (!a) return;
     var id = a.getAttribute("href").slice(1);
     if (!id || !panelFor(id)) return;
+    if (document.body.classList.contains("shell")) return;   /* the app shell routes #links itself */
     var sec = document.getElementById(id);
     e.preventDefault();
     window.NEXAIS_openSection(id);
@@ -8903,14 +8911,22 @@ Object.assign(window.FA, {
       html += "<div class=\"empty-box\"><p>" + esc(tt("Pick a business from the list.", "یک کسب‌وکار از لیست انتخاب کنید.")) + "</p></div></div></div></div>";
       taskSec.innerHTML = html; return;
     }
+    if (ccScenFor !== b) { ccScenFor = b; ccScen = ""; }
     var ph = phoneOf(b), ask = askFor(b), open = b.el.querySelector("details.opening blockquote"), hook = b.el.querySelector(".hook");
     var cur0 = statusOf(b);
     var OUT = ["Reached decision-maker", "Gatekeeper", "Voicemail left", "Callback scheduled", "Demo booked", "Not interested"];
     html += "<div class=\"call-card\"><p class=\"cc-pos\">" + (callI + 1) + " / " + callQ.length + " · " + esc(indLabel(b.ind)) + "</p>" +
       "<h3>" + esc(b.name) + "</h3><p class=\"cc-loc\">" + esc(b.loc) + (ask ? " · " + esc(tt("Ask for: ", "بخواهید: ")) + esc(ask) : "") + "</p>" +
       (ph.href ? (LINE_MODE ? lineCallBox(b, ph) : "<a class=\"cc-tel\" href=\"" + esc(ph.href) + "\">" + esc(ph.text) + "</a>") : "<p class=\"cc-loc\">" + esc(tt("No phone on file", "تلفن ثبت نشده")) + "</p>") +
-      (hook ? "<p class=\"cc-hook\">" + esc(hook.textContent.trim()) + "</p>" : "") +
-      (open ? "<details class=\"cc-open\"><summary>" + esc(tt("Opening line", "جملهٔ شروع")) + "</summary><p>" + esc(open.textContent.trim()) + "</p></details>" : "") +
+      hookBox(b).replace("data-fold=\"hook\"", "data-fold=\"call-hook\"") +
+      fold("call-script", tt("Call script", "اسکریپت تماس"),
+        (open ? "<blockquote class=\"open-q\">" + esc(open.textContent.trim().replace(/\[Caller\]/g, fullName() || "[Caller]")) + "</blockquote>" : "") +
+        "<div class=\"script-head\"><span></span><select id=\"cc-scen\">" + [["first", tt("First call", "تماس اول")], ["followup", tt("Follow-up call", "تماس پیگیری")], ["demo", tt("Demo invitation", "دعوت به دمو")], ["close", tt("Trial-offer close", "بستن با دورهٔ رایگان")]]
+          .map(function(x){ var sc = ccScen || defaultScenario(b); return "<option value=\"" + x[0] + "\"" + (x[0] === sc ? " selected" : "") + ">" + esc(x[1]) + "</option>"; }).join("") + "</select></div>" +
+        "<textarea id=\"cc-script\" class=\"tpl bz-script\" rows=\"14\">" + esc(buildScriptFor(b, ccScen || defaultScenario(b))) + "</textarea>" +
+        "<div class=\"biz-actions\" style=\"margin-top:8px\"><button type=\"button\" class=\"btn ghost\" data-cc=\"print\">" + esc(tt("Print / save as PDF", "پرینت / ذخیره PDF")) + "</button>" +
+        "<button type=\"button\" class=\"btn ghost\" data-cc=\"copy\">" + esc(tt("Copy", "کپی")) + "</button></div>", true) +
+      fold("call-history", tt("History with this business", "سوابق این کسب‌وکار"), "<div id=\"cc-hist\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>", false) +
       "<p class=\"cc-l\">" + esc(tt("Result", "نتیجه")) + "</p><div class=\"cc-out\">" + OUT.map(function(o){
         return "<button type=\"button\" data-out=\"" + esc(o) + "\"" + (cur0 === o ? " class=\"on\"" : "") + ">" + esc(stLabel(o)) + "</button>";
       }).join("") + "</div>" +
@@ -8920,7 +8936,28 @@ Object.assign(window.FA, {
       "<a class=\"linkish\" href=\"#b/" + esc(b.slug) + "\">" + esc(tt("Open full page", "صفحهٔ کامل")) + "</a>" +
       "<button type=\"button\" class=\"btn primary\" data-nav=\"next\"" + (callI < callQ.length - 1 ? "" : " disabled") + ">" + esc(tt("Next →", "بعدی ←")) + "</button></div></div></div></div></div>";
     taskSec.innerHTML = html; renderQuickComm();
+    var hd = taskSec.querySelector("[data-fold=call-history]"); if (hd && hd.open) loadCallHistory();
   }
+  var ccScen = "", ccScenFor = null;
+  function loadCallHistory(){
+    var b = callQ[callI], box = $("cc-hist"); if (!b || !box) return;
+    if (!LINE_MODE) { box.innerHTML = localHistoryHtml(b); return; }
+    api("GET", "/api/hub/history?business=" + encodeURIComponent(b.name)).then(function(d){
+      var x = $("cc-hist"); if (!x || callQ[callI] !== b) return;
+      var items = (d.items || []).slice(0, 8);
+      x.innerHTML = items.length ? "<ul class=\"hist-list\">" + items.map(histLine).join("") + "</ul>" + ((d.items || []).length > 8 ? "<a class=\"linkish\" href=\"#b/" + esc(b.slug) + "\">" + esc(tt("See all", "همه")) + "</a>" : "")
+        : "<p class=\"hint\">" + esc(tt("Nothing recorded yet — this is the first contact.", "هنوز چیزی ثبت نشده — این اولین تماس است.")) + "</p>";
+    }).catch(function(e){ var x = $("cc-hist"); if (x) x.innerHTML = "<p class=\"hint\">" + esc(e.message) + "</p>"; });
+  }
+  taskSec.addEventListener("change", function(e){
+    if (e.target.id === "cc-scen") { var b = callQ[callI]; ccScen = e.target.value; if (b && $("cc-script")) $("cc-script").value = buildScriptFor(b, ccScen); }
+  });
+  taskSec.addEventListener("click", function(e){
+    var t = e.target.closest("[data-cc]"); if (!t) return;
+    var b = callQ[callI], ta = $("cc-script"); if (!b || !ta) return;
+    if (t.getAttribute("data-cc") === "print") { printText(tt("Call script — ", "اسکریپت تماس — ") + b.name, ta.value); logSync("script-print", b.name, ""); }
+    else { try { navigator.clipboard.writeText(ta.value); } catch(x){ ta.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); }
+  });
   /* quick add: a place that is not on the list yet */
   taskSec.addEventListener("click", function(e){
     var t = e.target.closest("[data-qa]"); if (!t) return;
@@ -9605,6 +9642,18 @@ Object.assign(window.FA, {
     return st === "research" ? "first" : st === "demo" ? "close" : b.isNew && st === "sent" ? "first" : "followup";
   }
   function fullName(){ var s0 = window.NEXAIS_SESSION; if (s0 && s0.name) return s0.name; try { return JSON.parse(localStorage.getItem("nexais-hub-user-v1") || '""') || ""; } catch(e){ return ""; } }
+  /* collapsible sections — open/closed is remembered per section */
+  var FOLD_KEY = "nexais-hub-fold-v1";
+  function foldState(){ try { return JSON.parse(localStorage.getItem(FOLD_KEY) || "{}"); } catch(e){ return {}; } }
+  function fold(key, title, inner, openByDefault, extraCls){
+    var st = foldState(), open = key in st ? st[key] : !!openByDefault;
+    return "<details class=\"fold" + (extraCls ? " " + extraCls : "") + "\" data-fold=\"" + key + "\"" + (open ? " open" : "") + "><summary>" + esc(title) + "</summary><div class=\"fold-in\">" + inner + "</div></details>";
+  }
+  document.addEventListener("toggle", function(e){
+    var d = e.target; if (!d || !d.getAttribute || !d.getAttribute("data-fold")) return;
+    var st = foldState(); st[d.getAttribute("data-fold")] = d.open; try { localStorage.setItem(FOLD_KEY, JSON.stringify(st)); } catch(x){}
+    if (d.open && d.getAttribute("data-fold") === "call-history") loadCallHistory();
+  }, true);
   function buildScriptFor(b, scen){
     var f = $("cs-form"); if (!f) return "";
     var set = function(id, v){ var el = $(id); if (el) el.value = v; };
@@ -9621,7 +9670,7 @@ Object.assign(window.FA, {
   function foundHook(b){ return hooksAll()[b.name] || null; }
   function saveHook(b, r){ var all = hooksAll(); all[b.name] = r; try { localStorage.setItem(HOOKS_KEY, JSON.stringify(all)); } catch(e){} }
   function hookBox(b){
-    var card = b.el.querySelector(".hook"), fh = foundHook(b), html = "<div class=\"hook-box\"><p class=\"h3s\">" + esc(tt("What we found — weak spot / hook", "آنچه پیدا کردیم — نقطه‌ضعف / هوک")) + "</p>";
+    var card = b.el.querySelector(".hook"), fh = foundHook(b), html = "";
     var cardTxt = card ? card.textContent.trim().replace(/^Signal:\s*/, "") : "", rec = window.NEXAIS_newBiz.find(b.name) || {};
     if (cardTxt && rec.score) html += "<p class=\"hook-score\"><b>" + esc(rec.score) + "</b> " + esc(tt("pain score", "امتیاز درد")) + "</p>";
     if (cardTxt && !(fh && fh.hook)) {
@@ -9642,7 +9691,7 @@ Object.assign(window.FA, {
     if (hookErr[b.name]) html += "<p class=\"hint\" style=\"color:#b42318\">" + esc(hookErr[b.name]) + "</p>";
     if (LINE_MODE) html += "<button type=\"button\" class=\"btn " + (card || (fh && fh.hook) ? "ghost" : "primary") + "\" data-hook=\"find\"" + (hookBusy[b.name] ? " disabled" : "") + ">" +
       esc(hookBusy[b.name] ? tt("Searching Google Maps…", "در حال جستجو در گوگل‌مپ…") : (card || (fh && fh.hook)) ? tt("Check again (Google Maps + AVA)", "بررسی دوباره (گوگل‌مپ + اوا)") : tt("Find it now (Google Maps + AVA)", "الان پیدا کن (گوگل‌مپ + اوا)")) + "</button>";
-    return html + "</div>";
+    return fold("hook", tt("What we found — weak spot / hook", "آنچه پیدا کردیم — نقطه‌ضعف / هوک"), html, true, "hook-box");
   }
   bizHead.addEventListener("click", function(e){
     var t = e.target.closest("[data-hook]"); if (!t || !cur.biz) return;
@@ -9663,20 +9712,22 @@ Object.assign(window.FA, {
     var me = fullName() || "[Caller]", fh = foundHook(b);
     if (!opens.length && fh && fh.opening) opens = [fh.opening];
     if (opens.length) html += "<p class=\"h3s\">" + esc(tt("Opening line — word for word", "جملهٔ شروع — کلمه به کلمه")) + "</p>" + opens.map(function(o){ return "<blockquote class=\"open-q\">" + esc(o.replace(/\[Caller\]/g, me)) + "</blockquote>"; }).join("");
-    html += "<div class=\"script-head\"><p class=\"h3s\">" + esc(tt("Full call script for ", "اسکریپت کامل تماس برای ")) + esc(b.name) + "</p>" +
+    var callPart = "<div class=\"script-head\"><span></span>" +
       "<select id=\"bz-scen\">" + S.map(function(x){ return "<option value=\"" + x[0] + "\"" + (x[0] === scen ? " selected" : "") + ">" + esc(x[1]) + "</option>"; }).join("") + "</select></div>" +
       "<textarea id=\"bz-script\" class=\"tpl bz-script\" rows=\"22\">" + esc(buildScriptFor(b, scen)) + "</textarea>" +
       "<div class=\"biz-actions\" style=\"margin-top:10px\"><button type=\"button\" class=\"btn primary\" data-bz=\"print-script\">" + esc(tt("Print / save as PDF", "پرینت / ذخیره PDF")) + "</button>" +
       "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-script\">" + esc(tt("Copy", "کپی")) + "</button>" +
       "<a class=\"btn ghost\" href=\"#call/b/" + esc(b.slug) + "\">☎ " + esc(tt("Call now", "تماس الان")) + "</a></div>" +
       "<p class=\"hint\">" + esc(tt("The script is in English — the language of the call. You can edit it before printing.", "اسکریپت به انگلیسی است — زبان تماس. قبل از پرینت می‌توانید ویرایشش کنید.")) + "</p>";
+    html += fold("biz-script", tt("Call script — ", "اسکریپت تماس — ") + b.name, callPart, true);
     var sk = bzSmsT || (stageOf(b) === "sent" ? "proplink" : "after");
-    html += "<div class=\"script-head\" style=\"margin-top:26px\"><p class=\"h3s\">" + esc(tt("SMS script for ", "اسکریپت پیامک برای ")) + esc(b.name) + "</p>" +
+    var smsPart = "<div class=\"script-head\"><span></span>" +
       "<select id=\"bz-smst\">" + SMS_T.filter(function(x){ return x.k !== "custom"; }).map(function(x){ return "<option value=\"" + x.k + "\"" + (x.k === sk ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("") + "</select></div>" +
       "<textarea id=\"bz-sms\" class=\"tpl bz-script\" rows=\"4\">" + esc(smsFor(b, sk)) + "</textarea>" +
       "<div class=\"biz-actions\" style=\"margin-top:10px\"><a class=\"btn primary\" href=\"#sms/" + esc(b.slug) + "\" data-bz=\"sms-script\">" + esc(tt("Send this SMS", "ارسال همین پیامک")) + "</a>" +
-      "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-sms\">" + esc(tt("Copy", "کپی")) + "</button></div></div>";
-    return html;
+      "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-sms\">" + esc(tt("Copy", "کپی")) + "</button></div>";
+    html += fold("biz-sms", tt("SMS script — ", "اسکریپت پیامک — ") + b.name, smsPart, false);
+    return html + "</div>";
   }
   var bzSmsT = "";
   function smsFor(b, k){ var keep = smsT; smsT = k; try { return smsText(b); } finally { smsT = keep; } }
@@ -9743,7 +9794,7 @@ Object.assign(window.FA, {
       "<p class=\"hint\" style=\"margin:0 0 10px\">" + esc(tt("Opens the proposal generator with this business filled in. Finish the steps there and download the PDF to send it.",
         "سازندهٔ پروپوزال را با اطلاعات همین کسب‌وکار باز می‌کند. مراحل را آنجا تمام کنید و PDF را برای ارسال دانلود کنید.")) + "</p>" +
       "<button type=\"button\" class=\"btn " + (pr.url ? "ghost" : "primary") + "\" data-bz=\"make-prop\">" + esc(tt("Open the proposal generator", "باز کردن سازندهٔ پروپوزال")) + "</button></div>";
-    if (LINE_MODE) { html += "<div class=\"prop-box\" id=\"em-box\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>"; setTimeout(function(){ loadEmail(b); }, 0); }
+    if (LINE_MODE) { html += fold("biz-email", tt("Email this business", "ایمیل به این کسب‌وکار"), "<div id=\"em-box\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>", false); setTimeout(function(){ loadEmail(b); }, 0); }
     return html + "</div>";
   }
   /* ---------- email from the NexAIS address (owner's switch; per-person access) ---------- */
@@ -9768,7 +9819,7 @@ Object.assign(window.FA, {
     var box = $("em-box"); if (!box) return;
     var on = emSwitch && emSwitch.enabled, keep = {};
     ["em-to", "em-subj", "em-body", "em-basis"].forEach(function(id){ var el = $(id); if (el && el.dataset.edited) keep[id] = el.value; });
-    var dr = emailDraft(b), html = "<p class=\"h3s\">" + esc(tt("Email this business", "ایمیل به این کسب‌وکار")) + "</p>";
+    var dr = emailDraft(b), html = "";
     html += "<div class=\"ava-switch" + (on ? " on" : "") + "\"><span class=\"dot\"></span><b>" + esc(on ? tt("Email is ON — sent from info@nexais.ca", "ایمیل روشن است — از info@nexais.ca ارسال می‌شود") : tt("Email is OFF", "ایمیل خاموش است")) + "</b>" +
       (emSwitch && emSwitch.can_toggle ? "<button type=\"button\" class=\"btn ghost\" data-em=\"toggle\">" + esc(on ? tt("Turn off", "خاموش کن") : tt("Turn on", "روشن کن")) + "</button>" :
         (on ? "" : "<small>" + esc(tt("The NexAIS owner turns this on", "مدیر NexAIS آن را روشن می‌کند")) + "</small>")) + "</div>";
@@ -9921,7 +9972,7 @@ Object.assign(window.FA, {
     else if (k === "sms-script") { smsT = $("bz-smst").value; smsBiz = b.slug; pickFilter.sms = "all"; }
     else if (k === "copy-prop") { try { navigator.clipboard.writeText(proposalOf(b).url); } catch(x){} t.textContent = tt("Copied ✓", "کپی شد ✓"); }
     else if (k === "mail-prop") { logSync("proposal-sent", b.name, "email"); }
-    else if (k === "email-open") { var eb = $("em-box"); if (eb) { eb.scrollIntoView({ behavior: "smooth", block: "start" }); var et = $("em-to"); if (et) setTimeout(function(){ et.focus(); }, 300); } }
+    else if (k === "email-open") { var eb = $("em-box"); if (eb && eb.closest("details")) eb.closest("details").open = true; if (eb) { eb.scrollIntoView({ behavior: "smooth", block: "start" }); var et = $("em-to"); if (et) setTimeout(function(){ et.focus(); }, 300); } }
     else if (k === "sms-prop") { smsT = "proplink"; smsBiz = b.slug; pickFilter.sms = "all"; nav("sms/" + b.slug); }
     else if (k === "make-prop") {
       var pick = $("g-pick"), done = false;
