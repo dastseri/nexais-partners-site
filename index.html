@@ -8,7 +8,7 @@
 <title>NexAIS Sales Partners</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root{
     --bg:#ffffff; --bg-soft:#f5f8fc; --panel:#ffffff; --panel-line:#dbe4f0;
@@ -576,6 +576,206 @@
   [dir="rtl"] .demo-strip .n,[dir="rtl"] .facts dd.phone{direction:ltr;unicode-bidi:isolate}
   [dir="rtl"] input[type="tel"],[dir="rtl"] input[type="email"],[dir="rtl"] input[type="url"]{direction:ltr;text-align:left}
 </style>
+<style id="shell-css">
+/* ================= shell — minimal theme, side menu, live timeline rail ================= */
+  :root{
+    --bg:#ffffff; --bg-soft:#fafafa; --panel:#ffffff; --panel-line:#ececee;
+    --ink:#18181b; --ink-2:#52525b; --ink-3:#8a8a93;
+    --blue:#18181b; --blue-dark:#000000; --blue-soft:#f4f4f5;
+    --good:#0e7a4f; --good-soft:#eaf5ef; --warn:#9a6206; --warn-soft:#fbf3e4;
+    --accent:#0e7a4f;
+    --radius:10px; --shadow:none;
+    --side-w:228px; --rail-w:300px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#ffffff; --bg-soft:#fafafa; --panel:#ffffff; --panel-line:#ececee;
+      --ink:#18181b; --ink-2:#52525b; --ink-3:#8a8a93;
+      --blue:#18181b; --blue-dark:#000000; --blue-soft:#f4f4f5;
+      --good:#0e7a4f; --good-soft:#eaf5ef; --warn:#9a6206; --warn-soft:#fbf3e4; --shadow:none;
+    }
+  }
+  html{color-scheme:light}
+  body{font-family:"Inter","Vazirmatn",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px}
+  [dir="rtl"] body{font-family:"Vazirmatn","Inter",-apple-system,"Segoe UI",Tahoma,sans-serif}
+  h1,h2,h3,h4{font-weight:600;letter-spacing:-.015em}
+  .kicker{font-weight:600;letter-spacing:.08em;font-size:11.5px;color:var(--ink-3)}
+  .btn{font-weight:600;font-size:14px;padding:10px 18px;border-radius:8px}
+  .badge{font-weight:600}
+
+  /* layout */
+  body.shell{padding-left:var(--side-w);padding-right:var(--rail-w)}
+  [dir="rtl"] body.shell{padding-left:var(--rail-w);padding-right:var(--side-w)}
+  body.shell .wrap{max-width:880px}
+  body.shell .start-here,body.shell .hero,body.shell .reference-divider,body.shell .topbar .brand{display:none}
+  body.shell section{padding:32px 0}
+  body.shell section.soft,body.shell .reference-group{background:transparent}
+  body.shell .sec-head h2,body.shell details.sec-panel>summary h2{font-size:24px}
+  body.shell main-view{display:block}
+  body.shell [data-view-hidden]{display:none!important}
+  body.shell .topbar{background:rgba(255,255,255,.92);border-bottom:1px solid var(--panel-line)}
+  body.shell .topbar .wrap{min-height:56px}
+  .view-title{font-size:15px;font-weight:600;color:var(--ink);margin:0;display:flex;align-items:center;gap:8px}
+  .view-title small{color:var(--ink-3);font-weight:500;font-size:13px}
+  .menu-btn{display:none;border:1px solid var(--panel-line);background:#fff;border-radius:8px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer;color:var(--ink)}
+
+  /* side menu */
+  .app-side{position:fixed;top:0;bottom:0;left:0;width:var(--side-w);border-right:1px solid var(--panel-line);
+    background:#fff;overflow-y:auto;padding:18px 12px 24px;z-index:60}
+  [dir="rtl"] .app-side{left:auto;right:0;border-right:0;border-left:1px solid var(--panel-line)}
+  .side-brand{font-weight:700;font-size:17px;padding:4px 10px 18px;color:var(--ink)}
+  .side-brand b{color:var(--accent);font-weight:700}
+  .side-brand span{display:block;font-size:12px;color:var(--ink-3);font-weight:500;margin-top:2px}
+  .side-group{margin:0 0 16px}
+  .side-group>p{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 10px 6px}
+  [dir="rtl"] .side-group>p{letter-spacing:0}
+  .side-link{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:start;
+    border:0;background:transparent;font:inherit;font-size:14px;color:var(--ink-2);padding:7px 10px;border-radius:7px;cursor:pointer;text-decoration:none}
+  .side-link:hover{background:var(--blue-soft);color:var(--ink)}
+  .side-link.on{background:var(--blue-soft);color:var(--ink);font-weight:600}
+  .side-link .n{font-size:12px;color:var(--ink-3);font-weight:500}
+
+  /* timeline rail */
+  .app-rail{position:fixed;top:0;bottom:0;right:0;width:var(--rail-w);border-left:1px solid var(--panel-line);
+    background:var(--bg-soft);overflow-y:auto;padding:18px 18px 28px;z-index:55}
+  [dir="rtl"] .app-rail{right:auto;left:0;border-left:0;border-right:1px solid var(--panel-line)}
+  .rail-h{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin:0 0 10px}
+  [dir="rtl"] .rail-h{letter-spacing:0}
+  .now{background:#fff;border:1px solid var(--panel-line);border-radius:10px;padding:14px;margin-bottom:22px}
+  .now .where{font-size:12px;color:var(--ink-3);margin:0}
+  .now .what{font-size:15px;font-weight:600;color:var(--ink);margin:2px 0 8px}
+  .now .last{font-size:13px;color:var(--ink-2);margin:0;padding-top:8px;border-top:1px solid var(--panel-line)}
+  .now .pulse{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-inline-end:6px;vertical-align:middle;
+    box-shadow:0 0 0 0 rgba(14,122,79,.5);animation:pl 2s infinite}
+  @keyframes pl{0%{box-shadow:0 0 0 0 rgba(14,122,79,.45)}70%{box-shadow:0 0 0 7px rgba(14,122,79,0)}100%{box-shadow:0 0 0 0 rgba(14,122,79,0)}}
+  .stages{list-style:none;margin:0 0 24px;padding:0;position:relative}
+  .stages::before{content:"";position:absolute;top:10px;bottom:10px;left:7px;width:1px;background:var(--panel-line)}
+  [dir="rtl"] .stages::before{left:auto;right:7px}
+  .stage{position:relative;padding:0 0 4px 26px}
+  [dir="rtl"] .stage{padding:0 26px 4px 0}
+  .stage .dot{position:absolute;left:2px;top:8px;width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid var(--ink-3)}
+  [dir="rtl"] .stage .dot{left:auto;right:2px}
+  .stage.has .dot{border-color:var(--ink)}
+  .stage.cur .dot{background:var(--accent);border-color:var(--accent)}
+  .stage>button{display:flex;justify-content:space-between;align-items:center;width:100%;border:0;background:transparent;font:inherit;
+    font-size:14px;color:var(--ink);padding:5px 6px;border-radius:6px;cursor:pointer;text-align:start}
+  .stage>button:hover{background:#fff}
+  .stage>button .c{font-size:12px;color:var(--ink-3);font-weight:500;min-width:22px;text-align:end}
+  .stage.cur>button{font-weight:600}
+  .stage ul{list-style:none;margin:2px 0 8px;padding:0}
+  .stage li button{display:block;width:100%;text-align:start;border:0;background:transparent;font:inherit;font-size:13px;color:var(--ink-2);
+    padding:4px 6px;border-radius:6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stage li button:hover{background:#fff;color:var(--ink)}
+  .stage li button.sel{background:#fff;color:var(--ink);font-weight:600;box-shadow:inset 2px 0 0 var(--accent)}
+  [dir="rtl"] .stage li button.sel{box-shadow:inset -2px 0 0 var(--accent)}
+  .recent{list-style:none;margin:0;padding:0}
+  .recent li{font-size:13px;color:var(--ink-2);padding:7px 0;border-bottom:1px solid var(--panel-line);cursor:pointer}
+  .recent li:hover{color:var(--ink)}
+  .recent li time{display:block;font-size:11.5px;color:var(--ink-3)}
+  .rail-empty{font-size:13px;color:var(--ink-3)}
+
+  /* today dashboard */
+  #today h2{font-size:24px;margin-bottom:4px}
+  #today .sub{color:var(--ink-3);margin:0 0 22px}
+  .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:26px}
+  .kpi{border:1px solid var(--panel-line);border-radius:10px;padding:14px;background:#fff;cursor:pointer;text-align:start;font:inherit}
+  .kpi:hover{border-color:var(--ink-3)}
+  .kpi b{display:block;font-size:24px;font-weight:600;color:var(--ink)}
+  .kpi span{font-size:12.5px;color:var(--ink-3)}
+  .next-list{list-style:none;margin:0 0 10px;padding:0;border:1px solid var(--panel-line);border-radius:10px;overflow:hidden}
+  .next-list li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--panel-line);cursor:pointer;background:#fff}
+  .next-list li:last-child{border-bottom:0}
+  .next-list li:hover{background:var(--bg-soft)}
+  .next-list .nm{font-weight:600;font-size:14px}
+  .next-list .meta{font-size:12.5px;color:var(--ink-3)}
+  .next-list .tag{font-size:12px;color:var(--ink-2);border:1px solid var(--panel-line);border-radius:20px;padding:2px 10px;white-space:nowrap}
+  .h3s{font-size:15px;font-weight:600;margin:0 0 10px}
+  .hint{font-size:13px;color:var(--ink-3);margin:0 0 24px}
+
+  /* business page */
+  #biz-head{padding-top:28px;padding-bottom:0}
+  .biz-back{border:0;background:transparent;font:inherit;font-size:13px;color:var(--ink-3);cursor:pointer;padding:0;margin-bottom:10px}
+  .biz-back:hover{color:var(--ink)}
+  #biz-head h2{font-size:26px;margin-bottom:4px}
+  #biz-head .loc{color:var(--ink-3);margin:0 0 18px}
+  .steps{display:flex;gap:0;margin:0 0 18px;padding:0;list-style:none;flex-wrap:wrap}
+  .steps li{flex:1;min-width:92px;font-size:12.5px;color:var(--ink-3);padding-top:12px;border-top:3px solid var(--panel-line);margin-inline-end:4px}
+  .steps li.done{border-top-color:var(--ink);color:var(--ink-2)}
+  .steps li.cur{border-top-color:var(--accent);color:var(--ink);font-weight:600}
+  .steps li.lost{border-top-color:#b42318;color:#b42318;font-weight:600}
+  .biz-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  body.biz-mode #call-list .toolbar,body.biz-mode #call-list .sec-head,body.biz-mode #call-list details.box.acc,
+  body.biz-mode #call-list .progress-line,body.biz-mode #call-list .sheet-sync-line,body.biz-mode #call-list .group-head,
+  body.biz-mode #call-list details.sec-panel>summary{display:none!important}
+  body.biz-mode #call-list{padding-top:12px}
+  body.biz-mode #call-list .card{display:none!important}
+  body.biz-mode #call-list .card.focus{display:block!important;border-color:var(--panel-line)}
+
+  /* industries */
+  .side-sub{margin:2px 0 6px}
+  .side-link.sub{font-size:13px;padding:5px 10px 5px 22px;color:var(--ink-3)}
+  [dir="rtl"] .side-link.sub{padding:5px 22px 5px 10px}
+  .side-link.sub.on{color:var(--ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+  .chips button,.chips a{border:1px solid var(--panel-line);background:#fff;color:var(--ink-2);font:inherit;font-size:12px;
+    padding:4px 10px;border-radius:20px;cursor:pointer;text-decoration:none}
+  .chips button:hover,.chips a:hover{border-color:var(--ink-3);color:var(--ink)}
+  .chips .on{background:var(--ink);border-color:var(--ink);color:#fff!important}
+  .chips.big a{font-size:13.5px;padding:7px 14px}
+  .chips.big a span{color:var(--ink-3);margin-inline-start:4px}
+  .chips.big a.on span{color:#d4d4d8}
+  #ind-head{padding-bottom:0}
+  #ind-head h2{font-size:24px;margin:22px 0 6px}
+  .ind-sum{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--ink-3);font-size:13px;margin:0}
+  .ind-sum b{color:var(--ink);font-weight:600}
+  body.ind-mode #call-list .card.ind-out{display:none!important}
+  body.ind-mode #call-list .sec-head{display:none!important}
+  body.ind-mode #call-list .group-head,body.biz-mode #ind-head{display:none!important}
+  body.shell #call-list details.sec-panel>summary{display:none}
+  .ind-table{width:100%;border-collapse:collapse;margin:0 0 26px;font-size:14px;border:1px solid var(--panel-line);border-radius:10px;overflow:hidden}
+  .ind-table th{font-weight:500;color:var(--ink-3);font-size:12px;text-align:start;padding:9px 14px;background:var(--bg-soft);border-bottom:1px solid var(--panel-line)}
+  .ind-table td{padding:11px 14px;border-bottom:1px solid var(--panel-line);color:var(--ink-2)}
+  .ind-table td:first-child{color:var(--ink);font-weight:500}
+  .ind-table tbody tr{cursor:pointer}
+  .ind-table tbody tr:hover td{background:var(--bg-soft)}
+
+  /* add a business + research */
+  #new-biz h2{font-size:24px;margin:0 0 6px}
+  .sub-p{color:var(--ink-3);margin:0 0 20px;max-width:640px}
+  .nb-form{border:1px solid var(--panel-line);border-radius:10px;padding:20px;background:#fff}
+  .nb-err{color:#b42318;font-size:13px;margin:0}
+  .side-link.sub.add{color:var(--accent);font-weight:600}
+  .ind-title{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0 6px}
+  #ind-head .ind-title h2{margin:0}
+  .rs-box{margin-top:22px;border:1px solid var(--panel-line);border-radius:10px;padding:18px;background:#fff}
+  .rs-p{color:var(--ink-2);font-size:14px;margin:0 0 14px}
+  .rs-notes{display:block;margin-top:14px;font-size:13px;color:var(--ink-2);font-weight:500}
+  .rs-notes textarea{display:block;width:100%;margin-top:6px;border:1px solid var(--panel-line);border-radius:8px;padding:10px;font:inherit;font-size:14px}
+  .rs-foot{display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+  .rs-saved{font-size:13px;color:var(--accent)}
+  .linkish{margin-inline-start:auto;border:0;background:transparent;font:inherit;font-size:12.5px;color:var(--ink-3);cursor:pointer;text-decoration:underline}
+
+  /* responsive */
+  @media (max-width:1180px){
+    body.shell{padding-right:0}
+    [dir="rtl"] body.shell{padding-left:0}
+    .app-rail{position:static;width:auto;border:0;border-bottom:1px solid var(--panel-line);max-height:none;padding:16px 20px}
+    .app-rail .stages{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px 12px}
+    .app-rail .stages::before{display:none}
+    .app-rail .recent-wrap{display:none}
+  }
+  @media (max-width:860px){
+    body.shell,[dir="rtl"] body.shell{padding-left:0;padding-right:0}
+    .app-side{transform:translateX(-100%);transition:transform .2s}
+    body.side-open .app-side{box-shadow:0 0 40px rgba(0,0,0,.12)}
+    [dir="rtl"] .app-side{transform:translateX(100%)}
+    body.side-open .app-side{transform:none}
+    .menu-btn{display:inline-block}
+    .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media print{.app-side,.app-rail{display:none!important} body.shell{padding:0!important}}
+</style>
+
 </head>
 <body class="locked">
 
@@ -4041,6 +4241,93 @@
   </details>
   </div>
 </section>
+<script>
+/* ================= new businesses added in this hub — rebuilt as call-list cards before the call log restores =================
+   Saved on this device (nexais-hub-newbiz-v1); every addition is also logged and queued for the Sheet. */
+(function(){
+  "use strict";
+  var KEY = "nexais-hub-newbiz-v1";
+  function get(k, d){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } }
+  function put(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  var box = document.getElementById("cards");
+  if (!box) return;
+  function head(){
+    var h = box.querySelector('.group-head[data-group="new"]');
+    if (!h){
+      h = document.createElement("div");
+      h.className = "group-head"; h.setAttribute("data-group", "new");
+      h.innerHTML = "<h3>New businesses — added in this hub</h3><p>Added by the team. Research comes first: nothing is claimed until the research is done.</p>";
+      box.insertBefore(h, box.firstChild);
+    }
+    return h;
+  }
+  function build(b){
+    var n = esc(b.name);
+    var facts = "";
+    if (b.contact) facts += "<div><dt>Ask for</dt><dd>" + esc(b.contact) + "</dd></div>";
+    facts += "<div><dt>Phone</dt><dd class=\"phone\">" + (b.phone ? "<a href=\"tel:" + esc(b.phone.replace(/[^\d+]/g, "")) + "\">" + esc(b.phone) + "</a>" : "—") + "</dd></div>";
+    if (b.web) facts += "<div><dt>Website</dt><dd>" + esc(b.web) + "</dd></div>";
+    var c = document.createElement("article");
+    c.className = "card"; c.setAttribute("data-group", "new"); c.setAttribute("data-new", "1");
+    c.setAttribute("data-name", b.name.toLowerCase()); c.setAttribute("data-ind", b.ind || "other");
+    c.innerHTML =
+      "<div class=\"card-top\"><div><h4>" + n + "</h4><p class=\"loc\">" + esc(b.city || "—") + "</p></div>" +
+      "<span class=\"badge p2\">New</span></div>" +
+      "<dl class=\"facts\">" + facts + "</dl>" +
+      "<details class=\"card-more\"><summary>Details &amp; script</summary>" +
+      (b.note ? "<p class=\"hook\"><span>Signal:</span> " + esc(b.note) + "</p>" : "") +
+      "<div class=\"act-hist\"><p class=\"act-hist-t\">Action history</p><ul class=\"act-list\"></ul><p class=\"act-none\">No actions logged yet.</p></div>" +
+      "</details>" +
+      "<div class=\"tracker\"><label>Outcome <select class=\"status\" aria-label=\"Call outcome for " + n + "\">" +
+      "<option value=\"Not called\">Not called</option><option value=\"Reached decision-maker\">Reached decision-maker</option>" +
+      "<option value=\"Gatekeeper\">Gatekeeper</option><option value=\"Voicemail left\">Voicemail left</option>" +
+      "<option value=\"Not interested\">Not interested</option><option value=\"Callback scheduled\">Callback scheduled</option>" +
+      "<option value=\"Demo booked\">Demo booked</option></select></label>" +
+      "<label class=\"notes-l\">Notes — name, direct email, callback time <input type=\"text\" class=\"notes\" placeholder=\"e.g. Spoke to Maria — demo Thu 3 PM\" aria-label=\"Notes for " + n + "\"></label>" +
+      "<div class=\"actlog\"><label>Action type <select class=\"act-type\" aria-label=\"Action type for " + n + "\">" +
+      "<option value=\"Call\">Call</option><option value=\"SMS\">SMS</option><option value=\"Email\">Email</option><option value=\"DM\">DM</option><option value=\"Visit\">Visit</option></select></label>" +
+      "<button type=\"button\" class=\"btn ghost act-btn\">Log action</button>" +
+      "<p class=\"act-counts\">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p></div></div>";
+    var h = head();
+    h.parentNode.insertBefore(c, h.nextSibling);
+    return c;
+  }
+  get(KEY, []).slice().reverse().forEach(build);
+  window.NEXAIS_newBiz = {
+    list: function(){ return get(KEY, []); },
+    find: function(name){ name = (name || "").toLowerCase(); return get(KEY, []).filter(function(b){ return b.name.toLowerCase() === name; })[0] || null; },
+    exists: function(name){
+      name = (name || "").trim().toLowerCase();
+      return Array.prototype.some.call(box.querySelectorAll(".card"), function(c){ return c.getAttribute("data-name") === name; });
+    },
+    add: function(b){
+      var all = get(KEY, []); all.unshift(b); put(KEY, all);
+      var card = build(b);
+      var by = (function(){ try { var u = JSON.parse(sessionStorage.getItem("nexais-gate-user") || "null"); if (u && u.name) return u.name; } catch(e){} return get("nexais-hub-user-v1", "") || "unknown"; })();
+      var entry = { at: new Date().toISOString(), by: by, business: b.name, what: "biz-added",
+        to: [b.indLabel, b.city, b.phone, b.web, b.contact, b.note].filter(Boolean).join(" · ") };
+      var log = get("nexais-hub-activity-v1", []); log.push(entry); put("nexais-hub-activity-v1", log);
+      var q = get("nexais-hub-sheet-queue-v1", []); q.push(entry); put("nexais-hub-sheet-queue-v1", q);
+      if (window.NEXAIS_renderActivity) window.NEXAIS_renderActivity();
+      if (window.NEXAIS_refreshTracker) window.NEXAIS_refreshTracker();
+      return card;
+    },
+    update: function(name, patch){
+      var all = get(KEY, []), k = (name || "").toLowerCase();
+      all.forEach(function(b){ if (b.name.toLowerCase() === k) for (var p in patch) b[p] = patch[p]; });
+      put(KEY, all);
+    },
+    remove: function(name){
+      var k = (name || "").toLowerCase();
+      put(KEY, get(KEY, []).filter(function(b){ return b.name.toLowerCase() !== k; }));
+      var c = box.querySelector('.card[data-new="1"][data-name="' + k.replace(/"/g, '\\"') + '"]');
+      if (c) c.parentNode.removeChild(c);
+      if (!box.querySelector('.card[data-new="1"]')) { var h = box.querySelector('.group-head[data-group="new"]'); if (h) h.parentNode.removeChild(h); }
+    }
+  };
+})();
+</script>
 
 <section id="script-builder">
   <div class="wrap">
@@ -5532,7 +5819,7 @@ Object.assign(window.FA, {
   var DEMO = "+1 (437) 529-0400";
 
   /* ================= Step 1a — picker: load one of the 54 researched prospects ================= */
-  var cardEls = Array.prototype.slice.call(document.querySelectorAll("#cards .card"));
+  var cardEls = Array.prototype.slice.call(document.querySelectorAll("#cards .card")).filter(function(c){ return c.getAttribute("data-new") !== "1"; });
   var pick = $("g-pick"), pickNote = $("pick-note");
   var selectedCard = null, lastResearch = null;
 
@@ -7833,6 +8120,527 @@ Object.assign(window.FA, {
       v: V[type] || V.trades
     });
   });
+})();
+</script>
+<script>
+/* ================= shell — side menu, live timeline rail, one page per business =================
+   Layout layer only: every existing section, form and script keeps working as before.
+   Reads the call outcomes from the cards themselves and the activity log from this device. */
+(function(){
+  "use strict";
+  var tt = function(en, fa){ return window.LANG === "fa" ? fa : en; };
+  var LOG = "nexais-hub-activity-v1";
+  function get(k, d){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } }
+  function $(id){ return document.getElementById(id); }
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  var body = document.body, topbar = document.querySelector("header.topbar");
+  if (!topbar || !$("cards")) return;
+
+  /* ---------- menu ---------- */
+  var MENU = [
+    { g: ["Work", "کار"], items: [
+      { v: "today", en: "Today", fa: "امروز" },
+      { v: "biz", en: "Businesses", fa: "کسب‌وکارها", count: true },
+      { v: "my-activity", en: "My activity", fa: "فعالیت من" }
+    ]},
+    { g: ["Tools", "ابزارها"], items: [
+      { v: "script-builder", en: "Call script builder", fa: "ساخت اسکریپت تماس" },
+      { v: "close", en: "Close the deal", fa: "بستن معامله" },
+      { v: "generator", en: "Proposal generator", fa: "ساخت پروپوزال" },
+      { v: "research", en: "Research", fa: "تحقیق" },
+      { v: "ai-requests", en: "AI requests", fa: "درخواست از AI" },
+      { v: "talk", en: "Talk to AVA", fa: "صحبت با AVA" }
+    ]},
+    { g: ["Learn", "راهنما"], items: [
+      { v: "offer", en: "The offer", fa: "پیشنهاد" },
+      { v: "earn", en: "Commissions", fa: "کمیسیون" },
+      { v: "start", en: "Getting started", fa: "شروع کار" },
+      { v: "plan", en: "30-day plan", fa: "برنامهٔ ۳۰ روزه" },
+      { v: "scripts", en: "Call scripts", fa: "اسکریپت‌های تماس" },
+      { v: "rules", en: "Rules", fa: "قوانین" },
+      { v: "kit", en: "Sales kit", fa: "کیت فروش" },
+      { v: "faq", en: "FAQ", fa: "سؤالات رایج" },
+      { v: "join", en: "Join", fa: "عضویت" }
+    ]}
+  ];
+  function labelOf(v){
+    for (var i = 0; i < MENU.length; i++) for (var j = 0; j < MENU[i].items.length; j++)
+      if (MENU[i].items[j].v === v) return tt(MENU[i].items[j].en, MENU[i].items[j].fa);
+    if (v === "new") return tt("Add a business", "افزودن کسب‌وکار");
+    return "";
+  }
+
+  /* ---------- stages: where each business is in the sales flow ---------- */
+  var STAGES = [
+    { k: "research",  en: "In research",    fa: "در حال تحقیق" },
+    { k: "sent",      en: "Proposal sent",  fa: "پروپوزال ارسال شد" },
+    { k: "contacted", en: "Contacted",      fa: "تماس گرفته شد" },
+    { k: "followup",  en: "Follow-up",      fa: "پیگیری" },
+    { k: "demo",      en: "Demo booked",    fa: "دمو رزرو شد" },
+    { k: "lost",      en: "Not interested", fa: "علاقه ندارد" }
+  ];
+  var STATUS_STAGE = {
+    "Not called": "sent", "Gatekeeper": "contacted", "Voicemail left": "contacted",
+    "Reached decision-maker": "followup", "Callback scheduled": "followup",
+    "Demo booked": "demo", "Not interested": "lost"
+  };
+  function stageLabel(k){ for (var i = 0; i < STAGES.length; i++) if (STAGES[i].k === k) return tt(STAGES[i].en, STAGES[i].fa); return ""; }
+
+  /* ---------- industries ---------- */
+  var INDS = [
+    { k: "restaurant", en: "Restaurants & catering", fa: "رستوران و پذیرایی" },
+    { k: "venue",      en: "Event & banquet halls",  fa: "تالار و سالن پذیرایی" },
+    { k: "golf",       en: "Golf & country clubs",   fa: "باشگاه گلف" },
+    { k: "winery",     en: "Wineries",               fa: "وینری و تاکستان" },
+    { k: "clinic",     en: "Clinics & spas",         fa: "کلینیک و اسپا" },
+    { k: "transport",  en: "Transport & logistics",  fa: "حمل‌ونقل و لجستیک" },
+    { k: "beauty",     en: "Salons & beauty",        fa: "سالن زیبایی" },
+    { k: "trades",     en: "Home services & trades", fa: "خدمات ساختمانی و فنی" },
+    { k: "auto",       en: "Auto services",          fa: "خدمات خودرو" },
+    { k: "realestate", en: "Real estate",            fa: "املاک" },
+    { k: "other",      en: "Other",                  fa: "سایر" }
+  ];
+  var ALL_INDS = INDS.slice();
+  function indLabel(k){ for (var i = 0; i < ALL_INDS.length; i++) if (ALL_INDS[i].k === k) return tt(ALL_INDS[i].en, ALL_INDS[i].fa); return ""; }
+  function industryOf(slug, group){
+    if (group === "t") return "transport";
+    if (group === "3") return "clinic";
+    if (/golf|thornhill club/.test(slug)) return "golf";
+    if (/winer|vineyard|wines|wine co|estates|charmes|stratus|trius/.test(slug)) return "winery";
+    if (/parc|banquet hall|event centre/.test(slug)) return "venue";
+    if (group === "1" || group === "2") return "restaurant";
+    return "other";
+  }
+
+  /* ---------- businesses, read from the call-list cards ---------- */
+  var BIZ = [];
+  function loadBiz(){
+  BIZ = Array.prototype.slice.call(document.querySelectorAll("#cards .card")).map(function(c){
+    var h = c.querySelector("h4"), loc = c.querySelector(".card-top .loc");
+    return {
+      el: c, slug: c.getAttribute("data-name") || "",
+      name: h ? h.textContent.replace(/^\s*\d+\s*/, "").trim() : "",
+      loc: loc ? loc.textContent.trim() : "", group: c.getAttribute("data-group") || ""
+    };
+  });
+  BIZ.forEach(function(b){
+    b.isNew = b.el.getAttribute("data-new") === "1" || b.group === "draft";
+    b.ind = b.el.getAttribute("data-ind") || industryOf(b.slug, b.group);
+    b.el.setAttribute("data-ind", b.ind);
+  });
+  INDS = ALL_INDS.filter(function(x){ return BIZ.some(function(b){ return b.ind === x.k; }); });
+  }
+  loadBiz();
+  function inInd(b){ return !cur.ind || b.ind === cur.ind; }
+  function statusOf(b){ var s = b.el.querySelector(".status"); return s ? s.value : "Not called"; }
+  function stageOf(b){
+    var st = STATUS_STAGE[statusOf(b)] || "sent";
+    return st === "sent" && b.isNew ? "research" : st;
+  }
+  function bySlug(s){ for (var i = 0; i < BIZ.length; i++) if (BIZ[i].slug === s) return BIZ[i]; return null; }
+  function byName(n){ n = (n || "").toLowerCase(); for (var i = 0; i < BIZ.length; i++) if (BIZ[i].name.toLowerCase() === n) return BIZ[i]; return null; }
+
+  /* ---------- build the frame ---------- */
+  var side = document.createElement("nav");
+  side.className = "app-side"; side.id = "app-side"; side.setAttribute("aria-label", "Menu");
+  var rail = document.createElement("aside");
+  rail.className = "app-rail"; rail.id = "app-rail"; rail.setAttribute("aria-label", "Timeline");
+  body.appendChild(side);
+  topbar.parentNode.insertBefore(rail, topbar.nextSibling);
+  if (window.matchMedia("(max-width:1180px)").matches) { /* rail sits under the top bar on small screens */ }
+
+  var tw = topbar.querySelector(".wrap");
+  var menuBtn = document.createElement("button");
+  menuBtn.type = "button"; menuBtn.className = "menu-btn"; menuBtn.textContent = "☰";
+  menuBtn.addEventListener("click", function(){ body.classList.toggle("side-open"); });
+  var vt = document.createElement("p"); vt.className = "view-title"; vt.id = "view-title";
+  tw.insertBefore(vt, tw.firstChild); tw.insertBefore(menuBtn, vt);
+
+  var today = document.createElement("section"); today.id = "today";
+  var bizHead = document.createElement("section"); bizHead.id = "biz-head";
+  var cl = $("call-list");
+  cl.parentNode.insertBefore(today, cl);
+  cl.parentNode.insertBefore(bizHead, cl);
+  var newSec = document.createElement("section"); newSec.id = "new-biz";
+  cl.parentNode.insertBefore(newSec, cl);
+  var indHead = document.createElement("section"); indHead.id = "ind-head";
+  cl.parentNode.insertBefore(indHead, cl);
+
+  /* every top-level block that a view can show */
+  function blocks(){
+    return Array.prototype.slice.call(document.querySelectorAll("body > section, .reference-group > section"));
+  }
+
+  /* ---------- views ---------- */
+  var cur = { v: "today", biz: null, ind: null };
+  function show(ids){
+    blocks().forEach(function(s){
+      if (ids.indexOf(s.id) >= 0) {
+        s.removeAttribute("data-view-hidden");
+        var p = s.querySelector("details.sec-panel"); if (p) p.open = true;
+      } else s.setAttribute("data-view-hidden", "");
+    });
+  }
+  function go(v, slug, anchor){
+    cur.v = v; cur.biz = v === "b" && slug ? bySlug(slug) : null;
+    if (v === "ind") cur.ind = slug || null;
+    if (v === "new") cur.ind = null;
+    if (v === "biz") cur.ind = null;
+    if (cur.biz) cur.ind = cur.biz.ind;
+    body.classList.toggle("biz-mode", v === "b" && !!cur.biz);
+    body.classList.toggle("ind-mode", v === "ind" && !!cur.ind);
+    BIZ.forEach(function(b){ b.el.classList.toggle("ind-out", v === "ind" && b.ind !== cur.ind); });
+    BIZ.forEach(function(b){ b.el.classList.toggle("focus", cur.biz === b); });
+    if (v === "today") show(["today"]);
+    else if (v === "biz") show(["ind-head", "call-list"]);
+    else if (v === "ind") show(["ind-head", "call-list"]);
+    else if (v === "new") { show(["new-biz"]); renderNewForm(slug); }
+    else if (v === "b" && cur.biz) {
+      show(["biz-head", "call-list"]);
+      var more = cur.biz.el.querySelector("details.card-more"); if (more) more.open = true;
+    }
+    else show([v]);
+    body.classList.remove("side-open");
+    renderAll();
+    var target = anchor && document.getElementById(anchor);
+    if (target && v !== anchor) target.scrollIntoView({ block: "start" }); else window.scrollTo(0, 0);
+  }
+  function route(){
+    var h = decodeURIComponent((location.hash || "").replace(/^#/, ""));
+    if (!h || h === "top" || h === "today") return go("today");
+    if (h === "biz") return go("biz");
+    if (h === "new" || h.indexOf("new/") === 0) return go("new", h.slice(4) || null);
+    if (h.indexOf("ind/") === 0) return go("ind", h.slice(4));
+    if (h.indexOf("b/") === 0 && bySlug(h.slice(2))) return go("b", h.slice(2));
+    var el = document.getElementById(h);
+    if (!el) return go("today");
+    var sec = el.closest ? el.closest("section") : null;
+    if (sec && sec.id === "call-list") return go("biz", null, h);
+    if (sec && sec.id) return go(sec.id, null, h);
+    go("today");
+  }
+  function nav(hash){ if (location.hash === "#" + hash) route(); else location.hash = hash; }
+  window.addEventListener("hashchange", route);
+
+  /* ---------- render: side menu ---------- */
+  function renderSide(){
+    var html = "<div class=\"side-brand\">Nex<b>AIS</b><span>" + esc(tt("Sales Partners", "همکاران فروش")) + "</span></div>";
+    MENU.forEach(function(g){
+      html += "<div class=\"side-group\"><p>" + esc(tt(g.g[0], g.g[1])) + "</p>";
+      g.items.forEach(function(it){
+        var on = cur.v === it.v || (it.v === "biz" && cur.v === "b");
+        html += "<a class=\"side-link" + (on && !(it.v === "biz" && cur.ind) ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) +
+          (it.count ? "<span class=\"n\">" + BIZ.length + "</span>" : "") + "</a>";
+        if (it.v === "biz") {
+          html += "<a class=\"side-link sub add" + (cur.v === "new" ? " on" : "") + "\" href=\"#new\">+ " + esc(tt("Add a business", "افزودن کسب‌وکار")) + "</a>";
+          html += "<div class=\"side-sub\">" + INDS.map(function(x){
+            var n = BIZ.filter(function(b){ return b.ind === x.k; }).length;
+            var o = cur.ind === x.k && (cur.v === "ind" || cur.v === "b");
+            return "<a class=\"side-link sub" + (o ? " on" : "") + "\" href=\"#ind/" + x.k + "\">" + esc(tt(x.en, x.fa)) + "<span class=\"n\">" + n + "</span></a>";
+          }).join("") + "</div>";
+        }
+      });
+      html += "</div>";
+    });
+    side.innerHTML = html;
+  }
+
+  /* ---------- render: timeline rail ---------- */
+  function ago(iso){
+    var t = new Date(iso).getTime(); if (isNaN(t)) return "";
+    var m = Math.round((Date.now() - t) / 60000);
+    if (m < 1) return tt("just now", "همین الان");
+    if (m < 60) return tt(m + " min ago", m + " دقیقه پیش");
+    var h = Math.round(m / 60);
+    if (h < 24) return tt(h + " h ago", h + " ساعت پیش");
+    var d = Math.round(h / 24);
+    return tt(d + " d ago", d + " روز پیش");
+  }
+  function describe(e){
+    var w = {
+      status: tt("Outcome", "نتیجه"), notes: tt("Note", "یادداشت"), action: tt("Action", "اقدام"),
+      script: tt("Script built", "اسکریپت ساخته شد"), proposal: tt("Proposal built", "پروپوزال ساخته شد"),
+      "paylink-open": tt("Payment link opened", "لینک پرداخت باز شد"), "paylink-copy": tt("Payment link copied", "لینک پرداخت کپی شد"),
+      copy: tt("Text copied", "متن کپی شد"),
+      "biz-added": tt("Business added", "کسب‌وکار اضافه شد"), research: tt("Research started", "تحقیق شروع شد"),
+      "research-note": tt("Research note saved", "یادداشت تحقیق ذخیره شد")
+    }[e.what] || e.what || "";
+    var FA_ST = { "Not called": "تماس گرفته نشده", "Reached decision-maker": "با تصمیم‌گیرنده صحبت شد", "Gatekeeper": "منشی / واسطه",
+      "Voicemail left": "پیام صوتی گذاشته شد", "Not interested": "علاقه ندارد", "Callback scheduled": "تماس مجدد تنظیم شد", "Demo booked": "دمو رزرو شد",
+      "Call": "تماس", "SMS": "پیامک", "Email": "ایمیل" };
+    var to = e.to && window.LANG === "fa" && FA_ST[e.to] ? FA_ST[e.to] : e.to;
+    var tail = e.what === "status" || e.what === "action" ? (to ? ": " + to : "") : "";
+    return w + tail;
+  }
+  function renderRail(){
+    var log = get(LOG, []), last = log[log.length - 1];
+    var where = cur.v === "b" && cur.biz ? tt("Businesses", "کسب‌وکارها") + " · " + indLabel(cur.biz.ind)
+      : cur.v === "ind" && cur.ind ? tt("Businesses", "کسب‌وکارها") + " · " + indLabel(cur.ind) : labelOf(cur.v);
+    var what;
+    if (cur.v === "b" && cur.biz) what = esc(cur.biz.name) + " · " + esc(stageLabel(stageOf(cur.biz)));
+    else if (cur.v === "today") { var nx = nextCalls()[0]; what = nx ? tt("Next: ", "بعدی: ") + esc(nx.name) : tt("All caught up", "همه‌چیز انجام شده"); }
+    else if (cur.v === "ind" && cur.ind) what = esc(indLabel(cur.ind)) + " · " + BIZ.filter(inInd).length;
+    else what = esc(where);
+    var html = "<p class=\"rail-h\">" + esc(tt("Where we are", "کجا هستیم")) + "</p>" +
+      "<div class=\"now\"><p class=\"where\">" + esc(where) + "</p><p class=\"what\"><span class=\"pulse\"></span>" + what + "</p>" +
+      "<p class=\"last\">" + (last ? "<b>" + esc(last.by || "") + "</b> — " + esc(describe(last)) + (last.business ? " · " + esc(last.business) : "") +
+        "<br><span style=\"color:var(--ink-3);font-size:12px\">" + esc(ago(last.at)) + "</span>"
+        : esc(tt("Nothing logged yet on this device.", "هنوز چیزی در این دستگاه ثبت نشده."))) + "</p></div>";
+
+    html += "<p class=\"rail-h\">" + esc(tt("Timeline", "تایم‌لاین")) + (cur.ind ? " · " + esc(indLabel(cur.ind)) : "") + "</p>";
+    html += "<div class=\"chips\"><button type=\"button\" data-ind=\"\"" + (!cur.ind ? " class=\"on\"" : "") + ">" + esc(tt("All", "همه")) + "</button>" +
+      INDS.map(function(x){ return "<button type=\"button\" data-ind=\"" + x.k + "\"" + (cur.ind === x.k ? " class=\"on\"" : "") + ">" + esc(tt(x.en, x.fa)) + "</button>"; }).join("") + "</div>";
+    html += "<ol class=\"stages\">";
+    var selStage = cur.biz ? stageOf(cur.biz) : null;
+    STAGES.forEach(function(s){
+      var list = BIZ.filter(function(b){ return stageOf(b) === s.k && inInd(b); });
+      var isCur = selStage === s.k;
+      var open = isCur || (cur.openStage === s.k);
+      html += "<li class=\"stage" + (list.length ? " has" : "") + (isCur ? " cur" : "") + "\"><span class=\"dot\"></span>" +
+        "<button type=\"button\" data-stage=\"" + s.k + "\"><span>" + esc(tt(s.en, s.fa)) + "</span><span class=\"c\">" + list.length + "</span></button>";
+      if (open && list.length) {
+        html += "<ul>" + list.map(function(b){
+          return "<li><button type=\"button\" data-biz=\"" + esc(b.slug) + "\"" + (cur.biz === b ? " class=\"sel\"" : "") + ">" + esc(b.name) + "</button></li>";
+        }).join("") + "</ul>";
+      }
+      html += "</li>";
+    });
+    html += "</ol>";
+
+    html += "<div class=\"recent-wrap\"><p class=\"rail-h\">" + esc(tt("Latest activity", "آخرین فعالیت‌ها")) + "</p>";
+    var rec = log.slice(-8).reverse();
+    html += rec.length ? "<ul class=\"recent\">" + rec.map(function(e){
+      var b = byName(e.business);
+      return "<li" + (b ? " data-biz=\"" + esc(b.slug) + "\"" : "") + "><time>" + esc(ago(e.at)) + " · " + esc(e.by || "") + "</time>" +
+        esc(describe(e)) + (e.business ? " — " + esc(e.business) : "") + "</li>";
+    }).join("") + "</ul>" : "<p class=\"rail-empty\">" + esc(tt("No activity yet.", "هنوز فعالیتی نیست.")) + "</p>";
+    html += "</div>";
+    rail.innerHTML = html;
+  }
+  rail.addEventListener("click", function(ev){
+    var t = ev.target.closest("[data-biz],[data-stage],[data-ind]"); if (!t) return;
+    if (t.hasAttribute("data-biz")) return nav("b/" + t.getAttribute("data-biz"));
+    if (t.hasAttribute("data-ind")) { var ik = t.getAttribute("data-ind"); return nav(ik ? "ind/" + ik : "biz"); }
+    var k = t.getAttribute("data-stage");
+    cur.openStage = cur.openStage === k ? null : k;
+    renderRail();
+  });
+
+  /* ---------- render: today ---------- */
+  function nextCalls(){
+    var cb = BIZ.filter(function(b){ return statusOf(b) === "Callback scheduled"; });
+    var fresh = BIZ.filter(function(b){ return statusOf(b) === "Not called" && !b.isNew; })
+      .sort(function(a, b){ return (a.group > b.group) - (a.group < b.group); });
+    return cb.concat(fresh).slice(0, 6);
+  }
+  function renderToday(){
+    var cnt = { research: 0, sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
+    BIZ.forEach(function(b){ cnt[stageOf(b)]++; });
+    var dayStr = new Date().toDateString(), log = get(LOG, []);
+    var todayN = log.filter(function(e){ return new Date(e.at).toDateString() === dayStr; }).length;
+    var d = new Date().toLocaleDateString(window.LANG === "fa" ? "fa-IR" : "en-CA", { weekday: "long", month: "long", day: "numeric" });
+    var html = "<div class=\"wrap\"><h2>" + esc(tt("Today", "امروز")) + "</h2><p class=\"sub\">" + esc(d) + "</p>" +
+      "<div class=\"kpis\">" +
+      kpi(cnt.sent + cnt.research, tt("Not called yet", "هنوز تماس نگرفته‌ایم"), "sent") +
+      kpi(cnt.contacted + cnt.followup, tt("In progress", "در جریان"), "followup") +
+      kpi(cnt.demo, tt("Demos booked", "دموی رزروشده"), "demo") +
+      kpi(todayN, tt("Actions logged today", "اقدامات امروز"), "") +
+      "</div><p class=\"h3s\">" + esc(tt("Who to call next", "تماس بعدی با چه کسی")) + "</p>";
+    var nx = nextCalls();
+    html += nx.length ? "<ul class=\"next-list\">" + nx.map(function(b){
+      return "<li data-biz=\"" + esc(b.slug) + "\"><div><div class=\"nm\">" + esc(b.name) + "</div><div class=\"meta\">" + esc(b.loc) + "</div></div>" +
+        "<span class=\"tag\">" + esc(statusOf(b) === "Callback scheduled" ? tt("Callback", "تماس مجدد") : tt("Priority ", "اولویت ") + b.group.toUpperCase()) + "</span></li>";
+    }).join("") + "</ul>" : "<p class=\"hint\">" + esc(tt("Everyone on the list has been contacted.", "با همهٔ لیست تماس گرفته شده.")) + "</p>";
+    html += "<p class=\"h3s\">" + esc(tt("By industry", "بر اساس حوزهٔ کاری")) + "</p><table class=\"ind-table\"><thead><tr><th>" +
+      esc(tt("Industry", "حوزه")) + "</th><th>" + esc(tt("Not called", "تماس نگرفته")) + "</th><th>" + esc(tt("In progress", "در جریان")) + "</th><th>" +
+      esc(tt("Demo", "دمو")) + "</th><th>" + esc(tt("Total", "کل")) + "</th></tr></thead><tbody>" +
+      INDS.map(function(x){
+        var L = BIZ.filter(function(b){ return b.ind === x.k; }), c = { research: 0, sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
+        L.forEach(function(b){ c[stageOf(b)]++; });
+        return "<tr data-indrow=\"" + x.k + "\"><td>" + esc(tt(x.en, x.fa)) + "</td><td>" + (c.sent + c.research) + "</td><td>" + (c.contacted + c.followup) + "</td><td>" + c.demo + "</td><td>" + L.length + "</td></tr>";
+      }).join("") + "</tbody></table>";
+    html += "<p class=\"hint\">" + esc(tt("Best time to call: Tuesday to Thursday, 2:00–4:00 PM.", "بهترین زمان تماس: سه‌شنبه تا پنجشنبه، ساعت ۲ تا ۴ بعدازظهر.")) + "</p></div>";
+    today.innerHTML = html;
+  }
+  function kpi(n, label, stage){
+    return "<button type=\"button\" class=\"kpi\"" + (stage ? " data-stage=\"" + stage + "\"" : " data-go=\"my-activity\"") + "><b>" + n + "</b><span>" + esc(label) + "</span></button>";
+  }
+  today.addEventListener("click", function(ev){
+    var t = ev.target.closest("[data-biz],[data-stage],[data-go],[data-indrow]"); if (!t) return;
+    if (t.hasAttribute("data-indrow")) return nav("ind/" + t.getAttribute("data-indrow"));
+    if (t.hasAttribute("data-biz")) return nav("b/" + t.getAttribute("data-biz"));
+    if (t.hasAttribute("data-go")) return nav(t.getAttribute("data-go"));
+    cur.openStage = t.getAttribute("data-stage"); renderRail();
+    var first = BIZ.filter(function(b){ return stageOf(b) === cur.openStage; })[0];
+    if (first) nav("b/" + first.slug);
+  });
+
+  /* ---------- render: business page header ---------- */
+  function renderBizHead(){
+    var b = cur.biz; if (!b) { bizHead.innerHTML = ""; return; }
+    var st = stageOf(b), order = b.isNew ? ["research", "sent", "contacted", "followup", "demo"] : ["sent", "contacted", "followup", "demo"], idx = order.indexOf(st);
+    var steps = order.map(function(k, i){
+      var cls = st === "lost" ? (i === 0 ? "done" : "") : (i < idx ? "done" : i === idx ? "cur" : "");
+      return "<li class=\"" + cls + "\">" + esc(stageLabel(k)) + "</li>";
+    }).join("") + (st === "lost" ? "<li class=\"lost\">" + esc(stageLabel("lost")) + "</li>" : "");
+    bizHead.innerHTML = "<div class=\"wrap\"><button type=\"button\" class=\"biz-back\" data-go=\"ind/" + b.ind + "\">← " + esc(indLabel(b.ind)) + "</button>" +
+      "<h2>" + esc(b.name) + "</h2><p class=\"loc\">" + esc(b.loc) + "</p><ol class=\"steps\">" + steps + "</ol>" +
+      "<div class=\"biz-actions\">" +
+      "<button type=\"button\" class=\"btn ghost\" data-act=\"script\">" + esc(tt("Build call script", "ساخت اسکریپت تماس")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" data-act=\"close\">" + esc(tt("Close the deal", "بستن معامله")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" data-act=\"talk\">" + esc(tt("Ask AVA about it", "پرسیدن از AVA")) + "</button>" +
+      "</div>" + (b.isNew ? researchPanel(b) : "") + "</div>";
+  }
+  bizHead.addEventListener("click", function(ev){
+    var t = ev.target.closest("[data-go],[data-act]"); if (!t) return;
+    if (t.hasAttribute("data-go")) return nav(t.getAttribute("data-go"));
+    var b = cur.biz, a = t.getAttribute("data-act");
+    if (a === "dossier") return openDossier(b);
+    if (a === "ava-research") return askAvaResearch(b);
+    if (a === "rs-save") {
+      var v = $("rs-notes").value.trim();
+      window.NEXAIS_newBiz.update(b.name, { research: v });
+      logSync("research-note", b.name, v.slice(0, 120));
+      $("rs-saved").textContent = tt("Saved ✓", "ذخیره شد ✓");
+      return;
+    }
+    if (a === "remove") {
+      if (!window.confirm(tt("Remove " + b.name + " from the list on this device? Its log entries stay in the Sheet.", b.name + " از لیست این دستگاه حذف شود؟ سوابقش در شیت می‌ماند."))) return;
+      var ind = b.ind; window.NEXAIS_newBiz.remove(b.name); loadBiz(); return nav("ind/" + ind);
+    }
+    if (a === "script") { var i = $("cs-biz"); if (i && b) { i.value = b.name; i.dispatchEvent(new Event("input", { bubbles: true })); } nav("script-builder"); }
+    else if (a === "talk") { var m = $("m-biz"); if (m && b) { m.value = b.name; m.dispatchEvent(new Event("input", { bubbles: true })); } nav("talk"); }
+    else nav("close");
+  });
+
+  /* ---------- add a business ---------- */
+  function renderNewForm(preInd){
+    var opts = ALL_INDS.map(function(x){ return "<option value=\"" + x.k + "\"" + (preInd === x.k ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("");
+    newSec.innerHTML = "<div class=\"wrap\"><p class=\"kicker\">" + esc(tt("New business", "کسب‌وکار جدید")) + "</p>" +
+      "<h2>" + esc(tt("Add a business", "افزودن کسب‌وکار")) + "</h2>" +
+      "<p class=\"sub-p\">" + esc(tt("It joins the list, the timeline and its industry right away, starting in research. Only add what you know — never guess a name or a number.",
+        "بلافاصله به لیست، تایم‌لاین و حوزهٔ خودش اضافه می‌شود و از مرحلهٔ تحقیق شروع می‌کند. فقط چیزی را که می‌دانید وارد کنید — اسم یا شماره را حدس نزنید.")) + "</p>" +
+      "<form class=\"gen-form nb-form\" id=\"nb-form\" autocomplete=\"off\">" +
+      fld("nb-name", tt("Business name *", "نام کسب‌وکار *"), "text", true) +
+      "<label>" + esc(tt("Industry *", "حوزهٔ کاری *")) + "<select id=\"nb-ind\" required>" + opts + "</select></label>" +
+      fld("nb-city", tt("City / area", "شهر / منطقه"), "text") +
+      fld("nb-phone", tt("Phone", "تلفن"), "tel") +
+      fld("nb-web", tt("Website", "وب‌سایت"), "text") +
+      fld("nb-contact", tt("Contact — name and role", "مخاطب — نام و سمت"), "text") +
+      "<label class=\"full\">" + esc(tt("Signal — why this business, what you noticed", "نشانه — چرا این کسب‌وکار، چه چیزی دیدید")) +
+      "<textarea id=\"nb-note\" rows=\"3\"></textarea></label>" +
+      "<p class=\"nb-err full\" id=\"nb-err\" hidden></p>" +
+      "<div class=\"full\"><button class=\"btn primary\" type=\"submit\">" + esc(tt("Add and start research", "افزودن و شروع تحقیق")) + "</button></div></form></div>";
+    var f = $("nb-form");
+    f.addEventListener("submit", function(e){
+      e.preventDefault();
+      var name = $("nb-name").value.trim(), err = $("nb-err");
+      if (!name) return;
+      if (window.NEXAIS_newBiz.exists(name)) { err.hidden = false; err.textContent = tt("This business is already on the list.", "این کسب‌وکار از قبل در لیست هست."); return; }
+      var ind = $("nb-ind").value;
+      var b = { name: name, ind: ind, indLabel: indLabel(ind), city: $("nb-city").value.trim(), phone: $("nb-phone").value.trim(),
+        web: $("nb-web").value.trim(), contact: $("nb-contact").value.trim(), note: $("nb-note").value.trim(), added: new Date().toISOString(), research: "" };
+      window.NEXAIS_newBiz.add(b);
+      loadBiz();
+      nav("b/" + name.toLowerCase());
+    });
+    setTimeout(function(){ var n = $("nb-name"); if (n) n.focus(); }, 50);
+  }
+  function fld(id, label, type, req){
+    return "<label>" + esc(label) + "<input type=\"" + type + "\" id=\"" + id + "\"" + (req ? " required" : "") + " /></label>";
+  }
+
+  function logSync(what, biz, to){
+    if (window.NEXAIS_logActivity) window.NEXAIS_logActivity(what, biz, to);
+    var lg = get(LOG, []), q = get("nexais-hub-sheet-queue-v1", []);
+    if (lg.length) q.push(lg[lg.length - 1]);
+    try { localStorage.setItem("nexais-hub-sheet-queue-v1", JSON.stringify(q)); } catch(e){}
+  }
+  /* ---------- research panel on a new business ---------- */
+  function researchPanel(b){
+    var rec = window.NEXAIS_newBiz.find(b.name);
+    if (!rec) return "";
+    return "<div class=\"rs-box\"><p class=\"h3s\">" + esc(tt("Research", "تحقیق")) + "</p>" +
+      "<p class=\"rs-p\">" + esc(tt("Research comes before any call or proposal. Open the research workspace to build the dossier step by step, or ask AVA to research it for you.",
+        "تحقیق قبل از هر تماس یا پروپوزال است. فضای تحقیق را باز کنید تا پرونده را قدم‌به‌قدم بسازید، یا از AVA بخواهید برایتان تحقیق کند.")) + "</p>" +
+      "<div class=\"biz-actions\"><button type=\"button\" class=\"btn primary\" data-act=\"dossier\">" + esc(tt("Open research workspace", "باز کردن فضای تحقیق")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" data-act=\"ava-research\">" + esc(tt("Ask AVA to research it", "درخواست تحقیق از AVA")) + "</button></div>" +
+      "<label class=\"rs-notes\">" + esc(tt("Research notes — what you found, with the source", "یادداشت تحقیق — چه پیدا کردید، با منبع")) +
+      "<textarea id=\"rs-notes\" rows=\"4\">" + esc(rec.research || "") + "</textarea></label>" +
+      "<div class=\"rs-foot\"><button type=\"button\" class=\"btn ghost\" data-act=\"rs-save\">" + esc(tt("Save notes", "ذخیرهٔ یادداشت")) + "</button>" +
+      "<span id=\"rs-saved\" class=\"rs-saved\"></span>" +
+      "<button type=\"button\" class=\"linkish\" data-act=\"remove\">" + esc(tt("Remove this business", "حذف این کسب‌وکار")) + "</button></div></div>";
+  }
+  function openDossier(b){
+    var rec = window.NEXAIS_newBiz.find(b.name) || {};
+    var pick = $("g-pick");
+    if (pick && pick.value !== "new") { pick.value = "new"; pick.dispatchEvent(new Event("change")); }
+    function setVal(id, v){ var el = $(id); if (el) el.value = v || ""; }
+    setVal("g-biz", b.name); setVal("g-city", rec.city); setVal("g-web", rec.web); setVal("g-phone", rec.phone);
+    setVal("g-contact", rec.contact); setVal("g-findings", [rec.note, rec.research].filter(Boolean).join("\n"));
+    var t = $("g-type");
+    if (t) t.value = b.ind === "restaurant" || b.ind === "venue" || b.ind === "golf" || b.ind === "winery" ? "restaurant" : (b.ind === "clinic" || b.ind === "beauty" ? "clinic" : "service");
+    nav("generator");
+    setTimeout(function(){ var r = $("g-research-btn"); if (r) r.click(); }, 150);
+    logSync("research", b.name, "workspace");
+  }
+  function askAvaResearch(b){
+    var rec = window.NEXAIS_newBiz.find(b.name) || {};
+    var mt = $("m-type"); if (mt) { mt.value = "lead"; mt.dispatchEvent(new Event("change", { bubbles: true })); }
+    var mb = $("m-biz"); if (mb) mb.value = b.name;
+    var md = $("m-details");
+    if (md) md.value = "Please research this business before we call: " + [indLabel(b.ind), rec.city, rec.phone, rec.web, rec.contact].filter(Boolean).join(" · ") +
+      (rec.note ? ". Signal: " + rec.note : "") + ". I need the decision-maker, how they handle calls and bookings today, and what AVA can fix.";
+    [mb, md].forEach(function(el){ if (el) el.dispatchEvent(new Event("input", { bubbles: true })); });
+    nav("talk");
+    logSync("research", b.name, "AVA request");
+  }
+
+  /* ---------- industry page header ---------- */
+  function renderIndHead(){
+    var chips = "<div class=\"chips big\"><a href=\"#biz\"" + (!cur.ind ? " class=\"on\"" : "") + ">" + esc(tt("All", "همه")) + " <span>" + BIZ.length + "</span></a>" +
+      INDS.map(function(x){
+        var n = BIZ.filter(function(b){ return b.ind === x.k; }).length;
+        return "<a href=\"#ind/" + x.k + "\"" + (cur.ind === x.k ? " class=\"on\"" : "") + ">" + esc(tt(x.en, x.fa)) + " <span>" + n + "</span></a>";
+      }).join("") + "</div>";
+    var title = cur.ind ? indLabel(cur.ind) : tt("All businesses", "همهٔ کسب‌وکارها");
+    var L = BIZ.filter(inInd), c = { research: 0, sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
+    L.forEach(function(b){ c[stageOf(b)]++; });
+    var sum = STAGES.map(function(s){ return "<span><b>" + c[s.k] + "</b> " + esc(tt(s.en, s.fa)) + "</span>"; }).join("");
+    indHead.innerHTML = "<div class=\"wrap\"><p class=\"kicker\">" + esc(tt("Choose an industry", "حوزهٔ کاری را انتخاب کنید")) + "</p>" + chips +
+      "<div class=\"ind-title\"><h2>" + esc(title) + "</h2><a class=\"btn primary\" href=\"#new" + (cur.ind ? "/" + cur.ind : "") + "\">+ " +
+      esc(tt("Add a business", "افزودن کسب‌وکار")) + "</a></div><p class=\"ind-sum\">" + sum + "</p></div>";
+  }
+
+  /* ---------- top bar title ---------- */
+  function renderTitle(){
+    vt.innerHTML = cur.v === "b" && cur.biz
+      ? esc(tt("Businesses", "کسب‌وکارها")) + " <small>/ " + esc(indLabel(cur.biz.ind)) + " / " + esc(cur.biz.name) + "</small>"
+      : cur.v === "ind" && cur.ind ? esc(tt("Businesses", "کسب‌وکارها")) + " <small>/ " + esc(indLabel(cur.ind)) + "</small>"
+      : esc(labelOf(cur.v));
+  }
+
+  function renderAll(){ renderSide(); renderTitle(); renderRail(); renderToday(); renderBizHead(); renderIndHead(); }
+
+  /* keep everything live: outcomes, notes, actions, language */
+  var tmr;
+  function soon(){ clearTimeout(tmr); tmr = setTimeout(renderAll, 250); }
+  document.addEventListener("change", function(ev){ if (ev.target.closest && ev.target.closest("#cards")) soon(); }, true);
+  document.addEventListener("click", function(ev){ if (ev.target.closest && ev.target.closest("#cards button")) soon(); }, true);
+  window.addEventListener("storage", soon);
+  var origLog = window.NEXAIS_logActivity;
+  if (typeof origLog === "function") window.NEXAIS_logActivity = function(){ var r = origLog.apply(this, arguments); soon(); return r; };
+  var origLang = window.NEXAIS_setLang;
+  if (typeof origLang === "function") window.NEXAIS_setLang = function(l){ origLang(l); renderAll(); };
+  setInterval(renderRail, 60000);
+
+  Object.assign(window.FA || {}, {
+    "New businesses — added in this hub": "کسب‌وکارهای جدید — اضافه‌شده در همین هاب",
+    "Added by the team. Research comes first: nothing is claimed until the research is done.": "اضافه‌شده توسط تیم. اول تحقیق: تا تحقیق کامل نشده، چیزی ادعا نمی‌شود.",
+    "New": "جدید", "Signal:": "نشانه:", "Website": "وب‌سایت"
+  });
+  body.classList.add("shell");
+  route();
 })();
 </script>
 </body>
