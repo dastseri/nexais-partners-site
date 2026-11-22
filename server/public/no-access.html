@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>NexAIS Sales Partners — No access</title>
+<link rel="stylesheet" href="/app/auth.css">
+</head>
+<body>
+<main class="box">
+  <p class="brand">Nex<b>AIS</b></p>
+  <h1>No access · بدون دسترسی</h1>
+  <p class="sub">This account is signed in but is not part of the NexAIS partner program. Ask the NexAIS admin for access.</p>
+  <p class="sub" dir="rtl" lang="fa">این حساب وارد شده اما عضو برنامهٔ همکاران NexAIS نیست. برای دسترسی با ادمین NexAIS تماس بگیرید.</p>
+  <button id="out" type="button">Sign out · خروج</button>
+</main>
+<script>
+document.getElementById('out').addEventListener('click', function () {
+  fetch('/api/auth/logout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: '{}' })
+    .finally(function () { location.replace('/login'); });
+});
+</script>
+</body>
+</html>

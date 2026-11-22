@@ -4294,9 +4294,22 @@
     return c;
   }
   get(KEY, []).slice().reverse().forEach(build);
+  var fromCRM = {};
   window.NEXAIS_newBiz = {
     list: function(){ return get(KEY, []); },
-    find: function(name){ name = (name || "").toLowerCase(); return get(KEY, []).filter(function(b){ return b.name.toLowerCase() === name; })[0] || null; },
+    find: function(name){ name = (name || "").toLowerCase(); return get(KEY, []).filter(function(b){ return b.name.toLowerCase() === name; })[0] || fromCRM[name] || null; },
+    /* a business another team member added — shown from the CRM, not stored on this device */
+    importCRM: function(b){
+      var k = (b.name || "").toLowerCase();
+      if (!k || this.exists(b.name)) return null;
+      fromCRM[k] = b;
+      var c = build(b); c.setAttribute("data-crm", "1");
+      return c;
+    },
+    forget: function(name){
+      var k = (name || "").toLowerCase();
+      put(KEY, get(KEY, []).filter(function(b){ return b.name.toLowerCase() !== k; }));
+    },
     exists: function(name){
       name = (name || "").trim().toLowerCase();
       return Array.prototype.some.call(box.querySelectorAll(".card"), function(c){ return c.getAttribute("data-name") === name; });
@@ -4315,11 +4328,13 @@
     },
     update: function(name, patch){
       var all = get(KEY, []), k = (name || "").toLowerCase();
+      if (fromCRM[k]) for (var q in patch) fromCRM[k][q] = patch[q];
       all.forEach(function(b){ if (b.name.toLowerCase() === k) for (var p in patch) b[p] = patch[p]; });
       put(KEY, all);
     },
     remove: function(name){
       var k = (name || "").toLowerCase();
+      delete fromCRM[k];
       put(KEY, get(KEY, []).filter(function(b){ return b.name.toLowerCase() !== k; }));
       var c = box.querySelector('.card[data-new="1"][data-name="' + k.replace(/"/g, '\\"') + '"]');
       if (c) c.parentNode.removeChild(c);
@@ -8505,7 +8520,7 @@ Object.assign(window.FA, {
       return;
     }
     if (a === "remove") {
-      if (!window.confirm(tt("Remove " + b.name + " from the list on this device? Its log entries stay in the Sheet.", b.name + " از لیست این دستگاه حذف شود؟ سوابقش در شیت می‌ماند."))) return;
+      if (!window.confirm(tt("Remove " + b.name + " from the list? Its history is kept.", b.name + " از لیست حذف شود؟ سوابقش نگه داشته می‌شود."))) return;
       var ind = b.ind; window.NEXAIS_newBiz.remove(b.name); loadBiz(); return nav("ind/" + ind);
     }
     if (a === "script") { var i = $("cs-biz"); if (i && b) { i.value = b.name; i.dispatchEvent(new Event("input", { bubbles: true })); } nav("script-builder"); }
@@ -8639,6 +8654,7 @@ Object.assign(window.FA, {
     "Added by the team. Research comes first: nothing is claimed until the research is done.": "اضافه‌شده توسط تیم. اول تحقیق: تا تحقیق کامل نشده، چیزی ادعا نمی‌شود.",
     "New": "جدید", "Signal:": "نشانه:", "Website": "وب‌سایت"
   });
+  window.NEXAIS_shellReload = function(){ loadBiz(); renderAll(); if (cur.v === "b" && !cur.biz) route(); };
   body.classList.add("shell");
   route();
 })();

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>NexAIS Sales Partners — New password</title>
+<link rel="stylesheet" href="/app/auth.css">
+</head>
+<body>
+<main class="box">
+  <p class="brand">Nex<b>AIS</b></p>
+  <h1>New password · رمز جدید</h1>
+  <p class="sub">At least 10 characters. · حداقل ۱۰ نویسه.</p>
+  <form id="reset" novalidate>
+    <label>New password · رمز جدید<input id="p1" type="password" autocomplete="new-password" required></label>
+    <label>Repeat · تکرار<input id="p2" type="password" autocomplete="new-password" required></label>
+    <button id="go" type="submit">Save · ذخیره</button>
+    <p id="msg" class="msg" role="status" aria-live="polite"></p>
+  </form>
+</main>
+<script>
+(function () {
+  var hash = new URLSearchParams(location.hash.replace(/^#/, ''));
+  var token = hash.get('access_token');
+  history.replaceState(null, '', '/reset'); // keep the token out of history and screenshots
+  var msg = document.getElementById('msg'), go = document.getElementById('go');
+  function say(text, ok) { msg.textContent = text; msg.className = 'msg ' + (ok ? 'ok' : 'err'); }
+  if (!token || hash.get('type') !== 'recovery') { say('This link is not valid. Request a new one from the sign-in page. · این لینک معتبر نیست.'); go.disabled = true; return; }
+  document.getElementById('reset').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var a = document.getElementById('p1').value, b = document.getElementById('p2').value;
+    if (a.length < 10) return say('Use at least 10 characters. · حداقل ۱۰ نویسه.');
+    if (a !== b) return say('The two passwords do not match. · دو رمز یکی نیستند.');
+    go.disabled = true;
+    fetch('/api/auth/reset', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin', body: JSON.stringify({ access_token: token, password: a }) })
+      .then(function (r) {
+        if (r.ok) { say('Password saved. Redirecting to sign in… · رمز ذخیره شد.', true); setTimeout(function () { location.replace('/login'); }, 1500); }
+        else { go.disabled = false; say('This link has expired. Request a new one. · لینک منقضی شده است.'); }
+      }).catch(function () { go.disabled = false; say('Network problem. · مشکل اتصال.'); });
+  });
+})();
+</script>
+</body>
+</html>
