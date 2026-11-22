@@ -62,6 +62,12 @@ export function mapHubEntry(entry) {
     const via = entry.to === 'AVA request' ? 'asked AVA to research it' : 'opened the research workspace';
     return { business, row: { action: 'note', notes: `Research started in hub — ${via}${stamp}` } };
   }
+  if (entry.what === 'proposal-sent') {
+    return { business, row: { action: 'note', notes: `Proposal link sent to the client by email${stamp}` } };
+  }
+  if (entry.what === 'script-print') {
+    return { business, row: { action: 'note', notes: `Call script printed${stamp}` } };
+  }
   if (entry.what === 'agreement') {
     return { business, row: { action: 'note', notes: `Agreement sent to the client — ${clip(entry.to, 200) || 'plan'}${stamp}` } };
   }

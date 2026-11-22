@@ -812,6 +812,15 @@
   .bubble p{margin:0} .bubble small{display:block;font-size:11px;opacity:.7;margin-top:4px}
   .bubble.out{align-self:flex-end;background:var(--ink);color:#fff}
   .bubble.in{align-self:flex-start;background:var(--bg-soft);color:var(--ink);border:1px solid var(--panel-line)}
+  .biz-tabs{margin:18px 0 0}
+  body.biz-tab-other #call-list{display:none!important}
+  .tab-panel{padding:16px 0 8px}
+  .open-q{margin:0 0 12px;padding:14px 16px;background:var(--bg-soft);border-radius:10px;font-size:14.5px;line-height:1.6;direction:ltr;text-align:left}
+  .script-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 8px}
+  .script-head .h3s{margin:0}
+  .script-head select{border:1px solid var(--panel-line);border-radius:8px;padding:7px 10px;font:inherit;font-size:13.5px;background:#fff}
+  .bz-script{width:100%;font-size:14px;line-height:1.6;direction:ltr;text-align:left}
+  .prop-box{border:1px solid var(--panel-line);border-radius:12px;padding:16px;background:#fff;margin:0 0 12px}
   .pick-layout{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start}
   .pick{border:1px solid var(--panel-line);border-radius:12px;background:#fff;padding:10px;position:sticky;top:110px}
   .pick-new{display:block;width:100%;border:1px dashed var(--ink-3);background:#fff;border-radius:8px;padding:8px;font:inherit;font-size:13px;font-weight:600;color:var(--ink);cursor:pointer;margin:0 0 8px}
@@ -8624,7 +8633,7 @@ Object.assign(window.FA, {
       copy: tt("Text copied", "متن کپی شد"),
       "biz-added": tt("Business added", "کسب‌وکار اضافه شد"), research: tt("Research started", "تحقیق شروع شد"),
       "research-note": tt("Research note saved", "یادداشت تحقیق ذخیره شد"),
-      agreement: tt("Agreement sent", "قرارداد ارسال شد"), "paylink-sent": tt("Payment link sent", "لینک پرداخت ارسال شد")
+      agreement: tt("Agreement sent", "قرارداد ارسال شد"), "proposal-sent": tt("Proposal sent", "پروپوزال ارسال شد"), "script-print": tt("Call script printed", "اسکریپت تماس پرینت شد"), "paylink-sent": tt("Payment link sent", "لینک پرداخت ارسال شد")
     }[e.what] || e.what || "";
     var FA_ST = { "Not called": "تماس گرفته نشده", "Reached decision-maker": "با تصمیم‌گیرنده صحبت شد", "Gatekeeper": "منشی / واسطه",
       "Voicemail left": "پیام صوتی گذاشته شد", "Not interested": "علاقه ندارد", "Callback scheduled": "تماس مجدد تنظیم شد", "Demo booked": "دمو رزرو شد",
@@ -8741,11 +8750,12 @@ Object.assign(window.FA, {
     bizHead.innerHTML = "<div class=\"wrap\"><button type=\"button\" class=\"biz-back\" data-go=\"ind/" + b.ind + "\">← " + esc(indLabel(b.ind)) + "</button>" +
       "<h2>" + esc(b.name) + "</h2><p class=\"loc\">" + esc(b.loc) + "</p><ol class=\"steps\">" + steps + "</ol>" +
       "<div class=\"biz-actions\">" +
-      "<button type=\"button\" class=\"btn ghost\" data-act=\"script\">" + esc(tt("Build call script", "ساخت اسکریپت تماس")) + "</button>" +
+      "<a class=\"btn ghost\" href=\"#call/b/" + esc(b.slug) + "\">☎ " + esc(tt("Call", "تماس")) + "</a>" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"close\">" + esc(tt("Close the deal", "بستن معامله")) + "</button>" +
       "<a class=\"btn ghost\" href=\"#sms/" + esc(b.slug) + "\">" + esc(tt("Send SMS", "ارسال پیامک")) + "</a>" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"talk\">" + esc(tt("Ask AVA about it", "پرسیدن از AVA")) + "</button>" +
-      "</div>" + (b.isNew ? researchPanel(b) : "") + "</div>";
+      "</div>" + bizTabs(b) + (bizTab === "overview" && b.isNew ? researchPanel(b) : "") + "</div>";
+    body.classList.toggle("biz-tab-other", bizTab !== "overview");
   }
   bizHead.addEventListener("click", function(ev){
     var t = ev.target.closest("[data-go],[data-act]"); if (!t) return;
@@ -9010,6 +9020,7 @@ Object.assign(window.FA, {
     { k: "after", en: "After a call", fa: "بعد از تماس", t: "Hi {name}, this is {me} from NexAIS — thanks for your time today. You can test AVA, our AI receptionist, yourself any time: call or text +1 (437) 529-0400. Happy to start your free 7-day trial whenever you're ready." },
     { k: "proposal", en: "Ask where to send the proposal", fa: "پرسیدن ایمیل برای پروپوزال", t: "Hi {name}, {me} from NexAIS here. We prepared a short proposal for {biz} showing how AVA answers every call and booking 24/7. What's the best email to send it to?" },
     { k: "callback", en: "Callback reminder", fa: "یادآوری تماس مجدد", t: "Hi {name}, {me} from NexAIS — a quick reminder that I'll call you back as we agreed. Talk soon!" },
+    { k: "proplink", en: "Send the proposal link", fa: "ارسال لینک پروپوزال", t: "Hi {name}, {me} from NexAIS — here is the proposal we prepared for {biz}: {proposal} — happy to answer any questions." },
     { k: "pay", en: "Payment link (start the trial)", fa: "لینک پرداخت (شروع دورهٔ رایگان)", t: "Hi {name}, here is the secure link to start the free AVA trial for {biz}: {link} — no charge today. Any questions, just reply. {me}, NexAIS" },
     { k: "custom", en: "Write my own", fa: "متن خودم", t: "" }
   ];
@@ -9019,7 +9030,7 @@ Object.assign(window.FA, {
     var t = SMS_T.filter(function(x){ return x.k === smsT; })[0];
     var link = ($("cl-open") || {}).href || "";
     return (t ? t.t : "").replace(/\{name\}/g, (b && firstName(b)) || "there").replace(/\{me\}/g, myName() || "the NexAIS team")
-      .replace(/\{biz\}/g, b ? b.name : "your business").replace(/\{link\}/g, link).replace(/^Hi there, /, "Hi, ");
+      .replace(/\{biz\}/g, b ? b.name : "your business").replace(/\{link\}/g, link).replace(/\{proposal\}/g, b ? proposalOf(b).url || "(link)" : "(link)").replace(/^Hi there, /, "Hi, ");
   }
   function renderSms(){
     var html = phoneHead("sms");
@@ -9413,6 +9424,111 @@ Object.assign(window.FA, {
       "<div class=\"ind-title\"><h2>" + esc(title) + "</h2><a class=\"btn primary\" href=\"#new" + (cur.ind ? "/" + cur.ind : "") + "\">+ " +
       esc(tt("Add a business", "افزودن کسب‌وکار")) + "</a></div><p class=\"ind-sum\">" + sum + "</p></div>";
   }
+
+  /* ---------- business page tabs: overview · call script · proposal ---------- */
+  var bizTab = "overview", bizTabFor = null, scriptScenario = null;
+  function bizTabs(b){
+    if (bizTabFor !== b) { bizTab = "overview"; bizTabFor = b; scriptScenario = null; }
+    var T = [["overview", tt("Overview", "خلاصه")], ["script", tt("Call script", "اسکریپت تماس")], ["proposal", tt("Proposal", "پروپوزال")]];
+    var html = "<div class=\"tabs biz-tabs\">" + T.map(function(t){ return "<a href=\"#\" data-btab=\"" + t[0] + "\"" + (bizTab === t[0] ? " class=\"on\"" : "") + ">" + esc(t[1]) + "</a>"; }).join("") + "</div>";
+    if (bizTab === "script") html += scriptPanel(b);
+    if (bizTab === "proposal") html += proposalPanel(b);
+    return html;
+  }
+  function csType(b){
+    return { restaurant: "restaurant", venue: "restaurant", golf: "restaurant", winery: "restaurant", clinic: "clinic", beauty: "salon", auto: "auto", realestate: "realestate" }[b.ind] || "trades";
+  }
+  function defaultScenario(b){
+    var st = stageOf(b);
+    return st === "research" ? "first" : st === "demo" ? "close" : b.isNew && st === "sent" ? "first" : "followup";
+  }
+  function fullName(){ var s0 = window.NEXAIS_SESSION; if (s0 && s0.name) return s0.name; try { return JSON.parse(localStorage.getItem("nexais-hub-user-v1") || '""') || ""; } catch(e){ return ""; } }
+  function buildScriptFor(b, scen){
+    var f = $("cs-form"); if (!f) return "";
+    var set = function(id, v){ var el = $(id); if (el) el.value = v; };
+    var ask = askFor(b), contact = ask ? ask.split(/\s+[—-]\s+/)[0].trim() : "";
+    set("cs-biz", b.name); set("cs-type", csType(b)); set("cs-contact", /not yet known/i.test(contact) ? "" : contact);
+    set("cs-scenario", scen); set("cs-partner", fullName() || "NexAIS");
+    var keep = window.NEXAIS_logActivity; window.NEXAIS_logActivity = function(){};   /* building to show is not "building a script" */
+    try { if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event("submit", { cancelable: true })); } finally { window.NEXAIS_logActivity = keep; }
+    return ($("cs-out") || {}).value || "";
+  }
+  function scriptPanel(b){
+    var scen = scriptScenario || defaultScenario(b);
+    var S = [["first", tt("First call", "تماس اول")], ["followup", tt("Follow-up call", "تماس پیگیری")], ["demo", tt("Demo invitation", "دعوت به دمو")], ["close", tt("Trial-offer close", "بستن با دورهٔ رایگان")]];
+    var opens = Array.prototype.map.call(b.el.querySelectorAll("details.opening blockquote"), function(q){ return q.textContent.trim(); });
+    var hook = b.el.querySelector(".hook");
+    var html = "<div class=\"tab-panel\">";
+    if (hook) html += "<p class=\"cc-hook\">" + esc(hook.textContent.trim()) + "</p>";
+    var me = fullName() || "[Caller]";
+    if (opens.length) html += "<p class=\"h3s\">" + esc(tt("Opening line — word for word", "جملهٔ شروع — کلمه به کلمه")) + "</p>" + opens.map(function(o){ return "<blockquote class=\"open-q\">" + esc(o.replace(/\[Caller\]/g, me)) + "</blockquote>"; }).join("");
+    html += "<div class=\"script-head\"><p class=\"h3s\">" + esc(tt("Full call script for ", "اسکریپت کامل تماس برای ")) + esc(b.name) + "</p>" +
+      "<select id=\"bz-scen\">" + S.map(function(x){ return "<option value=\"" + x[0] + "\"" + (x[0] === scen ? " selected" : "") + ">" + esc(x[1]) + "</option>"; }).join("") + "</select></div>" +
+      "<textarea id=\"bz-script\" class=\"tpl bz-script\" rows=\"22\">" + esc(buildScriptFor(b, scen)) + "</textarea>" +
+      "<div class=\"biz-actions\" style=\"margin-top:10px\"><button type=\"button\" class=\"btn primary\" data-bz=\"print-script\">" + esc(tt("Print / save as PDF", "پرینت / ذخیره PDF")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-script\">" + esc(tt("Copy", "کپی")) + "</button>" +
+      "<a class=\"btn ghost\" href=\"#call/b/" + esc(b.slug) + "\">☎ " + esc(tt("Call now", "تماس الان")) + "</a></div>" +
+      "<p class=\"hint\">" + esc(tt("The script is in English — the language of the call. You can edit it before printing.", "اسکریپت به انگلیسی است — زبان تماس. قبل از پرینت می‌توانید ویرایشش کنید.")) + "</p></div>";
+    return html;
+  }
+  function proposalOf(b){
+    var a = b.el.querySelector(".prop-link a[href]"), when = "";
+    Array.prototype.forEach.call(b.el.querySelectorAll(".facts > div"), function(d){ var dt = d.querySelector("dt"), dd = d.querySelector("dd"); if (dt && dd && /proposal sent/i.test(dt.textContent)) when = dd.textContent.trim(); });
+    return { url: a ? a.getAttribute("href") : "", when: when };
+  }
+  function emailOf(b){ var m = b.el.textContent.match(/[\w.+-]+@[\w-]+\.[\w.]+/); return m ? m[0] : ""; }
+  function proposalPanel(b){
+    var pr = proposalOf(b), html = "<div class=\"tab-panel\">";
+    if (pr.url) {
+      html += "<div class=\"prop-box\"><p class=\"h3s\">" + esc(tt("The proposal we prepared", "پروپوزالی که تهیه کرده‌ایم")) + "</p>" +
+        (pr.when ? "<p class=\"hint\" style=\"margin:0 0 12px\">" + esc(tt("Sent: ", "ارسال: ")) + esc(pr.when) + "</p>" : "") +
+        "<div class=\"biz-actions\"><a class=\"btn primary\" href=\"" + esc(pr.url) + "\" target=\"_blank\" rel=\"noopener\">" + esc(tt("Open / download", "باز کردن / دانلود")) + " ↗</a>" +
+        ((window.NEXAIS_SESSION || {}).role === "partner" ? "" : "<a class=\"btn ghost\" href=\"" + esc(mailtoProposal(b, pr.url)) + "\" data-bz=\"mail-prop\">✉ " + esc(tt("Send by email", "ارسال با ایمیل")) + "</a>") +
+        "<button type=\"button\" class=\"btn ghost\" data-bz=\"sms-prop\">" + esc(tt("Send link by SMS", "ارسال لینک با پیامک")) + "</button>" +
+        "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-prop\">" + esc(tt("Copy link", "کپی لینک")) + "</button></div></div>";
+    } else {
+      html += "<div class=\"empty-box\"><p>" + esc(tt("No proposal has been prepared for this business yet.", "هنوز برای این کسب‌وکار پروپوزالی تهیه نشده.")) + "</p></div>";
+    }
+    html += "<div class=\"prop-box\"><p class=\"h3s\">" + esc(pr.url ? tt("Prepare a new version", "تهیهٔ نسخهٔ جدید") : tt("Prepare a proposal", "تهیهٔ پروپوزال")) + "</p>" +
+      "<p class=\"hint\" style=\"margin:0 0 10px\">" + esc(tt("Opens the proposal generator with this business filled in. Finish the steps there and download the PDF to send it.",
+        "سازندهٔ پروپوزال را با اطلاعات همین کسب‌وکار باز می‌کند. مراحل را آنجا تمام کنید و PDF را برای ارسال دانلود کنید.")) + "</p>" +
+      "<button type=\"button\" class=\"btn " + (pr.url ? "ghost" : "primary") + "\" data-bz=\"make-prop\">" + esc(tt("Open the proposal generator", "باز کردن سازندهٔ پروپوزال")) + "</button></div></div>";
+    return html;
+  }
+  function mailtoProposal(b, url){
+    var ask = askFor(b), first = (ask.match(/^([A-Z][a-zA-Z'-]+)\s+[A-Z]/) || [])[1] || "";
+    var body = (first ? "Hi " + first + ",\n\n" : "Hi,\n\n") + "Here is the proposal we prepared for " + b.name + ", showing how AVA can answer every call and booking 24/7:\n" + url +
+      "\n\nYou can also test AVA yourself any time — call or text +1 (437) 529-0400.\n\nHappy to answer any questions.\n\n" + (fullName() || "") + "\nNexAIS · info@nexais.ca";
+    return "mailto:" + encodeURIComponent(emailOf(b)) + "?subject=" + encodeURIComponent("Your AVA proposal — " + b.name) + "&body=" + encodeURIComponent(body);
+  }
+  function printText(title, text){
+    var fr = document.createElement("iframe"); fr.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0"; document.body.appendChild(fr);
+    var d = fr.contentWindow.document;
+    d.open(); d.write("<!doctype html><html><head><title>" + esc(title) + "</title><style>body{font:13pt/1.55 Georgia,serif;margin:2cm;color:#111}h1{font:600 16pt Arial,sans-serif;margin:0 0 4px}p.m{font:10pt Arial,sans-serif;color:#666;margin:0 0 18px}pre{white-space:pre-wrap;font:inherit}</style></head><body><h1>" +
+      esc(title) + "</h1><p class=\"m\">NexAIS · " + esc(new Date().toLocaleDateString("en-CA")) + "</p><pre>" + esc(text) + "</pre></body></html>"); d.close();
+    setTimeout(function(){ fr.contentWindow.focus(); fr.contentWindow.print(); setTimeout(function(){ fr.remove(); }, 1000); }, 150);
+  }
+  bizHead.addEventListener("click", function(e){
+    var t = e.target.closest("[data-btab],[data-bz]"); if (!t) return;
+    var b = cur.biz; if (!b) return;
+    if (t.hasAttribute("data-btab")) { e.preventDefault(); bizTab = t.getAttribute("data-btab"); renderBizHead(); return; }
+    var k = t.getAttribute("data-bz");
+    if (k === "print-script") { printText(tt("Call script — ", "اسکریپت تماس — ") + b.name, $("bz-script").value); logSync("script-print", b.name, ""); }
+    else if (k === "copy-script") { var ta = $("bz-script"); try { navigator.clipboard.writeText(ta.value); } catch(x){ ta.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); }
+    else if (k === "copy-prop") { try { navigator.clipboard.writeText(proposalOf(b).url); } catch(x){} t.textContent = tt("Copied ✓", "کپی شد ✓"); }
+    else if (k === "mail-prop") { logSync("proposal-sent", b.name, "email"); }
+    else if (k === "sms-prop") { smsT = "proplink"; smsBiz = b.slug; pickFilter.sms = "all"; nav("sms/" + b.slug); }
+    else if (k === "make-prop") {
+      var pick = $("g-pick"), done = false;
+      if (pick && !b.isNew) Array.prototype.forEach.call(pick.options, function(o){ if (!done && o.textContent.indexOf(b.name) === 0) { pick.value = o.value; done = true; } });
+      if (done) { pick.dispatchEvent(new Event("change")); nav("generator"); }
+      else if (window.NEXAIS_newBiz.find(b.name)) openDossier(b);
+      else { if (pick) { pick.value = "new"; pick.dispatchEvent(new Event("change")); } var gb = $("g-biz"); if (gb) gb.value = b.name; nav("generator"); }
+    }
+  });
+  bizHead.addEventListener("change", function(e){
+    if (e.target.id === "bz-scen" && cur.biz) { scriptScenario = e.target.value; $("bz-script").value = buildScriptFor(cur.biz, scriptScenario); }
+  });
 
   /* ---------- top bar title ---------- */
   function renderQuickComm(){
