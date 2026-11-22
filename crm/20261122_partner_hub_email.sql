@@ -112,8 +112,8 @@ begin
     raise exception 'this address unsubscribed; do not email it again' using errcode = '42501'; end if;
   if (select count(*) from public.partner_email_messages where user_id = v_uid and created_at > now() - interval '1 hour') >= 20 then
     raise exception 'limit reached: 20 emails per hour per person' using errcode = '42501'; end if;
-  if (select count(*) from public.partner_email_messages where company_id = v_company and created_at > now() - interval '1 day') >= 150 then
-    raise exception 'limit reached: 150 emails per day for the company' using errcode = '42501'; end if;
+  if (select count(*) from public.partner_email_messages where company_id = v_company and created_at > now() - interval '1 day') >= 30 then
+    raise exception 'limit reached: 30 emails per day for the company' using errcode = '42501'; end if;
   if (select count(*) from public.partner_email_messages where company_id = v_company and to_email = v_to and created_at > now() - interval '1 day') >= 3 then
     raise exception 'limit reached: 3 emails to the same address per day' using errcode = '42501'; end if;
   select coalesce(nullif(btrim(u.full_name), ''), split_part(u.email, '@', 1)) into v_name from public.users u where u.id = v_uid;
