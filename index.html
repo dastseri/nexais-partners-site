@@ -832,6 +832,12 @@
   .script-head select{border:1px solid var(--panel-line);border-radius:8px;padding:7px 10px;font:inherit;font-size:13.5px;background:#fff}
   .bz-script{width:100%;font-size:14px;line-height:1.6;direction:ltr;text-align:left}
   .prop-box{border:1px solid var(--panel-line);border-radius:12px;padding:16px;background:#fff;margin:0 0 12px}
+  .hook-box{border:1px solid var(--panel-line);border-radius:12px;padding:14px 16px;margin:16px 0 12px;background:#fff}
+  .hook-box .h3s{margin:0 0 6px}
+  .hook-text{font-size:15px;line-height:1.55;margin:0 0 8px;color:var(--ink)}
+  .hook-ev{margin:0 0 8px;padding-inline-start:18px;font-size:13px;color:var(--ink-2);line-height:1.5}
+  .hook-ev b{font-weight:600;color:var(--ink)}
+  .hook-box .btn{margin-top:4px}
   .hist-now{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:center;border:1px solid var(--panel-line);border-radius:12px;padding:14px 16px;margin:0 0 12px;background:#fff}
   .hist-now span{display:block;font-size:12px;color:var(--ink-3)}.hist-now b{font-size:15px;font-weight:600}
   .hist-notes{white-space:pre-wrap;margin:0;font-size:14px;line-height:1.55}
@@ -8785,7 +8791,7 @@ Object.assign(window.FA, {
       "<button type=\"button\" class=\"btn ghost\" data-act=\"close\">" + esc(tt("Close the deal", "بستن معامله")) + "</button>" +
       "<a class=\"btn ghost\" href=\"#sms/" + esc(b.slug) + "\">" + esc(tt("Send SMS", "ارسال پیامک")) + "</a>" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"talk\">" + esc(tt("Ask AVA about it", "پرسیدن از AVA")) + "</button>" +
-      "</div>" + bizTabs(b) + (bizTab === "overview" && b.isNew ? researchPanel(b) : "") + "</div>";
+      "</div>" + bizTabs(b) + (bizTab === "overview" ? hookBox(b) : "") + (bizTab === "overview" && b.isNew ? researchPanel(b) : "") + "</div>";
     body.classList.toggle("biz-tab-other", bizTab !== "overview");
   }
   bizHead.addEventListener("click", function(ev){
@@ -9499,14 +9505,48 @@ Object.assign(window.FA, {
     try { if (f.requestSubmit) f.requestSubmit(); else f.dispatchEvent(new Event("submit", { cancelable: true })); } finally { window.NEXAIS_logActivity = keep; }
     return ($("cs-out") || {}).value || "";
   }
+  /* ---------- weak spot / hook: from the research, or found now (CRM notes → Google Maps → AVA) ---------- */
+  var HOOKS_KEY = "nexais-hub-hooks-v1", hookBusy = {}, hookErr = {};
+  function hooksAll(){ try { return JSON.parse(localStorage.getItem(HOOKS_KEY) || "{}"); } catch(e){ return {}; } }
+  function foundHook(b){ return hooksAll()[b.name] || null; }
+  function saveHook(b, r){ var all = hooksAll(); all[b.name] = r; try { localStorage.setItem(HOOKS_KEY, JSON.stringify(all)); } catch(e){} }
+  function hookBox(b){
+    var card = b.el.querySelector(".hook"), fh = foundHook(b), html = "<div class=\"hook-box\"><p class=\"h3s\">" + esc(tt("What we found — weak spot / hook", "آنچه پیدا کردیم — نقطه‌ضعف / هوک")) + "</p>";
+    var cardTxt = card ? card.textContent.trim() : "";
+    if (cardTxt && !(fh && fh.hook)) html += "<p class=\"hook-text\">" + esc(cardTxt) + "</p>";
+    else if (fh && fh.hook) {
+      if (cardTxt) html += "<p class=\"hint\" style=\"margin:0 0 6px\">" + esc(tt("From our research: ", "از تحقیق ما: ") + cardTxt) + "</p>";
+      html += "<p class=\"hook-text\">" + esc(fh.hook) + "</p>";
+      if (fh.evidence && fh.evidence.length) html += "<ul class=\"hook-ev\">" + fh.evidence.map(function(e){ return "<li><b>" + esc(e.source) + "</b> " + esc(e.detail) + "</li>"; }).join("") + "</ul>";
+      html += "<p class=\"hint\">" + esc((fh.by === "ava" ? tt("Found by AVA", "پیدا شده توسط اوا") : tt("Found from public data", "پیدا شده از داده‌های عمومی")) + " · " + (fh.at ? new Date(fh.at).toLocaleDateString("en-CA") : "")) +
+        (fh.place && fh.place.maps_url ? " · <a href=\"" + esc(fh.place.maps_url) + "\" target=\"_blank\" rel=\"noopener\">Google Maps ↗</a>" : "") + "</p>";
+    } else if (fh && !fh.hook && !cardTxt) html += "<p class=\"hint\">" + esc(fh.missing === "google_key" ? tt("Google Maps search is not connected yet — ask the NexAIS admin.", "جستجوی گوگل‌مپ هنوز وصل نشده — به مدیر NexAIS بگویید.")
+        : fh.missing === "not_found" ? tt("Not found on Google Maps. Add research notes, then try again.", "در گوگل‌مپ پیدا نشد. یادداشت تحقیق اضافه کنید و دوباره امتحان کنید.")
+        : tt("No clear weak spot in the public data. Use the research notes or the standard script.", "در داده‌های عمومی نقطه‌ضعف روشنی پیدا نشد. از یادداشت تحقیق یا اسکریپت استاندارد استفاده کنید.")) + "</p>";
+    else if (!cardTxt) html += "<p class=\"hint\">" + esc(tt("No weak spot recorded for this business yet.", "هنوز نقطه‌ضعفی برای این کسب‌وکار ثبت نشده.")) + "</p>";
+    if (hookErr[b.name]) html += "<p class=\"hint\" style=\"color:#b42318\">" + esc(hookErr[b.name]) + "</p>";
+    if (LINE_MODE) html += "<button type=\"button\" class=\"btn " + (card || (fh && fh.hook) ? "ghost" : "primary") + "\" data-hook=\"find\"" + (hookBusy[b.name] ? " disabled" : "") + ">" +
+      esc(hookBusy[b.name] ? tt("Searching Google Maps…", "در حال جستجو در گوگل‌مپ…") : (card || (fh && fh.hook)) ? tt("Check again (Google Maps + AVA)", "بررسی دوباره (گوگل‌مپ + اوا)") : tt("Find it now (Google Maps + AVA)", "الان پیدا کن (گوگل‌مپ + اوا)")) + "</button>";
+    return html + "</div>";
+  }
+  bizHead.addEventListener("click", function(e){
+    var t = e.target.closest("[data-hook]"); if (!t || !cur.biz) return;
+    var b = cur.biz, rec = window.NEXAIS_newBiz.find(b.name) || {};
+    hookBusy[b.name] = true; hookErr[b.name] = ""; renderBizHead();
+    api("POST", "/api/hub/hook", { business: b.name, city: rec.city || (b.loc || "").split("·")[0].trim(), notes: [rec.note, rec.research].filter(Boolean).join("\n"), refresh: !!foundHook(b) })
+      .then(function(r){ r.at = new Date().toISOString(); saveHook(b, r); })
+      .catch(function(err){ hookErr[b.name] = err.message; })
+      .then(function(){ hookBusy[b.name] = false; if (cur.biz === b) renderBizHead(); });
+  });
   function scriptPanel(b){
     var scen = scriptScenario || defaultScenario(b);
     var S = [["first", tt("First call", "تماس اول")], ["followup", tt("Follow-up call", "تماس پیگیری")], ["demo", tt("Demo invitation", "دعوت به دمو")], ["close", tt("Trial-offer close", "بستن با دورهٔ رایگان")]];
     var opens = Array.prototype.map.call(b.el.querySelectorAll("details.opening blockquote"), function(q){ return q.textContent.trim(); });
     var hook = b.el.querySelector(".hook");
     var html = "<div class=\"tab-panel\">";
-    if (hook) html += "<p class=\"cc-hook\">" + esc(hook.textContent.trim()) + "</p>";
-    var me = fullName() || "[Caller]";
+    html += hookBox(b);
+    var me = fullName() || "[Caller]", fh = foundHook(b);
+    if (!opens.length && fh && fh.opening) opens = [fh.opening];
     if (opens.length) html += "<p class=\"h3s\">" + esc(tt("Opening line — word for word", "جملهٔ شروع — کلمه به کلمه")) + "</p>" + opens.map(function(o){ return "<blockquote class=\"open-q\">" + esc(o.replace(/\[Caller\]/g, me)) + "</blockquote>"; }).join("");
     html += "<div class=\"script-head\"><p class=\"h3s\">" + esc(tt("Full call script for ", "اسکریپت کامل تماس برای ")) + esc(b.name) + "</p>" +
       "<select id=\"bz-scen\">" + S.map(function(x){ return "<option value=\"" + x[0] + "\"" + (x[0] === scen ? " selected" : "") + ">" + esc(x[1]) + "</option>"; }).join("") + "</select></div>" +

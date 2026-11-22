@@ -15,6 +15,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mapHubEntry, dedupePrefix } from './hubActivity.js';
+import { findHook as defaultFindHook } from './hookFinder.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const ACCESS_COOKIE = 'nx_at';
@@ -53,6 +54,8 @@ export function createApp(options) {
     secureCookies = true,
     loginLimit = { max: 10, windowMs: 15 * 60 * 1000 },
     now = () => Date.now(),
+    findHook = defaultFindHook,     // ({bizName, city, crmNotes, env}) => hook result
+    env = process.env,
   } = options;
   if (!makeClient || !companyId || !publicOrigin) throw new Error('makeClient, companyId and publicOrigin are required');
 
@@ -555,6 +558,46 @@ export function createApp(options) {
   });
 
   // ---- AVA follow-up calls (consent required; the owner's on/off switch lives in the CRM) ----
+  // ---- find the weak spot / hook for a business (CRM notes → Google Maps → AVA) ----
+  const hookCache = new Map();   // key -> { at, result }
+  const hookUse = new Map();     // user -> [timestamps]
+  app.post('/api/hub/hook', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      const b = req.body || {};
+      const name = String(b.business || '').trim().slice(0, 200);
+      if (!name) return res.status(400).json({ error: 'Business name is required' });
+      const city = String(b.city || '').trim().slice(0, 100);
+      const key = `${dedupePrefix(name)}|${city.toLowerCase()}`;
+      const cached = hookCache.get(key);
+      if (cached && now() - cached.at < 24 * 3600 * 1000 && !b.refresh) return res.json({ ...cached.result, cached: true });
+      const uid = req.session.user.id;
+      const recent = (hookUse.get(uid) || []).filter((t) => now() - t < 3600 * 1000);
+      if (recent.length >= 20) return res.status(429).json({ error: 'Limit reached: 20 searches per hour' });
+      hookUse.set(uid, [...recent, now()]);
+      const db = req.session.db;
+      const prefix = dedupePrefix(name);
+      const { data: found } = await db.from('partner_missions').select('id, partner_summary, city')
+        .eq('company_id', companyId).like('dedupe_key', `${prefix}|%`).not('status', 'in', HUB_OPEN).limit(1);
+      const mission = found?.[0] || null;
+      let crmNotes = [String(b.notes || '').slice(0, 2000), mission?.partner_summary || ''].filter(Boolean).join('\n');
+      if (mission) {
+        const { data: research } = await db.from('partner_activity_log').select('notes').eq('mission_id', mission.id)
+          .eq('action', 'research_attached').order('created_at', { ascending: false }).limit(3);
+        crmNotes = [crmNotes, ...(research || []).map((r) => r.notes || '')].filter(Boolean).join('\n').slice(0, 4000);
+      }
+      let result;
+      try { result = await findHook({ bizName: name, city: city || mission?.city || '', crmNotes, env }); }
+      catch (e) { return res.status(502).json({ error: String(e.message || 'Search failed').slice(0, 200) }); }
+      hookCache.set(key, { at: now(), result });
+      if (mission && result.hook) {
+        const notes = [`Weak spot / hook (${result.by === 'ava' ? 'AVA' : 'rules'}, ${result.confidence}): ${result.hook}`,
+          ...result.evidence.map((e) => `- ${e.source}: ${e.detail}`), result.opening ? `Opening: ${result.opening}` : ''].filter(Boolean).join('\n').slice(0, 4000);
+        await db.from('partner_activity_log').insert({ company_id: companyId, mission_id: mission.id, action: 'research_attached', notes });
+      }
+      return res.json(result);
+    } catch (err) { return next(err); }
+  });
+
   // ---- one business's history: everything logged in the CRM (calls, SMS, email, AVA calls, notes) ----
   app.get('/api/hub/history', requireMember, async (req, res, next) => {
     try {

@@ -340,3 +340,20 @@ test('business history: merges CRM activity and line calls, newest first; unknow
   assert.equal(items.length, 2); assert.equal(items[0].kind, 'line_call'); assert.equal(items[1].outcome, 'gatekeeper');
   assert.equal((await getAs(base, '/api/hub/history?business=Bistro')).status, 401);
 }));
+
+test('hook finder: origin + login enforced, result returned, cached, saved to the CRM as research', () => {
+  let calls = 0;
+  const findHook = async ({ bizName }) => { calls++; return { hook: `${bizName} misses calls`, evidence: [{ source: 'Google review', detail: '2★: never answer' }], opening: '', confidence: 'high', by: 'rules', sources: ['google_maps'], place: null }; };
+  return withServer(async (base, state) => {
+    const h = { origin: ORIGIN, 'content-type': 'application/json' };
+    assert.equal((await fetch(`${base}/api/hub/hook`, { method: 'POST', headers: h, body: '{"business":"Bistro"}' })).status, 401);
+    assert.equal((await fetch(`${base}/api/hub/hook`, { method: 'POST', headers: { ...h, origin: 'https://evil.example', cookie: 'nx_at=tok-partner' }, body: '{"business":"Bistro"}' })).status, 403);
+    state.missions = [{ id: 'm-1', partner_summary: 'Signal: busy patio' }];
+    const r = await fetch(`${base}/api/hub/hook`, { method: 'POST', headers: { ...h, cookie: 'nx_at=tok-partner' }, body: '{"business":"Bistro","city":"Toronto"}' });
+    assert.equal(r.status, 200); assert.equal((await r.json()).hook, 'Bistro misses calls');
+    const again = await (await fetch(`${base}/api/hub/hook`, { method: 'POST', headers: { ...h, cookie: 'nx_at=tok-partner' }, body: '{"business":"Bistro","city":"Toronto"}' })).json();
+    assert.equal(again.cached, true); assert.equal(calls, 1);
+    const saved = state.calls.find((c) => c.table === 'partner_activity_log' && c.op === 'insert');
+    assert.equal(saved.payload.action, 'research_attached'); assert.match(saved.payload.notes, /misses calls/);
+  }, { findHook });
+});
