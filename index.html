@@ -935,6 +935,12 @@
   .inv-t{width:100%;border-collapse:collapse;margin:8px 0}.inv-t th{font-size:12px;color:var(--ink-3);text-align:start;font-weight:500;padding:4px}.inv-t td{padding:4px}
   .inv-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px}
   @media (max-width:860px){ .inv-grid{grid-template-columns:1fr} }
+  #mp-wrap .mp-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;justify-content:space-between;border:1px solid var(--panel-line);border-radius:12px;padding:12px 14px;margin:0 0 12px;background:#fff;position:sticky;top:96px;z-index:5}
+  #mp-wrap .mp-bar label{font-size:12.5px;color:var(--ink-3);font-weight:500;min-width:260px}
+  #mp-wrap .mp-bar select{display:block;width:100%;margin-top:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:14px;background:#fff}
+  #mp-wrap .mp-log{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:var(--ink-3)}
+  #mp-wrap .mp-log .btn{padding:6px 10px;font-size:12.5px}#mp-wrap .mp-log .btn.done{background:var(--accent);color:#fff;border-color:var(--accent)}
+  #mp-frame{display:block;width:100%;min-height:600px;border:1px solid var(--panel-line);border-radius:12px;background:#fff}
   body.shell #close .sec-head{display:none}
   body.shell #close details.sec-panel>summary{display:none}
   @media (max-width:860px){ #close-flow .cf-who{grid-template-columns:1fr} .quick-row{grid-template-columns:1fr!important} }
@@ -9272,7 +9278,56 @@ Object.assign(window.FA, {
   /* ---------- close a deal: business → plan → agreement → payment link ---------- */
   var closeBuilt = false, closeBiz = "", closeDone = {};
   var LEGAL = "https://crm.nexais.ca";
+  /* signed in: the "Close a deal" page IS Muse's Poorya Close Panel (served verbatim at /close-panel) —
+     the two must stay identical (Jarvis J-187/J-188). The hub only prefills the client and logs to the CRM. */
+  var mpBuilt = false;
+  function musePanelSetup(slug){
+    var sec = $("close"); if (!sec) return;
+    if (slug && bySlug(slug)) closeBiz = slug;
+    if (!mpBuilt) {
+      mpBuilt = true;
+      var panel = sec.querySelector("details.sec-panel");
+      Array.prototype.forEach.call(panel.children, function(c){ if (c.tagName !== "SUMMARY") c.hidden = true; });
+      var wrapper = document.createElement("div"); wrapper.id = "mp-wrap";
+      wrapper.innerHTML = "<div class=\"mp-bar\"></div><iframe id=\"mp-frame\" src=\"/close-panel\" title=\"Close panel\" loading=\"eager\"></iframe>";
+      panel.appendChild(wrapper);
+      var fr = $("mp-frame");
+      fr.addEventListener("load", function(){ mpPrefill(); mpFit(); try { new ResizeObserver(mpFit).observe(fr.contentDocument.body); } catch(e){ setInterval(mpFit, 1500); } });
+      sec.addEventListener("change", function(e){ if (e.target.id === "mp-biz") { closeBiz = e.target.value; mpPrefill(); renderMpBar(); } });
+      sec.addEventListener("click", function(e){
+        var t = e.target.closest("[data-mp]"); if (!t) return;
+        if (!closeBiz) { alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); return; }
+        var k = t.getAttribute("data-mp"), plan = mpVal("cPlan") || "";
+        var map = { agree: ["agreement", plan], pay: ["paylink-sent", plan], signed: ["notes", "Signed — free trial active" + (plan ? " (" + plan + ")" : "")], intake: ["notes", "Intake form received"] };
+        logSync(map[k][0], closeName(), map[k][1]);
+        closeDone[closeBiz] = closeDone[closeBiz] || {}; closeDone[closeBiz][k] = true; renderMpBar();
+      });
+    }
+    renderMpBar(); mpPrefill();
+  }
+  function mpDoc(){ var fr = $("mp-frame"); try { return fr && fr.contentDocument && fr.contentDocument.getElementById("cbiz") ? fr.contentDocument : null; } catch(e){ return null; } }
+  function mpVal(id){ var d = mpDoc(), el = d && d.getElementById(id); return el ? (el.value !== undefined && el.tagName !== "SPAN" && el.tagName !== "DIV" && el.tagName !== "B" ? el.value : el.textContent).trim() : ""; }
+  function mpFit(){ var fr = $("mp-frame"), d = mpDoc(); if (fr && d) fr.style.height = Math.max(600, d.documentElement.scrollHeight + 8) + "px"; }
+  function mpPrefill(){
+    var d = mpDoc(), b = bySlug(closeBiz); if (!d || !b) return;
+    var ask = askFor(b), contact = ask ? ask.split(/\s+[—-]\s+/)[0].trim() : "", ph = phoneOf(b), m = (ph.text || "").match(/\+?\(?\d[\d\s().-]{8,}\d/);
+    var set = function(id, v, force){ var el = d.getElementById(id); if (!el || (!force && el.value && el.dataset.hub !== "1")) return; el.value = v || ""; el.dataset.hub = "1"; el.dispatchEvent(new Event("input", { bubbles: true })); };
+    set("cbiz", b.name, true);
+    if (contact && !/not yet known/i.test(contact)) set("cname", contact, true);
+    if (m) set("cphone", m[0].trim(), true);
+    var em = emailOf(b); if (em) set("cemail", em, true);
+  }
+  function renderMpBar(){
+    var bar = document.querySelector("#mp-wrap .mp-bar"); if (!bar) return;
+    var opts = "<option value=\"\">" + esc(tt("— choose the business —", "— کسب‌وکار را انتخاب کنید —")) + "</option>" +
+      BIZ.map(function(b){ return "<option value=\"" + esc(b.slug) + "\"" + (b.slug === closeBiz ? " selected" : "") + ">" + esc(b.name) + "</option>"; }).join("");
+    var d = closeDone[closeBiz] || {}, btn = function(k, en, fa){ return "<button type=\"button\" class=\"btn " + (d[k] ? "done" : "ghost") + "\" data-mp=\"" + k + "\">" + (d[k] ? "✓ " : "") + esc(tt(en, fa)) + "</button>"; };
+    bar.innerHTML = "<label>" + esc(tt("Business (fills the panel's client form)", "کسب‌وکار (فرم مشتری پنل را پر می‌کند)")) + "<select id=\"mp-biz\">" + opts + "</select></label>" +
+      "<div class=\"mp-log\"><span>" + esc(tt("Log in the CRM:", "ثبت در CRM:")) + "</span>" + btn("agree", "Agreement sent", "قرارداد ارسال شد") + btn("pay", "Payment link sent", "لینک پرداخت ارسال شد") +
+      btn("signed", "Signed — trial active", "امضا شد — دورهٔ رایگان فعال") + btn("intake", "Intake received", "فرم اطلاعات رسید") + "</div>";
+  }
   function closeSetup(slug){
+    if (LINE_MODE) return musePanelSetup(slug);
     var sec = $("close"); if (!sec) return;
     if (slug && bySlug(slug)) closeBiz = slug;
     if (!closeBuilt) {

@@ -357,3 +357,12 @@ test('hook finder: origin + login enforced, result returned, cached, saved to th
     assert.equal(saved.payload.action, 'research_attached'); assert.match(saved.payload.notes, /misses calls/);
   }, { findHook });
 });
+
+test("close panel (Muse v22) is members-only and framable by the hub only", () => withServer(async (base) => {
+  const anon = await getAs(base, '/close-panel');
+  assert.equal(anon.status, 302);
+  const r = await getAs(base, '/close-panel', 'nx_at=tok-partner');
+  assert.equal(r.status, 200);
+  assert.equal(r.headers.get('x-frame-options'), 'SAMEORIGIN');
+  assert.match(await r.text(), /sec-pay/);
+}));

@@ -768,6 +768,13 @@ button{background:#18181b;color:#fff;border:0;border-radius:8px;padding:10px 16p
   app.get('/unsubscribe', (req, res, next) => unsubscribe(req, res, false).catch(next));
   app.post('/unsubscribe', (req, res, next) => unsubscribe(req, res, true).catch(next));
 
+  // Muse's Poorya Close Panel, served verbatim (Jarvis J-187/J-188: both panels must be identical).
+  // Shown inside the hub's "Close a deal" page in a same-origin frame; members only.
+  const CLOSE_PANEL = path.join(here, '..', 'close-panel', 'poorya-close-panel-v22.html');
+  app.get('/close-panel', requireMember, (req, res) => {
+    res.set({ 'X-Frame-Options': 'SAMEORIGIN', 'Cache-Control': 'no-store' });
+    return res.type('html').sendFile(CLOSE_PANEL);
+  });
   app.get('/calculator.html', (req, res) => res.type('html').sendFile(path.join(here, '..', 'calculator.html')));
 
   // ---- the hub itself (members only) ------------------------------------------------
