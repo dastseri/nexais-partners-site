@@ -711,6 +711,34 @@
   body.biz-mode #call-list .card{display:none!important}
   body.biz-mode #call-list .card.focus{display:block!important;border-color:var(--panel-line)}
 
+  /* industries */
+  .side-sub{margin:2px 0 6px}
+  .side-link.sub{font-size:13px;padding:5px 10px 5px 22px;color:var(--ink-3)}
+  [dir="rtl"] .side-link.sub{padding:5px 22px 5px 10px}
+  .side-link.sub.on{color:var(--ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+  .chips button,.chips a{border:1px solid var(--panel-line);background:#fff;color:var(--ink-2);font:inherit;font-size:12px;
+    padding:4px 10px;border-radius:20px;cursor:pointer;text-decoration:none}
+  .chips button:hover,.chips a:hover{border-color:var(--ink-3);color:var(--ink)}
+  .chips .on{background:var(--ink);border-color:var(--ink);color:#fff!important}
+  .chips.big a{font-size:13.5px;padding:7px 14px}
+  .chips.big a span{color:var(--ink-3);margin-inline-start:4px}
+  .chips.big a.on span{color:#d4d4d8}
+  #ind-head{padding-bottom:0}
+  #ind-head h2{font-size:24px;margin:22px 0 6px}
+  .ind-sum{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--ink-3);font-size:13px;margin:0}
+  .ind-sum b{color:var(--ink);font-weight:600}
+  body.ind-mode #call-list .card.ind-out{display:none!important}
+  body.ind-mode #call-list .sec-head{display:none!important}
+  body.ind-mode #call-list .group-head,body.biz-mode #ind-head{display:none!important}
+  body.shell #call-list details.sec-panel>summary{display:none}
+  .ind-table{width:100%;border-collapse:collapse;margin:0 0 26px;font-size:14px;border:1px solid var(--panel-line);border-radius:10px;overflow:hidden}
+  .ind-table th{font-weight:500;color:var(--ink-3);font-size:12px;text-align:start;padding:9px 14px;background:var(--bg-soft);border-bottom:1px solid var(--panel-line)}
+  .ind-table td{padding:11px 14px;border-bottom:1px solid var(--panel-line);color:var(--ink-2)}
+  .ind-table td:first-child{color:var(--ink);font-weight:500}
+  .ind-table tbody tr{cursor:pointer}
+  .ind-table tbody tr:hover td{background:var(--bg-soft)}
+
   /* responsive */
   @media (max-width:1180px){
     body.shell{padding-right:0}
@@ -8053,6 +8081,27 @@ Object.assign(window.FA, {
   };
   function stageLabel(k){ for (var i = 0; i < STAGES.length; i++) if (STAGES[i].k === k) return tt(STAGES[i].en, STAGES[i].fa); return ""; }
 
+  /* ---------- industries ---------- */
+  var INDS = [
+    { k: "restaurant", en: "Restaurants & catering", fa: "رستوران و پذیرایی" },
+    { k: "venue",      en: "Event & banquet halls",  fa: "تالار و سالن پذیرایی" },
+    { k: "golf",       en: "Golf & country clubs",   fa: "باشگاه گلف" },
+    { k: "winery",     en: "Wineries",               fa: "وینری و تاکستان" },
+    { k: "clinic",     en: "Clinics & spas",         fa: "کلینیک و اسپا" },
+    { k: "transport",  en: "Transport & logistics",  fa: "حمل‌ونقل و لجستیک" },
+    { k: "other",      en: "Other",                  fa: "سایر" }
+  ];
+  function indLabel(k){ for (var i = 0; i < INDS.length; i++) if (INDS[i].k === k) return tt(INDS[i].en, INDS[i].fa); return ""; }
+  function industryOf(slug, group){
+    if (group === "t") return "transport";
+    if (group === "3") return "clinic";
+    if (/golf|thornhill club/.test(slug)) return "golf";
+    if (/winer|vineyard|wines|wine co|estates|charmes|stratus|trius/.test(slug)) return "winery";
+    if (/parc|banquet hall|event centre/.test(slug)) return "venue";
+    if (group === "1" || group === "2") return "restaurant";
+    return "other";
+  }
+
   /* ---------- businesses, read from the call-list cards ---------- */
   var BIZ = Array.prototype.slice.call(document.querySelectorAll("#cards .card")).map(function(c){
     var h = c.querySelector("h4"), loc = c.querySelector(".card-top .loc");
@@ -8062,6 +8111,9 @@ Object.assign(window.FA, {
       loc: loc ? loc.textContent.trim() : "", group: c.getAttribute("data-group") || ""
     };
   });
+  BIZ.forEach(function(b){ b.ind = industryOf(b.slug, b.group); b.el.setAttribute("data-ind", b.ind); });
+  INDS = INDS.filter(function(x){ return BIZ.some(function(b){ return b.ind === x.k; }); });
+  function inInd(b){ return !cur.ind || b.ind === cur.ind; }
   function statusOf(b){ var s = b.el.querySelector(".status"); return s ? s.value : "Not called"; }
   function stageOf(b){ return STATUS_STAGE[statusOf(b)] || "sent"; }
   function bySlug(s){ for (var i = 0; i < BIZ.length; i++) if (BIZ[i].slug === s) return BIZ[i]; return null; }
@@ -8088,6 +8140,8 @@ Object.assign(window.FA, {
   var cl = $("call-list");
   cl.parentNode.insertBefore(today, cl);
   cl.parentNode.insertBefore(bizHead, cl);
+  var indHead = document.createElement("section"); indHead.id = "ind-head";
+  cl.parentNode.insertBefore(indHead, cl);
 
   /* every top-level block that a view can show */
   function blocks(){
@@ -8095,7 +8149,7 @@ Object.assign(window.FA, {
   }
 
   /* ---------- views ---------- */
-  var cur = { v: "today", biz: null };
+  var cur = { v: "today", biz: null, ind: null };
   function show(ids){
     blocks().forEach(function(s){
       if (ids.indexOf(s.id) >= 0) {
@@ -8105,11 +8159,17 @@ Object.assign(window.FA, {
     });
   }
   function go(v, slug, anchor){
-    cur.v = v; cur.biz = slug ? bySlug(slug) : null;
+    cur.v = v; cur.biz = v === "b" && slug ? bySlug(slug) : null;
+    if (v === "ind") cur.ind = slug || null;
+    if (v === "biz") cur.ind = null;
+    if (cur.biz) cur.ind = cur.biz.ind;
     body.classList.toggle("biz-mode", v === "b" && !!cur.biz);
+    body.classList.toggle("ind-mode", v === "ind" && !!cur.ind);
+    BIZ.forEach(function(b){ b.el.classList.toggle("ind-out", v === "ind" && b.ind !== cur.ind); });
     BIZ.forEach(function(b){ b.el.classList.toggle("focus", cur.biz === b); });
     if (v === "today") show(["today"]);
-    else if (v === "biz") show(["call-list"]);
+    else if (v === "biz") show(["ind-head", "call-list"]);
+    else if (v === "ind") show(["ind-head", "call-list"]);
     else if (v === "b" && cur.biz) {
       show(["biz-head", "call-list"]);
       var more = cur.biz.el.querySelector("details.card-more"); if (more) more.open = true;
@@ -8124,6 +8184,7 @@ Object.assign(window.FA, {
     var h = decodeURIComponent((location.hash || "").replace(/^#/, ""));
     if (!h || h === "top" || h === "today") return go("today");
     if (h === "biz") return go("biz");
+    if (h.indexOf("ind/") === 0) return go("ind", h.slice(4));
     if (h.indexOf("b/") === 0 && bySlug(h.slice(2))) return go("b", h.slice(2));
     var el = document.getElementById(h);
     if (!el) return go("today");
@@ -8142,8 +8203,15 @@ Object.assign(window.FA, {
       html += "<div class=\"side-group\"><p>" + esc(tt(g.g[0], g.g[1])) + "</p>";
       g.items.forEach(function(it){
         var on = cur.v === it.v || (it.v === "biz" && cur.v === "b");
-        html += "<a class=\"side-link" + (on ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) +
+        html += "<a class=\"side-link" + (on && !(it.v === "biz" && cur.ind) ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) +
           (it.count ? "<span class=\"n\">" + BIZ.length + "</span>" : "") + "</a>";
+        if (it.v === "biz") {
+          html += "<div class=\"side-sub\">" + INDS.map(function(x){
+            var n = BIZ.filter(function(b){ return b.ind === x.k; }).length;
+            var o = cur.ind === x.k && (cur.v === "ind" || cur.v === "b");
+            return "<a class=\"side-link sub" + (o ? " on" : "") + "\" href=\"#ind/" + x.k + "\">" + esc(tt(x.en, x.fa)) + "<span class=\"n\">" + n + "</span></a>";
+          }).join("") + "</div>";
+        }
       });
       html += "</div>";
     });
@@ -8177,10 +8245,12 @@ Object.assign(window.FA, {
   }
   function renderRail(){
     var log = get(LOG, []), last = log[log.length - 1];
-    var where = cur.v === "b" && cur.biz ? tt("Businesses", "کسب‌وکارها") : labelOf(cur.v);
+    var where = cur.v === "b" && cur.biz ? tt("Businesses", "کسب‌وکارها") + " · " + indLabel(cur.biz.ind)
+      : cur.v === "ind" && cur.ind ? tt("Businesses", "کسب‌وکارها") + " · " + indLabel(cur.ind) : labelOf(cur.v);
     var what;
     if (cur.v === "b" && cur.biz) what = esc(cur.biz.name) + " · " + esc(stageLabel(stageOf(cur.biz)));
     else if (cur.v === "today") { var nx = nextCalls()[0]; what = nx ? tt("Next: ", "بعدی: ") + esc(nx.name) : tt("All caught up", "همه‌چیز انجام شده"); }
+    else if (cur.v === "ind" && cur.ind) what = esc(indLabel(cur.ind)) + " · " + BIZ.filter(inInd).length;
     else what = esc(where);
     var html = "<p class=\"rail-h\">" + esc(tt("Where we are", "کجا هستیم")) + "</p>" +
       "<div class=\"now\"><p class=\"where\">" + esc(where) + "</p><p class=\"what\"><span class=\"pulse\"></span>" + what + "</p>" +
@@ -8188,10 +8258,13 @@ Object.assign(window.FA, {
         "<br><span style=\"color:var(--ink-3);font-size:12px\">" + esc(ago(last.at)) + "</span>"
         : esc(tt("Nothing logged yet on this device.", "هنوز چیزی در این دستگاه ثبت نشده."))) + "</p></div>";
 
-    html += "<p class=\"rail-h\">" + esc(tt("Timeline", "تایم‌لاین")) + "</p><ol class=\"stages\">";
+    html += "<p class=\"rail-h\">" + esc(tt("Timeline", "تایم‌لاین")) + (cur.ind ? " · " + esc(indLabel(cur.ind)) : "") + "</p>";
+    html += "<div class=\"chips\"><button type=\"button\" data-ind=\"\"" + (!cur.ind ? " class=\"on\"" : "") + ">" + esc(tt("All", "همه")) + "</button>" +
+      INDS.map(function(x){ return "<button type=\"button\" data-ind=\"" + x.k + "\"" + (cur.ind === x.k ? " class=\"on\"" : "") + ">" + esc(tt(x.en, x.fa)) + "</button>"; }).join("") + "</div>";
+    html += "<ol class=\"stages\">";
     var selStage = cur.biz ? stageOf(cur.biz) : null;
     STAGES.forEach(function(s){
-      var list = BIZ.filter(function(b){ return stageOf(b) === s.k; });
+      var list = BIZ.filter(function(b){ return stageOf(b) === s.k && inInd(b); });
       var isCur = selStage === s.k;
       var open = isCur || (cur.openStage === s.k);
       html += "<li class=\"stage" + (list.length ? " has" : "") + (isCur ? " cur" : "") + "\"><span class=\"dot\"></span>" +
@@ -8216,8 +8289,9 @@ Object.assign(window.FA, {
     rail.innerHTML = html;
   }
   rail.addEventListener("click", function(ev){
-    var t = ev.target.closest("[data-biz],[data-stage]"); if (!t) return;
+    var t = ev.target.closest("[data-biz],[data-stage],[data-ind]"); if (!t) return;
     if (t.hasAttribute("data-biz")) return nav("b/" + t.getAttribute("data-biz"));
+    if (t.hasAttribute("data-ind")) { var ik = t.getAttribute("data-ind"); return nav(ik ? "ind/" + ik : "biz"); }
     var k = t.getAttribute("data-stage");
     cur.openStage = cur.openStage === k ? null : k;
     renderRail();
@@ -8248,6 +8322,14 @@ Object.assign(window.FA, {
       return "<li data-biz=\"" + esc(b.slug) + "\"><div><div class=\"nm\">" + esc(b.name) + "</div><div class=\"meta\">" + esc(b.loc) + "</div></div>" +
         "<span class=\"tag\">" + esc(statusOf(b) === "Callback scheduled" ? tt("Callback", "تماس مجدد") : tt("Priority ", "اولویت ") + b.group.toUpperCase()) + "</span></li>";
     }).join("") + "</ul>" : "<p class=\"hint\">" + esc(tt("Everyone on the list has been contacted.", "با همهٔ لیست تماس گرفته شده.")) + "</p>";
+    html += "<p class=\"h3s\">" + esc(tt("By industry", "بر اساس حوزهٔ کاری")) + "</p><table class=\"ind-table\"><thead><tr><th>" +
+      esc(tt("Industry", "حوزه")) + "</th><th>" + esc(tt("Not called", "تماس نگرفته")) + "</th><th>" + esc(tt("In progress", "در جریان")) + "</th><th>" +
+      esc(tt("Demo", "دمو")) + "</th><th>" + esc(tt("Total", "کل")) + "</th></tr></thead><tbody>" +
+      INDS.map(function(x){
+        var L = BIZ.filter(function(b){ return b.ind === x.k; }), c = { sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
+        L.forEach(function(b){ c[stageOf(b)]++; });
+        return "<tr data-indrow=\"" + x.k + "\"><td>" + esc(tt(x.en, x.fa)) + "</td><td>" + c.sent + "</td><td>" + (c.contacted + c.followup) + "</td><td>" + c.demo + "</td><td>" + L.length + "</td></tr>";
+      }).join("") + "</tbody></table>";
     html += "<p class=\"hint\">" + esc(tt("Best time to call: Tuesday to Thursday, 2:00–4:00 PM.", "بهترین زمان تماس: سه‌شنبه تا پنجشنبه، ساعت ۲ تا ۴ بعدازظهر.")) + "</p></div>";
     today.innerHTML = html;
   }
@@ -8255,7 +8337,8 @@ Object.assign(window.FA, {
     return "<button type=\"button\" class=\"kpi\"" + (stage ? " data-stage=\"" + stage + "\"" : " data-go=\"my-activity\"") + "><b>" + n + "</b><span>" + esc(label) + "</span></button>";
   }
   today.addEventListener("click", function(ev){
-    var t = ev.target.closest("[data-biz],[data-stage],[data-go]"); if (!t) return;
+    var t = ev.target.closest("[data-biz],[data-stage],[data-go],[data-indrow]"); if (!t) return;
+    if (t.hasAttribute("data-indrow")) return nav("ind/" + t.getAttribute("data-indrow"));
     if (t.hasAttribute("data-biz")) return nav("b/" + t.getAttribute("data-biz"));
     if (t.hasAttribute("data-go")) return nav(t.getAttribute("data-go"));
     cur.openStage = t.getAttribute("data-stage"); renderRail();
@@ -8271,7 +8354,7 @@ Object.assign(window.FA, {
       var cls = st === "lost" ? (i === 0 ? "done" : "") : (i < idx ? "done" : i === idx ? "cur" : "");
       return "<li class=\"" + cls + "\">" + esc(stageLabel(k)) + "</li>";
     }).join("") + (st === "lost" ? "<li class=\"lost\">" + esc(stageLabel("lost")) + "</li>" : "");
-    bizHead.innerHTML = "<div class=\"wrap\"><button type=\"button\" class=\"biz-back\" data-go=\"biz\">← " + esc(tt("All businesses", "همهٔ کسب‌وکارها")) + "</button>" +
+    bizHead.innerHTML = "<div class=\"wrap\"><button type=\"button\" class=\"biz-back\" data-go=\"ind/" + b.ind + "\">← " + esc(indLabel(b.ind)) + "</button>" +
       "<h2>" + esc(b.name) + "</h2><p class=\"loc\">" + esc(b.loc) + "</p><ol class=\"steps\">" + steps + "</ol>" +
       "<div class=\"biz-actions\">" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"script\">" + esc(tt("Build call script", "ساخت اسکریپت تماس")) + "</button>" +
@@ -8288,14 +8371,30 @@ Object.assign(window.FA, {
     else nav("close");
   });
 
+  /* ---------- industry page header ---------- */
+  function renderIndHead(){
+    var chips = "<div class=\"chips big\"><a href=\"#biz\"" + (!cur.ind ? " class=\"on\"" : "") + ">" + esc(tt("All", "همه")) + " <span>" + BIZ.length + "</span></a>" +
+      INDS.map(function(x){
+        var n = BIZ.filter(function(b){ return b.ind === x.k; }).length;
+        return "<a href=\"#ind/" + x.k + "\"" + (cur.ind === x.k ? " class=\"on\"" : "") + ">" + esc(tt(x.en, x.fa)) + " <span>" + n + "</span></a>";
+      }).join("") + "</div>";
+    var title = cur.ind ? indLabel(cur.ind) : tt("All businesses", "همهٔ کسب‌وکارها");
+    var L = BIZ.filter(inInd), c = { sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
+    L.forEach(function(b){ c[stageOf(b)]++; });
+    var sum = STAGES.map(function(s){ return "<span><b>" + c[s.k] + "</b> " + esc(tt(s.en, s.fa)) + "</span>"; }).join("");
+    indHead.innerHTML = "<div class=\"wrap\"><p class=\"kicker\">" + esc(tt("Choose an industry", "حوزهٔ کاری را انتخاب کنید")) + "</p>" + chips +
+      "<h2>" + esc(title) + "</h2><p class=\"ind-sum\">" + sum + "</p></div>";
+  }
+
   /* ---------- top bar title ---------- */
   function renderTitle(){
     vt.innerHTML = cur.v === "b" && cur.biz
-      ? esc(tt("Businesses", "کسب‌وکارها")) + " <small>/ " + esc(cur.biz.name) + "</small>"
+      ? esc(tt("Businesses", "کسب‌وکارها")) + " <small>/ " + esc(indLabel(cur.biz.ind)) + " / " + esc(cur.biz.name) + "</small>"
+      : cur.v === "ind" && cur.ind ? esc(tt("Businesses", "کسب‌وکارها")) + " <small>/ " + esc(indLabel(cur.ind)) + "</small>"
       : esc(labelOf(cur.v));
   }
 
-  function renderAll(){ renderSide(); renderTitle(); renderRail(); renderToday(); renderBizHead(); }
+  function renderAll(){ renderSide(); renderTitle(); renderRail(); renderToday(); renderBizHead(); renderIndHead(); }
 
   /* keep everything live: outcomes, notes, actions, language */
   var tmr;
