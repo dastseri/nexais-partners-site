@@ -285,3 +285,15 @@ test('calls & SMS: origin enforced; RPCs run with the user token on the business
   const bad = await fetch(`${base}/api/calls/not-an-id`, { headers: { cookie: 'nx_at=tok-team' } });
   assert.equal(bad.status, 400);
 }));
+
+test('AVA calls: only the owner may flip the switch; origin enforced', () => withServer(async (base) => {
+  const h = { origin: ORIGIN, 'content-type': 'application/json' };
+  const team = await fetch(`${base}/api/ava/switch`, { method: 'PUT', headers: { ...h, cookie: 'nx_at=tok-team' }, body: '{"enabled":true}' });
+  assert.equal(team.status, 403);
+  const partner = await fetch(`${base}/api/ava/switch`, { method: 'PUT', headers: { ...h, cookie: 'nx_at=tok-partner' }, body: '{"enabled":true}' });
+  assert.equal(partner.status, 403);
+  const cross = await fetch(`${base}/api/ava/call`, { method: 'POST', headers: { ...h, origin: 'https://evil.example', cookie: 'nx_at=tok-team' }, body: '{}' });
+  assert.equal(cross.status, 403);
+  const bad = await fetch(`${base}/api/ava/takeover/nope`, { method: 'POST', headers: { ...h, cookie: 'nx_at=tok-team' }, body: '{}' });
+  assert.equal(bad.status, 400);
+}));

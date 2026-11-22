@@ -812,6 +812,17 @@
   .bubble p{margin:0} .bubble small{display:block;font-size:11px;opacity:.7;margin-top:4px}
   .bubble.out{align-self:flex-end;background:var(--ink);color:#fff}
   .bubble.in{align-self:flex-start;background:var(--bg-soft);color:var(--ink);border:1px solid var(--panel-line)}
+  .ava-switch{display:flex;align-items:center;gap:10px;border:1px solid var(--panel-line);border-radius:10px;padding:10px 14px;margin:0 0 12px;background:#fff}
+  .ava-switch .dot{width:9px;height:9px;border-radius:50%;background:#b42318}
+  .ava-switch.on .dot{background:var(--accent)}
+  .ava-switch b{font-size:14px;font-weight:600}
+  .ava-switch small{color:var(--ink-3);font-size:12px;margin-inline-start:auto}
+  .ava-switch .btn{margin-inline-start:auto;padding:6px 12px;font-size:12.5px}
+  .ava-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:8px 0}
+  .ava-grid label{font-size:12px;color:var(--ink-3);font-weight:500}
+  .ava-grid input,.ava-grid select,.cc-l input{display:block;width:100%;margin-top:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 9px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink)}
+  .ava-more summary{cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink-2);margin:6px 0}
+  @media (max-width:860px){ .ava-grid{grid-template-columns:1fr 1fr} }
   .biz-tabs{margin:18px 0 0}
   body.biz-tab-other #call-list{display:none!important}
   .tab-panel{padding:16px 0 8px}
@@ -9429,10 +9440,11 @@ Object.assign(window.FA, {
   var bizTab = "overview", bizTabFor = null, scriptScenario = null;
   function bizTabs(b){
     if (bizTabFor !== b) { bizTab = "overview"; bizTabFor = b; scriptScenario = null; }
-    var T = [["overview", tt("Overview", "خلاصه")], ["script", tt("Call script", "اسکریپت تماس")], ["proposal", tt("Proposal", "پروپوزال")]];
+    var T = [["overview", tt("Overview", "خلاصه")], ["script", tt("Call script", "اسکریپت تماس")], ["proposal", tt("Proposal", "پروپوزال")], ["ava", tt("AVA call", "تماس اوا")]];
     var html = "<div class=\"tabs biz-tabs\">" + T.map(function(t){ return "<a href=\"#\" data-btab=\"" + t[0] + "\"" + (bizTab === t[0] ? " class=\"on\"" : "") + ">" + esc(t[1]) + "</a>"; }).join("") + "</div>";
     if (bizTab === "script") html += scriptPanel(b);
     if (bizTab === "proposal") html += proposalPanel(b);
+    if (bizTab === "ava") { html += "<div class=\"tab-panel\" id=\"ava-panel\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>"; setTimeout(function(){ loadAva(b); }, 0); }
     return html;
   }
   function csType(b){
@@ -9501,6 +9513,93 @@ Object.assign(window.FA, {
       "\n\nYou can also test AVA yourself any time — call or text +1 (437) 529-0400.\n\nHappy to answer any questions.\n\n" + (fullName() || "") + "\nNexAIS · info@nexais.ca";
     return "mailto:" + encodeURIComponent(emailOf(b)) + "?subject=" + encodeURIComponent("Your AVA proposal — " + b.name) + "&body=" + encodeURIComponent(body);
   }
+  /* ---------- AVA follow-up call (consent first; the owner's switch) ---------- */
+  var AVA_PURPOSE = [["follow_up_proposal", "Follow up on the proposal", "پیگیری پروپوزال"], ["book_demo", "Book a demo time", "هماهنگی زمان دمو"],
+    ["trial_reminder", "Free-trial reminder", "یادآوری دورهٔ رایگان"], ["requested_callback", "They asked us to call back", "خودشان خواستند تماس بگیریم"]];
+  var AVA_ST = { scheduled: ["Planned", "برنامه‌ریزی شد"], calling: ["AVA is on the call now", "اوا الان در تماس است"], done: ["Finished", "تمام شد"],
+    failed: ["Failed", "ناموفق"], blocked: ["Blocked", "مسدود"], cancelled: ["Cancelled", "لغو شد"] };
+  var AVA_OUT = { interested: ["Interested", "علاقه‌مند"], confirmed: ["Confirmed", "تأیید کرد"], rescheduled: ["Wants another time", "زمان دیگری می‌خواهد"],
+    callback_requested: ["Asked for a call back", "تماس مجدد خواست"], not_interested: ["Not interested", "علاقه ندارد"], no_answer: ["No answer", "جواب نداد"],
+    voicemail: ["Left a voicemail", "پیام صوتی گذاشت"], other: ["Other", "سایر"] };
+  var avaTimer = null, avaSwitch = null, avaMsg = "", avaFor = null;
+  function loadAva(b){
+    clearTimeout(avaTimer);
+    if (avaFor !== b) { avaFor = b; avaMsg = ""; }
+    var box = $("ava-panel"); if (!box || cur.biz !== b || bizTab !== "ava") return;
+    if (!LINE_MODE) { box.innerHTML = "<div class=\"empty-box\"><p>" + esc(tt("AVA calls work after signing in with your NexAIS account.", "تماس اوا بعد از ورود با حساب NexAIS کار می‌کند.")) + "</p></div>"; return; }
+    Promise.all([api("GET", "/api/ava/switch"), api("GET", "/api/ava/overview?business=" + encodeURIComponent(b.name)).catch(function(e){ return { error: e.message }; })])
+      .then(function(r){ avaSwitch = r[0]; renderAva(b, r[1]); }).catch(function(e){ box.innerHTML = "<p class=\"hint\">" + esc(e.message) + "</p>"; });
+  }
+  function renderAva(b, d){
+    var box = $("ava-panel"); if (!box) return;
+    var on = avaSwitch && avaSwitch.enabled, html = "";
+    html += "<div class=\"ava-switch" + (on ? " on" : "") + "\"><span class=\"dot\"></span><b>" + esc(on ? tt("AVA calls are ON", "تماس اوا روشن است") : tt("AVA calls are OFF", "تماس اوا خاموش است")) + "</b>" +
+      (avaSwitch && avaSwitch.can_toggle ? "<button type=\"button\" class=\"btn ghost\" data-ava=\"toggle\">" + esc(on ? tt("Turn off", "خاموش کن") : tt("Turn on", "روشن کن")) + "</button>" :
+        "<small>" + esc(tt("Only the owner can turn this on or off.", "فقط مدیر می‌تواند روشن یا خاموشش کند.")) + "</small>") + "</div>";
+    if (d && d.error) { box.innerHTML = html + "<p class=\"hint\">" + esc(d.error) + "</p>"; return; }
+    var consents = d.consents || [], calls = d.calls || [];
+    html += "<p class=\"cf-p\">" + esc(tt("AVA only calls people who agreed to it (Canadian law — CRTC). Record their consent first, then plan the call. AVA says she is an AI assistant and that the call is recorded; you can take the call over at any moment.",
+      "اوا فقط با کسانی تماس می‌گیرد که قبول کرده‌اند (قانون کانادا — CRTC). اول رضایتشان را ثبت کنید، بعد تماس را برنامه‌ریزی کنید. اوا می‌گوید دستیار هوش مصنوعی است و تماس ضبط می‌شود؛ هر لحظه می‌توانید تماس را خودتان بگیرید.")) + "</p>";
+    // consent
+    var ph = cleanNumber(phoneOf(b).text), ask = askFor(b), person = ask ? ask.split(/\s+[—-]\s+/)[0] : "";
+    html += "<div class=\"prop-box\"><p class=\"h3s\">1 · " + esc(tt("Their consent", "رضایت آن‌ها")) + "</p>";
+    if (consents.length) html += "<ul class=\"recent\">" + consents.map(function(c){ return "<li><time>" + esc(new Date(c.given_at).toLocaleString()) + " · " + esc(c.method.replace("_", " ")) + "</time>" + esc(c.person) + " — " + esc(c.phone) + " ✓</li>"; }).join("") + "</ul>";
+    html += "<details" + (consents.length ? "" : " open") + " class=\"ava-more\"><summary>" + esc(consents.length ? tt("Add another consent", "ثبت رضایت دیگر") : tt("Record consent", "ثبت رضایت")) + "</summary>" +
+      "<div class=\"ava-grid\"><label>" + esc(tt("Who agreed", "چه کسی قبول کرد")) + "<input id=\"av-person\" value=\"" + esc(/not yet/i.test(person) ? "" : person) + "\"></label>" +
+      "<label>" + esc(tt("Number AVA may call", "شماره‌ای که اوا می‌تواند تماس بگیرد")) + "<input id=\"av-phone\" type=\"tel\" value=\"" + esc(ph) + "\"></label>" +
+      "<label>" + esc(tt("How they agreed", "چطور قبول کردند")) + "<select id=\"av-method\"><option value=\"phone_call\">" + esc(tt("On a phone call", "در تماس تلفنی")) + "</option><option value=\"sms\">SMS</option><option value=\"email\">Email</option><option value=\"in_person\">" + esc(tt("In person", "حضوری")) + "</option><option value=\"web_form\">" + esc(tt("Web form", "فرم وب")) + "</option></select></label>" +
+      "<label>" + esc(tt("When", "کی")) + "<input id=\"av-when\" type=\"datetime-local\" value=\"" + esc(localNow()) + "\"></label></div>" +
+      "<label class=\"sms-consent\"><input type=\"checkbox\" id=\"av-ok\"> " + esc(tt("They clearly agreed that AVA, an AI assistant, may call this number.", "صریحاً قبول کردند که اوا، دستیار هوش مصنوعی، با این شماره تماس بگیرد.")) + "</label>" +
+      "<button type=\"button\" class=\"btn ghost\" data-ava=\"consent\" style=\"margin-top:8px\">" + esc(tt("Save consent", "ثبت رضایت")) + "</button></details></div>";
+    // plan
+    html += "<div class=\"prop-box\"><p class=\"h3s\">2 · " + esc(tt("Plan AVA's call", "برنامه‌ریزی تماس اوا")) + "</p>";
+    if (!on) html += "<p class=\"hint\">" + esc(tt("AVA calls are off right now.", "تماس اوا الان خاموش است.")) + "</p>";
+    else if (!consents.length) html += "<p class=\"hint\">" + esc(tt("Record their consent first.", "اول رضایت را ثبت کنید.")) + "</p>";
+    else html += "<div class=\"ava-grid\"><label>" + esc(tt("Number", "شماره")) + "<select id=\"ac-phone\">" + consents.map(function(c){ return "<option>" + esc(c.phone) + "</option>"; }).join("") + "</select></label>" +
+      "<label>" + esc(tt("Purpose", "هدف")) + "<select id=\"ac-purpose\">" + AVA_PURPOSE.map(function(x){ return "<option value=\"" + x[0] + "\">" + esc(tt(x[1], x[2])) + "</option>"; }).join("") + "</select></label>" +
+      "<label>" + esc(tt("When", "کی")) + "<input id=\"ac-when\" type=\"datetime-local\" value=\"" + esc(localNow()) + "\"></label>" +
+      "<label>" + esc(tt("Language", "زبان")) + "<select id=\"ac-lang\"><option value=\"en\">English</option><option value=\"fa\">فارسی</option></select></label></div>" +
+      "<label class=\"cc-l\">" + esc(tt("Anything AVA should know (optional)", "چیزی که اوا باید بداند (اختیاری)")) + "<input id=\"ac-note\" type=\"text\"></label>" +
+      "<button type=\"button\" class=\"btn primary\" data-ava=\"call\" style=\"margin-top:8px\">🤖 " + esc(tt("Schedule AVA's call", "برنامه‌ریزی تماس اوا")) + "</button>" +
+      "<p class=\"hint\">" + esc(tt("AVA calls only 9:00–20:30 Toronto time; outside those hours she waits.", "اوا فقط ۹ صبح تا ۸:۳۰ شب به وقت تورنتو تماس می‌گیرد؛ خارج از این ساعت صبر می‌کند.")) + "</p>";
+    html += "<p class=\"hint\" id=\"ava-msg\">" + esc(avaMsg) + "</p></div>";
+    // calls
+    if (calls.length) {
+      html += "<p class=\"h3s\">" + esc(tt("AVA's calls with this business", "تماس‌های اوا با این کسب‌وکار")) + "</p><ul class=\"next-list\">" + calls.map(function(c){
+        var st = AVA_ST[c.status] || [c.status, c.status], out = c.outcome && AVA_OUT[c.outcome];
+        var p = AVA_PURPOSE.filter(function(x){ return x[0] === c.purpose; })[0];
+        return "<li style=\"cursor:default;align-items:flex-start\"><div><div class=\"nm\">" + esc(p ? tt(p[1], p[2]) : c.purpose) + " · " + esc(c.phone) + "</div><div class=\"meta\">" +
+          esc(new Date(c.scheduled_for).toLocaleString()) + (c.summary ? " — " + esc(c.summary) : "") + (c.error && c.status !== "done" ? " — " + esc(c.error) : "") + "</div></div>" +
+          "<div class=\"fl-r\"><span class=\"tag\">" + esc(tt(st[0], st[1]) + (out ? " · " + tt(out[0], out[1]) : "")) + "</span>" +
+          (c.status === "calling" && !c.takeover ? "<button type=\"button\" class=\"btn primary\" data-ava=\"takeover\" data-id=\"" + esc(c.id) + "\">" + esc(tt("Take over (ring me)", "تماس را بگیرم")) + "</button>" : "") +
+          (c.takeover ? "<span class=\"tag\">" + esc(tt("Take-over: ", "گرفتن تماس: ") + c.takeover) + "</span>" : "") + "</div></li>";
+      }).join("") + "</ul>";
+      if (calls.some(function(c){ return c.status === "scheduled" || c.status === "calling"; })) avaTimer = setTimeout(function(){ loadAva(b); }, 5000);
+    }
+    box.innerHTML = html;
+  }
+  function localNow(){ var d = new Date(Date.now() - new Date().getTimezoneOffset() * 60000); return d.toISOString().slice(0, 16); }
+  bizHead.addEventListener("click", function(e){
+    var t = e.target.closest("[data-ava]"); if (!t || !cur.biz) return;
+    var b = cur.biz, k = t.getAttribute("data-ava"), msg = $("ava-msg");
+    var say = function(m){ avaMsg = m; if (msg) msg.textContent = m; else alert(m); };
+    if (k === "toggle") { api("PUT", "/api/ava/switch", { enabled: !(avaSwitch && avaSwitch.enabled) }).then(function(){ loadAva(b); }).catch(function(err){ say(err.message); }); return; }
+    if (k === "consent") {
+      if (!$("av-ok").checked) { say(tt("Tick the box to confirm they clearly agreed.", "تیک را بزنید که صریحاً قبول کرده‌اند.")); return; }
+      var when = $("av-when").value ? new Date($("av-when").value).toISOString() : null;
+      api("POST", "/api/ava/consent", { business: b.name, person: $("av-person").value, phone: $("av-phone").value, method: $("av-method").value, given_at: when })
+        .then(function(){ loadAva(b); }).catch(function(err){ say(err.message); });
+      return;
+    }
+    if (k === "call") {
+      t.disabled = true; say(tt("Planning…", "در حال برنامه‌ریزی…"));
+      var w = $("ac-when").value ? new Date($("ac-when").value).toISOString() : null;
+      api("POST", "/api/ava/call", { business: b.name, phone: $("ac-phone").value, purpose: $("ac-purpose").value, when: w, language: $("ac-lang").value, note: $("ac-note").value })
+        .then(function(){ avaMsg = tt("Planned ✓ — AVA calls at the chosen time.", "برنامه‌ریزی شد ✓ — اوا در زمان انتخاب‌شده تماس می‌گیرد."); loadAva(b); }).catch(function(err){ t.disabled = false; say(err.message); });
+      return;
+    }
+    if (k === "takeover") { t.disabled = true; api("POST", "/api/ava/takeover/" + t.getAttribute("data-id"), {}).then(function(d){ say(tt("AVA is handing the call to ", "اوا تماس را به ") + (d.to || "") + tt("", " وصل می‌کند")); loadAva(b); }).catch(function(err){ t.disabled = false; say(err.message); }); }
+  });
   function printText(title, text){
     var fr = document.createElement("iframe"); fr.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0"; document.body.appendChild(fr);
     var d = fr.contentWindow.document;

@@ -554,6 +554,64 @@ export function createApp(options) {
     } catch (err) { return next(err); }
   });
 
+  // ---- AVA follow-up calls (consent required; the owner's on/off switch lives in the CRM) ----
+  app.get('/api/ava/switch', requireMember, async (req, res, next) => {
+    try {
+      const { data, error } = await req.session.db.rpc('partner_ava_enabled');
+      if (error) return dbError(res, error);
+      return res.set('Cache-Control', 'no-store').json({ enabled: data === true, can_toggle: req.member.role === 'admin' });
+    } catch (err) { return next(err); }
+  });
+  app.put('/api/ava/switch', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      if (req.member.role !== 'admin') return res.status(403).json({ error: 'Only the owner can turn AVA calls on or off' });
+      const { data, error } = await req.session.db.rpc('partner_set_ava_enabled', { p_on: req.body?.enabled === true });
+      if (error) return dbError(res, error);
+      return res.json({ enabled: data === true });
+    } catch (err) { return next(err); }
+  });
+  app.get('/api/ava/overview', requireMember, async (req, res, next) => {
+    try {
+      const m = await missionFor(req, req.query.business);
+      if (m.error) return res.status(m.status).json({ error: m.error });
+      const { data, error } = await req.session.db.rpc('partner_ava_overview', { p_mission: m.id });
+      if (error) return dbError(res, error);
+      return res.set('Cache-Control', 'no-store').json(data || {});
+    } catch (err) { return next(err); }
+  });
+  app.post('/api/ava/consent', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      const b = req.body || {};
+      const m = await missionFor(req, b.business);
+      if (m.error) return res.status(m.status).json({ error: m.error });
+      const { data, error } = await req.session.db.rpc('partner_record_ava_consent', {
+        p_mission: m.id, p_phone: String(b.phone || ''), p_person: String(b.person || ''), p_method: String(b.method || ''),
+        p_given_at: b.given_at || null, p_note: String(b.note || '') });
+      if (error) return dbError(res, error);
+      return res.status(201).json({ id: data });
+    } catch (err) { return next(err); }
+  });
+  app.post('/api/ava/call', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      const b = req.body || {};
+      const m = await missionFor(req, b.business);
+      if (m.error) return res.status(m.status).json({ error: m.error });
+      const { data, error } = await req.session.db.rpc('partner_request_ava_call', {
+        p_mission: m.id, p_phone: String(b.phone || ''), p_purpose: String(b.purpose || ''), p_note: String(b.note || ''),
+        p_when: b.when || null, p_language: String(b.language || 'en') });
+      if (error) return dbError(res, error);
+      return res.status(201).json({ call: data });
+    } catch (err) { return next(err); }
+  });
+  app.post('/api/ava/takeover/:id', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      if (!/^[0-9a-f-]{36}$/i.test(req.params.id)) return res.status(400).json({ error: 'Bad id' });
+      const { data, error } = await req.session.db.rpc('partner_ava_takeover', { p_call: req.params.id });
+      if (error) return dbError(res, error);
+      return res.json(data || { ok: true });
+    } catch (err) { return next(err); }
+  });
+
   // My earnings: commissions the CRM lets this person see (a partner sees only their own).
   app.get('/api/me/earnings', requireMember, async (req, res, next) => {
     try {
