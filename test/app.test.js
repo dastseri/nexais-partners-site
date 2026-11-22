@@ -274,3 +274,14 @@ test('earnings: signed-in members read commissions with their own token', () => 
   assert.ok(state.calls.some((c) => c.table === 'commissions' && c.user === 'u-partner'));
   assert.equal((await fetch(`${base}/api/me/earnings`)).status, 401);
 }));
+
+test('calls & SMS: origin enforced; RPCs run with the user token on the business mission', () => withServer(async (base, state) => {
+  state.missions = [{ id: 'm-1', business_name: 'Sassafraz' }];
+  const h = { cookie: 'nx_at=tok-team', origin: ORIGIN, 'content-type': 'application/json' };
+  const cross = await fetch(`${base}/api/sms/send`, { method: 'POST', headers: { ...h, origin: 'https://evil.example' }, body: '{}' });
+  assert.equal(cross.status, 403);
+  const anon = await fetch(`${base}/api/calls/start`, { method: 'POST', headers: { origin: ORIGIN, 'content-type': 'application/json' }, body: '{}' });
+  assert.equal(anon.status, 401);
+  const bad = await fetch(`${base}/api/calls/not-an-id`, { headers: { cookie: 'nx_at=tok-team' } });
+  assert.equal(bad.status, 400);
+}));

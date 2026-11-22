@@ -484,6 +484,76 @@ export function createApp(options) {
     } catch (err) { return next(err); }
   });
 
+  // ---- calls & SMS from the company's own AVA line (checks run in the CRM: partner_* functions) ----
+  async function missionFor(req, name) {
+    const prefix = dedupePrefix(name);
+    if (!prefix) return { error: 'Business name is required', status: 400 };
+    const db = req.session.db;
+    const { data: found, error } = await db.from('partner_missions').select('id')
+      .eq('company_id', companyId).like('dedupe_key', `${prefix}|%`).not('status', 'in', HUB_OPEN).limit(1);
+    if (error) return { error: error.message, status: 400 };
+    if (found?.[0]?.id) return { id: found[0].id };
+    if (req.member.role === 'partner') return { error: 'This business is not on your list yet', status: 404 };
+    const { data: created, error: cErr } = await db.from('partner_missions')
+      .insert({ company_id: companyId, origin: 'system_initiated', status: 'approved', business_name: String(name).trim().slice(0, 200) }).select('id').single();
+    if (cErr) return { error: cErr.message, status: 400 };
+    return { id: created.id };
+  }
+  const dbError = (res, error) => res.status(/42501/.test(error.code || '') ? 403 : 400).json({ error: String(error.message || 'Refused').slice(0, 200) });
+
+  app.post('/api/sms/send', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      const b = req.body || {};
+      const m = await missionFor(req, b.business);
+      if (m.error) return res.status(m.status).json({ error: m.error });
+      const { data, error } = await req.session.db.rpc('partner_send_sms', { p_mission: m.id, p_to: String(b.to || ''), p_body: String(b.body || ''), p_consent: b.consent === true });
+      if (error) return dbError(res, error);
+      return res.status(201).json({ sms: data });
+    } catch (err) { return next(err); }
+  });
+  app.get('/api/sms/thread', requireMember, async (req, res, next) => {
+    try {
+      const m = await missionFor(req, req.query.business);
+      if (m.error) return res.status(m.status).json({ error: m.error });
+      const { data, error } = await req.session.db.rpc('partner_sms_thread', { p_mission: m.id, p_to: String(req.query.to || '') });
+      if (error) return dbError(res, error);
+      return res.set('Cache-Control', 'no-store').json({ messages: data || [] });
+    } catch (err) { return next(err); }
+  });
+  app.get('/api/me/phone', requireMember, async (req, res, next) => {
+    try {
+      const { data } = await req.session.db.from('partner_user_phones').select('phone').maybeSingle();
+      return res.set('Cache-Control', 'no-store').json({ phone: data?.phone || null });
+    } catch (err) { return next(err); }
+  });
+  app.put('/api/me/phone', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      const { data, error } = await req.session.db.rpc('partner_set_my_phone', { p_phone: String(req.body?.phone || '') });
+      if (error) return dbError(res, error);
+      return res.json({ phone: data });
+    } catch (err) { return next(err); }
+  });
+  app.post('/api/calls/start', requireMember, sameOrigin, async (req, res, next) => {
+    try {
+      const b = req.body || {};
+      const m = await missionFor(req, b.business);
+      if (m.error) return res.status(m.status).json({ error: m.error });
+      const { data, error } = await req.session.db.rpc('partner_start_call', { p_mission: m.id, p_to: String(b.to || '') });
+      if (error) return dbError(res, error);
+      return res.status(201).json({ call: data });
+    } catch (err) { return next(err); }
+  });
+  app.get('/api/calls/:id', requireMember, async (req, res, next) => {
+    try {
+      if (!/^[0-9a-f-]{36}$/i.test(req.params.id)) return res.status(400).json({ error: 'Bad id' });
+      const { data, error } = await req.session.db.from('partner_click_calls')
+        .select('id, status, error, duration_sec, created_at, answered_at, ended_at').eq('id', req.params.id).maybeSingle();
+      if (error) return dbError(res, error);
+      if (!data) return res.status(404).json({ error: 'Not found' });
+      return res.set('Cache-Control', 'no-store').json({ call: data });
+    } catch (err) { return next(err); }
+  });
+
   // My earnings: commissions the CRM lets this person see (a partner sees only their own).
   app.get('/api/me/earnings', requireMember, async (req, res, next) => {
     try {

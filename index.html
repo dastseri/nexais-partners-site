@@ -796,6 +796,22 @@
     body.shell{padding-bottom:70px}
     body.shell .topbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
   }
+  .line-box{margin:0 0 14px}
+  .line-box .cc-tel{display:block;margin:0 0 10px}
+  .call-btn{font-size:15px;padding:12px 20px}
+  .line-note{font-size:12.5px;color:var(--ink-3);margin:8px 0 0}
+  .line-note a{color:var(--ink-2)}
+  .call-status{font-size:14px;font-weight:600;color:var(--ink);margin:10px 0 0;min-height:20px}
+  .call-status span{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ink-3);margin-inline-end:8px;vertical-align:middle}
+  .call-status .dot-connected{background:var(--accent)} .call-status .dot-ringing_you,.call-status .dot-connecting{background:#c27c0e;animation:pl 1.4s infinite}
+  .my-phone{border:1px dashed var(--panel-line);border-radius:10px;padding:12px;margin-top:6px}
+  .my-phone p{font-size:13px;color:var(--ink-2);margin:0 0 8px}
+  .my-phone input{border:1px solid var(--panel-line);border-radius:8px;padding:9px 10px;font:inherit;font-size:14px;margin-inline-end:8px;width:200px}
+  .sms-thread{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto;border:1px solid var(--panel-line);border-radius:12px;padding:12px;background:#fff}
+  .bubble{max-width:78%;padding:9px 12px;border-radius:12px;font-size:13.5px;line-height:1.45;direction:ltr;text-align:left}
+  .bubble p{margin:0} .bubble small{display:block;font-size:11px;opacity:.7;margin-top:4px}
+  .bubble.out{align-self:flex-end;background:var(--ink);color:#fff}
+  .bubble.in{align-self:flex-start;background:var(--bg-soft);color:var(--ink);border:1px solid var(--panel-line)}
   .pick-layout{display:grid;grid-template-columns:290px 1fr;gap:16px;align-items:start}
   .pick{border:1px solid var(--panel-line);border-radius:12px;background:#fff;padding:10px;position:sticky;top:110px}
   .pick-q{width:100%;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:13.5px}
@@ -8796,9 +8812,10 @@ Object.assign(window.FA, {
       .sort(function(a, b){ return (a.group > b.group) - (a.group < b.group); });
     return mode === "follow" ? f : fresh;
   }
-  var callPin = null;
+  var callPin = null, callSel = null;
   function callStart(mode){
-    if (mode && mode.indexOf("b/") === 0 && bySlug(mode.slice(2))) { callPin = bySlug(mode.slice(2)); }
+    callSel = null;
+    if (mode && mode.indexOf("b/") === 0 && bySlug(mode.slice(2))) { callPin = bySlug(mode.slice(2)); pickFilter.call = "all"; }
     else if (mode === "new" || mode === "follow" || mode === "all") pickFilter.call = mode;
     else pickFilter.call = followList().length ? "follow" : "new";
     callI = 0; renderCall();
@@ -8807,7 +8824,9 @@ Object.assign(window.FA, {
     var html = phoneHead("call");
     if (!PERM.can_call) { taskSec.innerHTML = html + permNote(tt("Calling", "تماس")) + "</div>"; return; }
     callQ = pickList("call"); if (callI >= callQ.length) callI = Math.max(0, callQ.length - 1);
-    if (callPin) { var pi = callQ.indexOf(callPin); if (pi < 0) { callQ.unshift(callPin); pi = 0; } callI = pi; callPin = null; }
+    if (callPin) { callSel = callPin; callPin = null; }
+    if (callSel) { var pi = callQ.indexOf(callSel); if (pi < 0) { callQ.unshift(callSel); pi = 0; } callI = pi; }
+    callSel = callQ[callI] || null;
     html += "<div class=\"pick-layout\">" + pickHtml("call", callQ[callI]) + "<div class=\"pick-main\">";
     var b = callQ[callI];
     if (!b) {
@@ -8819,7 +8838,7 @@ Object.assign(window.FA, {
     var OUT = ["Reached decision-maker", "Gatekeeper", "Voicemail left", "Callback scheduled", "Demo booked", "Not interested"];
     html += "<div class=\"call-card\"><p class=\"cc-pos\">" + (callI + 1) + " / " + callQ.length + " · " + esc(indLabel(b.ind)) + "</p>" +
       "<h3>" + esc(b.name) + "</h3><p class=\"cc-loc\">" + esc(b.loc) + (ask ? " · " + esc(tt("Ask for: ", "بخواهید: ")) + esc(ask) : "") + "</p>" +
-      (ph.href ? "<a class=\"cc-tel\" href=\"" + esc(ph.href) + "\">" + esc(ph.text) + "</a>" : "<p class=\"cc-loc\">" + esc(tt("No phone on file", "تلفن ثبت نشده")) + "</p>") +
+      (ph.href ? (LINE_MODE ? lineCallBox(b, ph) : "<a class=\"cc-tel\" href=\"" + esc(ph.href) + "\">" + esc(ph.text) + "</a>") : "<p class=\"cc-loc\">" + esc(tt("No phone on file", "تلفن ثبت نشده")) + "</p>") +
       (hook ? "<p class=\"cc-hook\">" + esc(hook.textContent.trim()) + "</p>" : "") +
       (open ? "<details class=\"cc-open\"><summary>" + esc(tt("Opening line", "جملهٔ شروع")) + "</summary><p>" + esc(open.textContent.trim()) + "</p></details>" : "") +
       "<p class=\"cc-l\">" + esc(tt("Result", "نتیجه")) + "</p><div class=\"cc-out\">" + OUT.map(function(o){
@@ -8832,7 +8851,73 @@ Object.assign(window.FA, {
       "<button type=\"button\" class=\"btn primary\" data-nav=\"next\"" + (callI < callQ.length - 1 ? "" : " disabled") + ">" + esc(tt("Next →", "بعدی ←")) + "</button></div></div></div></div></div>";
     taskSec.innerHTML = html; renderQuickComm();
   }
-  /* ---------- calls & SMS ---------- */
+  /* ---------- calls & sms ---------- */
+  var LINE_MODE = !!window.NEXAIS_SESSION, AVA_LINE = "437-529-0400";
+  var myPhone = null, activeCall = null, callTimer = null;
+  if (LINE_MODE) fetch("/api/me/phone", { credentials: "same-origin", cache: "no-store" }).then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){ myPhone = d && d.phone || ""; if (cur.v === "call") renderCall(); }).catch(function(){ myPhone = ""; });
+  function api(method, url, body){
+    return fetch(url, { method: method, credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+      .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){ if (!r.ok) throw new Error(j.error || ("Error " + r.status)); return j; }); });
+  }
+  function cleanNumber(t){ var m = String(t || "").match(/\+?\(?\d[\d\s().-]{8,}\d/); return m ? m[0].trim() : ""; }
+  function extOf(t){ var m = String(t || "").match(/ext\.?\s*(\d+)/i); return m ? m[1] : ""; }
+  var CALL_ST = {
+    queued: ["Starting…", "در حال شروع…"], ringing_you: ["Ringing your phone — answer it", "گوشی شما زنگ می‌خورد — جواب بدهید"],
+    connecting: ["Connecting you to the business…", "در حال وصل کردن شما به کسب‌وکار…"], connected: ["Connected", "وصل شد"],
+    ended: ["Call ended", "تماس تمام شد"], you_missed: ["You didn't answer your phone", "شما گوشی را جواب ندادید"],
+    no_answer: ["The business didn't answer", "کسب‌وکار جواب نداد"], failed: ["Call failed", "تماس ناموفق بود"], blocked: ["Call blocked", "تماس مسدود شد"]
+  };
+  function lineCallBox(b, ph){
+    var num = cleanNumber(ph.text), ext = extOf(ph.text);
+    var html = "<div class=\"line-box\"><div class=\"cc-tel\">" + esc(num) + "</div>";
+    if (myPhone === null) return html + "<p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>";
+    if (!myPhone) return html + "<div class=\"my-phone\"><p>" + esc(tt("First, your own mobile number — we ring you, then connect you. The business sees AVA's number (" + AVA_LINE + ").",
+      "اول شمارهٔ موبایل خودتان — اول به شما زنگ می‌زنیم، بعد وصلتان می‌کنیم. کسب‌وکار شمارهٔ اوا (" + AVA_LINE + ") را می‌بیند.")) + "</p>" +
+      "<input id=\"my-phone\" type=\"tel\" placeholder=\"647 555 0123\"><button type=\"button\" class=\"btn primary\" data-line=\"save-phone\">" + esc(tt("Save", "ذخیره")) + "</button><p class=\"hint\" id=\"my-phone-msg\"></p></div></div>";
+    var busy = activeCall && ["queued", "ringing_you", "connecting", "connected"].indexOf(activeCall.status) >= 0;
+    html += "<button type=\"button\" class=\"btn primary call-btn\" data-line=\"call\" data-num=\"" + esc(num) + "\"" + (busy ? " disabled" : "") + ">☎ " +
+      esc(tt("Call from AVA's number", "تماس با شمارهٔ اوا")) + "</button>" +
+      "<p class=\"line-note\">" + esc(tt("We ring you on " + myPhone + ", then connect you. The business sees " + AVA_LINE + ".", "اول به " + myPhone + " زنگ می‌زنیم، بعد وصل می‌شوید. کسب‌وکار " + AVA_LINE + " را می‌بیند.")) +
+      " <a href=\"#\" data-line=\"change-phone\">" + esc(tt("Change my number", "تغییر شمارهٔ من")) + "</a></p>" +
+      (ext ? "<p class=\"line-note\">" + esc(tt("This number has extension " + ext + " — ask for it once you are connected.", "این شماره داخلی " + ext + " دارد — بعد از وصل شدن آن را بخواهید.")) + "</p>" : "") +
+      "<p class=\"call-status\" id=\"call-status\">" + callStatusText() + "</p></div>";
+    return html;
+  }
+  function callStatusText(){
+    if (!activeCall) return "";
+    if (activeCall.msg) return esc(activeCall.msg);
+    var t = CALL_ST[activeCall.status] || [activeCall.status, activeCall.status];
+    var extra = activeCall.status === "ended" && activeCall.duration_sec ? " · " + Math.floor(activeCall.duration_sec / 60) + ":" + ("0" + activeCall.duration_sec % 60).slice(-2) : "";
+    if (activeCall.status === "failed" && activeCall.error) extra = " · " + activeCall.error;
+    return "<span class=\"dot-" + activeCall.status + "\"></span>" + esc(tt(t[0], t[1]) + extra);
+  }
+  function paintCallStatus(){ var el = $("call-status"); if (el) el.innerHTML = callStatusText(); var btn = document.querySelector("[data-line=call]");
+    if (btn) btn.disabled = !!(activeCall && !activeCall.msg && ["queued", "ringing_you", "connecting", "connected"].indexOf(activeCall.status) >= 0); }
+  function pollCall(id){
+    clearTimeout(callTimer);
+    api("GET", "/api/calls/" + id).then(function(d){
+      activeCall = d.call; paintCallStatus();
+      if (["queued", "ringing_you", "connecting", "connected"].indexOf(d.call.status) >= 0) callTimer = setTimeout(function(){ pollCall(id); }, 2000);
+    }).catch(function(){ callTimer = setTimeout(function(){ pollCall(id); }, 4000); });
+  }
+  document.addEventListener("click", function(e){
+    var t = e.target.closest && e.target.closest("[data-line]"); if (!t) return;
+    var k = t.getAttribute("data-line"); e.preventDefault();
+    if (k === "change-phone") { myPhone = ""; renderCall(); return; }
+    if (k === "save-phone") {
+      var v = ($("my-phone") || {}).value || "", msg = $("my-phone-msg");
+      api("PUT", "/api/me/phone", { phone: v }).then(function(d){ myPhone = d.phone; renderCall(); }).catch(function(err){ if (msg) msg.textContent = err.message; });
+      return;
+    }
+    if (k === "call") {
+      var b = callQ[callI]; if (!b) return;
+      activeCall = { status: "queued" }; paintCallStatus();
+      api("POST", "/api/calls/start", { business: b.name, to: t.getAttribute("data-num") }).then(function(d){
+        activeCall = { status: d.call.status, id: d.call.id }; paintCallStatus(); pollCall(d.call.id);
+      }).catch(function(err){ activeCall = { status: "failed", msg: err.message }; paintCallStatus(); });
+    }
+  });
   var PERM = { can_call: true, can_sms: true, loaded: !window.NEXAIS_SESSION };
   if (window.NEXAIS_SESSION) fetch("/api/permissions/me", { credentials: "same-origin", cache: "no-store" }).then(function(r){ return r.ok ? r.json() : null; })
     .then(function(p){ if (p) { PERM.can_call = !!p.can_call; PERM.can_sms = !!p.can_sms; } PERM.loaded = true; if (cur.v === "call") renderCall(); if (cur.v === "sms") renderSms(); }).catch(function(){});
@@ -8906,17 +8991,39 @@ Object.assign(window.FA, {
       "<label class=\"cc-l\">" + esc(tt("Message", "پیام")) + "<select id=\"sms-t\">" + tOpts + "</select></label></div>" +
       "<textarea id=\"sms-body\" rows=\"5\" class=\"sms-body\">" + esc(smsText(b)) + "</textarea><p class=\"sms-count\" id=\"sms-count\"></p>" +
       "<label class=\"sms-consent\"><input type=\"checkbox\" id=\"sms-ok\"> " + esc(tt("This person agreed to receive texts from us (required by law — CASL).", "این شخص قبول کرده از ما پیامک بگیرد (طبق قانون CASL الزامی است).")) + "</label>" +
-      "<div class=\"cc-nav\"><button type=\"button\" class=\"btn ghost\" data-sms=\"copy\">" + esc(tt("Copy text", "کپی متن")) + "</button>" +
-      "<a class=\"btn primary\" id=\"sms-send\" href=\"#\" data-sms=\"send\">" + esc(tt("Open in my phone's Messages", "باز کردن در پیامک گوشی")) + "</a>" +
-      "<button type=\"button\" class=\"btn ghost\" data-sms=\"log\">" + esc(tt("Log: SMS sent", "ثبت: پیامک ارسال شد")) + "</button></div>" +
+      (LINE_MODE
+        ? "<div class=\"cc-nav\"><button type=\"button\" class=\"btn ghost\" data-sms=\"copy\">" + esc(tt("Copy text", "کپی متن")) + "</button>" +
+          "<button type=\"button\" class=\"btn primary\" data-sms=\"line-send\">✉ " + esc(tt("Send from AVA's number (" + AVA_LINE + ")", "ارسال با شمارهٔ اوا (" + AVA_LINE + ")")) + "</button></div>"
+        : "<div class=\"cc-nav\"><button type=\"button\" class=\"btn ghost\" data-sms=\"copy\">" + esc(tt("Copy text", "کپی متن")) + "</button>" +
+          "<a class=\"btn primary\" id=\"sms-send\" href=\"#\" data-sms=\"send\">" + esc(tt("Open in my phone's Messages", "باز کردن در پیامک گوشی")) + "</a>" +
+          "<button type=\"button\" class=\"btn ghost\" data-sms=\"log\">" + esc(tt("Log: SMS sent", "ثبت: پیامک ارسال شد")) + "</button></div>") +
       "<p class=\"hint\" id=\"sms-msg\" style=\"margin:10px 0 0\"></p></div>";
-    if (b) {
+    if (b && LINE_MODE) {
+      html += "<p class=\"h3s\" style=\"margin-top:20px\">" + esc(tt("Conversation on AVA's number", "گفتگو با شمارهٔ اوا")) + "</p><div id=\"sms-thread\" class=\"sms-thread\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>";
+    } else if (b) {
       var hist = actionsOf(b, "SMS");
       html += "<p class=\"h3s\" style=\"margin-top:20px\">" + esc(tt("Texts logged for ", "پیامک‌های ثبت‌شده برای ")) + esc(b.name) + " · " + hist.length + "</p>" +
         (hist.length ? "<ul class=\"recent\">" + hist.slice().reverse().map(function(a){ return "<li><time>" + esc(a.d || "") + "</time>SMS</li>"; }).join("") + "</ul>" : "");
     }
     html += "</div></div></div>";
     taskSec.innerHTML = html; smsCount(); renderQuickComm();
+    if (LINE_MODE) loadThread();
+  }
+  var threadTimer = null;
+  function loadThread(){
+    clearTimeout(threadTimer);
+    var b = bySlug(smsBiz), box = $("sms-thread"), to = ($("sms-to") || {}).value || "";
+    if (!b || !box || cur.v !== "sms") return;
+    if (!to) { box.innerHTML = "<p class=\"hint\">" + esc(tt("Enter the mobile number to see the conversation.", "شمارهٔ موبایل را وارد کنید تا گفتگو نمایش داده شود.")) + "</p>"; return; }
+    api("GET", "/api/sms/thread?business=" + encodeURIComponent(b.name) + "&to=" + encodeURIComponent(to)).then(function(d){
+      var L = d.messages || [];
+      box.innerHTML = L.length ? L.slice().reverse().map(function(m){
+        var out = m.direction !== "inbound";
+        return "<div class=\"bubble " + (out ? "out" : "in") + "\"><p>" + esc(m.body) + "</p><small>" + esc(new Date(m.created_at).toLocaleString()) +
+          (out ? " · " + esc(m.status === "failed" ? tt("Not delivered", "ارسال نشد") + (m.error ? " — " + m.error : "") : m.status) : " · " + esc(tt("Reply", "پاسخ"))) + "</small></div>";
+      }).join("") : "<p class=\"hint\">" + esc(tt("No messages with this number yet.", "هنوز پیامی با این شماره نیست.")) + "</p>";
+      threadTimer = setTimeout(loadThread, 15000);
+    }).catch(function(err){ box.innerHTML = "<p class=\"hint\">" + esc(err.message) + "</p>"; });
   }
   function smsCount(){
     var t = $("sms-body"), c = $("sms-count"); if (!t || !c) return;
@@ -8937,10 +9044,10 @@ Object.assign(window.FA, {
   });
   taskSec.addEventListener("click", function(e){
     var pf = e.target.closest("[data-pf]"), pk = e.target.closest("[data-pick]");
-    if (pf) { var k1 = pf.getAttribute("data-kind"); pickFilter[k1] = pf.getAttribute("data-pf"); if (k1 === "call") { saveNote(); callI = 0; renderCall(); } else renderSms(); return; }
+    if (pf) { var k1 = pf.getAttribute("data-kind"); pickFilter[k1] = pf.getAttribute("data-pf"); if (k1 === "call") { saveNote(); callI = 0; callSel = null; renderCall(); } else renderSms(); return; }
     if (pk) {
       var k2 = pk.getAttribute("data-kind"), bz = bySlug(pk.getAttribute("data-pick"));
-      if (k2 === "call") { saveNote(); callPin = bz; renderCall(); } else { smsBiz = bz.slug; renderSms(); }
+      if (k2 === "call") { saveNote(); callPin = bz; activeCall = null; renderCall(); } else { smsBiz = bz.slug; renderSms(); }
     }
   }, true);
   taskSec.addEventListener("change", function(e){
@@ -8955,6 +9062,15 @@ Object.assign(window.FA, {
     if (!b) { e.preventDefault(); msg.textContent = tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید."); return; }
     if (!$("sms-ok").checked) { e.preventDefault(); msg.textContent = tt("Tick the consent box first — we only text people who agreed.", "اول تیک رضایت را بزنید — فقط به کسانی پیامک می‌دهیم که قبول کرده‌اند."); return; }
     if (k === "send") { msg.textContent = tt("Your Messages app opens with the text. After you send it, press “Log: SMS sent”.", "برنامهٔ پیامک گوشی با متن باز می‌شود. بعد از ارسال، «ثبت: پیامک ارسال شد» را بزنید."); return; }
+    if (k === "line-send") {
+      t.disabled = true; msg.textContent = tt("Sending…", "در حال ارسال…");
+      api("POST", "/api/sms/send", { business: b.name, to: $("sms-to").value, body: body.value, consent: true }).then(function(){
+        msg.textContent = tt("Sent from " + AVA_LINE + " ✓", "از " + AVA_LINE + " ارسال شد ✓"); t.disabled = false;
+        var a = b.el.__actions = b.el.__actions || []; a.push({ t: "SMS", d: new Date().toISOString().slice(0, 10) });
+        setTimeout(loadThread, 1500);
+      }).catch(function(err){ msg.textContent = err.message; t.disabled = false; });
+      return;
+    }
     if (k === "log") { logAction(b, "SMS"); setTimeout(function(){ renderSms(); var m2 = $("sms-msg"); if (m2) m2.textContent = tt("Logged ✓", "ثبت شد ✓"); }, 120); }
   });
 
@@ -8995,7 +9111,7 @@ Object.assign(window.FA, {
     }
     if (t.hasAttribute("data-nav")) {
       saveNote();
-      callI = Math.max(0, callI + (t.getAttribute("data-nav") === "next" ? 1 : -1));
+      callI = Math.max(0, callI + (t.getAttribute("data-nav") === "next" ? 1 : -1)); callSel = callQ[callI] || null; activeCall = null;
       renderCall(); renderRail(); window.scrollTo(0, 0); return;
     }
     var k = t.getAttribute("data-dl");
