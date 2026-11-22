@@ -920,6 +920,14 @@
   .cf-step.done .cf-h .qi{background:var(--accent);border-color:var(--accent);color:#fff}
   .cf-p{font-size:13.5px;color:var(--ink-2);margin:0 0 10px}
   .cf-body>.box{margin-top:0!important;margin-bottom:10px}
+  .cf-list{list-style:none;margin:0;padding:0}.cf-list li{padding:5px 0;font-size:14px}.cf-list input{margin-inline-end:8px;accent-color:var(--accent)}
+  .cf-inv{margin-top:8px!important}
+  .inv-grid{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:10px;margin:8px 0}
+  .inv-grid label{font-size:12.5px;color:var(--ink-3);font-weight:500}
+  .inv-grid select,.inv-grid input,.inv-t input{display:block;width:100%;margin-top:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 9px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink)}
+  .inv-t{width:100%;border-collapse:collapse;margin:8px 0}.inv-t th{font-size:12px;color:var(--ink-3);text-align:start;font-weight:500;padding:4px}.inv-t td{padding:4px}
+  .inv-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px}
+  @media (max-width:860px){ .inv-grid{grid-template-columns:1fr} }
   body.shell #close .sec-head{display:none}
   body.shell #close details.sec-panel>summary{display:none}
   @media (max-width:860px){ #close-flow .cf-who{grid-template-columns:1fr} .quick-row{grid-template-columns:1fr!important} }
@@ -4678,12 +4686,14 @@
             <input type="text" id="cl-ref" placeholder="e.g. POORYA-01" />
           </label>
           <label class="close-check"><input type="checkbox" id="cl-setup" /><span>Include the one-time setup fee (waived for Black Friday)</span></label>
+          <label class="close-check"><input type="checkbox" id="cl-hst" /><span>Show HST</span> <input type="text" id="cl-hst-rate" inputmode="decimal" value="13" style="width:52px;margin:0 4px;padding:4px 6px" aria-label="HST rate" />%</label>
         </div>
         <div class="calc-out">
           <div class="row"><span>Plan</span><b id="cl-v-plan">Professional — $399/mo</b></div>
           <div class="row"><span>Term discount</span><b id="cl-v-term">—</b></div>
           <div class="row"><span>Special discount</span><b id="cl-v-spec">—</b></div>
           <div class="row"><span>Monthly after discounts</span><b id="cl-v-monthly">$399.00</b></div>
+          <div class="row" id="cl-r-hst" hidden><span>Monthly with HST</span><b id="cl-v-hst"></b></div>
           <div class="row"><span>Setup fee</span><b id="cl-v-setup">Waived — Black Friday</b></div>
           <div class="row big"><span>Due today</span><b id="cl-v-due">$0</b></div>
         </div>
@@ -8135,6 +8145,8 @@ Object.assign(window.FA, {
   "Setup fee": "هزینهٔ راه‌اندازی",
   "Due today": "قابل پرداخت امروز",
   "Waived — Black Friday": "بخشوده شده — بلک فرایدی",
+  "Show HST": "نمایش مالیات HST",
+  "Monthly with HST": "ماهانه با HST",
   "Open the client's payment link": "باز کردن لینک پرداخت مشتری",
   "Copy payment link": "کپی لینک پرداخت",
   "No charge today — the first charge lands on the day the free trial ends. The client enters their own name, phone and card on the Stripe page.": "امروز هیچ برداشتی نیست — اولین برداشت در روزی است که دورهٔ آزمایشی رایگان تمام می‌شود. مشتری نام، تلفن و کارت خودش را در صفحهٔ Stripe وارد می‌کند.",
@@ -8175,6 +8187,8 @@ Object.assign(window.FA, {
     $("cl-v-term").textContent = termPct ? tt(termPct + "% off", termPct + "٪ تخفیف") : tt("None — monthly", "ندارد — ماهانه");
     $("cl-v-spec").textContent = spec ? spec + "%" : "—";
     $("cl-v-monthly").textContent = money(monthly);
+    var hstOn = $("cl-hst") && $("cl-hst").checked, hstRate = parseFloat(String(($("cl-hst-rate") || {}).value || "13").replace(/[^0-9.]/g, "")) || 0;
+    if ($("cl-r-hst")) { $("cl-r-hst").hidden = !hstOn; $("cl-v-hst").textContent = money(monthly * (1 + hstRate / 100)) + " (" + hstRate + "% HST)"; }
     $("cl-v-setup").textContent = setupIn.checked
       ? tt("Quoted by NexAIS in writing", "به‌صورت کتبی از سوی نکس‌ای‌آی اعلام می‌شود")
       : tt("Waived — Black Friday", "بخشوده شده — بلک فرایدی");
@@ -8192,6 +8206,7 @@ Object.assign(window.FA, {
   [planSel, trialSel, termSel].forEach(function(el){ el.addEventListener("change", render); });
   [discIn, refIn].forEach(function(el){ el.addEventListener("input", render); });
   setupIn.addEventListener("change", render);
+  if ($("cl-hst")) { $("cl-hst").addEventListener("change", render); $("cl-hst-rate").addEventListener("input", render); }
   $("cl-copy").addEventListener("click", function(){
     var btn = this, url = LINKS[planSel.value][trialSel.value];
     function done(){ var old = btn.textContent; btn.textContent = tt("Copied ✓", "کپی شد ✓"); setTimeout(function(){ btn.textContent = old; }, 1800); }
@@ -9231,7 +9246,9 @@ Object.assign(window.FA, {
       flow.innerHTML = "<div class=\"cf-top\"></div>" +
         "<div class=\"cf-step\" data-step=\"1\"><div class=\"cf-h\"><span class=\"qi\">1</span><b class=\"cf-t1\"></b></div><div class=\"cf-body cf-b1\"></div></div>" +
         "<div class=\"cf-step\" data-step=\"2\"><div class=\"cf-h\"><span class=\"qi\">2</span><b class=\"cf-t2\"></b></div><div class=\"cf-body cf-b2\"></div></div>" +
-        "<div class=\"cf-step\" data-step=\"3\"><div class=\"cf-h\"><span class=\"qi\">3</span><b class=\"cf-t3\"></b></div><div class=\"cf-body cf-b3\"></div></div>";
+        "<div class=\"cf-step\" data-step=\"3\"><div class=\"cf-h\"><span class=\"qi\">3</span><b class=\"cf-t3\"></b></div><div class=\"cf-body cf-b3\"></div></div>" +
+        "<div class=\"cf-step\" data-step=\"4\"><div class=\"cf-h\"><span class=\"qi\">4</span><b class=\"cf-t4\"></b></div><div class=\"cf-body cf-b4\"><div class=\"box cf-check\"></div></div></div>" +
+        "<div class=\"box cf-inv\" id=\"cf-inv\"></div>";
       panel.insertBefore(flow, calcBox);
       flow.querySelector(".cf-b1").appendChild(calcBox);
       var ag = document.createElement("div"); ag.className = "box cf-agree"; flow.querySelector(".cf-b2").appendChild(ag);
@@ -9261,13 +9278,105 @@ Object.assign(window.FA, {
     flow.querySelector(".cf-t1").textContent = tt("Choose the plan", "انتخاب پلن");
     flow.querySelector(".cf-t2").textContent = tt("Send the agreement", "ارسال قرارداد");
     flow.querySelector(".cf-t3").textContent = tt("Send the payment link", "ارسال لینک پرداخت");
+    flow.querySelector(".cf-t4").textContent = tt("Closing checklist", "چک‌لیست بستن قرارداد");
     var d = closeDone[closeBiz] || {};
     Array.prototype.forEach.call(flow.querySelectorAll(".cf-step"), function(st){
       var n = st.getAttribute("data-step");
       st.classList.toggle("done", n === "1" ? !!closeBiz : !!d[n]);
     });
-    renderAgreement();
+    renderAgreement(); renderChecklist(); renderInvoice();
   }
+  /* closing checklist — the first three tick themselves from the steps above */
+  var CL_KEY = "nexais-hub-close-v1";
+  function clSaved(){ try { return JSON.parse(localStorage.getItem(CL_KEY) || "{}"); } catch(e){ return {}; } }
+  function clSave(all){ try { localStorage.setItem(CL_KEY, JSON.stringify(all)); } catch(e){} }
+  var CL_ITEMS = [["plan", "Plan and free-trial length chosen with the client", "پلن و طول دورهٔ رایگان با مشتری انتخاب شد"],
+    ["agree", "Agreement summary + intake form sent", "خلاصهٔ قرارداد + فرم اطلاعات ارسال شد"],
+    ["pay", "Payment link sent", "لینک پرداخت ارسال شد"],
+    ["card", "Client finished the Stripe checkout (card on file, $0 today)", "مشتری پرداخت Stripe را کامل کرد (کارت ثبت شد، امروز $0)"],
+    ["intake", "Intake form came back complete", "فرم اطلاعات کامل برگشت"],
+    ["handoff", "Handed to the NexAIS team to build the AVA", "به تیم NexAIS برای ساخت AVA تحویل شد"]];
+  function renderChecklist(){
+    var box = document.querySelector("#close-flow .cf-check"); if (!box) return;
+    if (!closeBiz) { box.innerHTML = "<p class=\"cf-p\">" + esc(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")) + "</p>"; return; }
+    var d = closeDone[closeBiz] || {}, man = clSaved()[closeBiz] || {};
+    var auto = { plan: !!closeBiz, agree: !!d[2], pay: !!d[3] };
+    box.innerHTML = "<ul class=\"cf-list\">" + CL_ITEMS.map(function(it){
+      var on = it[0] in auto ? auto[it[0]] : !!man[it[0]], isAuto = it[0] in auto;
+      return "<li><label><input type=\"checkbox\" data-cl=\"" + it[0] + "\"" + (on ? " checked" : "") + (isAuto ? " disabled" : "") + "> " + esc(tt(it[1], it[2])) + "</label></li>"; }).join("") + "</ul>";
+  }
+  /* one-off services invoice (website, page design, AVA setup …) — printed as PDF */
+  var INV_PRESETS = [["Website design", 1500, ""], ["Website maintenance", 99, "/month"], ["Social page design", "", ""], ["Social page management", "", "/month"], ["AVA setup", "", ""], ["AVA monthly plan", "plan", "/month"]];
+  var invLines = [], invIssuer = "NexAIS Inc.", invHst = true, invRate = 13, invNo = "";
+  function invNum(){ var d = new Date(); return "NX-" + d.getFullYear() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0") + "-" + String(d.getHours()).padStart(2, "0") + String(d.getMinutes()).padStart(2, "0"); }
+  function invTotals(){
+    var sub = invLines.reduce(function(a, l){ return a + (Number(l.qty) || 0) * (Number(l.price) || 0); }, 0), tax = invHst ? sub * invRate / 100 : 0;
+    return { sub: sub, tax: tax, total: sub + tax };
+  }
+  function m2(n){ return "$" + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+  function renderInvoice(){
+    var box = $("cf-inv"); if (!box) return;
+    if (!invNo) invNo = invNum();
+    var t = invTotals();
+    box.innerHTML = "<p class=\"h3s\">" + esc(tt("One-off services — invoice", "خدمات یک‌باره — فاکتور")) + "</p>" +
+      "<p class=\"cf-p\">" + esc(tt("For work outside the AVA subscription: website, page design or management, AVA setup. Prints as a PDF the client can pay against.", "برای کارهای بیرون از اشتراک AVA: سایت، طراحی یا مدیریت پیج، راه‌اندازی AVA. به‌صورت PDF چاپ می‌شود.")) + "</p>" +
+      "<div class=\"inv-grid\"><label>" + esc(tt("Issued by", "صادرکننده")) + "<select id=\"inv-iss\"><option" + (invIssuer === "NexAIS Inc." ? " selected" : "") + ">NexAIS Inc.</option><option" + (invIssuer === "ZhioStudio by NexAIS" ? " selected" : "") + ">ZhioStudio by NexAIS</option></select></label>" +
+      "<label>" + esc(tt("Invoice no.", "شمارهٔ فاکتور")) + "<input id=\"inv-no\" value=\"" + esc(invNo) + "\"></label>" +
+      "<label>" + esc(tt("Add a service", "افزودن خدمت")) + "<select id=\"inv-add\"><option value=\"\">" + esc(tt("— choose —", "— انتخاب —")) + "</option>" +
+        INV_PRESETS.map(function(p, i){ return "<option value=\"" + i + "\">" + esc(p[0]) + (p[1] && p[1] !== "plan" ? " — $" + p[1] + p[2] : "") + "</option>"; }).join("") + "<option value=\"blank\">" + esc(tt("Other (type it)", "سایر (بنویسید)")) + "</option></select></label></div>" +
+      (invLines.length ? "<table class=\"inv-t\"><thead><tr><th>" + esc(tt("Service", "خدمت")) + "</th><th>" + esc(tt("Qty", "تعداد")) + "</th><th>" + esc(tt("Price", "قیمت")) + "</th><th></th></tr></thead><tbody>" +
+        invLines.map(function(l, i){ return "<tr><td><input data-inv=\"desc\" data-i=\"" + i + "\" value=\"" + esc(l.desc) + "\"></td><td><input data-inv=\"qty\" data-i=\"" + i + "\" inputmode=\"numeric\" value=\"" + esc(String(l.qty)) + "\" style=\"width:60px\"></td>" +
+          "<td><input data-inv=\"price\" data-i=\"" + i + "\" inputmode=\"decimal\" value=\"" + esc(String(l.price)) + "\" placeholder=\"0.00\" style=\"width:100px\"></td><td><button type=\"button\" class=\"linkish\" data-inv-del=\"" + i + "\">✕</button></td></tr>"; }).join("") + "</tbody></table>" : "") +
+      "<div class=\"inv-foot\"><label class=\"close-check\"><input type=\"checkbox\" id=\"inv-hst\"" + (invHst ? " checked" : "") + "> HST <input id=\"inv-rate\" value=\"" + invRate + "\" style=\"width:48px;padding:4px 6px\">%</label>" +
+      "<span id=\"inv-tot\">" + esc(tt("Subtotal ", "جمع ")) + m2(t.sub) + (invHst ? " · HST " + m2(t.tax) : "") + " · <b>" + esc(tt("Total ", "مبلغ کل ")) + m2(t.total) + "</b></span></div>" +
+      "<div class=\"biz-actions\" style=\"margin-top:10px\"><button type=\"button\" class=\"btn primary\" id=\"inv-print\"" + (invLines.length ? "" : " disabled") + ">" + esc(tt("Print / save as PDF", "پرینت / ذخیره PDF")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" id=\"inv-new\">" + esc(tt("New invoice", "فاکتور جدید")) + "</button></div>";
+  }
+  function invoiceHtml(){
+    var t = invTotals(), b = bySlug(closeBiz), who = ($("cf-contact") || {}).value || "", email = ($("cf-email") || {}).value || "";
+    var rows = invLines.map(function(l){ var amt = (Number(l.qty) || 0) * (Number(l.price) || 0);
+      return "<tr><td>" + esc(l.desc) + "</td><td class=n>" + esc(String(l.qty)) + "</td><td class=n>" + m2(Number(l.price) || 0) + "</td><td class=n>" + m2(amt) + "</td></tr>"; }).join("");
+    return "<!doctype html><html><head><meta charset=utf-8><title>Invoice " + esc(invNo) + "</title><style>body{font:11pt/1.5 Inter,Arial,sans-serif;color:#18181b;margin:1.8cm}" +
+      ".hd{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #18181b;padding-bottom:12px;margin-bottom:22px}.brand{font:700 20pt Arial,sans-serif;letter-spacing:-.5px}.brand span{color:#0e7a4f}" +
+      ".muted{color:#71717a;font-size:9.5pt}h1{font:600 14pt Arial,sans-serif;margin:0 0 4px;text-align:right}table{width:100%;border-collapse:collapse;margin:18px 0}th{text-align:left;font-size:9.5pt;color:#71717a;border-bottom:1px solid #e4e4e7;padding:6px 4px}" +
+      "td{padding:8px 4px;border-bottom:1px solid #f4f4f5}.n{text-align:right}.tot td{border:0;padding:3px 4px}.tot .big td{font-weight:700;font-size:12.5pt;border-top:2px solid #18181b;padding-top:8px}</style></head><body>" +
+      "<div class=hd><div><div class=brand>" + (invIssuer.indexOf("ZhioStudio") === 0 ? "ZhioStudio <span>by NexAIS</span>" : "Nex<span>AIS</span>") + "</div><div class=muted>" + esc(invIssuer === "NexAIS Inc." ? "NexAIS Inc." : "ZhioStudio by NexAIS · NexAIS Inc.") +
+      "<br>Richmond Hill, Ontario, Canada<br>info@nexais.ca · +1 (437) 529-0400</div></div><div><h1>INVOICE</h1><div class=muted style=text-align:right>No. " + esc(invNo) + "<br>Date: " + new Date().toLocaleDateString("en-CA") + "<br>Due: on receipt</div></div></div>" +
+      "<div class=muted>Bill to</div><div><b>" + esc(b ? b.name : "") + "</b>" + (who ? "<br>" + esc(who) : "") + (email ? "<br>" + esc(email) : "") + "</div>" +
+      "<table><thead><tr><th>Service</th><th class=n>Qty</th><th class=n>Price</th><th class=n>Amount</th></tr></thead><tbody>" + rows + "</tbody></table>" +
+      "<table class=tot style=width:45%;margin-left:55%><tr><td>Subtotal</td><td class=n>" + m2(t.sub) + "</td></tr>" + (invHst ? "<tr><td>HST (" + invRate + "%)</td><td class=n>" + m2(t.tax) + "</td></tr>" : "") +
+      "<tr class=big><td>Total (CAD)</td><td class=n>" + m2(t.total) + "</td></tr></table><p class=muted>Thank you for your business.</p></body></html>";
+  }
+  document.addEventListener("change", function(e){
+    var t = e.target; if (!t || !t.closest || !t.closest("#close-flow")) return;
+    if (t.hasAttribute("data-cl") && closeBiz) { var all = clSaved(); all[closeBiz] = all[closeBiz] || {}; all[closeBiz][t.getAttribute("data-cl")] = t.checked; clSave(all);
+      if (t.checked) logSync("notes", closeName(), "Close checklist: " + t.parentNode.textContent.trim()); return; }
+    if (t.id === "inv-iss") { invIssuer = t.value; return; }
+    if (t.id === "inv-hst") { invHst = t.checked; renderInvoice(); return; }
+    if (t.id === "inv-add" && t.value !== "") {
+      var p = t.value === "blank" ? ["", "", ""] : INV_PRESETS[Number(t.value)];
+      var price = p[1] === "plan" ? (parseFloat(String(textOf("cl-v-monthly")).replace(/[^0-9.]/g, "")) || "") : p[1];
+      invLines.push({ desc: p[0] ? p[0] + (p[2] ? " (" + p[2].replace("/", "per ") + ")" : "") : "", qty: 1, price: price }); renderInvoice(); return; }
+  });
+  document.addEventListener("input", function(e){
+    var t = e.target; if (!t || !t.closest || !t.closest("#cf-inv")) return;
+    if (t.hasAttribute("data-inv")) { invLines[Number(t.getAttribute("data-i"))][t.getAttribute("data-inv")] = t.value; var x = invTotals(), el = $("inv-tot");
+      if (el) el.innerHTML = esc(tt("Subtotal ", "جمع ")) + m2(x.sub) + (invHst ? " · HST " + m2(x.tax) : "") + " · <b>" + esc(tt("Total ", "مبلغ کل ")) + m2(x.total) + "</b>"; var pb = $("inv-print"); if (pb) pb.disabled = !invLines.length; }
+    if (t.id === "inv-no") invNo = t.value;
+    if (t.id === "inv-rate") { invRate = parseFloat(t.value) || 0; var y = invTotals(), el2 = $("inv-tot"); if (el2) el2.innerHTML = esc(tt("Subtotal ", "جمع ")) + m2(y.sub) + (invHst ? " · HST " + m2(y.tax) : "") + " · <b>" + esc(tt("Total ", "مبلغ کل ")) + m2(y.total) + "</b>"; }
+  });
+  document.addEventListener("click", function(e){
+    var t = e.target; if (!t || !t.closest || !t.closest("#cf-inv")) return;
+    if (t.hasAttribute("data-inv-del")) { invLines.splice(Number(t.getAttribute("data-inv-del")), 1); renderInvoice(); return; }
+    if (t.id === "inv-new") { invLines = []; invNo = invNum(); renderInvoice(); return; }
+    if (t.id === "inv-print") {
+      if (!closeBiz) { alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); return; }
+      var fr = document.createElement("iframe"); fr.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0"; document.body.appendChild(fr);
+      var d = fr.contentWindow.document; d.open(); d.write(invoiceHtml()); d.close();
+      setTimeout(function(){ fr.contentWindow.focus(); fr.contentWindow.print(); setTimeout(function(){ fr.remove(); }, 1000); }, 200);
+      logSync("notes", closeName(), "Invoice " + invNo + " — " + m2(invTotals().total) + " (" + invIssuer + ")");
+    }
+  });
   function textOf(id){ var el = $(id); return el ? el.textContent.trim() : ""; }
   function selText(id){ var el = $(id); return el && el.selectedIndex >= 0 ? el.options[el.selectedIndex].text : ""; }
   function agreementText(){
