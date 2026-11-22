@@ -739,6 +739,22 @@
   .ind-table tbody tr{cursor:pointer}
   .ind-table tbody tr:hover td{background:var(--bg-soft)}
 
+  /* add a business + research */
+  #new-biz h2{font-size:24px;margin:0 0 6px}
+  .sub-p{color:var(--ink-3);margin:0 0 20px;max-width:640px}
+  .nb-form{border:1px solid var(--panel-line);border-radius:10px;padding:20px;background:#fff}
+  .nb-err{color:#b42318;font-size:13px;margin:0}
+  .side-link.sub.add{color:var(--accent);font-weight:600}
+  .ind-title{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0 6px}
+  #ind-head .ind-title h2{margin:0}
+  .rs-box{margin-top:22px;border:1px solid var(--panel-line);border-radius:10px;padding:18px;background:#fff}
+  .rs-p{color:var(--ink-2);font-size:14px;margin:0 0 14px}
+  .rs-notes{display:block;margin-top:14px;font-size:13px;color:var(--ink-2);font-weight:500}
+  .rs-notes textarea{display:block;width:100%;margin-top:6px;border:1px solid var(--panel-line);border-radius:8px;padding:10px;font:inherit;font-size:14px}
+  .rs-foot{display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+  .rs-saved{font-size:13px;color:var(--accent)}
+  .linkish{margin-inline-start:auto;border:0;background:transparent;font:inherit;font-size:12.5px;color:var(--ink-3);cursor:pointer;text-decoration:underline}
+
   /* responsive */
   @media (max-width:1180px){
     body.shell{padding-right:0}
@@ -4225,6 +4241,93 @@
   </details>
   </div>
 </section>
+<script>
+/* ================= new businesses added in this hub — rebuilt as call-list cards before the call log restores =================
+   Saved on this device (nexais-hub-newbiz-v1); every addition is also logged and queued for the Sheet. */
+(function(){
+  "use strict";
+  var KEY = "nexais-hub-newbiz-v1";
+  function get(k, d){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch(e){ return d; } }
+  function put(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } }
+  function esc(s){ return String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  var box = document.getElementById("cards");
+  if (!box) return;
+  function head(){
+    var h = box.querySelector('.group-head[data-group="new"]');
+    if (!h){
+      h = document.createElement("div");
+      h.className = "group-head"; h.setAttribute("data-group", "new");
+      h.innerHTML = "<h3>New businesses — added in this hub</h3><p>Added by the team. Research comes first: nothing is claimed until the research is done.</p>";
+      box.insertBefore(h, box.firstChild);
+    }
+    return h;
+  }
+  function build(b){
+    var n = esc(b.name);
+    var facts = "";
+    if (b.contact) facts += "<div><dt>Ask for</dt><dd>" + esc(b.contact) + "</dd></div>";
+    facts += "<div><dt>Phone</dt><dd class=\"phone\">" + (b.phone ? "<a href=\"tel:" + esc(b.phone.replace(/[^\d+]/g, "")) + "\">" + esc(b.phone) + "</a>" : "—") + "</dd></div>";
+    if (b.web) facts += "<div><dt>Website</dt><dd>" + esc(b.web) + "</dd></div>";
+    var c = document.createElement("article");
+    c.className = "card"; c.setAttribute("data-group", "new"); c.setAttribute("data-new", "1");
+    c.setAttribute("data-name", b.name.toLowerCase()); c.setAttribute("data-ind", b.ind || "other");
+    c.innerHTML =
+      "<div class=\"card-top\"><div><h4>" + n + "</h4><p class=\"loc\">" + esc(b.city || "—") + "</p></div>" +
+      "<span class=\"badge p2\">New</span></div>" +
+      "<dl class=\"facts\">" + facts + "</dl>" +
+      "<details class=\"card-more\"><summary>Details &amp; script</summary>" +
+      (b.note ? "<p class=\"hook\"><span>Signal:</span> " + esc(b.note) + "</p>" : "") +
+      "<div class=\"act-hist\"><p class=\"act-hist-t\">Action history</p><ul class=\"act-list\"></ul><p class=\"act-none\">No actions logged yet.</p></div>" +
+      "</details>" +
+      "<div class=\"tracker\"><label>Outcome <select class=\"status\" aria-label=\"Call outcome for " + n + "\">" +
+      "<option value=\"Not called\">Not called</option><option value=\"Reached decision-maker\">Reached decision-maker</option>" +
+      "<option value=\"Gatekeeper\">Gatekeeper</option><option value=\"Voicemail left\">Voicemail left</option>" +
+      "<option value=\"Not interested\">Not interested</option><option value=\"Callback scheduled\">Callback scheduled</option>" +
+      "<option value=\"Demo booked\">Demo booked</option></select></label>" +
+      "<label class=\"notes-l\">Notes — name, direct email, callback time <input type=\"text\" class=\"notes\" placeholder=\"e.g. Spoke to Maria — demo Thu 3 PM\" aria-label=\"Notes for " + n + "\"></label>" +
+      "<div class=\"actlog\"><label>Action type <select class=\"act-type\" aria-label=\"Action type for " + n + "\">" +
+      "<option value=\"Call\">Call</option><option value=\"SMS\">SMS</option><option value=\"Email\">Email</option><option value=\"DM\">DM</option><option value=\"Visit\">Visit</option></select></label>" +
+      "<button type=\"button\" class=\"btn ghost act-btn\">Log action</button>" +
+      "<p class=\"act-counts\">Calls: 0 · SMS: 0 · Email: 0 · DM: 0 · Visits: 0</p></div></div>";
+    var h = head();
+    h.parentNode.insertBefore(c, h.nextSibling);
+    return c;
+  }
+  get(KEY, []).slice().reverse().forEach(build);
+  window.NEXAIS_newBiz = {
+    list: function(){ return get(KEY, []); },
+    find: function(name){ name = (name || "").toLowerCase(); return get(KEY, []).filter(function(b){ return b.name.toLowerCase() === name; })[0] || null; },
+    exists: function(name){
+      name = (name || "").trim().toLowerCase();
+      return Array.prototype.some.call(box.querySelectorAll(".card"), function(c){ return c.getAttribute("data-name") === name; });
+    },
+    add: function(b){
+      var all = get(KEY, []); all.unshift(b); put(KEY, all);
+      var card = build(b);
+      var by = (function(){ try { var u = JSON.parse(sessionStorage.getItem("nexais-gate-user") || "null"); if (u && u.name) return u.name; } catch(e){} return get("nexais-hub-user-v1", "") || "unknown"; })();
+      var entry = { at: new Date().toISOString(), by: by, business: b.name, what: "biz-added",
+        to: [b.indLabel, b.city, b.phone, b.web, b.contact, b.note].filter(Boolean).join(" · ") };
+      var log = get("nexais-hub-activity-v1", []); log.push(entry); put("nexais-hub-activity-v1", log);
+      var q = get("nexais-hub-sheet-queue-v1", []); q.push(entry); put("nexais-hub-sheet-queue-v1", q);
+      if (window.NEXAIS_renderActivity) window.NEXAIS_renderActivity();
+      if (window.NEXAIS_refreshTracker) window.NEXAIS_refreshTracker();
+      return card;
+    },
+    update: function(name, patch){
+      var all = get(KEY, []), k = (name || "").toLowerCase();
+      all.forEach(function(b){ if (b.name.toLowerCase() === k) for (var p in patch) b[p] = patch[p]; });
+      put(KEY, all);
+    },
+    remove: function(name){
+      var k = (name || "").toLowerCase();
+      put(KEY, get(KEY, []).filter(function(b){ return b.name.toLowerCase() !== k; }));
+      var c = box.querySelector('.card[data-new="1"][data-name="' + k.replace(/"/g, '\\"') + '"]');
+      if (c) c.parentNode.removeChild(c);
+      if (!box.querySelector('.card[data-new="1"]')) { var h = box.querySelector('.group-head[data-group="new"]'); if (h) h.parentNode.removeChild(h); }
+    }
+  };
+})();
+</script>
 
 <section id="script-builder">
   <div class="wrap">
@@ -5716,7 +5819,7 @@ Object.assign(window.FA, {
   var DEMO = "+1 (437) 529-0400";
 
   /* ================= Step 1a — picker: load one of the 54 researched prospects ================= */
-  var cardEls = Array.prototype.slice.call(document.querySelectorAll("#cards .card"));
+  var cardEls = Array.prototype.slice.call(document.querySelectorAll("#cards .card")).filter(function(c){ return c.getAttribute("data-new") !== "1"; });
   var pick = $("g-pick"), pickNote = $("pick-note");
   var selectedCard = null, lastResearch = null;
 
@@ -8063,11 +8166,13 @@ Object.assign(window.FA, {
   function labelOf(v){
     for (var i = 0; i < MENU.length; i++) for (var j = 0; j < MENU[i].items.length; j++)
       if (MENU[i].items[j].v === v) return tt(MENU[i].items[j].en, MENU[i].items[j].fa);
+    if (v === "new") return tt("Add a business", "افزودن کسب‌وکار");
     return "";
   }
 
   /* ---------- stages: where each business is in the sales flow ---------- */
   var STAGES = [
+    { k: "research",  en: "In research",    fa: "در حال تحقیق" },
     { k: "sent",      en: "Proposal sent",  fa: "پروپوزال ارسال شد" },
     { k: "contacted", en: "Contacted",      fa: "تماس گرفته شد" },
     { k: "followup",  en: "Follow-up",      fa: "پیگیری" },
@@ -8089,9 +8194,14 @@ Object.assign(window.FA, {
     { k: "winery",     en: "Wineries",               fa: "وینری و تاکستان" },
     { k: "clinic",     en: "Clinics & spas",         fa: "کلینیک و اسپا" },
     { k: "transport",  en: "Transport & logistics",  fa: "حمل‌ونقل و لجستیک" },
+    { k: "beauty",     en: "Salons & beauty",        fa: "سالن زیبایی" },
+    { k: "trades",     en: "Home services & trades", fa: "خدمات ساختمانی و فنی" },
+    { k: "auto",       en: "Auto services",          fa: "خدمات خودرو" },
+    { k: "realestate", en: "Real estate",            fa: "املاک" },
     { k: "other",      en: "Other",                  fa: "سایر" }
   ];
-  function indLabel(k){ for (var i = 0; i < INDS.length; i++) if (INDS[i].k === k) return tt(INDS[i].en, INDS[i].fa); return ""; }
+  var ALL_INDS = INDS.slice();
+  function indLabel(k){ for (var i = 0; i < ALL_INDS.length; i++) if (ALL_INDS[i].k === k) return tt(ALL_INDS[i].en, ALL_INDS[i].fa); return ""; }
   function industryOf(slug, group){
     if (group === "t") return "transport";
     if (group === "3") return "clinic";
@@ -8103,7 +8213,9 @@ Object.assign(window.FA, {
   }
 
   /* ---------- businesses, read from the call-list cards ---------- */
-  var BIZ = Array.prototype.slice.call(document.querySelectorAll("#cards .card")).map(function(c){
+  var BIZ = [];
+  function loadBiz(){
+  BIZ = Array.prototype.slice.call(document.querySelectorAll("#cards .card")).map(function(c){
     var h = c.querySelector("h4"), loc = c.querySelector(".card-top .loc");
     return {
       el: c, slug: c.getAttribute("data-name") || "",
@@ -8111,11 +8223,20 @@ Object.assign(window.FA, {
       loc: loc ? loc.textContent.trim() : "", group: c.getAttribute("data-group") || ""
     };
   });
-  BIZ.forEach(function(b){ b.ind = industryOf(b.slug, b.group); b.el.setAttribute("data-ind", b.ind); });
-  INDS = INDS.filter(function(x){ return BIZ.some(function(b){ return b.ind === x.k; }); });
+  BIZ.forEach(function(b){
+    b.isNew = b.el.getAttribute("data-new") === "1" || b.group === "draft";
+    b.ind = b.el.getAttribute("data-ind") || industryOf(b.slug, b.group);
+    b.el.setAttribute("data-ind", b.ind);
+  });
+  INDS = ALL_INDS.filter(function(x){ return BIZ.some(function(b){ return b.ind === x.k; }); });
+  }
+  loadBiz();
   function inInd(b){ return !cur.ind || b.ind === cur.ind; }
   function statusOf(b){ var s = b.el.querySelector(".status"); return s ? s.value : "Not called"; }
-  function stageOf(b){ return STATUS_STAGE[statusOf(b)] || "sent"; }
+  function stageOf(b){
+    var st = STATUS_STAGE[statusOf(b)] || "sent";
+    return st === "sent" && b.isNew ? "research" : st;
+  }
   function bySlug(s){ for (var i = 0; i < BIZ.length; i++) if (BIZ[i].slug === s) return BIZ[i]; return null; }
   function byName(n){ n = (n || "").toLowerCase(); for (var i = 0; i < BIZ.length; i++) if (BIZ[i].name.toLowerCase() === n) return BIZ[i]; return null; }
 
@@ -8140,6 +8261,8 @@ Object.assign(window.FA, {
   var cl = $("call-list");
   cl.parentNode.insertBefore(today, cl);
   cl.parentNode.insertBefore(bizHead, cl);
+  var newSec = document.createElement("section"); newSec.id = "new-biz";
+  cl.parentNode.insertBefore(newSec, cl);
   var indHead = document.createElement("section"); indHead.id = "ind-head";
   cl.parentNode.insertBefore(indHead, cl);
 
@@ -8161,6 +8284,7 @@ Object.assign(window.FA, {
   function go(v, slug, anchor){
     cur.v = v; cur.biz = v === "b" && slug ? bySlug(slug) : null;
     if (v === "ind") cur.ind = slug || null;
+    if (v === "new") cur.ind = null;
     if (v === "biz") cur.ind = null;
     if (cur.biz) cur.ind = cur.biz.ind;
     body.classList.toggle("biz-mode", v === "b" && !!cur.biz);
@@ -8170,6 +8294,7 @@ Object.assign(window.FA, {
     if (v === "today") show(["today"]);
     else if (v === "biz") show(["ind-head", "call-list"]);
     else if (v === "ind") show(["ind-head", "call-list"]);
+    else if (v === "new") { show(["new-biz"]); renderNewForm(slug); }
     else if (v === "b" && cur.biz) {
       show(["biz-head", "call-list"]);
       var more = cur.biz.el.querySelector("details.card-more"); if (more) more.open = true;
@@ -8184,6 +8309,7 @@ Object.assign(window.FA, {
     var h = decodeURIComponent((location.hash || "").replace(/^#/, ""));
     if (!h || h === "top" || h === "today") return go("today");
     if (h === "biz") return go("biz");
+    if (h === "new" || h.indexOf("new/") === 0) return go("new", h.slice(4) || null);
     if (h.indexOf("ind/") === 0) return go("ind", h.slice(4));
     if (h.indexOf("b/") === 0 && bySlug(h.slice(2))) return go("b", h.slice(2));
     var el = document.getElementById(h);
@@ -8206,6 +8332,7 @@ Object.assign(window.FA, {
         html += "<a class=\"side-link" + (on && !(it.v === "biz" && cur.ind) ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) +
           (it.count ? "<span class=\"n\">" + BIZ.length + "</span>" : "") + "</a>";
         if (it.v === "biz") {
+          html += "<a class=\"side-link sub add" + (cur.v === "new" ? " on" : "") + "\" href=\"#new\">+ " + esc(tt("Add a business", "افزودن کسب‌وکار")) + "</a>";
           html += "<div class=\"side-sub\">" + INDS.map(function(x){
             var n = BIZ.filter(function(b){ return b.ind === x.k; }).length;
             var o = cur.ind === x.k && (cur.v === "ind" || cur.v === "b");
@@ -8234,7 +8361,9 @@ Object.assign(window.FA, {
       status: tt("Outcome", "نتیجه"), notes: tt("Note", "یادداشت"), action: tt("Action", "اقدام"),
       script: tt("Script built", "اسکریپت ساخته شد"), proposal: tt("Proposal built", "پروپوزال ساخته شد"),
       "paylink-open": tt("Payment link opened", "لینک پرداخت باز شد"), "paylink-copy": tt("Payment link copied", "لینک پرداخت کپی شد"),
-      copy: tt("Text copied", "متن کپی شد")
+      copy: tt("Text copied", "متن کپی شد"),
+      "biz-added": tt("Business added", "کسب‌وکار اضافه شد"), research: tt("Research started", "تحقیق شروع شد"),
+      "research-note": tt("Research note saved", "یادداشت تحقیق ذخیره شد")
     }[e.what] || e.what || "";
     var FA_ST = { "Not called": "تماس گرفته نشده", "Reached decision-maker": "با تصمیم‌گیرنده صحبت شد", "Gatekeeper": "منشی / واسطه",
       "Voicemail left": "پیام صوتی گذاشته شد", "Not interested": "علاقه ندارد", "Callback scheduled": "تماس مجدد تنظیم شد", "Demo booked": "دمو رزرو شد",
@@ -8300,19 +8429,19 @@ Object.assign(window.FA, {
   /* ---------- render: today ---------- */
   function nextCalls(){
     var cb = BIZ.filter(function(b){ return statusOf(b) === "Callback scheduled"; });
-    var fresh = BIZ.filter(function(b){ return statusOf(b) === "Not called"; })
+    var fresh = BIZ.filter(function(b){ return statusOf(b) === "Not called" && !b.isNew; })
       .sort(function(a, b){ return (a.group > b.group) - (a.group < b.group); });
     return cb.concat(fresh).slice(0, 6);
   }
   function renderToday(){
-    var cnt = { sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
+    var cnt = { research: 0, sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
     BIZ.forEach(function(b){ cnt[stageOf(b)]++; });
     var dayStr = new Date().toDateString(), log = get(LOG, []);
     var todayN = log.filter(function(e){ return new Date(e.at).toDateString() === dayStr; }).length;
     var d = new Date().toLocaleDateString(window.LANG === "fa" ? "fa-IR" : "en-CA", { weekday: "long", month: "long", day: "numeric" });
     var html = "<div class=\"wrap\"><h2>" + esc(tt("Today", "امروز")) + "</h2><p class=\"sub\">" + esc(d) + "</p>" +
       "<div class=\"kpis\">" +
-      kpi(cnt.sent, tt("Not called yet", "هنوز تماس نگرفته‌ایم"), "sent") +
+      kpi(cnt.sent + cnt.research, tt("Not called yet", "هنوز تماس نگرفته‌ایم"), "sent") +
       kpi(cnt.contacted + cnt.followup, tt("In progress", "در جریان"), "followup") +
       kpi(cnt.demo, tt("Demos booked", "دموی رزروشده"), "demo") +
       kpi(todayN, tt("Actions logged today", "اقدامات امروز"), "") +
@@ -8326,9 +8455,9 @@ Object.assign(window.FA, {
       esc(tt("Industry", "حوزه")) + "</th><th>" + esc(tt("Not called", "تماس نگرفته")) + "</th><th>" + esc(tt("In progress", "در جریان")) + "</th><th>" +
       esc(tt("Demo", "دمو")) + "</th><th>" + esc(tt("Total", "کل")) + "</th></tr></thead><tbody>" +
       INDS.map(function(x){
-        var L = BIZ.filter(function(b){ return b.ind === x.k; }), c = { sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
+        var L = BIZ.filter(function(b){ return b.ind === x.k; }), c = { research: 0, sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
         L.forEach(function(b){ c[stageOf(b)]++; });
-        return "<tr data-indrow=\"" + x.k + "\"><td>" + esc(tt(x.en, x.fa)) + "</td><td>" + c.sent + "</td><td>" + (c.contacted + c.followup) + "</td><td>" + c.demo + "</td><td>" + L.length + "</td></tr>";
+        return "<tr data-indrow=\"" + x.k + "\"><td>" + esc(tt(x.en, x.fa)) + "</td><td>" + (c.sent + c.research) + "</td><td>" + (c.contacted + c.followup) + "</td><td>" + c.demo + "</td><td>" + L.length + "</td></tr>";
       }).join("") + "</tbody></table>";
     html += "<p class=\"hint\">" + esc(tt("Best time to call: Tuesday to Thursday, 2:00–4:00 PM.", "بهترین زمان تماس: سه‌شنبه تا پنجشنبه، ساعت ۲ تا ۴ بعدازظهر.")) + "</p></div>";
     today.innerHTML = html;
@@ -8349,7 +8478,7 @@ Object.assign(window.FA, {
   /* ---------- render: business page header ---------- */
   function renderBizHead(){
     var b = cur.biz; if (!b) { bizHead.innerHTML = ""; return; }
-    var st = stageOf(b), order = ["sent", "contacted", "followup", "demo"], idx = order.indexOf(st);
+    var st = stageOf(b), order = b.isNew ? ["research", "sent", "contacted", "followup", "demo"] : ["sent", "contacted", "followup", "demo"], idx = order.indexOf(st);
     var steps = order.map(function(k, i){
       var cls = st === "lost" ? (i === 0 ? "done" : "") : (i < idx ? "done" : i === idx ? "cur" : "");
       return "<li class=\"" + cls + "\">" + esc(stageLabel(k)) + "</li>";
@@ -8360,16 +8489,112 @@ Object.assign(window.FA, {
       "<button type=\"button\" class=\"btn ghost\" data-act=\"script\">" + esc(tt("Build call script", "ساخت اسکریپت تماس")) + "</button>" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"close\">" + esc(tt("Close the deal", "بستن معامله")) + "</button>" +
       "<button type=\"button\" class=\"btn ghost\" data-act=\"talk\">" + esc(tt("Ask AVA about it", "پرسیدن از AVA")) + "</button>" +
-      "</div></div>";
+      "</div>" + (b.isNew ? researchPanel(b) : "") + "</div>";
   }
   bizHead.addEventListener("click", function(ev){
     var t = ev.target.closest("[data-go],[data-act]"); if (!t) return;
     if (t.hasAttribute("data-go")) return nav(t.getAttribute("data-go"));
     var b = cur.biz, a = t.getAttribute("data-act");
+    if (a === "dossier") return openDossier(b);
+    if (a === "ava-research") return askAvaResearch(b);
+    if (a === "rs-save") {
+      var v = $("rs-notes").value.trim();
+      window.NEXAIS_newBiz.update(b.name, { research: v });
+      logSync("research-note", b.name, v.slice(0, 120));
+      $("rs-saved").textContent = tt("Saved ✓", "ذخیره شد ✓");
+      return;
+    }
+    if (a === "remove") {
+      if (!window.confirm(tt("Remove " + b.name + " from the list on this device? Its log entries stay in the Sheet.", b.name + " از لیست این دستگاه حذف شود؟ سوابقش در شیت می‌ماند."))) return;
+      var ind = b.ind; window.NEXAIS_newBiz.remove(b.name); loadBiz(); return nav("ind/" + ind);
+    }
     if (a === "script") { var i = $("cs-biz"); if (i && b) { i.value = b.name; i.dispatchEvent(new Event("input", { bubbles: true })); } nav("script-builder"); }
     else if (a === "talk") { var m = $("m-biz"); if (m && b) { m.value = b.name; m.dispatchEvent(new Event("input", { bubbles: true })); } nav("talk"); }
     else nav("close");
   });
+
+  /* ---------- add a business ---------- */
+  function renderNewForm(preInd){
+    var opts = ALL_INDS.map(function(x){ return "<option value=\"" + x.k + "\"" + (preInd === x.k ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("");
+    newSec.innerHTML = "<div class=\"wrap\"><p class=\"kicker\">" + esc(tt("New business", "کسب‌وکار جدید")) + "</p>" +
+      "<h2>" + esc(tt("Add a business", "افزودن کسب‌وکار")) + "</h2>" +
+      "<p class=\"sub-p\">" + esc(tt("It joins the list, the timeline and its industry right away, starting in research. Only add what you know — never guess a name or a number.",
+        "بلافاصله به لیست، تایم‌لاین و حوزهٔ خودش اضافه می‌شود و از مرحلهٔ تحقیق شروع می‌کند. فقط چیزی را که می‌دانید وارد کنید — اسم یا شماره را حدس نزنید.")) + "</p>" +
+      "<form class=\"gen-form nb-form\" id=\"nb-form\" autocomplete=\"off\">" +
+      fld("nb-name", tt("Business name *", "نام کسب‌وکار *"), "text", true) +
+      "<label>" + esc(tt("Industry *", "حوزهٔ کاری *")) + "<select id=\"nb-ind\" required>" + opts + "</select></label>" +
+      fld("nb-city", tt("City / area", "شهر / منطقه"), "text") +
+      fld("nb-phone", tt("Phone", "تلفن"), "tel") +
+      fld("nb-web", tt("Website", "وب‌سایت"), "text") +
+      fld("nb-contact", tt("Contact — name and role", "مخاطب — نام و سمت"), "text") +
+      "<label class=\"full\">" + esc(tt("Signal — why this business, what you noticed", "نشانه — چرا این کسب‌وکار، چه چیزی دیدید")) +
+      "<textarea id=\"nb-note\" rows=\"3\"></textarea></label>" +
+      "<p class=\"nb-err full\" id=\"nb-err\" hidden></p>" +
+      "<div class=\"full\"><button class=\"btn primary\" type=\"submit\">" + esc(tt("Add and start research", "افزودن و شروع تحقیق")) + "</button></div></form></div>";
+    var f = $("nb-form");
+    f.addEventListener("submit", function(e){
+      e.preventDefault();
+      var name = $("nb-name").value.trim(), err = $("nb-err");
+      if (!name) return;
+      if (window.NEXAIS_newBiz.exists(name)) { err.hidden = false; err.textContent = tt("This business is already on the list.", "این کسب‌وکار از قبل در لیست هست."); return; }
+      var ind = $("nb-ind").value;
+      var b = { name: name, ind: ind, indLabel: indLabel(ind), city: $("nb-city").value.trim(), phone: $("nb-phone").value.trim(),
+        web: $("nb-web").value.trim(), contact: $("nb-contact").value.trim(), note: $("nb-note").value.trim(), added: new Date().toISOString(), research: "" };
+      window.NEXAIS_newBiz.add(b);
+      loadBiz();
+      nav("b/" + name.toLowerCase());
+    });
+    setTimeout(function(){ var n = $("nb-name"); if (n) n.focus(); }, 50);
+  }
+  function fld(id, label, type, req){
+    return "<label>" + esc(label) + "<input type=\"" + type + "\" id=\"" + id + "\"" + (req ? " required" : "") + " /></label>";
+  }
+
+  function logSync(what, biz, to){
+    if (window.NEXAIS_logActivity) window.NEXAIS_logActivity(what, biz, to);
+    var lg = get(LOG, []), q = get("nexais-hub-sheet-queue-v1", []);
+    if (lg.length) q.push(lg[lg.length - 1]);
+    try { localStorage.setItem("nexais-hub-sheet-queue-v1", JSON.stringify(q)); } catch(e){}
+  }
+  /* ---------- research panel on a new business ---------- */
+  function researchPanel(b){
+    var rec = window.NEXAIS_newBiz.find(b.name);
+    if (!rec) return "";
+    return "<div class=\"rs-box\"><p class=\"h3s\">" + esc(tt("Research", "تحقیق")) + "</p>" +
+      "<p class=\"rs-p\">" + esc(tt("Research comes before any call or proposal. Open the research workspace to build the dossier step by step, or ask AVA to research it for you.",
+        "تحقیق قبل از هر تماس یا پروپوزال است. فضای تحقیق را باز کنید تا پرونده را قدم‌به‌قدم بسازید، یا از AVA بخواهید برایتان تحقیق کند.")) + "</p>" +
+      "<div class=\"biz-actions\"><button type=\"button\" class=\"btn primary\" data-act=\"dossier\">" + esc(tt("Open research workspace", "باز کردن فضای تحقیق")) + "</button>" +
+      "<button type=\"button\" class=\"btn ghost\" data-act=\"ava-research\">" + esc(tt("Ask AVA to research it", "درخواست تحقیق از AVA")) + "</button></div>" +
+      "<label class=\"rs-notes\">" + esc(tt("Research notes — what you found, with the source", "یادداشت تحقیق — چه پیدا کردید، با منبع")) +
+      "<textarea id=\"rs-notes\" rows=\"4\">" + esc(rec.research || "") + "</textarea></label>" +
+      "<div class=\"rs-foot\"><button type=\"button\" class=\"btn ghost\" data-act=\"rs-save\">" + esc(tt("Save notes", "ذخیرهٔ یادداشت")) + "</button>" +
+      "<span id=\"rs-saved\" class=\"rs-saved\"></span>" +
+      "<button type=\"button\" class=\"linkish\" data-act=\"remove\">" + esc(tt("Remove this business", "حذف این کسب‌وکار")) + "</button></div></div>";
+  }
+  function openDossier(b){
+    var rec = window.NEXAIS_newBiz.find(b.name) || {};
+    var pick = $("g-pick");
+    if (pick && pick.value !== "new") { pick.value = "new"; pick.dispatchEvent(new Event("change")); }
+    function setVal(id, v){ var el = $(id); if (el) el.value = v || ""; }
+    setVal("g-biz", b.name); setVal("g-city", rec.city); setVal("g-web", rec.web); setVal("g-phone", rec.phone);
+    setVal("g-contact", rec.contact); setVal("g-findings", [rec.note, rec.research].filter(Boolean).join("\n"));
+    var t = $("g-type");
+    if (t) t.value = b.ind === "restaurant" || b.ind === "venue" || b.ind === "golf" || b.ind === "winery" ? "restaurant" : (b.ind === "clinic" || b.ind === "beauty" ? "clinic" : "service");
+    nav("generator");
+    setTimeout(function(){ var r = $("g-research-btn"); if (r) r.click(); }, 150);
+    logSync("research", b.name, "workspace");
+  }
+  function askAvaResearch(b){
+    var rec = window.NEXAIS_newBiz.find(b.name) || {};
+    var mt = $("m-type"); if (mt) { mt.value = "lead"; mt.dispatchEvent(new Event("change", { bubbles: true })); }
+    var mb = $("m-biz"); if (mb) mb.value = b.name;
+    var md = $("m-details");
+    if (md) md.value = "Please research this business before we call: " + [indLabel(b.ind), rec.city, rec.phone, rec.web, rec.contact].filter(Boolean).join(" · ") +
+      (rec.note ? ". Signal: " + rec.note : "") + ". I need the decision-maker, how they handle calls and bookings today, and what AVA can fix.";
+    [mb, md].forEach(function(el){ if (el) el.dispatchEvent(new Event("input", { bubbles: true })); });
+    nav("talk");
+    logSync("research", b.name, "AVA request");
+  }
 
   /* ---------- industry page header ---------- */
   function renderIndHead(){
@@ -8379,11 +8604,12 @@ Object.assign(window.FA, {
         return "<a href=\"#ind/" + x.k + "\"" + (cur.ind === x.k ? " class=\"on\"" : "") + ">" + esc(tt(x.en, x.fa)) + " <span>" + n + "</span></a>";
       }).join("") + "</div>";
     var title = cur.ind ? indLabel(cur.ind) : tt("All businesses", "همهٔ کسب‌وکارها");
-    var L = BIZ.filter(inInd), c = { sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
+    var L = BIZ.filter(inInd), c = { research: 0, sent: 0, contacted: 0, followup: 0, demo: 0, lost: 0 };
     L.forEach(function(b){ c[stageOf(b)]++; });
     var sum = STAGES.map(function(s){ return "<span><b>" + c[s.k] + "</b> " + esc(tt(s.en, s.fa)) + "</span>"; }).join("");
     indHead.innerHTML = "<div class=\"wrap\"><p class=\"kicker\">" + esc(tt("Choose an industry", "حوزهٔ کاری را انتخاب کنید")) + "</p>" + chips +
-      "<h2>" + esc(title) + "</h2><p class=\"ind-sum\">" + sum + "</p></div>";
+      "<div class=\"ind-title\"><h2>" + esc(title) + "</h2><a class=\"btn primary\" href=\"#new" + (cur.ind ? "/" + cur.ind : "") + "\">+ " +
+      esc(tt("Add a business", "افزودن کسب‌وکار")) + "</a></div><p class=\"ind-sum\">" + sum + "</p></div>";
   }
 
   /* ---------- top bar title ---------- */
@@ -8408,6 +8634,11 @@ Object.assign(window.FA, {
   if (typeof origLang === "function") window.NEXAIS_setLang = function(l){ origLang(l); renderAll(); };
   setInterval(renderRail, 60000);
 
+  Object.assign(window.FA || {}, {
+    "New businesses — added in this hub": "کسب‌وکارهای جدید — اضافه‌شده در همین هاب",
+    "Added by the team. Research comes first: nothing is claimed until the research is done.": "اضافه‌شده توسط تیم. اول تحقیق: تا تحقیق کامل نشده، چیزی ادعا نمی‌شود.",
+    "New": "جدید", "Signal:": "نشانه:", "Website": "وب‌سایت"
+  });
   body.classList.add("shell");
   route();
 })();
