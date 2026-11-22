@@ -832,6 +832,18 @@
   .script-head select{border:1px solid var(--panel-line);border-radius:8px;padding:7px 10px;font:inherit;font-size:13.5px;background:#fff}
   .bz-script{width:100%;font-size:14px;line-height:1.6;direction:ltr;text-align:left}
   .prop-box{border:1px solid var(--panel-line);border-radius:12px;padding:16px;background:#fff;margin:0 0 12px}
+  .hist-now{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:center;border:1px solid var(--panel-line);border-radius:12px;padding:14px 16px;margin:0 0 12px;background:#fff}
+  .hist-now span{display:block;font-size:12px;color:var(--ink-3)}.hist-now b{font-size:15px;font-weight:600}
+  .hist-notes{white-space:pre-wrap;margin:0;font-size:14px;line-height:1.55}
+  .hist-list{list-style:none;margin:8px 0 0;padding:0;border-inline-start:2px solid var(--panel-line)}
+  .hist-list li{position:relative;padding:8px 0 10px 16px;margin-inline-start:-1px}
+  [dir=rtl] .hist-list li{padding:8px 16px 10px 0}
+  .hist-list li::before{content:"";position:absolute;inset-inline-start:-5px;top:14px;width:8px;height:8px;border-radius:50%;background:var(--ink)}
+  .hist-list .h-top{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline}
+  .hist-list .h-top b{font-size:14px}.hist-list .h-out{font-size:13px;color:var(--accent);font-weight:600}
+  .hist-list .h-when{font-size:12px;color:var(--ink-3);margin-inline-start:auto}
+  .hist-list p{margin:4px 0 0;font-size:13.5px;color:var(--ink-2);white-space:pre-wrap}
+  @media (max-width:860px){ .hist-now{grid-template-columns:1fr 1fr} }
   .em-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
   .em-grid label,.em-body label{font-size:12px;color:var(--ink-3);font-weight:500}
   .em-grid input,.em-grid select{display:block;width:100%;margin-top:4px;border:1px solid var(--panel-line);border-radius:8px;padding:8px 9px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink)}
@@ -9461,10 +9473,11 @@ Object.assign(window.FA, {
   var bizTab = "overview", bizTabFor = null, scriptScenario = null;
   function bizTabs(b){
     if (bizTabFor !== b) { bizTab = "overview"; bizTabFor = b; scriptScenario = null; }
-    var T = [["overview", tt("Overview", "خلاصه")], ["script", tt("Call script", "اسکریپت تماس")], ["proposal", tt("Proposal", "پروپوزال")], ["ava", tt("AVA call", "تماس اوا")]];
+    var T = [["overview", tt("Overview", "خلاصه")], ["script", tt("Scripts — call & SMS", "اسکریپت تماس و پیامک")], ["history", tt("History", "سوابق")], ["proposal", tt("Proposal", "پروپوزال")], ["ava", tt("AVA call", "تماس اوا")]];
     var html = "<div class=\"tabs biz-tabs\">" + T.map(function(t){ return "<a href=\"#\" data-btab=\"" + t[0] + "\"" + (bizTab === t[0] ? " class=\"on\"" : "") + ">" + esc(t[1]) + "</a>"; }).join("") + "</div>";
     if (bizTab === "script") html += scriptPanel(b);
     if (bizTab === "proposal") html += proposalPanel(b);
+    if (bizTab === "history") { html += "<div class=\"tab-panel\" id=\"hist-panel\">" + localHistoryHtml(b) + "<div id=\"hist-crm\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div></div>"; setTimeout(function(){ loadHistory(b); }, 0); }
     if (bizTab === "ava") { html += "<div class=\"tab-panel\" id=\"ava-panel\"><p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>"; setTimeout(function(){ loadAva(b); }, 0); }
     return html;
   }
@@ -9501,8 +9514,56 @@ Object.assign(window.FA, {
       "<div class=\"biz-actions\" style=\"margin-top:10px\"><button type=\"button\" class=\"btn primary\" data-bz=\"print-script\">" + esc(tt("Print / save as PDF", "پرینت / ذخیره PDF")) + "</button>" +
       "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-script\">" + esc(tt("Copy", "کپی")) + "</button>" +
       "<a class=\"btn ghost\" href=\"#call/b/" + esc(b.slug) + "\">☎ " + esc(tt("Call now", "تماس الان")) + "</a></div>" +
-      "<p class=\"hint\">" + esc(tt("The script is in English — the language of the call. You can edit it before printing.", "اسکریپت به انگلیسی است — زبان تماس. قبل از پرینت می‌توانید ویرایشش کنید.")) + "</p></div>";
+      "<p class=\"hint\">" + esc(tt("The script is in English — the language of the call. You can edit it before printing.", "اسکریپت به انگلیسی است — زبان تماس. قبل از پرینت می‌توانید ویرایشش کنید.")) + "</p>";
+    var sk = bzSmsT || (stageOf(b) === "sent" ? "proplink" : "after");
+    html += "<div class=\"script-head\" style=\"margin-top:26px\"><p class=\"h3s\">" + esc(tt("SMS script for ", "اسکریپت پیامک برای ")) + esc(b.name) + "</p>" +
+      "<select id=\"bz-smst\">" + SMS_T.filter(function(x){ return x.k !== "custom"; }).map(function(x){ return "<option value=\"" + x.k + "\"" + (x.k === sk ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("") + "</select></div>" +
+      "<textarea id=\"bz-sms\" class=\"tpl bz-script\" rows=\"4\">" + esc(smsFor(b, sk)) + "</textarea>" +
+      "<div class=\"biz-actions\" style=\"margin-top:10px\"><a class=\"btn primary\" href=\"#sms/" + esc(b.slug) + "\" data-bz=\"sms-script\">" + esc(tt("Send this SMS", "ارسال همین پیامک")) + "</a>" +
+      "<button type=\"button\" class=\"btn ghost\" data-bz=\"copy-sms\">" + esc(tt("Copy", "کپی")) + "</button></div></div>";
     return html;
+  }
+  var bzSmsT = "";
+  function smsFor(b, k){ var keep = smsT; smsT = k; try { return smsText(b); } finally { smsT = keep; } }
+  /* ---------- one business's history ---------- */
+  var KIND = { call: ["Call", "تماس"], line_call: ["Call from AVA's number", "تماس از شمارهٔ اوا"], sms: ["SMS", "پیامک"], email: ["Email", "ایمیل"], note: ["Note", "یادداشت"],
+    status_change: ["Status changed", "تغییر وضعیت"], request: ["Business added", "ثبت کسب‌وکار"], approval: ["Approved", "تأیید"], assignment: ["Assigned", "واگذاری"],
+    research_attached: ["Research", "تحقیق"], proposal_attached: ["Proposal", "پروپوزال"], visit: ["Visit", "مراجعه"], permission_change: ["Permission", "دسترسی"] };
+  var OUTC = { not_called: ["Not called", "تماس گرفته نشد"], reached_decision_maker: ["Reached the decision-maker", "با تصمیم‌گیرنده صحبت شد"], gatekeeper: ["Gatekeeper", "منشی / واسطه"],
+    voicemail_left: ["Voicemail left", "پیام صوتی گذاشته شد"], not_interested: ["Not interested", "علاقه ندارد"], callback_scheduled: ["Callback scheduled", "تماس مجدد قرار شد"], demo_booked: ["Demo booked", "دمو رزرو شد"] };
+  var LINE_ST = { ended: ["finished", "انجام شد"], no_answer: ["no answer", "جواب نداد"], you_missed: ["you missed it", "جواب ندادید"], failed: ["failed", "ناموفق"], blocked: ["blocked", "مسدود"], connected: ["in progress", "در جریان"] };
+  function fmtWhen(iso){ try { return new Date(iso).toLocaleString(LANG_FA() ? "fa-IR" : "en-CA", { dateStyle: "medium", timeStyle: "short" }); } catch(e){ return iso; } }
+  function LANG_FA(){ return window.LANG === "fa"; }
+  function localHistoryHtml(b){
+    var st = b.el.querySelector(".status"), nt = b.el.querySelector(".notes"), acts = (b.el.__actions || []).slice().reverse();
+    var html = "<div class=\"hist-now\"><div><span>" + esc(tt("Last call result", "نتیجهٔ آخرین تماس")) + "</span><b>" + esc(st && st.value ? tt(st.value, (window.FA || {})[st.value] || st.value) : tt("Not called yet", "هنوز تماس گرفته نشده")) + "</b></div>" +
+      "<div><span>" + esc(tt("Stage", "مرحله")) + "</span><b>" + esc(stageLabel(stageOf(b))) + "</b></div>" +
+      "<div><a class=\"btn primary\" href=\"#call/b/" + esc(b.slug) + "\">☎ " + esc(tt("Call now", "تماس الان")) + "</a></div></div>";
+    if (nt && nt.value.trim()) html += "<div class=\"prop-box\"><p class=\"h3s\">" + esc(tt("Call notes", "یادداشت تماس‌ها")) + "</p><p class=\"hist-notes\">" + esc(nt.value.trim()) + "</p></div>";
+    if (acts.length) html += "<p class=\"hint\">" + esc(tt("Logged on this device: ", "ثبت‌شده روی همین دستگاه: ")) + acts.map(function(a){ return (LANG_FA() ? (ACT_FA_LABEL_ALL[a.t] || a.t) : a.t) + " " + a.d; }).join(" · ") + "</p>";
+    return html;
+  }
+  var ACT_FA_LABEL_ALL = { Call: "تماس", SMS: "پیامک", Email: "ایمیل", DM: "دایرکت", Visit: "مراجعه" };
+  function histLine(it){
+    var k = KIND[it.kind] || [it.kind, it.kind], parts = [];
+    if (it.outcome && OUTC[it.outcome]) parts.push(tt(OUTC[it.outcome][0], OUTC[it.outcome][1]));
+    if (it.kind === "line_call") { var ls = LINE_ST[it.status] || [it.status, it.status]; parts.push(tt(ls[0], ls[1])); if (it.duration) parts.push(Math.round(it.duration / 60 * 10) / 10 + tt(" min", " دقیقه")); }
+    if (it.kind === "status_change" && it.to) parts.push((it.from ? it.from + " → " : "") + it.to);
+    var by = it.by === "me" ? tt("you", "شما") : it.by === "team" ? tt("team", "تیم") : it.by === "system" ? "AVA" : it.by;
+    return "<li><div class=\"h-top\"><b>" + esc(tt(k[0], k[1])) + "</b>" + (parts.length ? "<span class=\"h-out\">" + esc(parts.join(" · ")) + "</span>" : "") +
+      "<span class=\"h-when\">" + esc(fmtWhen(it.at)) + " · " + esc(by) + "</span></div>" + (it.notes ? "<p>" + esc(it.notes) + "</p>" : "") + "</li>";
+  }
+  function loadHistory(b){
+    var box = $("hist-crm"); if (!box || cur.biz !== b || bizTab !== "history") return;
+    if (!LINE_MODE) { box.innerHTML = "<p class=\"hint\">" + esc(tt("The full team history shows after signing in with your NexAIS account.", "سوابق کامل تیم بعد از ورود با حساب NexAIS نمایش داده می‌شود.")) + "</p>"; return; }
+    api("GET", "/api/hub/history?business=" + encodeURIComponent(b.name)).then(function(d){
+      if (cur.biz !== b || !$("hist-crm")) return;
+      var items = d.items || [];
+      var lastOut = items.filter(function(x){ return x.outcome && OUTC[x.outcome]; })[0], nb = document.querySelector("#hist-panel .hist-now b");
+      if (lastOut && nb) nb.textContent = tt(OUTC[lastOut.outcome][0], OUTC[lastOut.outcome][1]) + " · " + fmtWhen(lastOut.at);
+      $("hist-crm").innerHTML = "<p class=\"h3s\">" + esc(tt("Everything done with this business", "همهٔ کارهایی که با این کسب‌وکار انجام شده")) + "</p>" +
+        (items.length ? "<ul class=\"hist-list\">" + items.map(histLine).join("") + "</ul>" : "<div class=\"empty-box\"><p>" + esc(tt("Nothing recorded yet. Calls, SMS, emails and AVA calls appear here automatically.", "هنوز چیزی ثبت نشده. تماس‌ها، پیامک‌ها، ایمیل‌ها و تماس‌های اوا خودکار اینجا می‌آیند.")) + "</p></div>");
+    }).catch(function(e){ var x = $("hist-crm"); if (x) x.innerHTML = "<p class=\"hint\">" + esc(e.message) + "</p>"; });
   }
   function proposalOf(b){
     var a = b.el.querySelector(".prop-link a[href]"), when = "";
@@ -9701,6 +9762,8 @@ Object.assign(window.FA, {
     var k = t.getAttribute("data-bz");
     if (k === "print-script") { printText(tt("Call script — ", "اسکریپت تماس — ") + b.name, $("bz-script").value); logSync("script-print", b.name, ""); }
     else if (k === "copy-script") { var ta = $("bz-script"); try { navigator.clipboard.writeText(ta.value); } catch(x){ ta.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); }
+    else if (k === "copy-sms") { var sa = $("bz-sms"); try { navigator.clipboard.writeText(sa.value); } catch(x){ sa.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); }
+    else if (k === "sms-script") { smsT = $("bz-smst").value; smsBiz = b.slug; pickFilter.sms = "all"; }
     else if (k === "copy-prop") { try { navigator.clipboard.writeText(proposalOf(b).url); } catch(x){} t.textContent = tt("Copied ✓", "کپی شد ✓"); }
     else if (k === "mail-prop") { logSync("proposal-sent", b.name, "email"); }
     else if (k === "email-open") { var eb = $("em-box"); if (eb) { eb.scrollIntoView({ behavior: "smooth", block: "start" }); var et = $("em-to"); if (et) setTimeout(function(){ et.focus(); }, 300); } }
@@ -9715,6 +9778,7 @@ Object.assign(window.FA, {
   });
   bizHead.addEventListener("change", function(e){
     if (e.target.id === "bz-scen" && cur.biz) { scriptScenario = e.target.value; $("bz-script").value = buildScriptFor(cur.biz, scriptScenario); }
+    if (e.target.id === "bz-smst" && cur.biz) { bzSmsT = e.target.value; $("bz-sms").value = smsFor(cur.biz, bzSmsT); }
   });
 
   /* ---------- top bar title ---------- */

@@ -33,7 +33,7 @@ function makeFake(state) {
       const q = { table, ops: [], payload: null, op: 'select' };
       const chain = {
         select() { return chain; }, eq(k, v) { q.ops.push(['eq', k, v]); return chain; }, or() { return chain; },
-        like(k, v) { q.ops.push(['like', k, v]); return chain; }, not() { return chain; }, order() { return chain; }, limit() { return chain; },
+        like(k, v) { q.ops.push(['like', k, v]); return chain; }, not() { return chain; }, in() { return chain; }, order() { return chain; }, limit() { return chain; },
         insert(p) { q.op = 'insert'; q.payload = p; return chain; }, update(p) { q.op = 'update'; q.payload = p; return chain; },
         upsert(p) { q.op = 'upsert'; q.payload = p; return chain; },
         single() { return resolve(true); }, maybeSingle() { return resolve(true); },
@@ -51,6 +51,8 @@ function makeFake(state) {
           return Promise.resolve({ data: single ? m : [m], error: null });
         }
         if (table === 'partner_activity_log' && q.op === 'insert') return Promise.resolve({ data: null, error: null });
+        if (table === 'partner_activity_log' && q.op === 'select' && state.acts) return Promise.resolve({ data: state.acts, error: null });
+        if (table === 'partner_click_calls' && q.op === 'select' && state.clicks) return Promise.resolve({ data: state.clicks, error: null });
         return Promise.resolve({ data: single ? null : [], error: null });
       }
       return chain;
@@ -325,4 +327,16 @@ test('unsubscribe page is public, confirms on GET and unsubscribes only on POST'
   const post = await fetch(`${base}/unsubscribe?u=${UNSUB_OK}`, { method: 'POST' });
   assert.equal(post.status, 200); assert.match(await post.text(), /unsubscribed/i);
   assert.equal(state.calls.filter((c) => c.rpc === 'partner_email_unsubscribe').pop().args.p_confirm, true);
+}));
+
+test('business history: merges CRM activity and line calls, newest first; unknown business is empty', () => withServer(async (base, state) => {
+  const empty = await getAs(base, '/api/hub/history?business=Nowhere', 'nx_at=tok-partner');
+  assert.equal(empty.status, 200); assert.deepEqual((await empty.json()).items, []);
+  state.missions = [{ id: 'm-1' }];
+  state.acts = [{ action: 'call', outcome: 'gatekeeper', notes: 'Spoke to front desk', actor_user: 'u-partner', created_at: '2026-11-20T15:00:00Z' }];
+  state.clicks = [{ status: 'ended', to_number: '+14165550000', duration_sec: 95, user_id: 'u-partner', created_at: '2026-11-21T15:00:00Z' }];
+  const r = await getAs(base, '/api/hub/history?business=Bistro', 'nx_at=tok-partner');
+  const items = (await r.json()).items;
+  assert.equal(items.length, 2); assert.equal(items[0].kind, 'line_call'); assert.equal(items[1].outcome, 'gatekeeper');
+  assert.equal((await getAs(base, '/api/hub/history?business=Bistro')).status, 401);
 }));

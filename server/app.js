@@ -555,6 +555,40 @@ export function createApp(options) {
   });
 
   // ---- AVA follow-up calls (consent required; the owner's on/off switch lives in the CRM) ----
+  // ---- one business's history: everything logged in the CRM (calls, SMS, email, AVA calls, notes) ----
+  app.get('/api/hub/history', requireMember, async (req, res, next) => {
+    try {
+      const prefix = dedupePrefix(req.query.business);
+      if (!prefix) return res.status(400).json({ error: 'Business name is required' });
+      const db = req.session.db;
+      const { data: found, error } = await db.from('partner_missions').select('id')
+        .eq('company_id', companyId).like('dedupe_key', `${prefix}|%`).not('status', 'in', HUB_OPEN).limit(1);
+      if (error) return res.status(400).json({ error: error.message });
+      const id = found?.[0]?.id;
+      if (!id) return res.set('Cache-Control', 'no-store').json({ items: [] });
+      const [acts, calls] = await Promise.all([
+        db.from('partner_activity_log').select('id, action, outcome, from_value, to_value, notes, actor_user, created_at')
+          .eq('mission_id', id).order('created_at', { ascending: false }).limit(150),
+        db.from('partner_click_calls').select('id, status, to_number, duration_sec, user_id, created_at')
+          .eq('mission_id', id).order('created_at', { ascending: false }).limit(50),
+      ]);
+      if (acts.error) return res.status(400).json({ error: acts.error.message });
+      const ids = [...new Set([...(acts.data || []).map((a) => a.actor_user), ...(calls.data || []).map((c) => c.user_id)].filter(Boolean))];
+      const names = {};
+      if (ids.length) {
+        const { data: users } = await db.from('users').select('id, full_name, email').in('id', ids);
+        for (const u of users || []) names[u.id] = u.full_name || String(u.email || '').split('@')[0];
+      }
+      const me = req.session.user.id;
+      const who = (uid) => (uid === me ? 'me' : names[uid] || (uid ? 'team' : 'system'));
+      const items = [
+        ...(acts.data || []).map((a) => ({ kind: a.action, outcome: a.outcome, from: a.from_value, to: a.to_value, notes: a.notes, by: who(a.actor_user), at: a.created_at })),
+        ...(calls.error ? [] : (calls.data || []).map((c) => ({ kind: 'line_call', status: c.status, to: c.to_number, duration: c.duration_sec, by: who(c.user_id), at: c.created_at }))),
+      ].sort((x, y) => String(y.at).localeCompare(String(x.at)));
+      return res.set('Cache-Control', 'no-store').json({ items });
+    } catch (err) { return next(err); }
+  });
+
   // ---- email from the NexAIS address (owner's switch; per-person can_email) ----
   app.get('/api/email/switch', requireMember, async (req, res, next) => {
     try {
