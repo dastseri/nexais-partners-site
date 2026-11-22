@@ -10,7 +10,10 @@ const ORIGIN = 'https://partner.nexais.ca';
 const COMPANY = 'company-nexais';
 const hubDir = mkdtempSync(path.join(tmpdir(), 'hub-'));
 const hubHtmlPath = path.join(hubDir, 'index.html');
-writeFileSync(hubHtmlPath, '<!doctype html><html><head><title>Hub</title></head><body>SECRET-PROSPECT-LIST</body></html>');
+writeFileSync(hubHtmlPath, '<!doctype html><html><head><title>Hub</title></head><body>HUB-PAGE<div id="cards">'
+  + '<article class="card" data-group="1" data-name="copper creek golf club"><h4>Copper Creek Golf Club</h4><dd>MY-CONTACT</dd></article>\n'
+  + '<article class="card" data-group="2" data-name="sassafraz"><h4>Sassafraz</h4><dd>SECRET-PROSPECT-LIST</dd></article>\n'
+  + '</div></body></html>');
 
 // ---- fake Supabase -----------------------------------------------------------------
 const USERS = {
@@ -123,13 +126,15 @@ test('login success sets HttpOnly Secure SameSite cookies and opens the hub', ()
   assert.match(hubHtml, /SECRET-PROSPECT-LIST/); assert.match(hubHtml, /\/app\/hub-bridge\.js/);
 }));
 
-test('partners never receive the hub prospect list; they get their own console', () => withServer(async (base) => {
-  const r = await getAs(base, '/', 'nx_at=tok-partner');
-  assert.equal(r.status, 302); assert.equal(r.headers.get('location'), '/my');
-  const my = await getAs(base, '/my', 'nx_at=tok-partner'); const html = await my.text();
-  assert.equal(my.status, 200); assert.doesNotMatch(html, /SECRET-PROSPECT-LIST/); assert.match(html, /"role":"partner"/);
+test('partners get the hub with only their own businesses; never other prospects or the team console', () => withServer(async (base, state) => {
+  state.missions = [{ business_name: 'Copper Creek Golf Club' }];
+  const r = await getAs(base, '/', 'nx_at=tok-partner'); const html = await r.text();
+  assert.equal(r.status, 200); assert.match(html, /HUB-PAGE/); assert.match(html, /MY-CONTACT/);
+  assert.doesNotMatch(html, /SECRET-PROSPECT-LIST/); assert.match(html, /"role":"partner"/);
   const team = await getAs(base, '/team', 'nx_at=tok-partner'); assert.equal(team.status, 302); assert.equal(team.headers.get('location'), '/my');
   assert.equal((await getAs(base, '/api/team/partners', 'nx_at=tok-partner')).status, 403);
+  const teamHub = await (await getAs(base, '/', 'nx_at=tok-team')).text();
+  assert.match(teamHub, /SECRET-PROSPECT-LIST/);
 }));
 
 test('team gets the hub and the team console', () => withServer(async (base) => {
@@ -225,7 +230,7 @@ test('hub state: team gets open missions with latest outcome; partners refused',
   assert.equal(body.missions[0].business_name, 'Maple Freight Lines');
   assert.equal(body.missions[0].last_outcome, null);
   const partner = await fetch(`${base}/api/hub/state`, { headers: { cookie: 'nx_at=tok-partner' } });
-  assert.equal(partner.status, 403);
+  assert.equal(partner.status, 200); // row-level security limits partners to their own missions
 }));
 test('hub business: team adds a business as a mission in research; origin and JSON enforced', () => withServer(async (base, state) => {
   const h = { cookie: 'nx_at=tok-team', origin: ORIGIN, 'content-type': 'application/json' };
@@ -242,8 +247,13 @@ test('hub business: team adds a business as a mission in research; origin and JS
   assert.equal(empty.status, 400);
   const cross = await fetch(`${base}/api/hub/business`, { method: 'POST', headers: { ...h, origin: 'https://evil.example' }, body: '{"name":"X"}' });
   assert.equal(cross.status, 403);
-  const partner = await fetch(`${base}/api/hub/business`, { method: 'POST', headers: { ...h, cookie: 'nx_at=tok-partner' }, body: '{"name":"X"}' });
-  assert.equal(partner.status, 403);
+  state.calls.length = 0;
+  const partner = await fetch(`${base}/api/hub/business`, { method: 'POST', headers: { ...h, cookie: 'nx_at=tok-partner' }, body: JSON.stringify({ name: 'X Co', contact: 'Bo' }) });
+  assert.equal(partner.status, 201);
+  const pins = state.calls.find((c) => c.table === 'partner_missions' && c.op === 'insert');
+  assert.equal(pins.payload.origin, 'partner_initiated'); assert.equal(pins.payload.status, 'requested'); assert.equal(pins.payload.partner_summary, null);
+  const close = await fetch(`${base}/api/hub/business/close`, { method: 'POST', headers: { ...h, cookie: 'nx_at=tok-partner' }, body: JSON.stringify({ name: 'X Co' }) });
+  assert.notEqual(close.status, 200);
 }));
 test('research entries map to notes on the mission', () => {
   assert.equal(mapHubEntry({ business: 'Maple', what: 'research', to: 'AVA request' }).row.action, 'note');
@@ -255,4 +265,12 @@ test('calculator stays public; hub does not', () => withServer(async (base) => {
   assert.equal(calc.status, 200);
   const hub = await fetch(`${base}/`, { redirect: 'manual' });
   assert.equal(hub.status, 302);
+}));
+
+test('earnings: signed-in members read commissions with their own token', () => withServer(async (base, state) => {
+  const r = await fetch(`${base}/api/me/earnings`, { headers: { cookie: 'nx_at=tok-partner' } });
+  assert.equal(r.status, 200);
+  const body = await r.json(); assert.equal(body.scope, 'mine'); assert.ok(Array.isArray(body.rows));
+  assert.ok(state.calls.some((c) => c.table === 'commissions' && c.user === 'u-partner'));
+  assert.equal((await fetch(`${base}/api/me/earnings`)).status, 401);
 }));

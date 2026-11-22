@@ -739,6 +739,35 @@
   .ind-table tbody tr{cursor:pointer}
   .ind-table tbody tr:hover td{background:var(--bg-soft)}
 
+  /* three areas */
+  .area{margin:0 0 8px;border-radius:10px}
+  .area-h{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border-radius:8px;text-decoration:none;color:var(--ink)}
+  .area-h:hover{background:var(--blue-soft)}
+  .area-h b{display:block;font-size:14px;font-weight:600}
+  .area-h small{display:block;font-size:11.5px;color:var(--ink-3);margin-top:1px}
+  .area.on>.area-h .qi{background:var(--ink);border-color:var(--ink);color:#fff}
+  .area-sub{margin:2px 0 6px}
+  .area-sub .side-link{padding-inline-start:40px;font-size:13.5px}
+  .area-sub .side-link.sub{padding-inline-start:52px;font-size:12.5px}
+  .quick-row{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .quick-row a{align-items:flex-start!important}
+  .quick-row b{display:block;font-weight:600;font-size:14.5px}
+  .quick-row small{display:block;font-size:12px;color:var(--ink-3);margin-top:2px;font-weight:400}
+  #close-flow .cf-who{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;margin:0 0 22px}
+  #close-flow .cf-who label{font-size:12.5px;color:var(--ink-3);font-weight:500}
+  #close-flow .cf-who select,#close-flow .cf-who input{display:block;width:100%;margin-top:5px;border:1px solid var(--panel-line);border-radius:8px;padding:9px 10px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}
+  .cf-step{position:relative;padding-inline-start:38px;padding-bottom:22px}
+  .cf-step::before{content:"";position:absolute;inset-inline-start:10px;top:26px;bottom:0;width:1px;background:var(--panel-line)}
+  .cf-step:last-child::before{display:none}
+  .cf-h{display:flex;align-items:center;gap:10px;margin:0 0 10px;margin-inline-start:-38px}
+  .cf-h b{font-size:16px;font-weight:600}
+  .cf-step.done .cf-h .qi{background:var(--accent);border-color:var(--accent);color:#fff}
+  .cf-p{font-size:13.5px;color:var(--ink-2);margin:0 0 10px}
+  .cf-body>.box{margin-top:0!important;margin-bottom:10px}
+  body.shell #close .sec-head{display:none}
+  body.shell #close details.sec-panel>summary{display:none}
+  @media (max-width:860px){ #close-flow .cf-who{grid-template-columns:1fr} .quick-row{grid-template-columns:1fr!important} }
+
   /* minimal collapsible menu + quick tasks */
   .rail-ind{width:100%;border:1px solid var(--panel-line);border-radius:8px;padding:8px 10px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink);margin:0 0 14px}
   .side-link.home{font-weight:600;color:var(--ink);margin-bottom:12px}
@@ -8207,25 +8236,25 @@ Object.assign(window.FA, {
   var QUICK = [
     { v: "follow",    en: "My follow-ups",  fa: "پیگیری‌های من" },
     { v: "call",      en: "Make calls",     fa: "تماس بگیرم" },
-    { v: "downloads", en: "Downloads",      fa: "دانلودها" },
-    { v: "new",       en: "Add a business",          fa: "افزودن کسب‌وکار" }
+    { v: "biz",       en: "All businesses", fa: "همهٔ کسب‌وکارها", count: true },
+    { v: "new",       en: "Add a business", fa: "افزودن کسب‌وکار" },
+    { v: "downloads", en: "Downloads",      fa: "دانلودها" }
+  ];
+  var AREAS = [
+    { v: "follow",   en: "Work with businesses", fa: "کار با کسب‌وکارها", d: ["Follow-ups, calls, research", "پیگیری، تماس، تحقیق"] },
+    { v: "closing",  en: "Close a deal",         fa: "بستن قرارداد",      d: ["Plan → agreement → payment link", "پلن ← قرارداد ← لینک پرداخت"] },
+    { v: "earnings", en: "My earnings",          fa: "وضعیت مالی من",     d: ["Commissions earned and paid", "کمیسیون‌های کسب‌شده و پرداخت‌شده"] }
   ];
   var MENU = [
-    { id: "biz", g: ["Businesses", "کسب‌وکارها"], items: [
-      { v: "biz", en: "All businesses", fa: "همهٔ کسب‌وکارها", count: true }
-    ]},
-    { id: "tools", g: ["Tools", "ابزارها"], items: [
+    { id: "more", g: ["Tools & guides", "ابزار و راهنما"], items: [
       { v: "script-builder", en: "Call script builder", fa: "ساخت اسکریپت تماس" },
-      { v: "close", en: "Close the deal", fa: "بستن معامله" },
       { v: "generator", en: "Proposal generator", fa: "ساخت پروپوزال" },
       { v: "research", en: "Research queue", fa: "صف تحقیق" },
       { v: "ai-requests", en: "AI requests", fa: "درخواست از AI" },
       { v: "talk", en: "Talk to AVA", fa: "صحبت با AVA" },
-      { v: "my-activity", en: "My activity", fa: "فعالیت من" }
-    ]},
-    { id: "learn", g: ["Guides", "راهنما"], items: [
+      { v: "my-activity", en: "My activity", fa: "فعالیت من" },
       { v: "offer", en: "The offer", fa: "پیشنهاد" },
-      { v: "earn", en: "Commissions", fa: "کمیسیون" },
+      { v: "earn", en: "Commission rules", fa: "قوانین کمیسیون" },
       { v: "start", en: "Getting started", fa: "شروع کار" },
       { v: "plan", en: "30-day plan", fa: "برنامهٔ ۳۰ روزه" },
       { v: "scripts", en: "Call scripts", fa: "اسکریپت‌های تماس" },
@@ -8237,6 +8266,9 @@ Object.assign(window.FA, {
   ];
   function labelOf(v){
     if (v === "today") return tt("Today", "امروز");
+    if (v === "closing") return tt("Close a deal", "بستن قرارداد");
+    if (v === "earnings") return tt("My earnings", "وضعیت مالی من");
+    if (v === "close") return tt("Close a deal", "بستن قرارداد");
     for (var q = 0; q < QUICK.length; q++) if (QUICK[q].v === v) return tt(QUICK[q].en, QUICK[q].fa);
     for (var i = 0; i < MENU.length; i++) for (var j = 0; j < MENU[i].items.length; j++)
       if (MENU[i].items[j].v === v) return tt(MENU[i].items[j].en, MENU[i].items[j].fa);
@@ -8360,7 +8392,7 @@ Object.assign(window.FA, {
   function go(v, slug, anchor){
     cur.v = v; cur.biz = v === "b" && slug ? bySlug(slug) : null;
     if (v === "ind") cur.ind = slug || null;
-    if (v === "new" || v === "follow" || v === "call" || v === "downloads") cur.ind = null;
+    if (v === "new" || v === "follow" || v === "call" || v === "downloads" || v === "earnings" || v === "closing") cur.ind = null;
     if (v === "biz") cur.ind = null;
     if (cur.biz) cur.ind = cur.biz.ind;
     body.classList.toggle("biz-mode", v === "b" && !!cur.biz);
@@ -8374,6 +8406,8 @@ Object.assign(window.FA, {
     else if (v === "follow") { show(["task-view"]); renderFollow(); }
     else if (v === "call") { show(["task-view"]); callStart(slug); }
     else if (v === "downloads") { show(["task-view"]); renderDownloads(); }
+    else if (v === "earnings") { show(["task-view"]); renderEarnings(); }
+    else if (v === "closing" || v === "close") { show(["close"]); closeSetup(slug); }
     else if (v === "b" && cur.biz) {
       show(["biz-head", "call-list"]);
       var more = cur.biz.el.querySelector("details.card-more"); if (more) more.open = true;
@@ -8389,9 +8423,11 @@ Object.assign(window.FA, {
     if (!h || h === "top" || h === "today") return go("today");
     if (h === "biz") return go("biz");
     if (h === "new" || h.indexOf("new/") === 0) return go("new", h.slice(4) || null);
-    if (h === "follow" || h === "downloads") return go(h);
+    if (h === "follow" || h === "downloads" || h === "earnings") return go(h);
+    if (h === "closing" || h.indexOf("closing/") === 0) return go("closing", h.slice(8) || null);
     if (h === "call" || h.indexOf("call/") === 0) return go("call", h.slice(5) || null);
     if (h.indexOf("ind/") === 0) return go("ind", h.slice(4));
+    if (h === "close") return go("closing");
     if (h.indexOf("b/") === 0 && bySlug(h.slice(2))) return go("b", h.slice(2));
     var el = document.getElementById(h);
     if (!el) return go("today");
@@ -8413,29 +8449,34 @@ Object.assign(window.FA, {
   }
   function renderSide(){
     var og = openGroups(), curG = groupOf(cur.v);
+    var workOn = ["follow", "call", "biz", "ind", "b", "new", "downloads"].indexOf(cur.v) >= 0;
     var html = "<div class=\"side-brand\">Nex<b>AIS</b><span>" + esc(tt("Sales Partners", "همکاران فروش")) + "</span></div>";
     html += "<a class=\"side-link home" + (cur.v === "today" ? " on" : "") + "\" href=\"#today\">" + esc(tt("Today", "امروز")) + "</a>";
-    html += "<p class=\"side-q-h\">" + esc(tt("What do you want to do?", "چه کاری می‌خواهید انجام دهید؟")) + "</p><div class=\"side-quick\">";
-    QUICK.forEach(function(it, i){
-      var n = it.v === "follow" ? followList().length : 0;
-      html += "<a class=\"side-link q" + (cur.v === it.v ? " on" : "") + "\" href=\"#" + it.v + "\"><span class=\"qi\">" + (i + 1) + "</span><span class=\"ql\">" +
-        esc(tt(it.en, it.fa)) + "</span>" + (n ? "<span class=\"n\">" + n + "</span>" : "") + "</a>";
+    AREAS.forEach(function(a, i){
+      var on = i === 0 ? workOn : (cur.v === a.v || (a.v === "closing" && cur.v === "close"));
+      html += "<div class=\"area" + (on ? " on" : "") + "\"><a class=\"area-h\" href=\"#" + a.v + "\"><span class=\"qi\">" + (i + 1) + "</span><span><b>" +
+        esc(tt(a.en, a.fa)) + "</b><small>" + esc(tt(a.d[0], a.d[1])) + "</small></span></a>";
+      if (i === 0) {
+        html += "<div class=\"area-sub\">" + QUICK.map(function(it){
+          var n = it.v === "follow" ? followList().length : (it.count ? BIZ.length : 0);
+          var o = cur.v === it.v && !(it.v === "biz" && cur.ind);
+          var h = "<a class=\"side-link" + (o ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) + (n ? "<span class=\"n\">" + n + "</span>" : "") + "</a>";
+          if (it.v === "biz" && (cur.v === "biz" || cur.v === "ind" || cur.v === "b")) {
+            h += INDS.map(function(x){
+              var c = BIZ.filter(function(b){ return b.ind === x.k; }).length;
+              return "<a class=\"side-link sub" + (cur.ind === x.k ? " on" : "") + "\" href=\"#ind/" + x.k + "\">" + esc(tt(x.en, x.fa)) + "<span class=\"n\">" + c + "</span></a>";
+            }).join("");
+          }
+          return h;
+        }).join("") + "</div>";
+      }
+      html += "</div>";
     });
-    html += "</div>";
     MENU.forEach(function(g){
       var open = g.id === curG || og[g.id];
       html += "<details class=\"side-group\" data-g=\"" + g.id + "\"" + (open ? " open" : "") + "><summary>" + esc(tt(g.g[0], g.g[1])) + "</summary>";
       g.items.forEach(function(it){
-        var on = cur.v === it.v && !(it.v === "biz" && cur.ind);
-        html += "<a class=\"side-link" + (on ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) +
-          (it.count ? "<span class=\"n\">" + BIZ.length + "</span>" : "") + "</a>";
-        if (it.v === "biz") {
-          html += INDS.map(function(x){
-            var n = BIZ.filter(function(b){ return b.ind === x.k; }).length;
-            var o = cur.ind === x.k && (cur.v === "ind" || cur.v === "b");
-            return "<a class=\"side-link sub" + (o ? " on" : "") + "\" href=\"#ind/" + x.k + "\">" + esc(tt(x.en, x.fa)) + "<span class=\"n\">" + n + "</span></a>";
-          }).join("");
-        }
+        html += "<a class=\"side-link" + (cur.v === it.v ? " on" : "") + "\" href=\"#" + it.v + "\">" + esc(tt(it.en, it.fa)) + "</a>";
       });
       html += "</details>";
     });
@@ -8465,7 +8506,8 @@ Object.assign(window.FA, {
       "paylink-open": tt("Payment link opened", "لینک پرداخت باز شد"), "paylink-copy": tt("Payment link copied", "لینک پرداخت کپی شد"),
       copy: tt("Text copied", "متن کپی شد"),
       "biz-added": tt("Business added", "کسب‌وکار اضافه شد"), research: tt("Research started", "تحقیق شروع شد"),
-      "research-note": tt("Research note saved", "یادداشت تحقیق ذخیره شد")
+      "research-note": tt("Research note saved", "یادداشت تحقیق ذخیره شد"),
+      agreement: tt("Agreement sent", "قرارداد ارسال شد"), "paylink-sent": tt("Payment link sent", "لینک پرداخت ارسال شد")
     }[e.what] || e.what || "";
     var FA_ST = { "Not called": "تماس گرفته نشده", "Reached decision-maker": "با تصمیم‌گیرنده صحبت شد", "Gatekeeper": "منشی / واسطه",
       "Voicemail left": "پیام صوتی گذاشته شد", "Not interested": "علاقه ندارد", "Callback scheduled": "تماس مجدد تنظیم شد", "Demo booked": "دمو رزرو شد",
@@ -8551,8 +8593,8 @@ Object.assign(window.FA, {
       kpi(cnt.contacted + cnt.followup, tt("In progress", "در جریان"), "followup") +
       kpi(cnt.demo, tt("Demos booked", "دموی رزروشده"), "demo") +
       kpi(todayN, tt("Actions logged today", "اقدامات امروز"), "") +
-      "</div><div class=\"quick-row\">" + QUICK.map(function(q, i){
-        return "<a href=\"#" + q.v + "\"><span class=\"qi\">" + (i + 1) + "</span>" + esc(tt(q.en, q.fa)) + "</a>";
+      "</div><div class=\"quick-row\">" + AREAS.map(function(a, i){
+        return "<a href=\"#" + a.v + "\"><span class=\"qi\">" + (i + 1) + "</span><span><b>" + esc(tt(a.en, a.fa)) + "</b><small>" + esc(tt(a.d[0], a.d[1])) + "</small></span></a>";
       }).join("") + "</div><p class=\"h3s\">" + esc(tt("Who to call next", "تماس بعدی با چه کسی")) + "</p>";
     var nx = nextCalls();
     html += nx.length ? "<ul class=\"next-list\">" + nx.map(function(b){
@@ -8618,7 +8660,7 @@ Object.assign(window.FA, {
     }
     if (a === "script") { var i = $("cs-biz"); if (i && b) { i.value = b.name; i.dispatchEvent(new Event("input", { bubbles: true })); } nav("script-builder"); }
     else if (a === "talk") { var m = $("m-biz"); if (m && b) { m.value = b.name; m.dispatchEvent(new Event("input", { bubbles: true })); } nav("talk"); }
-    else nav("close");
+    else nav("closing/" + (b ? b.slug : ""));
   });
 
   /* ---------- task views: follow-ups, call mode, downloads ---------- */
@@ -8743,6 +8785,155 @@ Object.assign(window.FA, {
     else if (k === "one") { var bb = bySlug($("dl-biz").value); var pb = bb && bb.el.querySelector(".print-card-btn"); if (pb) pb.click(); }
   });
 
+  /* ---------- close a deal: business → plan → agreement → payment link ---------- */
+  var closeBuilt = false, closeBiz = "", closeDone = {};
+  var LEGAL = "https://crm.nexais.ca";
+  function closeSetup(slug){
+    var sec = $("close"); if (!sec) return;
+    if (slug && bySlug(slug)) closeBiz = slug;
+    if (!closeBuilt) {
+      closeBuilt = true;
+      var wrapEl = sec.querySelector(".wrap"), panel = sec.querySelector("details.sec-panel");
+      var boxes = panel.querySelectorAll(":scope > .box");
+      var calcBox = boxes[0], intakeBox = boxes[1];
+      var btnRow = $("cl-open").parentNode, note = $("cl-note");
+      var flow = document.createElement("div"); flow.id = "close-flow";
+      flow.innerHTML = "<div class=\"cf-top\"></div>" +
+        "<div class=\"cf-step\" data-step=\"1\"><div class=\"cf-h\"><span class=\"qi\">1</span><b class=\"cf-t1\"></b></div><div class=\"cf-body cf-b1\"></div></div>" +
+        "<div class=\"cf-step\" data-step=\"2\"><div class=\"cf-h\"><span class=\"qi\">2</span><b class=\"cf-t2\"></b></div><div class=\"cf-body cf-b2\"></div></div>" +
+        "<div class=\"cf-step\" data-step=\"3\"><div class=\"cf-h\"><span class=\"qi\">3</span><b class=\"cf-t3\"></b></div><div class=\"cf-body cf-b3\"></div></div>";
+      panel.insertBefore(flow, calcBox);
+      flow.querySelector(".cf-b1").appendChild(calcBox);
+      var ag = document.createElement("div"); ag.className = "box cf-agree"; flow.querySelector(".cf-b2").appendChild(ag);
+      if (intakeBox) flow.querySelector(".cf-b2").appendChild(intakeBox);
+      var pay = document.createElement("div"); pay.className = "box";
+      pay.appendChild(btnRow); if (note) pay.appendChild(note);
+      flow.querySelector(".cf-b3").appendChild(pay);
+      sec.addEventListener("change", function(e){ if (e.target.closest(".calc") || e.target.id === "cf-biz" || e.target.id === "cf-email") setTimeout(renderClose, 30); });
+      sec.addEventListener("input", function(e){ if (e.target.closest(".calc") || e.target.id === "cf-email" || e.target.id === "cf-contact") setTimeout(renderAgreement, 30); });
+      sec.addEventListener("click", closeClick, true);
+    }
+    renderClose();
+  }
+  function closeName(){ var b = bySlug(closeBiz); return b ? b.name : ""; }
+  function renderClose(){
+    var flow = $("close-flow"); if (!flow) return;
+    var sel = $("cf-biz"); if (sel) closeBiz = sel.value;
+    var opts = "<option value=\"\">" + esc(tt("— choose the business —", "— کسب‌وکار را انتخاب کنید —")) + "</option>" +
+      BIZ.map(function(b){ return "<option value=\"" + esc(b.slug) + "\"" + (b.slug === closeBiz ? " selected" : "") + ">" + esc(b.name) + "</option>"; }).join("");
+    var keepEmail = $("cf-email") ? $("cf-email").value : "", keepContact = $("cf-contact") ? $("cf-contact").value : "";
+    flow.querySelector(".cf-top").innerHTML = "<h2 class=\"t-h\">" + esc(tt("Close a deal", "بستن قرارداد")) + "</h2>" +
+      "<p class=\"sub-p\">" + esc(tt("Three steps, in order. Nothing is charged today; the first charge is on the day the free trial ends.",
+        "سه قدم، به ترتیب. امروز هیچ مبلغی کسر نمی‌شود؛ اولین برداشت روز پایان دورهٔ رایگان است.")) + "</p>" +
+      "<div class=\"cf-who\"><label>" + esc(tt("Business", "کسب‌وکار")) + "<select id=\"cf-biz\">" + opts + "</select></label>" +
+      "<label>" + esc(tt("Client's name", "نام مشتری")) + "<input id=\"cf-contact\" type=\"text\" value=\"" + esc(keepContact) + "\"></label>" +
+      "<label>" + esc(tt("Client's email", "ایمیل مشتری")) + "<input id=\"cf-email\" type=\"email\" value=\"" + esc(keepEmail) + "\"></label></div>";
+    flow.querySelector(".cf-t1").textContent = tt("Choose the plan", "انتخاب پلن");
+    flow.querySelector(".cf-t2").textContent = tt("Send the agreement", "ارسال قرارداد");
+    flow.querySelector(".cf-t3").textContent = tt("Send the payment link", "ارسال لینک پرداخت");
+    var d = closeDone[closeBiz] || {};
+    Array.prototype.forEach.call(flow.querySelectorAll(".cf-step"), function(st){
+      var n = st.getAttribute("data-step");
+      st.classList.toggle("done", n === "1" ? !!closeBiz : !!d[n]);
+    });
+    renderAgreement();
+  }
+  function textOf(id){ var el = $(id); return el ? el.textContent.trim() : ""; }
+  function selText(id){ var el = $(id); return el && el.selectedIndex >= 0 ? el.options[el.selectedIndex].text : ""; }
+  function agreementText(){
+    var name = closeName() || "[Business]", who = ($("cf-contact") && $("cf-contact").value.trim()) || "";
+    return (who ? "Hi " + who + ",\n\n" : "Hi,\n\n") +
+      "Thank you for choosing AVA for " + name + ". Here is a summary of your plan and the agreement that applies to it.\n\n" +
+      "Plan: " + textOf("cl-v-plan") + "\n" +
+      "Free trial: " + selText("cl-trial") + "\n" +
+      "Billing: " + selText("cl-term") + "\n" +
+      "Monthly after discounts: " + textOf("cl-v-monthly") + " (+ HST)\n" +
+      "Setup fee: " + textOf("cl-v-setup") + "\n" +
+      "Due today: " + textOf("cl-v-due") + "\n\n" +
+      "Your subscription is governed by the NexAIS agreement — please read it before you start:\n" +
+      "• Terms of Service: " + LEGAL + "/terms\n" +
+      "• Subscription Agreement: " + LEGAL + "/subscription-agreement\n" +
+      "• Refund Policy: " + LEGAL + "/refund-policy\n" +
+      "• Privacy Policy: " + LEGAL + "/privacy\n\n" +
+      "By completing checkout on the payment link I send next, you accept these terms on behalf of " + name + ".\n" +
+      "Please also fill in the short intake form below and send it back, so we can build your AVA.\n\n" +
+      "Thank you,\nNexAIS · info@nexais.ca · +1 (437) 529-0400";
+  }
+  function renderAgreement(){
+    var box = document.querySelector("#close-flow .cf-agree"); if (!box) return;
+    var txt = agreementText(), email = $("cf-email") ? $("cf-email").value.trim() : "";
+    var subj = "Your AVA plan and agreement — " + (closeName() || "NexAIS");
+    var ta = $("cf-agree-text");
+    if (!ta) {
+      box.innerHTML = "<p class=\"cf-p\"></p><textarea id=\"cf-agree-text\" class=\"tpl\" rows=\"18\"></textarea>" +
+        "<div class=\"biz-actions\" style=\"margin-top:10px\"><a class=\"btn primary\" id=\"cf-mail\" href=\"#\"></a>" +
+        "<button type=\"button\" class=\"btn ghost\" id=\"cf-copy\"></button><button type=\"button\" class=\"btn ghost\" id=\"cf-sent\"></button></div>";
+      ta = $("cf-agree-text");
+    }
+    if (!ta.dataset.edited) ta.value = txt;
+    box.querySelector(".cf-p").textContent = tt("The plan summary and the NexAIS agreement links, ready to send. Send the intake form with it.",
+      "خلاصهٔ پلن و لینک‌های قرارداد NexAIS، آمادهٔ ارسال. فرم اطلاعات را هم همراهش بفرستید.");
+    var mail = $("cf-mail");
+    mail.textContent = tt("Open in email", "باز کردن در ایمیل");
+    mail.href = "mailto:" + encodeURIComponent(email) + "?subject=" + encodeURIComponent(subj) + "&body=" + encodeURIComponent(ta.value);
+    $("cf-copy").textContent = tt("Copy text", "کپی متن");
+    $("cf-sent").textContent = (closeDone[closeBiz] || {})[2] ? tt("Agreement sent ✓", "قرارداد ارسال شد ✓") : tt("Mark as sent", "ثبت: ارسال شد");
+  }
+  function markStep(n, what, to){
+    if (!closeBiz) { alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); return false; }
+    closeDone[closeBiz] = closeDone[closeBiz] || {}; closeDone[closeBiz][n] = true;
+    logSync(what, closeName(), to || "");
+    renderClose(); return true;
+  }
+  function closeClick(e){
+    var t = e.target;
+    if (t.id === "cf-agree-text") return;
+    if (t.id === "cf-copy") { var ta = $("cf-agree-text"); try { navigator.clipboard.writeText(ta.value); } catch(x){ ta.select(); document.execCommand("copy"); } t.textContent = tt("Copied ✓", "کپی شد ✓"); return; }
+    if (t.id === "cf-sent") { markStep(2, "agreement", textOf("cl-v-plan")); return; }
+    if (t.id === "cf-mail") { if (!closeBiz) { e.preventDefault(); alert(tt("Choose the business first.", "اول کسب‌وکار را انتخاب کنید.")); } return; }
+    if (t.id === "cl-open" || t.id === "cl-copy") { if (closeBiz) { closeDone[closeBiz] = closeDone[closeBiz] || {}; closeDone[closeBiz][3] = true; logSync("paylink-sent", closeName(), textOf("cl-v-plan")); setTimeout(renderClose, 50); } }
+  }
+  document.addEventListener("input", function(e){ if (e.target && e.target.id === "cf-agree-text") { e.target.dataset.edited = "1"; var m = $("cf-mail"); if (m) m.href = "mailto:" + encodeURIComponent(($("cf-email") || {}).value || "") + "?subject=" + encodeURIComponent("Your AVA plan and agreement — " + (closeName() || "NexAIS")) + "&body=" + encodeURIComponent(e.target.value); } });
+
+  /* ---------- my earnings ---------- */
+  function money(n){ return "$" + (Number(n) || 0).toLocaleString("en-CA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function nextPayout(){ var d = new Date(); var p = new Date(d.getFullYear(), d.getMonth() + (d.getDate() > 15 ? 1 : 0), 15); return p.toLocaleDateString(window.LANG === "fa" ? "fa-IR" : "en-CA", { month: "long", day: "numeric" }); }
+  function renderEarnings(){
+    var head = taskHead(tt("My earnings", "وضعیت مالی من"),
+      tt("Commissions are paid by the 15th of each month, on client payments actually received and past the 14-day refund window.",
+         "کمیسیون‌ها تا ۱۵ هر ماه پرداخت می‌شوند — فقط برای پرداخت‌هایی که واقعاً وصول شده و از ۱۴ روز بازپرداخت گذشته‌اند."));
+    if (!window.NEXAIS_SESSION) {
+      taskSec.innerHTML = head + "<div class=\"empty-box\"><p>" + esc(tt("Your earnings appear here once you sign in with your NexAIS account.",
+        "وقتی با حساب NexAIS وارد شوید، درآمدتان اینجا نمایش داده می‌شود.")) + "</p><a class=\"btn ghost\" href=\"#earn\">" +
+        esc(tt("How commissions work", "کمیسیون چطور حساب می‌شود")) + "</a></div></div>";
+      return;
+    }
+    taskSec.innerHTML = head + "<p class=\"hint\">" + esc(tt("Loading…", "در حال بارگذاری…")) + "</p></div>";
+    fetch("/api/me/earnings", { credentials: "same-origin", cache: "no-store" }).then(function(r){ return r.ok ? r.json() : null; }).then(function(data){
+      if (cur.v !== "earnings") return;
+      if (!data) { taskSec.innerHTML = head + "<div class=\"empty-box\"><p>" + esc(tt("Couldn't load your earnings right now — try again in a minute.", "الان نتوانستم درآمد شما را بخوانم — یک دقیقهٔ دیگر دوباره امتحان کنید.")) + "</p></div></div>"; return; }
+      var rows = data.rows || [], earned = 0, paid = 0, pending = 0;
+      rows.forEach(function(r){ earned += r.amount; if (r.status === "paid" || r.paid_at) paid += r.amount; else if (r.status !== "cancelled" && r.status !== "void") pending += r.amount; });
+      var html = head + (data.scope === "all" ? "<p class=\"hint\">" + esc(tt("You are viewing all partners' commissions (team view).", "شما کمیسیون همهٔ پارتنرها را می‌بینید (نمای تیم).")) + "</p>" : "") +
+        "<div class=\"kpis\">" +
+        "<div class=\"kpi\"><b>" + money(earned) + "</b><span>" + esc(tt("Total earned", "کل کسب‌شده")) + "</span></div>" +
+        "<div class=\"kpi\"><b>" + money(paid) + "</b><span>" + esc(tt("Paid to you", "پرداخت‌شده")) + "</span></div>" +
+        "<div class=\"kpi\"><b>" + money(pending) + "</b><span>" + esc(tt("Waiting to be paid", "در انتظار پرداخت")) + "</span></div>" +
+        "<div class=\"kpi\"><b>" + esc(nextPayout()) + "</b><span>" + esc(tt("Next payout date", "تاریخ پرداخت بعدی")) + "</span></div></div>";
+      if (!rows.length) html += "<div class=\"empty-box\"><p>" + esc(tt("No commissions yet — your first one appears here after your first client pays.", "هنوز کمیسیونی نیست — اولین کمیسیون بعد از پرداخت اولین مشتری‌تان اینجا می‌آید.")) + "</p><a class=\"btn primary\" href=\"#closing\">" + esc(tt("Close a deal", "بستن قرارداد")) + "</a></div>";
+      else html += "<table class=\"ind-table\"><thead><tr><th>" + esc(tt("Date", "تاریخ")) + "</th><th>" + esc(tt("Type", "نوع")) + "</th><th>" + esc(tt("Client payment", "پرداخت مشتری")) +
+        "</th><th>%</th><th>" + esc(tt("Your commission", "کمیسیون شما")) + "</th><th>" + esc(tt("Status", "وضعیت")) + "</th></tr></thead><tbody>" + rows.map(function(r){
+          var st = r.status === "paid" || r.paid_at ? tt("Paid", "پرداخت شد") : r.status === "pending" ? tt("Pending", "در انتظار") : (r.status || "");
+          var dt = r.earned_at ? new Date(r.earned_at).toLocaleDateString(window.LANG === "fa" ? "fa-IR" : "en-CA") : "";
+          var ty = r.month > 1 ? tt("Recurring · month " + r.month, "ماهانه · ماه " + r.month) : tt("First month", "ماه اول");
+          return "<tr><td>" + esc(dt) + "</td><td>" + esc(ty) + "</td><td>" + (r.sale == null ? "—" : money(r.sale)) + "</td><td>" + (r.percent == null ? "—" : r.percent + "%") +
+            "</td><td><b>" + money(r.amount) + "</b></td><td>" + esc(st) + "</td></tr>";
+        }).join("") + "</tbody></table>";
+      html += "<p class=\"hint\"><a href=\"#earn\">" + esc(tt("How commissions are calculated", "کمیسیون چطور حساب می‌شود")) + "</a></p></div>";
+      taskSec.innerHTML = html;
+    }).catch(function(){});
+  }
+
   /* ---------- add a business ---------- */
   function renderNewForm(preInd){
     var opts = ALL_INDS.map(function(x){ return "<option value=\"" + x.k + "\"" + (preInd === x.k ? " selected" : "") + ">" + esc(tt(x.en, x.fa)) + "</option>"; }).join("");
@@ -8799,7 +8990,7 @@ Object.assign(window.FA, {
       "<textarea id=\"rs-notes\" rows=\"4\">" + esc(rec.research || "") + "</textarea></label>" +
       "<div class=\"rs-foot\"><button type=\"button\" class=\"btn ghost\" data-act=\"rs-save\">" + esc(tt("Save notes", "ذخیرهٔ یادداشت")) + "</button>" +
       "<span id=\"rs-saved\" class=\"rs-saved\"></span>" +
-      "<button type=\"button\" class=\"linkish\" data-act=\"remove\">" + esc(tt("Remove this business", "حذف این کسب‌وکار")) + "</button></div></div>";
+      ((window.NEXAIS_SESSION || {}).role === "partner" ? "" : "<button type=\"button\" class=\"linkish\" data-act=\"remove\">" + esc(tt("Remove this business", "حذف این کسب‌وکار")) + "</button>") + "</div></div>";
   }
   function openDossier(b){
     var rec = window.NEXAIS_newBiz.find(b.name) || {};

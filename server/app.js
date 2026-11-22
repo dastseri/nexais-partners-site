@@ -35,6 +35,14 @@ function escapeJsonForHtml(value) {
     .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
 }
 
+// Removes every call-list card whose business is not in `allowed` (dedupe prefixes).
+export function keepOnlyCards(html, allowed) {
+  return html.replace(/<article class="card" data-group="[^"]*" data-name="([^"]*)">[\s\S]*?<\/article>\s*/g, (block, name) => {
+    const key = dedupePrefix(name.replace(/&amp;/g, '&').replace(/&#x27;/g, "'"));
+    return allowed.has(key) ? block : '';
+  });
+}
+
 export function createApp(options) {
   const {
     makeClient,            // (accessToken?) => supabase-like client
@@ -411,10 +419,8 @@ export function createApp(options) {
 
   // ---- shared business list for the hub (team and admin only) ------------------------
   const HUB_OPEN = '(won,lost,closed,rejected)';
-  function requireTeam2(req, res, next) {
-    if (req.member.role === 'partner') return res.status(403).json({ error: 'The hub is for the NexAIS team' });
-    return next();
-  }
+  // Partners use the hub too; the CRM's row-level security limits them to their own missions.
+  function requireTeam2(req, res, next) { return next(); }
   // Every open mission plus the latest logged call outcome on each, so every device shows the same list.
   app.get('/api/hub/state', requireMember, requireTeam2, async (req, res, next) => {
     try {
@@ -442,10 +448,12 @@ export function createApp(options) {
       const name = cut(b.name, 200);
       if (!name) return res.status(400).json({ error: 'Business name is required' });
       const summary = [b.contact ? `Contact: ${b.contact}` : '', b.note ? `Signal: ${b.note}` : ''].filter(Boolean).join('\n');
+      const partner = req.member.role === 'partner';
+      // A partner registers a request (the CRM fills in who asked); the team can file it straight into research.
       const row = {
-        company_id: companyId, origin: 'system_initiated', status: 'researching', business_name: name,
-        city: cut(b.city, 100), vertical: cut(b.industry, 100), website: cut(b.website, 300), public_phone: cut(b.phone, 40),
-        partner_summary: summary ? summary.slice(0, 4000) : null,
+        company_id: companyId, origin: partner ? 'partner_initiated' : 'system_initiated', status: partner ? 'requested' : 'researching',
+        business_name: name, city: cut(b.city, 100), vertical: cut(b.industry, 100), website: cut(b.website, 300), public_phone: cut(b.phone, 40),
+        partner_summary: !partner && summary ? summary.slice(0, 4000) : null,
       };
       const { data, error } = await req.session.db.from('partner_missions').insert(row).select('id, mission_code, status').single();
       if (error) {
@@ -453,7 +461,7 @@ export function createApp(options) {
         return res.status(duplicate ? 409 : 400).json({ error: duplicate ? 'This business already has an open mission' : error.message });
       }
       await req.session.db.from('partner_activity_log').insert({ company_id: companyId, mission_id: data.id, action: 'note',
-        notes: `Business added in the hub${b.at ? ` (logged on device ${cut(b.at, 40)})` : ''}` });
+        notes: `Business added in the hub${b.at ? ` (logged on device ${cut(b.at, 40)})` : ''}${partner && summary ? `\n${summary.slice(0, 3500)}` : ''}` });
       return res.status(201).json({ mission: data });
     } catch (err) { return next(err); }
   });
@@ -469,9 +477,26 @@ export function createApp(options) {
       if (error) return res.status(400).json({ error: error.message });
       const m = found?.[0];
       if (!m) return res.status(404).json({ error: 'No open mission for this business' });
+      if (req.member.role === 'partner') return res.status(403).json({ error: 'Ask the NexAIS team to close a business' });
       const { error: upErr } = await db.from('partner_missions').update({ status: 'closed' }).eq('id', m.id).select('id').maybeSingle();
       if (upErr) return res.status(403).json({ error: upErr.message });
       return res.json({ ok: true });
+    } catch (err) { return next(err); }
+  });
+
+  // My earnings: commissions the CRM lets this person see (a partner sees only their own).
+  app.get('/api/me/earnings', requireMember, async (req, res, next) => {
+    try {
+      const { data, error } = await req.session.db.from('commissions')
+        .select('id, sale_amount, commission_percent, commission_amount, total_commission_amount, month_number, status, commission_type, earned_at, paid_at, created_at, notes, sales_agent_id, agent_id')
+        .order('created_at', { ascending: false }).limit(500);
+      if (error) return res.status(400).json({ error: error.message });
+      const rows = (data || []).map((c) => ({
+        amount: Number(c.total_commission_amount ?? c.commission_amount ?? 0), sale: c.sale_amount == null ? null : Number(c.sale_amount),
+        percent: c.commission_percent == null ? null : Number(c.commission_percent), month: c.month_number, status: c.status,
+        type: c.commission_type, earned_at: c.earned_at || c.created_at, paid_at: c.paid_at, note: c.notes ? String(c.notes).slice(0, 200) : '',
+      }));
+      return res.set('Cache-Control', 'no-store').json({ scope: req.member.role === 'partner' ? 'mine' : 'all', rows });
     } catch (err) { return next(err); }
   });
 
@@ -498,12 +523,22 @@ export function createApp(options) {
   app.get('/app/console-common.js', (req, res) => res.type('application/javascript').send(page('console-common.js')));
 
   // The hub holds the team's full prospect list, so partners get their own console instead.
-  app.get(['/', '/index.html'], requireMember, (req, res) => {
-    if (req.member.role === 'partner') return res.redirect(302, '/my');
-    const boot = `<script>window.NEXAIS_SESSION=${escapeJsonForHtml({ name: req.member.name, role: req.member.role })};</script>`
-      + '<script src="/app/hub-bridge.js"></script>';
-    const html = hub().replace(/<head>/i, (m) => `${m}\n${boot}`);
-    res.type('html').set('Cache-Control', 'no-store').send(html);
+  // Partners get the same hub, but the prospect cards are cut down to their own missions on the server,
+  // so no other business's contacts ever reach their browser.
+  app.get(['/', '/index.html'], requireMember, async (req, res, next) => {
+    try {
+      const boot = `<script>window.NEXAIS_SESSION=${escapeJsonForHtml({ name: req.member.name, role: req.member.role })};</script>`
+        + '<script src="/app/hub-bridge.js"></script>';
+      let html = hub();
+      if (req.member.role === 'partner') {
+        const { data, error } = await req.session.db.from('partner_missions').select('business_name')
+          .eq('company_id', companyId).not('status', 'in', HUB_OPEN).limit(1000);
+        if (error) return res.status(503).type('text').send('The CRM is not reachable right now — please try again.');
+        html = keepOnlyCards(html, new Set((data || []).map((m) => dedupePrefix(m.business_name)).filter(Boolean)));
+      }
+      html = html.replace(/<head>/i, (m) => `${m}\n${boot}`);
+      return res.type('html').set('Cache-Control', 'no-store').send(html);
+    } catch (err) { return next(err); }
   });
 
   app.use((req, res) => res.status(404).json({ error: 'Not found' }));
